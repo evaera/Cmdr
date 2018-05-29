@@ -1,0 +1,10 @@
+{
+  "name": "Cmdr",
+  "servePort": 8000,
+  "partitions": {
+    "server": {
+      "path": "./Cmdr",
+      "target": "ServerScriptService.Cmdr"
+    }
+  }
+}
