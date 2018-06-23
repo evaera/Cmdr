@@ -2,7 +2,7 @@ local Argument = {}
 Argument.__index = Argument
 
 --- Returns a new ArgumentContext, an object that handles parsing and validating arguments
-function Argument.new (command, argumentObject, value)
+function Argument.new(command, argumentObject, value)
 	local self = {
 		Command = command; -- The command that owns this argument
 		Type = command.Dispatcher.Registry:GetType(argumentObject.type); -- The type definition
@@ -15,7 +15,7 @@ function Argument.new (command, argumentObject, value)
 	}
 
 	if self.Type == nil then
-		error(string.format("%s has an unregistered type \"%s\""), self.Name, argumentObject.type)
+		error(("%s has an unregistered type %q"):format(self.Name, argumentObject.type))
 	end
 
 	setmetatable(self, Argument)
@@ -41,12 +41,12 @@ function Argument:Transform()
 end
 
 --- Returns whatever the transform method gave us.
-function Argument:GetTransformedValue ()
+function Argument:GetTransformedValue()
 	return unpack(self.TransformedValue)
 end
 
 --- Validates that the argument will work without any type errors.
-function Argument:Validate ()
+function Argument:Validate()
 	if self.RawValue == nil or #self.RawValue == 0 and self.Required == false then
 		return true
 	end
@@ -60,7 +60,7 @@ function Argument:Validate ()
 end
 
 --- Gets a list of all possible values that could match based on the current value.
-function Argument:GetAutocomplete ()
+function Argument:GetAutocomplete()
 	if self.Type.autocomplete then
 		return self.Type.autocomplete(self:GetTransformedValue())
 	else
@@ -69,7 +69,7 @@ function Argument:GetAutocomplete ()
 end
 
 --- Returns the final value of the argument.
-function Argument:GetValue ()
+function Argument:GetValue()
 	if self.Type.parse then
 		return self.Type.parse(self:GetTransformedValue())
 	else
