@@ -9,6 +9,7 @@ local Cmdr do
 	Cmdr = setmetatable({
 		ReplicatedRoot = nil;
 		RemoteFunction = nil;
+		Util = Util;
 	}, {
 		__index = function (self, k)
 			local r = self.Registry[k]
