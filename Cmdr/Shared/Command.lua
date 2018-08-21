@@ -29,7 +29,7 @@ end
 -- allowIncompleteArguments: if true, will not throw an error for missing arguments
 function Command:Parse (allowIncompleteArguments)
 	for i, definition in pairs(self.ArgumentDefinitions) do
-		if self.RawArguments[i] == nil and definition.Required ~= true and allowIncompleteArguments ~= true then
+		if self.RawArguments[i] == nil and definition.optional ~= true and allowIncompleteArguments ~= true then
 			return false, ("Required argument #%d %s is missing."):format(i, definition.name)
 		else
 			self.Arguments[i] = Argument.new(self, definition, self.RawArguments[i] or "")

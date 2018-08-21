@@ -148,4 +148,19 @@ function Util.GetTextSize (text, label, size)
 	return TextService:GetTextSize(text, label.TextSize, label.Font, size or Vector2.new(label.AbsoluteSize.X, 0))
 end
 
+function Util.MakeEnumType(name, values)
+	local findValue = Util.MakeFuzzyFinder(values)
+	return {
+		validate = function (text)
+			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
+		end;
+		autocomplete = function (text)
+			return findValue(text)
+		end;
+		parse = function (text)
+			return findValue(text, true)
+		end
+	}
+end
+
 return Util
