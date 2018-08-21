@@ -31,7 +31,7 @@ return function (cmdr)
 	cmdr.RemoteFunction = RemoteFunction
 
 	cmdr:RegisterTypesIn(script.Parent.BuiltInTypes)
-	cmdr:RegisterCommandsIn(script.Parent.BuiltInCommands)
+	--cmdr:RegisterCommandsIn(script.Parent.BuiltInCommands)
 
 	script.Parent.BuiltInTypes:Destroy()
 	script.Parent.BuiltInCommands.Name = "Server commands"
