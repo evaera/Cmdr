@@ -11,6 +11,7 @@ local Cmdr do
 		ReplicatedRoot = script;
 		RemoteFunction = script:WaitForChild("CmdrFunction");
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
+		Util = Util;
 	}, {
 		-- This sucks, and may be redone or removed
 		-- Proxies dispatch methods on to main Cmdr object
