@@ -23,7 +23,7 @@ function CheckShorthands (text, executor, ...)
 end
 
 local playerType = {
-	transform = function (text, executor)
+	Transform = function (text, executor)
 		local shorthand = CheckShorthands(text, executor, ShorthandSingle)
 		if shorthand then
 			return shorthand, text
@@ -34,21 +34,21 @@ local playerType = {
 		return findPlayer(text), text
 	end;
 
-	validate = function (players)
+	Validate = function (players)
 		return #players > 0, "No player with that name could be found."
 	end;
 
-	autocomplete = function (players, rawText)
+	Autocomplete = function (players, rawText)
 		return Util.GetInstanceNames(players), rawText:sub(1, 1) == "%" and 2 or 1
 	end;
 
-	parse = function (players)
+	Parse = function (players)
 		return players[1]
 	end;
 }
 
 local playersType = {
-	transform = function (text, executor)
+	Transform = function (text, executor)
 		local shorthand = CheckShorthands(text, executor, ShorthandSingle, ShorthandMultiple)
 
 		if shorthand then
@@ -72,15 +72,15 @@ local playersType = {
 		end
 	end;
 
-	validate = function (players)
+	Validate = function (players)
 		return #players > 0, "No players were found matching that query."
 	end;
 
-	autocomplete = function (players, rawText, teams)
+	Autocomplete = function (players, rawText, teams)
 		return Util.GetInstanceNames(teams or players), rawText:sub(1, 1) == "%" and 2 or 1
 	end;
 
-	parse = function (players)
+	Parse = function (players)
 		return players
 	end;
 }

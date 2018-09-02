@@ -1,12 +1,12 @@
 return {
-	name = "kill";
-	aliases = {"slay"};
-	description = "Kills a player or set of players.";
-	args = {
+	Name = "kill";
+	Aliases = {"slay"};
+	Description = "Kills a player or set of players.";
+	Args = {
 		{
-			type = "players";
-			name = "victims";
-			description = "The players to kill.";
+			Type = "players";
+			Name = "victims";
+			Description = "The players to kill.";
 		},
 	};
 }

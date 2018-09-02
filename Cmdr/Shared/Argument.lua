@@ -5,17 +5,17 @@ Argument.__index = Argument
 function Argument.new (command, argumentObject, value)
 	local self = {
 		Command = command; -- The command that owns this argument
-		Type = command.Dispatcher.Registry:GetType(argumentObject.type); -- The type definition
-		Name = argumentObject.name; -- The name for this specific argument
+		Type = command.Dispatcher.Registry:GetType(argumentObject.Type); -- The type definition
+		Name = argumentObject.Name; -- The name for this specific argument
 		Object = argumentObject; -- The raw ArgumentObject (definition)
-		Required = argumentObject.optional ~= true; -- If the argument is required or not.
+		Required = argumentObject.Optional ~= true; -- If the argument is required or not.
 		Executor = command.Executor; -- The player who is running the command
 		RawValue = value; -- The raw, unparsed value
 		TransformedValue = nil; -- The transformed value (generated later)
 	}
 
 	if self.Type == nil then
-		error(string.format("%s has an unregistered type %q"), self.Name, argumentObject.type or "<none>")
+		error(string.format("%s has an unregistered type %q"), self.Name, argumentObject.Type or "<none>")
 	end
 
 	setmetatable(self, Argument)
@@ -33,14 +33,14 @@ function Argument:Transform()
 		return
 	end
 
-	if self.Type.transform then
-		self.TransformedValue = {self.Type.transform(self.RawValue, self.Executor)}
+	if self.Type.Transform then
+		self.TransformedValue = {self.Type.Transform(self.RawValue, self.Executor)}
 	else
 		self.TransformedValue = {self.RawValue}
 	end
 end
 
---- Returns whatever the transform method gave us.
+--- Returns whatever the Transform method gave us.
 function Argument:GetTransformedValue ()
 	return unpack(self.TransformedValue)
 end
@@ -51,8 +51,8 @@ function Argument:Validate ()
 		return true
 	end
 
-	if self.Type.validate then
-		local valid, errorText = self.Type.validate(self:GetTransformedValue())
+	if self.Type.Validate then
+		local valid, errorText = self.Type.Validate(self:GetTransformedValue())
 		return valid, errorText or "Invalid value"
 	else
 		return true
@@ -61,8 +61,8 @@ end
 
 --- Gets a list of all possible values that could match based on the current value.
 function Argument:GetAutocomplete ()
-	if self.Type.autocomplete then
-		return self.Type.autocomplete(self:GetTransformedValue())
+	if self.Type.Autocomplete then
+		return self.Type.Autocomplete(self:GetTransformedValue())
 	else
 		return {}
 	end
@@ -70,8 +70,8 @@ end
 
 --- Returns the final value of the argument.
 function Argument:GetValue ()
-	if self.Type.parse then
-		return self.Type.parse(self:GetTransformedValue())
+	if self.Type.Parse then
+		return self.Type.Parse(self:GetTransformedValue())
 	else
 		return self:GetTransformedValue()
 	end

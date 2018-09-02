@@ -1,33 +1,33 @@
 return {
-	name = "argTest";
-	aliases = {"t"};
-	description = "Tests all the different argument types.";
-	args = {
+	Name = "argTest";
+	Aliases = {"t"};
+	Description = "Tests all the different argument Types.";
+	Args = {
 		{
-			type = "string";
-			name = "text";
+			Type = "string";
+			Name = "text";
 		},
 		{
-			type = "number";
-			name = "number";
+			Type = "number";
+			Name = "number";
 		},
 		{
-			type = "integer";
-			name = "integer";
+			Type = "integer";
+			Name = "integer";
 		},
 		{
-			type = "boolean";
-			name = "true/false";
-			description = "Some  boolean";
-			optional = true;
+			Type = "boolean";
+			Name = "true/false";
+			Description = "Some  boolean";
+			Optional = true;
 		},
 		{
-			type = "players";
-			name = "Many players";
+			Type = "players";
+			Name = "Many players";
 		},
 		{
-			type = "player";
-			name = "Single player";
+			Type = "player";
+			Name = "Single player";
 		},
 	};
 }

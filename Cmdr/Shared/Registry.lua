@@ -2,17 +2,21 @@ local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
-	TypeMethods = Util.MakeDictionary({"transform", "validate", "autocomplete", "parse", "name"});
-	CommandMethods = Util.MakeDictionary({"name", "aliases", "description", "args", "run", "data"});
-	CommandArgProps = Util.MakeDictionary({"name", "type", "description", "optional"});
+	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "Name"});
+	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data"});
+	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional"});
 	Types = {};
 	Commands = {};
 	CommandsArray = {};
 	Cmdr = nil;
+	Hooks = {
+		BeforeRun = {};
+		AfterRun = {}
+	}
 }
 
 --- Registers a type in the system.
--- name: The type name. This must be unique.
+-- name: The type Name. This must be unique.
 function Registry:RegisterType (name, typeObject)
 	for key in pairs(typeObject) do
 		if self.TypeMethods[key] == nil then
@@ -24,7 +28,7 @@ function Registry:RegisterType (name, typeObject)
 		error(('Type "%s" has already been registered.'):format(name))
 	end
 
-	typeObject.name = name
+	typeObject.Name = name
 
 	self.Types[name] = typeObject
 end
@@ -43,25 +47,25 @@ end
 function Registry:RegisterCommandObject (commandObject)
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
-			error("Unknown key/method in command " .. (commandObject.name or "unknown command") .. ": " .. key)
+			error("Unknown key/method in command " .. (commandObject.Name or "unknown command") .. ": " .. key)
 		end
 	end
 
-	if commandObject.args then
-		for i, arg in pairs(commandObject.args) do
+	if commandObject.Args then
+		for i, arg in pairs(commandObject.Args) do
 			for key in pairs(arg) do
 				if self.CommandArgProps[key] == nil then
-					error(('Unknown propery in command "%s" argument #%d: %s'):format(commandObject.name or "unknown", i, key))
+					error(('Unknown propery in command "%s" argument #%d: %s'):format(commandObject.Name or "unknown", i, key))
 				end
 			end
 		end
 	end
 
-	self.Commands[commandObject.name:lower()] = commandObject
+	self.Commands[commandObject.Name:lower()] = commandObject
 	self.CommandsArray[#self.CommandsArray + 1] = commandObject
 
-	if commandObject.aliases then
-		for _, alias in pairs(commandObject.aliases) do
+	if commandObject.Aliases then
+		for _, alias in pairs(commandObject.Aliases) do
 			self.Commands[alias:lower()] = commandObject
 		end
 	end
@@ -73,9 +77,9 @@ function Registry:RegisterCommand (commandScript, commandServerScript)
 	local commandObject = require(commandScript)
 
 	if commandServerScript then
-		commandObject.run = require(commandServerScript)
+		commandObject.Run = require(commandServerScript)
 	else
-		commandObject.run = nil
+		commandObject.Run = nil
 	end
 
 	self:RegisterCommandObject(commandObject)
@@ -120,12 +124,12 @@ function Registry:GetCommands ()
 	return self.CommandsArray
 end
 
---- Retruns an array of the names of all registered commands (not including aliases)
+--- Returns an array of the names of all registered commands (not including aliases)
 function Registry:GetCommandsAsStrings ()
 	local commands = {}
 
 	for _, command in pairs(self.CommandsArray) do
-		commands[#commands + 1] = command.name
+		commands[#commands + 1] = command.Name
 	end
 
 	return commands

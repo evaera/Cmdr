@@ -1,17 +1,17 @@
 return {
-	name = "teleport";
-	aliases = {"tp"};
-	description = "Teleports a player or set of players to one target.";
-	args = {
+	Name = "teleport";
+	Aliases = {"tp"};
+	Description = "Teleports a player or set of players to one target.";
+	Args = {
 		{
-			type = "players";
-			name = "from";
-			description = "The players to teleport";
+			Type = "players";
+			Name = "from";
+			Description = "The players to teleport";
 		},
 		{
-			type = "player";
-			name = "to";
-			description = "The player to teleport to"
+			Type = "player";
+			Name = "to";
+			Description = "The player to teleport to"
 		}
 	};
 }

@@ -151,13 +151,13 @@ end
 function Util.MakeEnumType(name, values)
 	local findValue = Util.MakeFuzzyFinder(values)
 	return {
-		validate = function (text)
+		Validate = function (text)
 			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
 		end;
-		autocomplete = function (text)
+		Autocomplete = function (text)
 			return findValue(text)
 		end;
-		parse = function (text)
+		Parse = function (text)
 			return findValue(text, true)
 		end
 	}

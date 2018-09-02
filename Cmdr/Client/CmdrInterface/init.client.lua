@@ -32,9 +32,9 @@ function Window.OnTextChanged (text)
 	local commandText = table.remove(arguments, 1)
 	local atEnd = false
 	if command then
-		arguments = Util.MashExcessArguments(arguments, #command.Object.args)
+		arguments = Util.MashExcessArguments(arguments, #command.Object.Args)
 
-		atEnd = #arguments == #command.Object.args
+		atEnd = #arguments == #command.Object.Args
 	end
 
 	local entryComplete = commandText and #arguments > 0
@@ -68,8 +68,8 @@ function Window.OnTextChanged (text)
 				leftChop = leftChop;
 				at = atEnd and #text - #lastArgument.RawValue + (text:sub(#text, #text):match("%s") and -1 or 0);
 				name = lastArgument.Name;
-				type = lastArgument.Object.type;
-				description = (valid == false and errorText) or lastArgument.Object.description;
+				type = lastArgument.Object.Type;
+				description = (valid == false and errorText) or lastArgument.Object.Description;
 				invalid = not valid;
 			})
 		end
@@ -78,9 +78,9 @@ function Window.OnTextChanged (text)
 		local exactCommand = Cmdr.Registry:GetCommand(commandText)
 		local exactMatch
 		if exactCommand then
-			exactMatch = {exactCommand.name, exactCommand.name, options = {
-				name = exactCommand.name;
-				description = exactCommand.description;
+			exactMatch = {exactCommand.Name, exactCommand.Name, options = {
+				name = exactCommand.Name;
+				description = exactCommand.Description;
 			}}
 		end
 
@@ -89,8 +89,8 @@ function Window.OnTextChanged (text)
 			if commandText:lower() == cmd:lower():sub(1, #commandText) and (exactMatch == nil or exactMatch[1] ~= commandText) then
 				local commandObject = Cmdr.Registry:GetCommand(cmd)
 				acItems[#acItems + 1] = {commandText, cmd, options = {
-					name = commandObject.name;
-					description = commandObject.description;
+					name = commandObject.Name;
+					description = commandObject.Description;
 				}}
 			end
 		end

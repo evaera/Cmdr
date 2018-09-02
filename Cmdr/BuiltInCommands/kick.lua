@@ -1,12 +1,12 @@
 return {
-	name = "kick";
-	aliases = {"boot"};
-	description = "Kicks a player or set of players.";
-	args = {
+	Name = "kick";
+	Aliases = {"boot"};
+	Description = "Kicks a player or set of players.";
+	Args = {
 		{
-			type = "players";
-			name = "players";
-			description = "The players to kick.";
+			Type = "players";
+			Name = "players";
+			Description = "The players to kick.";
 		},
 	};
 }

@@ -1,11 +1,11 @@
 return {
-	name = "bring";
-	description = "Brings a player or set of players to you.";
-	args = {
+	Name = "bring";
+	Description = "Brings a player or set of players to you.";
+	Args = {
 		{
-			type = "players";
-			name = "players";
-			description = "The players to bring";
+			Type = "players";
+			Name = "players";
+			Description = "The players to bring";
 		},
 	};
 }

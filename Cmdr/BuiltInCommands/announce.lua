@@ -1,12 +1,12 @@
 return {
-	name = "announce";
-	aliases = {"m"};
-	description = "Makes a server-wide announcement.";
-	args = {
+	Name = "announce";
+	Aliases = {"m"};
+	Description = "Makes a server-wide announcement.";
+	Args = {
 		{
-			type = "string";
-			name = "text";
-			description = "The announcement text.";
+			Type = "string";
+			Name = "text";
+			Description = "The announcement text.";
 		},
 	};
 }

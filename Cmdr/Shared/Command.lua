@@ -4,16 +4,16 @@ local Argument = require(script.Parent.Argument)
 local Command = {}
 Command.__index = Command
 
---- Retruns a new CommandContext, an object which is created for every command validation.
--- This is also what's passed as the context to the "run" functions in commands
+--- Returns a new CommandContext, an object which is created for every command validation.
+-- This is also what's passed as the context to the "Run" functions in commands
 function Command.new (dispatcher, text, commandObject, executor, arguments, data)
 	local self = {
 		Dispatcher = dispatcher; -- The dispatcher that created this command context
-		Name = commandObject.name; -- The command name (not alias)
+		Name = commandObject.Name; -- The command name (not alias)
 		RawText = text; -- The raw text used to trigger this command
 		Object = commandObject; -- The command object (definition)
 		Executor = executor; -- The player who ran the command
-		ArgumentDefinitions = commandObject.args; -- The argument definitions from the command definition
+		ArgumentDefinitions = commandObject.Args; -- The argument definitions from the command definition
 		RawArguments = arguments; -- Array of strings which are the unparsed values for the arguments
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = data; -- A special container for any additional data the command needs to collect from the client
@@ -29,8 +29,8 @@ end
 -- allowIncompleteArguments: if true, will not throw an error for missing arguments
 function Command:Parse (allowIncompleteArguments)
 	for i, definition in pairs(self.ArgumentDefinitions) do
-		if self.RawArguments[i] == nil and definition.optional ~= true and allowIncompleteArguments ~= true then
-			return false, ("Required argument #%d %s is missing."):format(i, definition.name)
+		if self.RawArguments[i] == nil and definition.Optional ~= true and allowIncompleteArguments ~= true then
+			return false, ("Required argument #%d %s is missing."):format(i, definition.Name)
 		elseif self.RawArguments[i] then
 			self.Arguments[i] = Argument.new(self, definition, self.RawArguments[i] or "")
 		end
@@ -43,7 +43,7 @@ end
 -- This must be called before :Run() is called.
 -- Returns boolean (true if ok), errorText
 function Command:Validate ()
-	self._validated = true
+	self._Validated = true
 	local errorText = ""
 	local success = true
 
@@ -83,17 +83,17 @@ end
 --- Runs the command. Handles dispatching to the server if necessary.
 -- Command:Validate() must be called before this is called or it will throw.
 function Command:Run ()
-	if self._validated == nil then
+	if self._Validated == nil then
 		error("Must validate a command before running.")
 	end
 
-	if self.Object.run then -- We can just run it here on this machine
-		return self.Object.run(self, self.Executor, unpack(self:GatherArgumentValues()))
-	elseif RunService:IsServer() == true then -- Uh oh, we're already on the server and there's no run function.
+	if self.Object.Run then -- We can just Run it here on this machine
+		return self.Object.Run(self, self.Executor, unpack(self:GatherArgumentValues()))
+	elseif RunService:IsServer() == true then -- Uh oh, we're already on the server and there's no Run function.
 		warn(self.Name, "command has no implementation!")
 		return "No implementation."
 	else -- We're on the client, so we send this off to the server to let the server see what it can do with it.
-		return self.Dispatcher:Send(self.RawText, self.Object.data and self.Object.data(self))
+		return self.Dispatcher:Send(self.RawText, self.Object.Data and self.Object.Data(self))
 	end
 end
 
@@ -109,8 +109,8 @@ function Command:GetData ()
 		return self.Data
 	end
 
-	if self.Object.data then
-		self.Data = self.Object.data(self)
+	if self.Object.Data then
+		self.Data = self.Object.Data(self)
 	end
 
 	return self.Data

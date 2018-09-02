@@ -12,7 +12,7 @@ local Dispatcher = {
 --- Takes in raw command information and generates a command out of it.
 -- text and executor are required arguments.
 -- allowIncompleteData, when true, will ignore errors about arguments missing so we can parse live as the user types.
--- data is for speccial networked data about the command gathered on the client. Purely optional.
+-- data is for special networked Data about the command gathered on the client. Purely Optional.
 -- returns the command if successful, or (false, errorText) if not
 function Dispatcher:Evaluate (text, executor, allowIncompleteArguments, data)
 	if RunService:IsClient() == true and executor ~= game.Players.LocalPlayer then
@@ -25,7 +25,7 @@ function Dispatcher:Evaluate (text, executor, allowIncompleteArguments, data)
 
 	if commandObject then
 		-- No need to continue splitting when there are no more arguments. We'll just mash any additional arguments into the last one.
-		arguments = Util.MashExcessArguments(arguments, #commandObject.args)
+		arguments = Util.MashExcessArguments(arguments, #commandObject.Args)
 
 		-- Create the CommandContext and parse it.
 		local command = Command.new(self, text, commandObject, executor, arguments, data)

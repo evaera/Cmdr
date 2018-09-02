@@ -1,11 +1,11 @@
 return {
-	name = "to";
-	description = "Teleports you to another player.";
-	args = {
+	Name = "to";
+	Description = "Teleports you to another player.";
+	Args = {
 		{
-			type = "player";
-			name = "target";
-			description = "The player to teleport to."
+			Type = "player";
+			Name = "target";
+			Description = "The player to teleport to."
 		}
 	};
 }
