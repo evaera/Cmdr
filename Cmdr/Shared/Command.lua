@@ -31,7 +31,7 @@ function Command:Parse (allowIncompleteArguments)
 	for i, definition in pairs(self.ArgumentDefinitions) do
 		if self.RawArguments[i] == nil and definition.optional ~= true and allowIncompleteArguments ~= true then
 			return false, ("Required argument #%d %s is missing."):format(i, definition.name)
-		else
+		elseif self.RawArguments[i] then
 			self.Arguments[i] = Argument.new(self, definition, self.RawArguments[i] or "")
 		end
 	end
