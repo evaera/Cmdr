@@ -1,5 +1,5 @@
 return function (context, fromPlayers, toPlayer)
-  if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
+  if toPlayer.Character and toPlayer.Character:FindFirstChild("HumanoidRootPart") then
     local position = toPlayer.Character.HumanoidRootPart.CFrame
 
     for _, player in ipairs(fromPlayers) do

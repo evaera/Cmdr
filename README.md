@@ -6,7 +6,7 @@
   <img src="https://giant.gfycat.com/ChillyAjarGoldfish.gif" alt="Cmdr Demo" />
 </p>
 
-Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard moderation commands (teleport, kill, kick, ban), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe). 
+Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard moderation commands (teleport, kill, kick, ban), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
 
 Cmdr provides a friendly API that lets the game developer choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
 
@@ -15,7 +15,7 @@ Cmdr has a robust and friendly type validation system (making sure strings are s
 ## Set-up
 
 ### Server
-You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded. 
+You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded.
 
 ```lua
 -- This is a script you would create in ServerScriptService, for example.
@@ -41,7 +41,7 @@ Cmdr:SetActivationKeys({ Enum.KeyCode.Semicolon })
 
 ## Commands
 
-Commands are defined as ModuleScripts that return a single table. 
+Commands are defined in ModuleScripts that return a single table.
 
 ```lua
 -- Teleport.lua, inside your commands folder as defined above.
@@ -74,19 +74,23 @@ The implementation should be in a separate file, which is never delivered to the
 return function (context, fromPlayers, toPlayer)
   if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
     local position = toPlayer.Character.HumanoidRootPart.CFrame
-    
+
     for _, player in ipairs(fromPlayers) do
       if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         player.Character.HumanoidRootPart.CFrame = position
       end
     end
-    
+
     return "Teleported players."
   end
-  
+
   return "Target player has no character."
 end
 ```
+
+Alternatively, you can make a command run entirely on the client, by adding a `Run` function directly to the first module instead of having it be in a -`Server` script on its own.
+
+## API
 
 # Todo
 - Write documentation
