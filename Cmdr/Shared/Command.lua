@@ -97,7 +97,7 @@ function Command:Run ()
 	end
 
 	if self.Object.Run then -- We can just Run it here on this machine
-		self.Response = self.Object.Run(self, self.Executor, unpack(self:GatherArgumentValues()))
+		self.Response = self.Object.Run(self, unpack(self:GatherArgumentValues()))
 	elseif RunService:IsServer() == true then -- Uh oh, we're already on the server and there's no Run function.
 		warn(self.Name, "command has no implementation!")
 		self.Response = "No implementation."
