@@ -95,6 +95,21 @@ function Dispatcher:Run (...)
 	return command:Run()
 end
 
+--- Runs hooks matching name and returns nil for ok or a string for cancellation
+function Dispatcher:RunHooks(hookName, ...)
+	if not self.Registry.Hooks[hookName] then
+		error(("Invalid hook name: %q"):format(hookName), 2)
+	end
+
+	for _, hook in ipairs(self.Registry.Hooks[hookName]) do
+		local value = hook(...)
+
+		if value ~= nil then
+			return tostring(value)
+		end
+	end
+end
+
 return function (cmdr)
 	Dispatcher.Cmdr = cmdr
 	Dispatcher.Registry = cmdr.Registry

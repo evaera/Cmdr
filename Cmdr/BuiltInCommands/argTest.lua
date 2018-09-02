@@ -19,7 +19,7 @@ return {
 			Type = "boolean";
 			Name = "true/false";
 			Description = "Some  boolean";
-			Optional = true;
+			-- Optional = true;
 		},
 		{
 			Type = "players";

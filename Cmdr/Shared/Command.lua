@@ -12,11 +12,15 @@ function Command.new (dispatcher, text, commandObject, executor, arguments, data
 		Name = commandObject.Name; -- The command name (not alias)
 		RawText = text; -- The raw text used to trigger this command
 		Object = commandObject; -- The command object (definition)
+		Group = commandObject.Group;
+		Aliases = commandObject.Aliases;
+		Description = commandObject.Description;
 		Executor = executor; -- The player who ran the command
 		ArgumentDefinitions = commandObject.Args; -- The argument definitions from the command definition
 		RawArguments = arguments; -- Array of strings which are the unparsed values for the arguments
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = data; -- A special container for any additional data the command needs to collect from the client
+		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
 	}
 
 	setmetatable(self, Command)
@@ -31,7 +35,7 @@ function Command:Parse (allowIncompleteArguments)
 	for i, definition in pairs(self.ArgumentDefinitions) do
 		if self.RawArguments[i] == nil and definition.Optional ~= true and allowIncompleteArguments ~= true then
 			return false, ("Required argument #%d %s is missing."):format(i, definition.Name)
-		elseif self.RawArguments[i] then
+		elseif self.RawArguments[i] or allowIncompleteArguments then
 			self.Arguments[i] = Argument.new(self, definition, self.RawArguments[i] or "")
 		end
 	end
@@ -87,13 +91,25 @@ function Command:Run ()
 		error("Must validate a command before running.")
 	end
 
+	local beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
+	if beforeRunHook then
+		return beforeRunHook
+	end
+
 	if self.Object.Run then -- We can just Run it here on this machine
-		return self.Object.Run(self, self.Executor, unpack(self:GatherArgumentValues()))
+		self.Response = self.Object.Run(self, self.Executor, unpack(self:GatherArgumentValues()))
 	elseif RunService:IsServer() == true then -- Uh oh, we're already on the server and there's no Run function.
 		warn(self.Name, "command has no implementation!")
-		return "No implementation."
+		self.Response = "No implementation."
 	else -- We're on the client, so we send this off to the server to let the server see what it can do with it.
-		return self.Dispatcher:Send(self.RawText, self.Object.Data and self.Object.Data(self))
+		self.Response = self.Dispatcher:Send(self.RawText, self.Object.Data and self.Object.Data(self))
+	end
+
+	local afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)
+	if afterRunHook then
+		return afterRunHook
+	else
+		return self.Response
 	end
 end
 

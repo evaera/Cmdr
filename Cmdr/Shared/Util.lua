@@ -58,7 +58,7 @@ function Util.MakeFuzzyFinder (setOrContainer)
 
 			-- Continue on checking for non-exact matches...
 			-- Still need to loop through everything, even on returnFrist, because possibility of an exact match.
-			if name:lower():sub(1, #text) == text then
+			if name:lower():sub(1, #text) == text and #text > 0 then
 				results[#results + 1] = instances and instances[i] or name
 			end
 		end

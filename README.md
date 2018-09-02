@@ -6,6 +6,5 @@ Still big WIP, more to be written later
 
 
 # Todo
-- Add lifecycle methods
-- Add permission system
-- Implement server logic for commands
+- Write documentation
+- Add more methods to command context

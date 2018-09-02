@@ -2,6 +2,7 @@ return {
 	Name = "teleport";
 	Aliases = {"tp"};
 	Description = "Teleports a player or set of players to one target.";
+	Group = "Admin";
 	Args = {
 		{
 			Type = "players";

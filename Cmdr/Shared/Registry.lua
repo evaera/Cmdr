@@ -3,7 +3,7 @@ local Util = require(script.Parent.Util)
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
 	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "Name"});
-	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data"});
+	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional"});
 	Types = {};
 	Commands = {};
@@ -138,6 +138,15 @@ end
 --- Gets a type definition by name.
 function Registry:GetType (name)
 	return self.Types[name]
+end
+
+--- Adds a hook to be called when any command is run
+function Registry:AddHook(hookName, callback)
+	if not self.Hooks[hookName] then
+		error(("Invalid hook name: %q"):format(hookName), 2)
+	end
+
+	table.insert(self.Hooks[hookName], callback)
 end
 
 return function (cmdr)
