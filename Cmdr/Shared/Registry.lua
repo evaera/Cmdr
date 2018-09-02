@@ -113,6 +113,10 @@ function Registry:RegisterCommandsIn (container)
 	end
 end
 
+function Registry:RegisterDefaultCommands ()
+	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder)
+end
+
 --- Gets a command definition by name. (Can be an alias)
 function Registry:GetCommand (name)
 	name = name or ""

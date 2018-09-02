@@ -1,7 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterGui = game:GetService("StarterGui")
-
-local Util = require(script.Parent.Shared.Util)
 
 --- Handles initial preparation of the game server-side.
 return function (cmdr)
@@ -15,8 +12,14 @@ return function (cmdr)
 		return object
 	end
 
-	ReplicatedRoot = script.Parent.Client.CmdrClient
-	ReplicatedRoot.Parent = ReplicatedStorage
+	ReplicatedRoot = script.Parent.CmdrClient
+
+	if ReplicatedStorage:FindFirstChild("Resources") then -- If using RoStrap
+		-- ReplicatedRoot.Name = "Cmdr"
+		ReplicatedRoot.Parent = ReplicatedStorage.Resources.Libraries
+	else
+		ReplicatedRoot.Parent = ReplicatedStorage
+	end
 
 	RemoteFunction = Create("RemoteFunction", "CmdrFunction")
 
@@ -24,14 +27,11 @@ return function (cmdr)
 	Create("Folder", "Types")
 
 	script.Parent.Shared.Parent = ReplicatedRoot
-	script.Parent.Client.CmdrInterface.Parent = StarterGui:WaitForChild("Cmdr")
-	script.Parent.Client:Destroy()
 
 	cmdr.ReplicatedRoot = ReplicatedRoot
 	cmdr.RemoteFunction = RemoteFunction
 
 	cmdr:RegisterTypesIn(script.Parent.BuiltInTypes)
-	--cmdr:RegisterCommandsIn(script.Parent.BuiltInCommands)
 
 	script.Parent.BuiltInTypes:Destroy()
 	script.Parent.BuiltInCommands.Name = "Server commands"

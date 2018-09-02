@@ -11,6 +11,8 @@ local Cmdr do
 		ReplicatedRoot = script;
 		RemoteFunction = script:WaitForChild("CmdrFunction");
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
+		Enabled = true;
+		PlaceName = "place";
 		Util = Util;
 	}, {
 		-- This sucks, and may be redone or removed
@@ -29,9 +31,22 @@ local Cmdr do
 	Cmdr.Dispatcher = require(Shared.Dispatcher)(Cmdr)
 end
 
+local Interface = require(script.CmdrInterface)(Cmdr)
+
 --- Sets a list of keyboard keys (Enum.KeyCode) that can be used to open the commands menu
 function Cmdr:SetActivationKeys (keysArray)
 	self.ActivationKeys = Util.MakeDictionary(keysArray)
+end
+
+--- Sets the place name label on the interface
+function Cmdr:SetPlaceName (name)
+	self.PlaceName = name
+	Interface.Window:UpdateLabel()
+end
+
+--- Sets whether or not the console is enabled
+function Cmdr:SetEnabled (enabled)
+	self.Enabled = enabled
 end
 
 -- Only register when we aren't in studio because don't want to overwrite what the server portion did

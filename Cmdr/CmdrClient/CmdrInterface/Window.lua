@@ -1,9 +1,9 @@
+-- Here be dragons
+
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
-local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 local LINE_HEIGHT = 20
 local WINDOW_MAX_HEIGHT = 300
@@ -14,9 +14,10 @@ local Window = {
 	AutoComplete = nil;
 	ProcessEntry = nil;
 	OnTextChanged = nil;
+	Cmdr = nil;
 }
 
-local Gui = script.Parent.Parent:WaitForChild("Frame")
+local Gui = Player:WaitForChild("PlayerGui"):WaitForChild("Cmdr"):WaitForChild("Frame")
 local Line = Gui:WaitForChild("Line")
 local Entry = Gui:WaitForChild("Entry")
 
@@ -24,7 +25,7 @@ Line.Parent = nil
 
 --- Update the text entry label
 function Window:UpdateLabel ()
-	Entry.TextLabel.Text = Player.Name .. "@" .. "place" .. "$"
+	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
 	Entry.TextLabel.Size = UDim2.new(0, Entry.TextLabel.TextBounds.X, 0, 20)
 	Entry.TextBox.Position = UDim2.new(0, Entry.TextLabel.Size.X.Offset + 10, 0, 0)
 end
@@ -135,9 +136,20 @@ function Window:BeginInput (input, gameProcessed)
 	if GuiService.MenuIsOpen then
 		self:Hide()
 	end
-	if gameProcessed and self:IsVisible() == false then return end
 
-	if Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
+	if self.Cmdr.Enabled == false then
+		if self:IsVisible() then
+			self:Hide()
+		end
+
+		return
+	end
+
+	if gameProcessed and self:IsVisible() == false then
+		return
+	end
+
+	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
 		self:SetVisible(not self:IsVisible())
 		wait()
 		self:SetEntryText("")
