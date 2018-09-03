@@ -41,7 +41,9 @@ Cmdr:SetActivationKeys({ Enum.KeyCode.Semicolon })
 
 ## Commands
 
-Commands are defined in ModuleScripts that return a single table.
+No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling `Cmdr:RegisterDefaultCommands()`. See [Default Commands](#default-commands) for a list.
+
+Custom commands are defined in ModuleScripts that return a single table.
 
 ```lua
 -- Teleport.lua, inside your commands folder as defined above.
@@ -88,11 +90,55 @@ return function (context, fromPlayers, toPlayer)
 end
 ```
 
-Alternatively, you can make a command run entirely on the client, by adding a `Run` function directly to the first module instead of having it be in a -`Server` script on its own.
+### Definition properties
+
+#### Name: string
+The name that's in auto complete and displayed to user.
+
+#### Aliases: array<string>
+Aliases that are not in the autocomplete, but if matched will run this command just the same. For example, `m` might be an alias of `announce`.
+
+#### Description: string
+A description of the command which is displayed to the user.
+
+#### Group?: any
+Optional, can be be any value you wish. This property is intended to be used in hooks, so that you can categorize commands and decide if you want a specific user to be able to run them or not.
+
+#### Args: array<dictionary>
+An array containing dictionaries with the following keys:
+
+##### Type: string
+The argument type (case sensitive).
+
+##### Name: string
+The argument name, this is displayed to the user as they type.
+
+##### Description: string
+A description of what the argument is, this is also displayed to the user.
+
+##### Optional?: boolean
+If this is present and set to `true`, then the user can run the command without filling out this value. The argument will be sent to your commands as `nil`.
+
+#### Data?: function (context: CommandContext)
+If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available on the server command with `context:GetData()`.
+
+#### Run?: function (context: CommandContext, ...: any)
+If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
+
+### Default Commands
+Note: These commands are coming soon, they are not bundled yet.
+
+~~If you run `Cmdr:RegisterDefaultCommands()`, these commands are available with the following `Group`s:~~
+
+~~Group: `DefaultAdmin`: `announce`, `bring`, `kick`, `ban`, `teleport`, `to`, `kill`~~
 
 ## Types
 
-Types are defined as tables that implement specific named functions. When Types are in a ModuleScript, the ModuleScript should not return the table directly; instead it should return a function, which accepts the Registry as a parameter. You should then call `registry:RegisterType("typeName", yourTable)` to register it.
+By default, these types are available:
+
+`string`, `number`, `integer`, `boolean`, `player`, `players` (More defaults coming soon)
+
+Custom types are defined as tables that implement specific named functions. When Types are in a ModuleScript, the ModuleScript should not return the table directly; instead it should return a function, which accepts the Registry as a parameter. You should then call `registry:RegisterType("typeName", yourTable)` to register it.
 
 ```lua
 local intType = {
@@ -114,25 +160,26 @@ return function (registry)
 end
 ```
 
-### Transform
+### Definition properties
+#### Transform
 
 `Transform` is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (Validate, Autocomplete, and Parse).
 
-### Validate
+#### Validate
 
 The `Validate` function is passed whatever is returned from the Transform function (or the raw value if there is no Transform function). If the value is valid for the type, it should return `true`. If it the value is invalid, it should return two values: `false`, and a string containing an error message.
 
 If this function isn't present, anything will be considered valid.
 
-### Autocomplete
+#### Autocomplete
 
 `Autocomplete` is optional and should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu.
 
-### Parse
+#### Parse
 
 Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
 
-## Enum types
+### Enum types
 
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).
 
@@ -279,3 +326,5 @@ Descriptions for the API are coming soon.
 # Todo
 - Write documentation
 - Add more methods to command context
+	- Allowing commands to take more control of the console, printing extra messages, clearing, rich text, etc.
+- Make players type able to have a comma-separated list.
