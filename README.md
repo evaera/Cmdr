@@ -137,7 +137,7 @@ Parse is the only required function in a type definition. It is the final step b
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).
 
 ```lua
-	return function (registry)
+return function (registry)
 	registry:RegisterType("place", registry.Cmdr.Util.MakeEnumType("Place", {"World 1", "World 2", "World 3", "Final World"}))
 end
 ```
