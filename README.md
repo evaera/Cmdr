@@ -107,16 +107,16 @@ Optional, can be be any value you wish. This property is intended to be used in 
 #### Args: array<dictionary>
 An array containing dictionaries with the following keys:
 
-##### Type: string
+##### Arg.Type: string
 The argument type (case sensitive).
 
-##### Name: string
+##### Arg.Name: string
 The argument name, this is displayed to the user as they type.
 
-##### Description: string
+##### Arg.Description: string
 A description of what the argument is, this is also displayed to the user.
 
-##### Optional?: boolean
+##### Arg.Optional?: boolean
 If this is present and set to `true`, then the user can run the command without filling out this value. The argument will be sent to your commands as `nil`.
 
 #### Data?: function (context: CommandContext)
