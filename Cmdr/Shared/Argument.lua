@@ -15,7 +15,7 @@ function Argument.new (command, argumentObject, value)
 	}
 
 	if self.Type == nil then
-		error(string.format("%s has an unregistered type %q"), self.Name, argumentObject.Type or "<none>")
+		error(string.format("%s has an unregistered type %q"), self.Name or "<none>", argumentObject.Type or "<none>")
 	end
 
 	setmetatable(self, Argument)

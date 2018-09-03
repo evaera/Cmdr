@@ -4,7 +4,7 @@
   "partitions": {
     "server": {
       "path": "./Cmdr",
-      "target": "ServerScriptService.Repository.Vendor.CmdrServer"
+      "target": "ServerScriptService.Repository.Vendor.Cmdr.Server.Cmdr"
     }
   }
 }
