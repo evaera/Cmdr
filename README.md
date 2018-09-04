@@ -32,7 +32,7 @@ To prepare the GUI, download the Cmdr.rbxm model file and insert it into your ga
 
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient")
+local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Configurable, and you can choose multiple keys
 Cmdr:SetActivationKeys({ Enum.KeyCode.Semicolon })
