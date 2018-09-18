@@ -1,4 +1,5 @@
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 local Argument = require(script.Parent.Argument)
 
 local IsServer = RunService:IsServer()
@@ -138,21 +139,23 @@ function Command:GetData ()
 end
 
 --- Sends an event message to a player
-function Command:SendEvent(player, ...)
-	if not IsServer then
-		error("Can't send event messages from the client.", 2)
-	end
-
+function Command:SendEvent(player, event, ...)
 	assert(typeof(player) == "Instance", "Argument #1 must be a Player")
 	assert(player:IsA("Player"), "Argument #1 must be a Player")
+	assert(type(event) == "string", "Argument #2 must be a string")
 
-	self.Dispatcher.Cmdr.RemoteEvent:FireClient(player, ...)
+	if IsServer then
+		self.Dispatcher.Cmdr.RemoteEvent:FireClient(player, event, ...)
+	elseif self.Dispatcher.Cmdr.Events[event] then
+		assert(player == Players.LocalPlayer, "Event messages can only be sent to the local player on the client.")
+		self.Dispatcher.Cmdr.Events[event](...)
+	end
 end
 
 --- Sends an event message to all players
 function Command:BroadcastEvent(...)
 	if not IsServer then
-		error("Can't send event messages from the client.", 2)
+		error("Can't broadcast event messages from the client.", 2)
 	end
 
 	self.Dispatcher.Cmdr.RemoteEvent:FireAllClients(...)

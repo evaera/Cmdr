@@ -55,6 +55,10 @@ end
 
 --- Add a line to the command bar
 function Window:AddLine (text, color)
+	if #text == 0 then
+		return
+	end
+
 	local line = Line:Clone()
 	line.Text = text or "nil"
 	line.TextColor3 = color or line.TextColor3
