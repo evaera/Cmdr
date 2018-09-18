@@ -9,6 +9,7 @@ local Cmdr do
 	Cmdr = setmetatable({
 		ReplicatedRoot = nil;
 		RemoteFunction = nil;
+		RemoteEvent = nil;
 		Util = Util;
 		DefaultCommandsFolder = script.BuiltInCommands;
 	}, {

@@ -78,8 +78,6 @@ function Registry:RegisterCommand (commandScript, commandServerScript)
 
 	if commandServerScript then
 		commandObject.Run = require(commandServerScript)
-	else
-		commandObject.Run = nil
 	end
 
 	self:RegisterCommandObject(commandObject)

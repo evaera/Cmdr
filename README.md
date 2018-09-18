@@ -128,9 +128,11 @@ If you want your command to run entirely on the client, you can add this functio
 ### Default Commands
 Note: These commands are coming soon, they are not bundled yet.
 
-~~If you run `Cmdr:RegisterDefaultCommands()`, these commands are available with the following `Group`s:~~
+If you run `Cmdr:RegisterDefaultCommands()`, these commands are available with the following `Group`s:
 
-~~Group: `DefaultAdmin`: `announce`, `bring`, `kick`, `ban`, `teleport`, `to`, `kill`~~
+Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp`), `kill`
+
+Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
 ## Types
 
@@ -244,6 +246,7 @@ Descriptions for the API are coming soon.
 #### `CmdrClient:SetActivationKeys(keys: array<Enum.KeyCode>): void`
 #### `CmdrClient:SetPlaceName(labelText: string): void`
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
+#### `CmdrClient:HandleEvent(event: string, handler: function): void`
 
 ### Properties
 
@@ -294,6 +297,9 @@ Descriptions for the API are coming soon.
 
 #### `CommandContext:GetArgument(index: number): ArgumentContext`
 #### `CommandContext:GetData(): any`
+#### `CommandContext:SendEvent(player: Player, event: string, ...: any): void`
+#### `CommandContext:BroadcastEvent(event: string, ...: any): void`
+#### `CommandContext:Reply(text: string, color: Color3): void`
 
 ## ArgumentContext
 
@@ -315,7 +321,7 @@ Descriptions for the API are coming soon.
 ### Methods
 
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
-#### `Util.MakeFuzzyFinder(setOrContainer: array<strings> | array<Instance> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
+#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
 #### `Util.GetInstanceNames(instances: array<Instance>): array<string>`
 #### `Util.SplitStringSimple(text: string, seperator: string): array<string>`
 #### `Util.SplitString(text: string, max: number): array<string>`

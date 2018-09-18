@@ -1,6 +1,9 @@
 local RunService = game:GetService("RunService")
 local Argument = require(script.Parent.Argument)
 
+local IsServer = RunService:IsServer()
+local IsClient = RunService:IsClient()
+
 local Command = {}
 Command.__index = Command
 
@@ -98,7 +101,7 @@ function Command:Run ()
 
 	if self.Object.Run then -- We can just Run it here on this machine
 		self.Response = self.Object.Run(self, unpack(self:GatherArgumentValues()))
-	elseif RunService:IsServer() == true then -- Uh oh, we're already on the server and there's no Run function.
+	elseif IsServer then -- Uh oh, we're already on the server and there's no Run function.
 		warn(self.Name, "command has no implementation!")
 		self.Response = "No implementation."
 	else -- We're on the client, so we send this off to the server to let the server see what it can do with it.
@@ -118,6 +121,8 @@ function Command:GetArgument (index)
 	return self.Arguments[index]
 end
 
+-- Below are functions that are only meant to be used in command implementations --
+
 --- Returns the extra data associated with this command.
 -- This needs to be used instead of just context.Data for reliability when not using a remote command.
 function Command:GetData ()
@@ -130,6 +135,32 @@ function Command:GetData ()
 	end
 
 	return self.Data
+end
+
+--- Sends an event message to a player
+function Command:SendEvent(player, ...)
+	if not IsServer then
+		error("Can't send event messages from the client.", 2)
+	end
+
+	assert(typeof(player) == "Instance", "Argument #1 must be a Player")
+	assert(player:IsA("Player"), "Argument #1 must be a Player")
+
+	self.Dispatcher.Cmdr.RemoteEvent:FireClient(player, ...)
+end
+
+--- Sends an event message to all players
+function Command:BroadcastEvent(...)
+	if not IsServer then
+		error("Can't send event messages from the client.", 2)
+	end
+
+	self.Dispatcher.Cmdr.RemoteEvent:FireAllClients(...)
+end
+
+--- Alias of self:SendEvent(self.Executor, "AddLine", text)
+function Command:Reply(...)
+	return self:SendEvent(self.Executor, "AddLine", ...)
 end
 
 return Command

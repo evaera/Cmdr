@@ -10,10 +10,12 @@ local Cmdr do
 	Cmdr = setmetatable({
 		ReplicatedRoot = script;
 		RemoteFunction = script:WaitForChild("CmdrFunction");
+		RemoteEvent = script:WaitForChild("CmdrEvent");
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
 		Enabled = true;
 		PlaceName = "place";
 		Util = Util;
+		Events = {};
 	}, {
 		-- This sucks, and may be redone or removed
 		-- Proxies dispatch methods on to main Cmdr object
@@ -49,10 +51,24 @@ function Cmdr:SetEnabled (enabled)
 	self.Enabled = enabled
 end
 
+--- Sets the handler for a certain event type
+function Cmdr:HandleEvent(name, callback)
+	self.Events[name] = callback
+end
+
 -- Only register when we aren't in studio because don't want to overwrite what the server portion did
 if RunService:IsServer() == false then
 	Cmdr.Registry:RegisterTypesIn(script:WaitForChild("Types"))
 	Cmdr.Registry:RegisterCommandsIn(script:WaitForChild("Commands"))
 end
+
+-- Hook up event listener
+Cmdr.RemoteEvent.OnClientEvent:Connect(function(name, ...)
+	if Cmdr.Events[name] then
+		Cmdr.Events[name](...)
+	end
+end)
+
+require(script.DefaultEventHandlers)(Cmdr)
 
 return Cmdr

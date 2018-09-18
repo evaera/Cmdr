@@ -8,7 +8,7 @@ return function (context, fromPlayers, toPlayer)
       end
     end
 
-    return "Teleported players."
+    return ("Teleported %d players."):format(#fromPlayers)
   end
 
   return "Target player has no character."

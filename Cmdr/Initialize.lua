@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --- Handles initial preparation of the game server-side.
 return function (cmdr)
-	local ReplicatedRoot, RemoteFunction
+	local ReplicatedRoot, RemoteFunction, RemoteEvent
 
 	local function Create (class, name, parent)
 		local object = Instance.new(class)
@@ -22,6 +22,7 @@ return function (cmdr)
 	end
 
 	RemoteFunction = Create("RemoteFunction", "CmdrFunction")
+	RemoteEvent = Create("RemoteEvent", "CmdrEvent")
 
 	Create("Folder", "Commands")
 	Create("Folder", "Types")
@@ -30,6 +31,7 @@ return function (cmdr)
 
 	cmdr.ReplicatedRoot = ReplicatedRoot
 	cmdr.RemoteFunction = RemoteFunction
+	cmdr.RemoteEvent = RemoteEvent
 
 	cmdr:RegisterTypesIn(script.Parent.BuiltInTypes)
 

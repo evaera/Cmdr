@@ -1,6 +1,7 @@
 return {
 	Name = "to";
 	Description = "Teleports you to another player.";
+	Group = "DefaultDebug";
 	Args = {
 		{
 			Type = "player";
