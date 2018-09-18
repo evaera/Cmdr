@@ -1,3 +1,10 @@
+local TYPE_DEFAULTS = {
+	-- Make all `players` types also be able to match by team
+	players = "players % teamPlayers";
+}
+
+local Util = require(script.Parent.Util)
+
 local Argument = {}
 Argument.__index = Argument
 
@@ -5,17 +12,26 @@ Argument.__index = Argument
 function Argument.new (command, argumentObject, value)
 	local self = {
 		Command = command; -- The command that owns this argument
-		Type = command.Dispatcher.Registry:GetType(argumentObject.Type); -- The type definition
+		Type = nil; -- The type definition
 		Name = argumentObject.Name; -- The name for this specific argument
 		Object = argumentObject; -- The raw ArgumentObject (definition)
 		Required = argumentObject.Optional ~= true; -- If the argument is required or not.
 		Executor = command.Executor; -- The player who is running the command
-		RawValue = value; -- The raw, unparsed value
+		RawValue = nil; -- The raw, unparsed value
 		TransformedValue = nil; -- The transformed value (generated later)
+		Prefix = nil; -- The prefix for this command (%Team)
 	}
 
+	local parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(
+		TYPE_DEFAULTS[argumentObject.Type] or argumentObject.Type, value
+	)
+
+	self.Type = command.Dispatcher.Registry:GetType(parsedType)
+	self.RawValue = parsedRawValue
+	self.Prefix = prefix
+
 	if self.Type == nil then
-		error(string.format("%s has an unregistered type %q"), self.Name or "<none>", argumentObject.Type or "<none>")
+		error(string.format("%s has an unregistered type %q", self.Name or "<none>", parsedType or "<none>"))
 	end
 
 	setmetatable(self, Argument)

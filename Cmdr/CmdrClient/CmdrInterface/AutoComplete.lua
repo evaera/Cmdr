@@ -6,7 +6,6 @@ return function (Cmdr)
 		Items = {};
 		ItemOptions = {};
 		SelectedItem = 0;
-		LeftChop = 0;
 	}
 
 	local Util = Cmdr.Util
@@ -66,14 +65,15 @@ return function (Cmdr)
 
 	--- Shows the auto complete menu with the given list and possible options
 	-- item = {typedText, suggestedText, options?=options}
-	-- The options table is optional. `at` and `leftChop` should only be passed into AutoComplete::Show
+	-- The options table is optional. `at` should only be passed into AutoComplete::Show
 	-- name, type, and description may be passed in an options dictionary inside the items as well
 	-- options.at?: the character index at which to show the menu
-	-- options.leftChop?: Ignore x characters from the left side on the given options (for %Team selection)
 	-- options.name?: The name to display in the info box
 	-- options.type?: The type to display in the info box
+	-- options.prefix?: The current type prefix (%Team)
 	-- options.description?: The description for the currently active info box
 	-- options.invalid?: If true, description is shown in red.
+	-- options.isLast?: If true, auto complete won't keep going after this argument.
 	function AutoComplete:Show (items, options)
 		options = options or {}
 
@@ -87,13 +87,14 @@ return function (Cmdr)
 		-- Reset state
 		self.SelectedItem = 1
 		self.Items = items
-		self.LeftChop = options.leftChop or 1
+		self.Prefix = options.prefix or ""
+		self.LastItem = options.isLast or false
 
 		-- Generate the new option labels
 		local autocompleteWidth = 200
 
 		for i, item in pairs(self.Items) do
-			local leftText = item[1]:sub(self.LeftChop)
+			local leftText = item[1]
 			local rightText = item[2]
 
 			if Shorthands[leftText] then

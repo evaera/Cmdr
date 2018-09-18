@@ -51,7 +51,7 @@ return function (Cmdr)
 
 			local lastArgument = command:GetArgument(#arguments)
 			if lastArgument then
-				local items, leftChop = lastArgument:GetAutocomplete()
+				local items = lastArgument:GetAutocomplete()
 				for i, item in pairs(items) do
 					acItems[i] = {lastArgument.RawValue, item}
 				end
@@ -63,15 +63,16 @@ return function (Cmdr)
 				end
 
 				return AutoComplete:Show(acItems, {
-					leftChop = leftChop;
 					at = atEnd and #text - #lastArgument.RawValue + (text:sub(#text, #text):match("%s") and -1 or 0);
+					prefix = lastArgument.Prefix;
+					isLast = #command.Arguments == #command.ArgumentDefinitions;
 					name = lastArgument.Name;
-					type = lastArgument.Object.Type;
+					type = lastArgument.Type.Name;
 					description = (valid == false and errorText) or lastArgument.Object.Description;
 					invalid = not valid;
 				})
 			end
-		elseif commandText then
+		elseif commandText and #arguments == 0 then
 			Window:SetIsValidInput(true)
 			local exactCommand = Cmdr.Registry:GetCommand(commandText)
 			local exactMatch
@@ -96,6 +97,7 @@ return function (Cmdr)
 			return AutoComplete:Show(acItems)
 		end
 
+		Window:SetIsValidInput(false, "Invalid command. Use the help command to see all available commands.")
 		AutoComplete:Hide()
 	end
 

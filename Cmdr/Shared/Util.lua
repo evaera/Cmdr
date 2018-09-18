@@ -148,6 +148,7 @@ function Util.GetTextSize (text, label, size)
 	return TextService:GetTextSize(text, label.TextSize, label.Font, size or Vector2.new(label.AbsoluteSize.X, 0))
 end
 
+--- Makes an Enum type.
 function Util.MakeEnumType(name, values)
 	local findValue = Util.MakeFuzzyFinder(values)
 	return {
@@ -161,6 +162,31 @@ function Util.MakeEnumType(name, values)
 			return findValue(text, true)
 		end
 	}
+end
+
+function Util.ParsePrefixedUnionType(typeValue, rawValue)
+	local split = Util.SplitStringSimple(typeValue)
+
+	-- Check prefixes in order from longest to shortest
+	local types = {}
+	for i = 1, #split, 2 do
+		types[#types + 1] = {
+			prefix = split[i - 1] or "";
+			type = split[i];
+		}
+	end
+
+	table.sort(types, function (a, b)
+		return #a.prefix > #b.prefix
+	end)
+
+	for i = 1, #types do
+		local t = types[i]
+
+		if rawValue:sub(1, #t.prefix) == t.prefix then
+			return t.type, rawValue:sub(#t.prefix + 1), t.prefix
+		end
+	end
 end
 
 return Util

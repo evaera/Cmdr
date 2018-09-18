@@ -1,6 +1,6 @@
 # Cmdr
 
-**Cmdr** is a fully extensible command console for Roblox developers.
+**Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
 <p align="center">
   <img src="https://giant.gfycat.com/ChillyAjarGoldfish.gif" alt="Cmdr Demo" />
@@ -138,7 +138,7 @@ Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
 By default, these types are available:
 
-`string`, `number`, `integer`, `boolean`, `player`, `players` (More defaults coming soon)
+`string`, `number`, `integer`, `boolean`, `player`, `players`, `team`, `teamPlayers`
 
 Custom types are defined as tables that implement specific named functions. When Types are in a ModuleScript, the ModuleScript should not return the table directly; instead it should return a function, which accepts the Registry as a parameter. You should then call `registry:RegisterType("typeName", yourTable)` to register it.
 
@@ -299,7 +299,7 @@ Descriptions for the API are coming soon.
 #### `CommandContext:GetData(): any`
 #### `CommandContext:SendEvent(player: Player, event: string, ...: any): void`
 #### `CommandContext:BroadcastEvent(event: string, ...: any): void`
-#### `CommandContext:Reply(text: string, color: Color3): void`
+#### `CommandContext:Reply(text: string, color?: Color3): void`
 
 ## ArgumentContext
 

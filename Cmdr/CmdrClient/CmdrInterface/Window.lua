@@ -166,25 +166,22 @@ function Window:BeginInput (input, gameProcessed)
 		self:SetEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
 	elseif input.KeyCode == Enum.KeyCode.Tab then -- Auto complete
 		local item = self.AutoComplete:GetSelectedItem()
-		if item then
-			local text = self:GetEntryText():gsub("\t+", "") -- Get rid of the tab button text input since we use it for auto complete
-			local typed = item[1] --.. (text:sub(#text, #text):match("%s") and " " or "") -- Helps with off-by-one errors when text ends with a space (todo, still broke)
+		local text = self:GetEntryText():gsub("\t+", "") -- Get rid of the tab button text input since we use it for auto complete
+		if item and not (text:sub(#text, #text) == " " and self.AutoComplete.LastItem) then
+			local typed = item[1]
 			local replace = item[2]
-
-			-- Handles chopped characters from the AutoComplete (e.g. %Team Name, the % doesn't show up on the menu so we must have a special case to get the length correct)
-			local chopped = self.AutoComplete.LeftChop > 1 and text:sub(#text - #typed + self.AutoComplete.LeftChop - 1):sub(1, self.AutoComplete.LeftChop) or ""
 
 			-- Put auto completion options in quotation marks if they have a space
 			if replace:find(" ") then
-				replace = ('"%s%s"'):format(chopped, replace)
+				replace = ('"%s%s"'):format(self.AutoComplete.Prefix, replace)
 			else
-				replace = chopped .. replace
+				replace = self.AutoComplete.Prefix .. replace
 			end
 
 			-- need to wait a frame so we can eat the \t
 			wait()
 			-- Update the text box
-			self:SetEntryText(text:sub(1, #text - #typed) .. replace .. " ")
+			self:SetEntryText(text:sub(1, #text - #typed - #self.AutoComplete.Prefix) .. replace .. " ")
 		else
 			-- Still need to eat the \t even if there is no auto-complete to show
 			wait()
