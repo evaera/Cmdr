@@ -65,8 +65,8 @@ return function (Cmdr)
 				return AutoComplete:Show(acItems, {
 					at = atEnd and #text - #lastArgument.RawValue + (text:sub(#text, #text):match("%s") and -1 or 0);
 					prefix = lastArgument.Prefix;
-					isLast = #command.Arguments == #command.ArgumentDefinitions;
-					name = lastArgument.Name;
+					isLast = #command.Arguments == #command.ArgumentDefinitions and #lastArgument.RawValue > 0;
+					name = lastArgument.Name .. (lastArgument.Required and "" or "?");
 					type = lastArgument.Type.Name;
 					description = (valid == false and errorText) or lastArgument.Object.Description;
 					invalid = not valid;
