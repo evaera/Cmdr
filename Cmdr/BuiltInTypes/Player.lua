@@ -51,7 +51,7 @@ local playersType = {
 		local shorthand = CheckShorthands(text, executor, ShorthandSingle, ShorthandMultiple)
 
 		if shorthand then
-			return shorthand
+			return shorthand, true
 		end
 
 		local findPlayers = Util.MakeFuzzyFinder(Players:GetPlayers())
@@ -67,8 +67,8 @@ local playersType = {
 		return Util.GetInstanceNames(players)
 	end;
 
-	Parse = function (players)
-		return players
+	Parse = function (players, returnAll)
+		return returnAll and players or { players[1] }
 	end;
 }
 
