@@ -126,9 +126,7 @@ If your command needs to gather some extra data from the client that's only avai
 If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
 
 ### Default Commands
-Note: These commands are coming soon, they are not bundled yet.
-
-If you run `Cmdr:RegisterDefaultCommands()`, these commands are available with the following `Group`s:
+If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp`), `kill`
 
