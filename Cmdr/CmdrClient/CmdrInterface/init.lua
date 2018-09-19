@@ -51,21 +51,22 @@ return function (Cmdr)
 
 			local lastArgument = command:GetArgument(#arguments)
 			if lastArgument then
+				local typedText = lastArgument.RawSegments[#lastArgument.RawSegments]
 				local items = lastArgument:GetAutocomplete()
 				for i, item in pairs(items) do
-					acItems[i] = {lastArgument.RawValue, item}
+					acItems[i] = {typedText, item}
 				end
 
 				local valid, errorText = true, nil
 
-				if #lastArgument.RawValue > 0 then
+				if #typedText > 0 then
 					valid, errorText = lastArgument:Validate()
 				end
 
 				return AutoComplete:Show(acItems, {
-					at = atEnd and #text - #lastArgument.RawValue + (text:sub(#text, #text):match("%s") and -1 or 0);
-					prefix = lastArgument.Prefix;
-					isLast = #command.Arguments == #command.ArgumentDefinitions and #lastArgument.RawValue > 0;
+					at = atEnd and #text - #typedText + (text:sub(#text, #text):match("%s") and -1 or 0);
+					prefix = #lastArgument.RawSegments == 1 and lastArgument.Prefix or "";
+					isLast = #command.Arguments == #command.ArgumentDefinitions and #typedText > 0;
 					name = lastArgument.Name .. (lastArgument.Required and "" or "?");
 					type = lastArgument.Type.Name;
 					description = (valid == false and errorText) or lastArgument.Object.Description;

@@ -18,7 +18,8 @@ function Argument.new (command, argumentObject, value)
 		Required = argumentObject.Optional ~= true; -- If the argument is required or not.
 		Executor = command.Executor; -- The player who is running the command
 		RawValue = nil; -- The raw, unparsed value
-		TransformedValue = nil; -- The transformed value (generated later)
+		RawSegments = {}; -- The raw, unparsed segments (if the raw value was comma-sep)
+		TransformedValues = {}; -- The transformed value (generated later)
 		Prefix = nil; -- The prefix for this command (%Team)
 	}
 
@@ -45,52 +46,105 @@ end
 -- The return value(s) from this function are passed to all of the other argument methods.
 -- Called automatically at instantiation
 function Argument:Transform()
-	if self.TransformedValue ~= nil then
+	if #self.TransformedValues ~= 0 then
 		return
 	end
 
-	if self.Type.Transform then
-		self.TransformedValue = {self.Type.Transform(self.RawValue, self.Executor)}
+	if self.Type.Listable and #self.RawValue > 0 then
+		local rawSegments = Util.SplitStringSimple(self.RawValue, ",")
+
+		if self.RawValue:sub(#self.RawValue, #self.RawValue) == "," then
+			rawSegments[#rawSegments + 1] = "" -- makes auto complete tick over right after pressing ,
+		end
+
+		for i, rawSegment in ipairs(rawSegments) do
+			self.RawSegments[i] = rawSegment
+			self.TransformedValues[i] = { self:TransformSegment(rawSegment) }
+		end
 	else
-		self.TransformedValue = {self.RawValue}
+		self.RawSegments[1] = self.RawValue
+		self.TransformedValues[1] = { self:TransformSegment(self.RawValue) }
+	end
+end
+
+function Argument:TransformSegment(rawSegment)
+	if self.Type.Transform then
+		return self.Type.Transform(rawSegment, self.Executor)
+	else
+		return rawSegment
 	end
 end
 
 --- Returns whatever the Transform method gave us.
-function Argument:GetTransformedValue ()
-	return unpack(self.TransformedValue)
+function Argument:GetTransformedValue(segment)
+	return unpack(self.TransformedValues[segment])
 end
 
 --- Validates that the argument will work without any type errors.
-function Argument:Validate ()
+function Argument:Validate()
 	if self.RawValue == nil or #self.RawValue == 0 and self.Required == false then
 		return true
 	end
 
 	if self.Type.Validate then
-		local valid, errorText = self.Type.Validate(self:GetTransformedValue())
-		return valid, errorText or "Invalid value"
+		for i = 1, #self.TransformedValues do
+			local valid, errorText = self.Type.Validate(self:GetTransformedValue(i))
+
+			if not valid then
+				return valid, errorText or "Invalid value"
+			end
+		end
+
+		return true
 	else
 		return true
 	end
 end
 
 --- Gets a list of all possible values that could match based on the current value.
-function Argument:GetAutocomplete ()
+function Argument:GetAutocomplete()
 	if self.Type.Autocomplete then
-		return self.Type.Autocomplete(self:GetTransformedValue())
+		return self.Type.Autocomplete(self:GetTransformedValue(#self.TransformedValues))
 	else
 		return {}
 	end
 end
 
---- Returns the final value of the argument.
-function Argument:GetValue ()
+function Argument:ParseValue(i)
 	if self.Type.Parse then
-		return self.Type.Parse(self:GetTransformedValue())
+		return self.Type.Parse(self:GetTransformedValue(i))
 	else
-		return self:GetTransformedValue()
+		return self:GetTransformedValue(i)
 	end
+end
+
+--- Returns the final value of the argument.
+function Argument:GetValue()
+	if not self.Type.Listable then
+		return self:ParseValue(1)
+	end
+
+	local values = {}
+
+	for i = 1, #self.TransformedValues do
+		local parsedValue = self:ParseValue(i)
+
+		if type(parsedValue) ~= "table" then
+			error("Listable types must return a table from Parse")
+		end
+
+		for _, value in pairs(parsedValue) do
+			values[value] = true -- Put them into a dictionary to ensure uniqueness
+		end
+	end
+
+	local valueArray = {}
+
+	for value in pairs(values) do
+		valueArray[#valueArray + 1] = value
+	end
+
+	return valueArray
 end
 
 return Argument

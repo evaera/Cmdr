@@ -2,7 +2,7 @@ local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
-	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "Name"});
+	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "Name", "Listable"});
 	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional"});
 	Types = {};

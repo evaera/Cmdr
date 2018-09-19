@@ -10,7 +10,7 @@ Cmdr is designed specifically so that you can write your own commands and argume
 
 Cmdr provides a friendly API that lets the game developer choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
 
-Cmdr has a robust and friendly type validation system (making sure strings are strings, players are players, etc), which can give end users realtime command validation as they type, and automatic error messages. By the time the command actually gets to your code, you can be assured that all of the arguments are present and of the correct type.
+Cmdr has a robust and friendly type validation system (making sure strings are strings, players are players, etc), which can give end users real time command validation as they type, and automatic error messages. By the time the command actually gets to your code, you can be assured that all of the arguments are present and of the correct type.
 
 ## Set-up
 
@@ -183,6 +183,11 @@ If this function isn't present, anything will be considered valid.
 
 Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
 
+#### Listable
+If you set the optional key `Listable` to `true` in your table, this will tell Cmdr that comma-separated lists are allowed for this type. Cmdr will automatically split the list and parse each segment through your Transform, Validate, Autocomplete, and Parse functions individually, so you don't have to change the logic of your Type at all.
+
+The only limitation is that your Parse function **must return a table**. The tables from each individual segment's Parse will be merged into one table at the end of the parse step. The uniqueness of values is ensured upon merging, so even if the user lists the same value several times, it will only appear once in the final table.
+
 ### Enum types
 
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).
@@ -312,11 +317,13 @@ Descriptions for the API are coming soon.
 #### `ArgumentContext.Required: boolean`
 #### `ArgumentContext.Executor: Player`
 #### `ArgumentContext.RawValue: string`
+#### `ArgumentContext.RawSegments: array<string>`
+#### `ArgumentContext.Prefix: string`
 
 ### Methods
 
 #### `ArgumentContext:GetValue(): any`
-#### `ArgumentContext:GetTransformedValue(): any...`
+#### `ArgumentContext:GetTransformedValue(segment: number): any...`
 
 ## Util
 

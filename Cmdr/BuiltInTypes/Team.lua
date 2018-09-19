@@ -22,6 +22,7 @@ local teamType = {
 }
 
 local teamPlayersType = {
+	Listable = true;
 	Transform = teamType.Transform;
 	Validate = teamType.Validate;
 	Autocomplete = teamType.Autocomplete;

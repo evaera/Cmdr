@@ -47,6 +47,8 @@ local playerType = {
 }
 
 local playersType = {
+	Listable = true;
+
 	Transform = function (text, executor)
 		local shorthand = CheckShorthands(text, executor, ShorthandSingle, ShorthandMultiple)
 

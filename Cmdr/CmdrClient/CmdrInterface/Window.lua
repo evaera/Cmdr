@@ -182,10 +182,11 @@ function Window:BeginInput (input, gameProcessed)
 				replace = self.AutoComplete.Prefix .. replace
 			end
 
+			local newText = text:sub(1, #text - #typed - #self.AutoComplete.Prefix) .. replace .. " "
 			-- need to wait a frame so we can eat the \t
 			wait()
 			-- Update the text box
-			self:SetEntryText(text:sub(1, #text - #typed - #self.AutoComplete.Prefix) .. replace .. " ")
+			self:SetEntryText(newText)
 		else
 			-- Still need to eat the \t even if there is no auto-complete to show
 			wait()
