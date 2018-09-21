@@ -130,7 +130,7 @@ function Util.MashExcessArguments (arguments, max)
 	local t = {}
 	for i = 1, #arguments do
 		if i > max then
-			t[max] = ("%s %s"):format(t[max], arguments[i])
+			t[max] = ("%s %s"):format(t[max] or "", arguments[i])
 		else
 			t[i] = arguments[i]
 		end
