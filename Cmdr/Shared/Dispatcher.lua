@@ -52,7 +52,7 @@ function Dispatcher:EvaluateAndRun (text, executor, data)
 		return errorText
 	end
 
-	local valid, errorText = command:Validate()
+	local valid, errorText = command:Validate(true)
 
 	if not valid then
 		return errorText
@@ -86,7 +86,7 @@ function Dispatcher:Run (...)
 		error(errorText) -- We do a full-on error here since this is code-invoked and they should know better.
 	end
 
-	local success, errorText = command:Validate()
+	local success, errorText = command:Validate(true)
 
 	if not success then
 		error(errorText)

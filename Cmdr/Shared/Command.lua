@@ -50,13 +50,13 @@ end
 --- Validates that all of the arguments are in a valid state.
 -- This must be called before :Run() is called.
 -- Returns boolean (true if ok), errorText
-function Command:Validate ()
+function Command:Validate (isFinal)
 	self._Validated = true
 	local errorText = ""
 	local success = true
 
 	for i, arg in pairs(self.Arguments) do
-		local argSuccess, argErrorText = arg:Validate()
+		local argSuccess, argErrorText = arg:Validate(isFinal)
 
 		if not argSuccess then
 			success = false

@@ -42,6 +42,8 @@ stds.roblox = {
 	}
 }
 
+max_line_length = false
+
 ignore = { "111" }
 
 std = "lua51+roblox"

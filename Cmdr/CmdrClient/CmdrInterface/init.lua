@@ -57,7 +57,7 @@ return function (Cmdr)
 					acItems[i] = {typedText, item}
 				end
 
-				local valid, errorText = true, nil
+				local valid = true
 
 				if #typedText > 0 then
 					valid, errorText = lastArgument:Validate()

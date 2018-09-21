@@ -1,6 +1,8 @@
 local TYPE_DEFAULTS = {
 	-- Make all `players` types also be able to match by team
 	players = "players % teamPlayers";
+
+	playerId = "playerId # integer"
 }
 
 local Util = require(script.Parent.Util)
@@ -81,17 +83,27 @@ function Argument:GetTransformedValue(segment)
 end
 
 --- Validates that the argument will work without any type errors.
-function Argument:Validate()
+function Argument:Validate(isFinal)
 	if self.RawValue == nil or #self.RawValue == 0 and self.Required == false then
 		return true
 	end
 
-	if self.Type.Validate then
+	if self.Type.Validate or self.Type.ValidateOnce then
 		for i = 1, #self.TransformedValues do
-			local valid, errorText = self.Type.Validate(self:GetTransformedValue(i))
+			if self.Type.Validate then
+				local valid, errorText = self.Type.Validate(self:GetTransformedValue(i))
 
-			if not valid then
-				return valid, errorText or "Invalid value"
+				if not valid then
+					return valid, errorText or "Invalid value"
+				end
+			end
+
+			if isFinal and self.Type.ValidateOnce then
+				local validOnce, errorTextOnce = self.Type.ValidateOnce(self:GetTransformedValue(i))
+
+				if not validOnce then
+					return validOnce, errorTextOnce
+				end
 			end
 		end
 
