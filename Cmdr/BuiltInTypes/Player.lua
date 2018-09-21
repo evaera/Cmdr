@@ -38,7 +38,7 @@ local playerType = {
 	end;
 
 	Autocomplete = function (players)
-		return Util.GetInstanceNames(players)
+		return Util.GetNames(players)
 	end;
 
 	Parse = function (players)
@@ -66,7 +66,7 @@ local playersType = {
 	end;
 
 	Autocomplete = function (players)
-		return Util.GetInstanceNames(players)
+		return Util.GetNames(players)
 	end;
 
 	Parse = function (players, returnAll)

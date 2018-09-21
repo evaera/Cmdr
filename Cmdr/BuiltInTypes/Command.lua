@@ -22,4 +22,5 @@ return function (cmdr)
 	}
 
 	cmdr:RegisterType("command", commandType)
+	cmdr:RegisterType("commands", Util.MakeListableType(commandType))
 end

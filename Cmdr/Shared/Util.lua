@@ -72,7 +72,7 @@ function Util.MakeFuzzyFinder (setOrContainer)
 end
 
 --- Takes an array of instances and returns an array of those instances' names.
-function Util.GetInstanceNames (instances)
+function Util.GetNames (instances)
 	local names = {}
 
 	for i = 1, #instances do
@@ -164,6 +164,7 @@ function Util.MakeEnumType(name, values)
 	}
 end
 
+--- Parses a prefixed union type argument (such as %Team)
 function Util.ParsePrefixedUnionType(typeValue, rawValue)
 	local split = Util.SplitStringSimple(typeValue)
 
@@ -187,6 +188,21 @@ function Util.ParsePrefixedUnionType(typeValue, rawValue)
 			return t.type, rawValue:sub(#t.prefix + 1), t.prefix
 		end
 	end
+end
+
+--- Creates a listable type from a singlular type
+function Util.MakeListableType(type)
+	local listableType = {
+		Listable = true;
+		Transform = type.Transform;
+		Validate = type.Validate;
+		Autocomplete = type.Autocomplete;
+		Parse = function (...)
+			return { type.Parse(...) }
+		end;
+	}
+
+	return listableType
 end
 
 return Util

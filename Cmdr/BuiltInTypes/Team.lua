@@ -13,7 +13,7 @@ local teamType = {
 	end;
 
 	Autocomplete = function (teams)
-		return Util.GetInstanceNames(teams)
+		return Util.GetNames(teams)
 	end;
 
 	Parse = function (teams)

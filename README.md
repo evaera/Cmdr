@@ -329,12 +329,13 @@ Descriptions for the API are coming soon.
 
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
 #### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
-#### `Util.GetInstanceNames(instances: array<Instance>): array<string>`
+#### `Util.GetNames(instances: array<Instance>): array<string>`
 #### `Util.SplitStringSimple(text: string, seperator: string): array<string>`
 #### `Util.SplitString(text: string, max: number): array<string>`
 #### `Util.TrimString(text: string): string`
 #### `Util.GetTextSize(text: string, label: TextLabel, size: number): Vector2`
 #### `Util.MakeEnumType(name: string, values: array<string>): TypeDefinition`
+#### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
 
 # Todo
 - Write documentation
