@@ -9,10 +9,7 @@ local function getUserId(name)
 		nameCache[name] = Players[name].UserId
 		return Players[name].UserId
 	else
-		local userid
-		local ok = pcall(function()
-			userid = Players:GetUserIdFromNameAsync(name)
-		end)
+		local ok, userid = pcall(Players.GetUserIdFromNameAsync, Players, name)
 
 		if not ok then
 			return nil
