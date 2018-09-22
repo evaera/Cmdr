@@ -1,19 +1,19 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 local Players = game:GetService("Players")
 
-function ShorthandSingle (text, executor)
+local function ShorthandSingle (text, executor)
 	if text == "." or text == "me" then
 		return {executor}
 	end
 end
 
-function ShorthandMultiple (text)
+local function ShorthandMultiple (text)
 	if text == "*" or text == "all" then
 		return Players:GetPlayers()
 	end
 end
 
-function CheckShorthands (text, executor, ...)
+local function CheckShorthands (text, executor, ...)
 	for _, func in pairs({...}) do
 		local values = func(text, executor)
 
