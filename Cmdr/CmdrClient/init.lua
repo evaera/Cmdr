@@ -1,4 +1,7 @@
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
 
@@ -31,6 +34,10 @@ local Cmdr do
 
 	Cmdr.Registry = require(Shared.Registry)(Cmdr)
 	Cmdr.Dispatcher = require(Shared.Dispatcher)(Cmdr)
+end
+
+if StarterGui:WaitForChild("Cmdr") and Player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
+	StarterGui.Cmdr:Clone().Parent = Player.PlayerGui
 end
 
 local Interface = require(script.CmdrInterface)(Cmdr)
