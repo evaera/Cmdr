@@ -360,9 +360,3 @@ Descriptions for the API are coming soon.
 #### `Util.GetTextSize(text: string, label: TextLabel, size: number): Vector2`
 #### `Util.MakeEnumType(name: string, values: array<string>): TypeDefinition`
 #### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
-
-# Todo
-- Write documentation
-- Add more methods to command context
-	- Allowing commands to take more control of the console, printing extra messages, clearing, rich text, etc.
-- Make players type able to have a comma-separated list.
