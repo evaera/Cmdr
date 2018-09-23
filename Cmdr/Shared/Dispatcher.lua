@@ -52,13 +52,21 @@ function Dispatcher:EvaluateAndRun (text, executor, data)
 		return errorText
 	end
 
-	local valid, errorText = command:Validate(true)
+	local ok, out = pcall(function()
+		local valid, errorText = command:Validate(true)
 
-	if not valid then
-		return errorText
+		if not valid then
+			return errorText
+		end
+
+		return command:Run() or "Command executed."
+	end)
+
+	if not ok then
+		warn(("Error occurred while evaluating command string %q\n%s"):format(text, out))
 	end
 
-	return command:Run() or "Command executed."
+	return ok and out or "An error occurred while running this command."
 end
 
 --- Send text as the local user to remote server to be evaluated there.
