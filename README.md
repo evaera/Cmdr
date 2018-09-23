@@ -17,7 +17,9 @@ Cmdr has a robust and friendly type validation system (making sure strings are s
 ### Installation
 #### Method 1 - Recommended
 
-The easiest way to get started with Cmdr is to install the [RoStrap](https://www.roblox.com/library/725884332/RoStrap) Roblox Studio plugin, open the RoStrap interface in a place, and then install "Cmdr". This will instantly download and build the newest version of Cmdr right from GitHub.
+The easiest way to get started with Cmdr is to install the [RoStrap Roblox Studio plugin](https://www.roblox.com/library/725884332/RoStrap), open the RoStrap interface in a place, and then install "Cmdr". This will instantly download and build the newest version of Cmdr right from GitHub.
+
+![Installation](https://user-images.githubusercontent.com/2489210/45920094-b27c3f80-be6d-11e8-9105-f358140b5a13.png)
 
 #### Method 2 - Advanced
 
