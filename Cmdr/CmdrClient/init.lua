@@ -36,7 +36,7 @@ local Cmdr do
 	Cmdr.Dispatcher = require(Shared.Dispatcher)(Cmdr)
 end
 
-if StarterGui:WaitForChild("Cmdr") and Player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
+if StarterGui:WaitForChild("Cmdr") and wait() and Player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
 	StarterGui.Cmdr:Clone().Parent = Player.PlayerGui
 end
 
