@@ -27,7 +27,7 @@ Line.Parent = nil
 function Window:UpdateLabel ()
 	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
 	Entry.TextLabel.Size = UDim2.new(0, Entry.TextLabel.TextBounds.X, 0, 20)
-	Entry.TextBox.Position = UDim2.new(0, Entry.TextLabel.Size.X.Offset + 10, 0, 0)
+	Entry.TextBox.Position = UDim2.new(0, Entry.TextLabel.Size.X.Offset + 7, 0, 0)
 end
 
 --- Get the text entry label
