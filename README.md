@@ -293,13 +293,13 @@ Descriptions for the API are coming soon.
 #### `Registry:RegisterTypesIn(container: Instance): void`
 #### `Registry:RegisterType(name: string, typeDefinition: TypeDefinition): void`
 #### `Registry:GetType(name: string): TypeDefinition?`
-#### `Registry:RegisterCommandsIn(container: Instance): void`
-#### `Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript?: ModuleScript): void`
-#### `Registry:RegisterDefaultCommands(): void`
+#### `Registry:RegisterCommandsIn(container: Instance, filter?: (command: CommandDefinition) => boolean): void`
+#### `Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript?: ModuleScript, filter?: (command: CommandDefinition) => boolean): void`
+#### `Registry:RegisterDefaultCommands(groups?: array<string>): void`
 #### `Registry:GetCommand(name: string): CommandDefinition?`
 #### `Registry:GetCommands(): array<CommandDefinition>`
 #### `Registry:GetCommandsAsStrings(): array<string>`
-#### `Registry:AddHook(hookName: string, callback: function): void`
+#### `Registry:AddHook(hookName: string, callback: (context: CommandContext) => string | void): void`
 
 ## Dispatcher
 

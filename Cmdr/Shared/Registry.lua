@@ -73,11 +73,15 @@ end
 
 --- Registers a command definition and its server equivalent.
 -- Handles replicating the definition to the client.
-function Registry:RegisterCommand (commandScript, commandServerScript)
+function Registry:RegisterCommand (commandScript, commandServerScript, filter)
 	local commandObject = require(commandScript)
 
 	if commandServerScript then
 		commandObject.Run = require(commandServerScript)
+	end
+
+	if filter and not filter(commandObject) then
+		return
 	end
 
 	self:RegisterCommandObject(commandObject)
@@ -86,7 +90,7 @@ function Registry:RegisterCommand (commandScript, commandServerScript)
 end
 
 --- A helper method that registers all commands inside a specific container.
-function Registry:RegisterCommandsIn (container)
+function Registry:RegisterCommandsIn (container, filter)
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
 
@@ -98,7 +102,7 @@ function Registry:RegisterCommandsIn (container)
 				usedServerScripts[serverCommandScript] = true
 			end
 
-			self:RegisterCommand(commandScript, serverCommandScript)
+			self:RegisterCommand(commandScript, serverCommandScript, filter)
 		else
 			skippedServerScripts[commandScript] = true
 		end
@@ -111,8 +115,11 @@ function Registry:RegisterCommandsIn (container)
 	end
 end
 
-function Registry:RegisterDefaultCommands ()
-	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder)
+function Registry:RegisterDefaultCommands (groups)
+	groups = groups and Util.MakeDictionary(groups)
+	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, groups and function (command)
+		return groups[command.Group] or false
+	end)
 end
 
 --- Gets a command definition by name. (Can be an alias)
