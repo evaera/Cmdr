@@ -1,3 +1,8 @@
+--[[
+	DO NOT MODIFY. This file is auto-generated.
+	Plugin: https://www.roblox.com/library/2307140444/Object-to-Lua
+]]
+
 return function ()
 	local Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
