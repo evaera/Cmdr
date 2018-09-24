@@ -217,4 +217,60 @@ function Util.MakeListableType(type)
 	return listableType
 end
 
+--- Creates an alias command
+function Util.MakeAliasCommand(name, commandString)
+	return {
+		Name = name;
+		Aliases = {};
+		Description = commandString;
+		Group = "UserAlias";
+		Args = {
+			{
+				Type = "string";
+				Name = "Argument 1";
+				Description = "";
+				Default = "";
+			},
+			{
+				Type = "string";
+				Name = "Argument 2";
+				Description = "";
+				Default = "";
+			},
+			{
+				Type = "string";
+				Name = "Argument 3";
+				Description = "";
+				Default = "";
+			},
+			{
+				Type = "string";
+				Name = "Argument 4";
+				Description = "";
+				Default = "";
+			},
+			{
+				Type = "string";
+				Name = "Argument 5";
+				Description = "";
+				Default = "";
+			},
+		};
+		Run = function (context, ...)
+			local args = {...}
+			local commands = Util.SplitStringSimple(commandString, "&&")
+
+			for _, command in ipairs(commands) do
+				command = command:gsub("$(%d)", function (p)
+					return args[tonumber(p)] or ""
+				end)
+
+				context:Reply(context.Dispatcher:EvaluateAndRun(command))
+			end
+
+			return ""
+		end;
+	}
+end
+
 return Util

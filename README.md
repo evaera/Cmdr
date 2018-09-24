@@ -387,3 +387,4 @@ end)
 #### `Util.GetTextSize(text: string, label: TextLabel, size: number): Vector2`
 #### `Util.MakeEnumType(name: string, values: array<string>): TypeDefinition`
 #### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
+#### `Util.MakeAliasCommand(name: string, commandString: string): CommandDefinition`

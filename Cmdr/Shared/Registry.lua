@@ -67,8 +67,17 @@ function Registry:RegisterCommandObject (commandObject)
 		end
 	end
 
+	-- Unregister the old command if it exists...
+	local oldCommand = self.Commands[commandObject.Name:lower()]
+	if oldCommand and oldCommand.Aliases then
+		for _, alias in pairs(oldCommand.Aliases) do
+			self.Commands[alias:lower()] = nil
+		end
+	elseif not oldCommand then
+		self.CommandsArray[#self.CommandsArray + 1] = commandObject
+	end
+
 	self.Commands[commandObject.Name:lower()] = commandObject
-	self.CommandsArray[#self.CommandsArray + 1] = commandObject
 
 	if commandObject.Aliases then
 		for _, alias in pairs(commandObject.Aliases) do
