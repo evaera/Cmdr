@@ -26,7 +26,7 @@ The easiest way to get started with Cmdr is to install the [RoStrap Roblox Studi
 Cmdr has no dependencies, so it can also be easily included as a Git submodule and synced in with the rest of your project with [Rojo](https://github.com/LPGhatguy/rojo). If you don't know how to do this already, then please see method 1 :)
 
 ### Server
-You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded.
+You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded. However, you only need to register commands and types on the server.
 
 ```lua
 -- This is a script you would create in ServerScriptService, for example.
@@ -137,6 +137,9 @@ A description of what the argument is, this is also displayed to the user.
 ##### Arg.Optional?: boolean
 If this is present and set to `true`, then the user can run the command without filling out this value. The argument will be sent to your commands as `nil`.
 
+##### Arg.Default?: any
+If present, the argument will be optional and if the user doesn't supply a value, your function will receive whatever you set this to. `Default` being set implies `Optional = true`, so `Optional` can be omitted.
+
 #### Data?: function (context: CommandContext)
 If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available on the server command with `context:GetData()`.
 
@@ -150,7 +153,21 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`
+
 Group: `Help`: `help`
+
+#### Registering a subset of the default commands
+If you only want some, but not all, of the default commands, you can restrict the commands that you register in two ways.
+
+1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr:RegisterDefaultCommands({"Help", "DefaultUtil"})`
+2. Pass a filter function that accepts a CommandDefinition and either returns `true` or `false`:
+
+```lua
+Cmdr:RegisterDefaultCommands(function(cmd)
+	return #cmd.Name < 6 -- This is absurd... but possible!
+end)
+```
 
 ## Types
 
@@ -259,7 +276,15 @@ end)
 
 # API
 
-Descriptions for the API are coming soon.
+## How to read these function signatures:
+
+- Parameters and properties are in the format `name: type` (`name: string`)
+- Return value types are listed following a colon after the closing paren (`example(): boolean`)
+- Optional parameters are listed with a `?` following their name
+- Potentially nil properties or return types are listed with a `?` following their type
+- `void` is interchangeable with `nil` in most circumstances
+- Varargs are in the format `...: type`, where the type applies to all values (`...: string`)
+- Callback functions are written as *arrow functions*, in the format `(param1: type, param2: type) => type`, where the return type follows the arrow
 
 ## Cmdr Server
 
@@ -275,7 +300,7 @@ Descriptions for the API are coming soon.
 #### `CmdrClient:SetActivationKeys(keys: array<Enum.KeyCode>): void`
 #### `CmdrClient:SetPlaceName(labelText: string): void`
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
-#### `CmdrClient:HandleEvent(event: string, handler: function): void`
+#### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
 
 ### Properties
 
@@ -299,7 +324,8 @@ Descriptions for the API are coming soon.
 #### `Registry:GetCommand(name: string): CommandDefinition?`
 #### `Registry:GetCommands(): array<CommandDefinition>`
 #### `Registry:GetCommandsAsStrings(): array<string>`
-#### `Registry:AddHook(hookName: string, callback: (context: CommandContext) => string | void): void`
+#### `Registry:AddHook(hookName: string, callback: (context: CommandContext) => string?): void`
+#### `Registry:GetStore(name: string): table`
 
 ## Dispatcher
 
@@ -326,6 +352,7 @@ Descriptions for the API are coming soon.
 
 #### `CommandContext:GetArgument(index: number): ArgumentContext`
 #### `CommandContext:GetData(): any`
+#### `CommandContext:GetStore(name: string): table`
 #### `CommandContext:SendEvent(player: Player, event: string, ...: any): void`
 #### `CommandContext:BroadcastEvent(event: string, ...: any): void`
 #### `CommandContext:Reply(text: string, color?: Color3): void`
@@ -352,7 +379,7 @@ Descriptions for the API are coming soon.
 ### Methods
 
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
-#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
+#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
 #### `Util.GetNames(instances: array<Instance>): array<string>`
 #### `Util.SplitStringSimple(text: string, seperator: string): array<string>`
 #### `Util.SplitString(text: string, max: number): array<string>`
