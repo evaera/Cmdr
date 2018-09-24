@@ -12,6 +12,6 @@ return {
 	};
 
 	Run = function(context, command)
-		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.SubstituteAmbientArgs(command))
+		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteAmbientArgs(command)))
 	end
 }

@@ -2,6 +2,10 @@
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
+- Run commands programmatically on behalf of the local user.
+- Bind commands to user input.
+- Make commands specifi
+
 <p align="center">
   <img src="https://i.eryn.io/bmzoz5gvhw.gif" alt="Cmdr Demo" />
 </p>
@@ -21,7 +25,11 @@ The easiest way to get started with Cmdr is to install the [RoStrap Roblox Studi
 
 ![Installation](https://user-images.githubusercontent.com/2489210/45920094-b27c3f80-be6d-11e8-9105-f358140b5a13.png)
 
-#### Method 2 - Advanced
+#### Method 2 - Manual
+
+You can download the latest model file release from the [releases section](https://github.com/evaera/Cmdr/releases/latest), but this may not always be the most up to date version of Cmdr. You'll want to put this is a server directory, like ServerScriptService.
+
+#### Method 3 - Advanced
 
 Cmdr has no dependencies, so it can also be easily included as a Git submodule and synced in with the rest of your project with [Rojo](https://github.com/LPGhatguy/rojo). If you don't know how to do this already, then please see method 1 :)
 

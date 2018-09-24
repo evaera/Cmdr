@@ -13,7 +13,7 @@ return {
 	Group = "DefaultUtil";
 	Args = {
 		{
-			Type = "string";
+			Type = "conditionFunction";
 			Name = "Condition";
 			Description = "The condition function"
 		},
@@ -24,22 +24,28 @@ return {
 		},
 		{
 			Type = "string";
+			Name = "Test against";
+			Description = "The text to test against."
+		},
+		{
+			Type = "string";
 			Name = "Command";
-			Description = "The command string to run if requirements are met"
+			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used.";
+			Optional = true;
 		},
 	};
 
-	Run = function(context, condition, arg, command)
+	Run = function(context, condition, arg, testAgainst, command)
 		local conditionFunc = conditions[condition]
 
 		if not conditionFunc then
 			return ("Condition %q is not valid."):format(condition)
 		end
 
-		local text = conditionFunc(command, arg)
+		local text = conditionFunc(testAgainst, arg)
 
 		if text then
-			context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.SubstituteAmbientArgs(text)))
+			context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteAmbientArgs(command or text))))
 		end
 
 		return ""

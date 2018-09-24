@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local Util = {}
 
 --- Takes an array and flips its values into dictionary keys with value of true.
-function Util.MakeDictionary (array)
+function Util.MakeDictionary(array)
 	local dictionary = {}
 
 	for i = 1, #array do
@@ -15,7 +15,7 @@ function Util.MakeDictionary (array)
 end
 
 -- Takes an array of instances and returns (array<names>, array<instances>)
-local function transformInstanceSet (instances)
+local function transformInstanceSet(instances)
 	local names = {}
 
 	for i = 1, #instances do
@@ -29,7 +29,7 @@ end
 -- Can pass an array of strings, array of instances, array of EnumItems,
 -- array of dictionaries with a Name key or an instance (in which case its children will be used)
 -- Exact matches will be inserted in the front of the resulting array
-function Util.MakeFuzzyFinder (setOrContainer)
+function Util.MakeFuzzyFinder(setOrContainer)
 	local names
 	local instances = {}
 
@@ -37,13 +37,9 @@ function Util.MakeFuzzyFinder (setOrContainer)
 		names, instances = transformInstanceSet(setOrContainer:GetChildren())
 	elseif typeof(setOrContainer) == "table" then
 		if
-			typeof(setOrContainer[1]) == "Instance"
-			or typeof(setOrContainer[1]) == "EnumItem"
-			or (
-				typeof(setOrContainer[1]) == "table"
-				and typeof(setOrContainer[1].Name) == "string"
-			)
-		then
+			typeof(setOrContainer[1]) == "Instance" or typeof(setOrContainer[1]) == "EnumItem" or
+				(typeof(setOrContainer[1]) == "table" and typeof(setOrContainer[1].Name) == "string")
+		 then
 			names, instances = transformInstanceSet(setOrContainer)
 		elseif type(setOrContainer[1]) == "string" then
 			names = setOrContainer
@@ -57,7 +53,7 @@ function Util.MakeFuzzyFinder (setOrContainer)
 	end
 
 	-- Searches the set (checking exact matches first)
-	return function (text, returnFirst)
+	return function(text, returnFirst)
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -85,7 +81,7 @@ function Util.MakeFuzzyFinder (setOrContainer)
 end
 
 --- Takes an array of instances and returns an array of those instances' names.
-function Util.GetNames (instances)
+function Util.GetNames(instances)
 	local names = {}
 
 	for i = 1, #instances do
@@ -98,19 +94,19 @@ end
 --- Splits a string using a simple separator (no quote parsing)
 function Util.SplitStringSimple(inputstr, sep)
 	if sep == nil then
-					sep = "%s"
+		sep = "%s"
 	end
-	local t={}
-	local i=1
-	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-					t[i] = str
-					i = i + 1
+	local t = {}
+	local i = 1
+	for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+		t[i] = str
+		i = i + 1
 	end
 	return t
 end
 
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
-function Util.SplitString (text, max)
+function Util.SplitString(text, max)
 	max = max or math.huge
 	local t = {}
 	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
@@ -121,12 +117,12 @@ function Util.SplitString (text, max)
 		if squoted and not quoted and not equoted then
 			buf, quoted = str, squoted
 		elseif buf and equoted == quoted and #escaped % 2 == 0 then
-			str, buf, quoted = buf .. ' ' .. str, nil, nil
+			str, buf, quoted = buf .. " " .. str, nil, nil
 		elseif buf then
-			buf = buf .. ' ' .. str
+			buf = buf .. " " .. str
 		end
 		if not buf then
-			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat,""):gsub(epat,""))
+			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat, ""):gsub(epat, ""))
 		end
 	end
 
@@ -139,7 +135,7 @@ end
 
 --- Takes an array of arguments and a max value.
 -- Any indicies past the max value will be appended to the last valid argument.
-function Util.MashExcessArguments (arguments, max)
+function Util.MashExcessArguments(arguments, max)
 	local t = {}
 	for i = 1, #arguments do
 		if i > max then
@@ -157,7 +153,7 @@ function Util.TrimString(s)
 end
 
 --- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
-function Util.GetTextSize (text, label, size)
+function Util.GetTextSize(text, label, size)
 	return TextService:GetTextSize(text, label.TextSize, label.Font, size or Vector2.new(label.AbsoluteSize.X, 0))
 end
 
@@ -165,13 +161,13 @@ end
 function Util.MakeEnumType(name, values)
 	local findValue = Util.MakeFuzzyFinder(values)
 	return {
-		Validate = function (text)
+		Validate = function(text)
 			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
-		end;
-		Autocomplete = function (text)
+		end,
+		Autocomplete = function(text)
 			return findValue(text)
-		end;
-		Parse = function (text)
+		end,
+		Parse = function(text)
 			return findValue(text, true)
 		end
 	}
@@ -185,14 +181,17 @@ function Util.ParsePrefixedUnionType(typeValue, rawValue)
 	local types = {}
 	for i = 1, #split, 2 do
 		types[#types + 1] = {
-			prefix = split[i - 1] or "";
-			type = split[i];
+			prefix = split[i - 1] or "",
+			type = split[i]
 		}
 	end
 
-	table.sort(types, function (a, b)
-		return #a.prefix > #b.prefix
-	end)
+	table.sort(
+		types,
+		function(a, b)
+			return #a.prefix > #b.prefix
+		end
+	)
 
 	for i = 1, #types do
 		local t = types[i]
@@ -206,16 +205,28 @@ end
 --- Creates a listable type from a singlular type
 function Util.MakeListableType(type)
 	local listableType = {
-		Listable = true;
-		Transform = type.Transform;
-		Validate = type.Validate;
-		Autocomplete = type.Autocomplete;
-		Parse = function (...)
-			return { type.Parse(...) }
-		end;
+		Listable = true,
+		Transform = type.Transform,
+		Validate = type.Validate,
+		Autocomplete = type.Autocomplete,
+		Parse = function(...)
+			return {type.Parse(...)}
+		end
 	}
 
 	return listableType
+end
+
+--- Runs embedded commands and replaces them
+function Util.RunEmbeddedCommands(dispatcher, str)
+	local s =
+		str:gsub(
+		"$(%b{})",
+		function(text)
+			return dispatcher:EvaluateAndRun(text:sub(2, #text-1))
+		end
+	)
+	return s
 end
 
 --- Replaces arguments in the format $1, $2, $something with whatever the
@@ -233,7 +244,7 @@ end
 
 --- Ambient arguments used in alias and bind command
 Util.AmbientArgs = {
-	hover = function ()
+	hover = function()
 		local mouse = Players.LocalPlayer:GetMouse()
 		local target = mouse.Target
 
@@ -245,69 +256,80 @@ Util.AmbientArgs = {
 
 --- Replaces ambient arguments (used in alias/bind)
 function Util.SubstituteAmbientArgs(text)
-	return Util.SubstituteArgs(text, function(k)
-		if Util.AmbientArgs[k] then
-			return Util.AmbientArgs[k]()
+	return Util.SubstituteArgs(
+		text,
+		function(k)
+			if Util.AmbientArgs[k] then
+				return Util.AmbientArgs[k]()
+			end
 		end
-	end)
+	)
 end
 
 --- Creates an alias command
 function Util.MakeAliasCommand(name, commandString)
 	return {
-		Name = name;
-		Aliases = {};
-		Description = commandString;
-		Group = "UserAlias";
+		Name = name,
+		Aliases = {},
+		Description = commandString,
+		Group = "UserAlias",
 		Args = {
 			{
-				Type = "string";
-				Name = "Argument 1";
-				Description = "";
-				Default = "";
+				Type = "string",
+				Name = "Argument 1",
+				Description = "",
+				Default = ""
 			},
 			{
-				Type = "string";
-				Name = "Argument 2";
-				Description = "";
-				Default = "";
+				Type = "string",
+				Name = "Argument 2",
+				Description = "",
+				Default = ""
 			},
 			{
-				Type = "string";
-				Name = "Argument 3";
-				Description = "";
-				Default = "";
+				Type = "string",
+				Name = "Argument 3",
+				Description = "",
+				Default = ""
 			},
 			{
-				Type = "string";
-				Name = "Argument 4";
-				Description = "";
-				Default = "";
+				Type = "string",
+				Name = "Argument 4",
+				Description = "",
+				Default = ""
 			},
 			{
-				Type = "string";
-				Name = "Argument 5";
-				Description = "";
-				Default = "";
-			},
-		};
-		Run = function (context, ...)
+				Type = "string",
+				Name = "Argument 5",
+				Description = "",
+				Default = ""
+			}
+		},
+		Run = function(context, ...)
 			local args = {...}
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
 			for _, command in ipairs(commands) do
-				context:Reply(context.Dispatcher:EvaluateAndRun(
-					Util.SubstituteArgs(command, function (p)
-						if Util.AmbientArgs[p] then
-							return Util.AmbientArgs[p]()
-						end
-						return args[tonumber(p)]
-					end)
-				))
+				context:Reply(
+					context.Dispatcher:EvaluateAndRun(
+						Util.RunEmbeddedCommands(
+							context.Dispatcher,
+							Util.SubstituteArgs(
+								command,
+								function(p)
+									if Util.AmbientArgs[p] then
+										return Util.AmbientArgs[p]()
+									end
+									return args[tonumber(p)]
+								end
+							)
+						)
+					)
+				)
 			end
 
 			return ""
-		end;
+		end
 	}
 end
 

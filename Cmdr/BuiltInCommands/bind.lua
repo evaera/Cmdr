@@ -1,6 +1,4 @@
 local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
 
 return {
 	Name = "bind";
@@ -46,7 +44,7 @@ return {
 				end
 
 				if input.UserInputType == bind or input.KeyCode == bind then
-					context:Reply(context.Dispatcher:EvaluateAndRun(command))
+					context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command)))
 				end
 			end)
 		elseif bindType == "bindableResource" then
@@ -54,7 +52,7 @@ return {
 		elseif bindType == "player" then
 			binds[bind] = bind.Chatted:Connect(function(message)
 				local args = { message }
-				local chatCommand = context.Cmdr.Util.SubstituteArgs(command, args)
+				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteArgs(command, args))
 				context:Reply(("%s $ %s : %s"):format(
 					bind.Name,
 					chatCommand,
