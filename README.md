@@ -3,7 +3,7 @@
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
 <p align="center">
-  <img src="https://giant.gfycat.com/ChillyAjarGoldfish.gif" alt="Cmdr Demo" />
+  <img src="https://i.eryn.io/bmzoz5gvhw.gif" alt="Cmdr Demo" />
 </p>
 
 Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard moderation commands (teleport, kill, kick, ban), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
