@@ -173,7 +173,7 @@ end)
 
 By default, these types are available:
 
-`string`, `number`, `integer`, `boolean`, `player`, `players`, `team`, `teamPlayers`, `command`
+`string`, `number`, `integer`, `boolean`, `player`, `players`, `team`, `teams`, `teamPlayers`, `command`, `commands`, `userInput`, `userInputs`
 
 Custom types are defined as tables that implement specific named functions. When Types are in a ModuleScript, the ModuleScript should not return the table directly; instead it should return a function, which accepts the Registry as a parameter. You should then call `registry:RegisterType("typeName", yourTable)` to register it.
 
