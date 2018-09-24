@@ -36,8 +36,17 @@ end
 -- Called by the command dispatcher automatically
 -- allowIncompleteArguments: if true, will not throw an error for missing arguments
 function Command:Parse (allowIncompleteArguments)
-	for i, definition in pairs(self.ArgumentDefinitions) do
-		if self.RawArguments[i] == nil and definition.Optional ~= true and allowIncompleteArguments ~= true then
+	local hadOptional = false
+	for i, definition in ipairs(self.ArgumentDefinitions) do
+		local required = (definition.Default == nil and definition.Optional ~= true)
+
+		if required and hadOptional then
+			error(("Command %q: Required arguments cannot occur after optional arguments."):format(self.Name))
+		elseif not required then
+			hadOptional = true
+		end
+
+		if self.RawArguments[i] == nil and required and allowIncompleteArguments ~= true then
 			return false, ("Required argument #%d %s is missing."):format(i, definition.Name)
 		elseif self.RawArguments[i] or allowIncompleteArguments then
 			self.Arguments[i] = Argument.new(self, definition, self.RawArguments[i] or "")
@@ -81,8 +90,13 @@ end
 function Command:GatherArgumentValues ()
 	local values = {}
 
-	for i, arg in pairs(self.Arguments) do
-		values[i] = arg:GetValue()
+	for i = 1, #self.ArgumentDefinitions do
+		local arg = self.Arguments[i]
+		if arg then
+			values[i] = arg:GetValue()
+		else
+			values[i] = self.ArgumentDefinitions[i].Default
+		end
 	end
 
 	return values

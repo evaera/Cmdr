@@ -20,13 +20,11 @@ return {
 			Type = "string";
 			Name = "Arguments";
 			Description = "The arguments for the command";
-			Optional = true;
+			Default = "";
 		}
 	};
 
 	Run = function(context, inputEnum, command, arguments)
-		arguments = arguments or ""
-
 		local binds = context:GetStore("CMDR_Binds")
 
 		if binds[inputEnum] then

@@ -8,14 +8,13 @@ return {
 			Type = "number";
 			Name = "Extra distance";
 			Description = "Go through the wall an additional X studs.";
-			Optional = true;
+			Default = 0;
 		}
 	};
 
 	Run = function(context, extra)
 		-- We implement this here because player position is owned by the client.
 		-- No reason to bother the server for this!
-		extra = extra or 0
 
 		local mouse = context.Executor:GetMouse()
 		local character = context.Executor.Character

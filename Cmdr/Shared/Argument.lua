@@ -17,7 +17,7 @@ function Argument.new (command, argumentObject, value)
 		Type = nil; -- The type definition
 		Name = argumentObject.Name; -- The name for this specific argument
 		Object = argumentObject; -- The raw ArgumentObject (definition)
-		Required = argumentObject.Optional ~= true; -- If the argument is required or not.
+		Required = argumentObject.Default == nil and argumentObject.Optional ~= true; -- If the argument is required or not.
 		Executor = command.Executor; -- The player who is running the command
 		RawValue = nil; -- The raw, unparsed value
 		RawSegments = {}; -- The raw, unparsed segments (if the raw value was comma-sep)
