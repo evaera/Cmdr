@@ -153,7 +153,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`
 
 Group: `Help`: `help`
 
@@ -250,8 +250,8 @@ The callback is passed the CommandContext for the relevant command. The hooks ar
 This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
 
 ```lua
-Cmdr:AddHook("BeforeRun", function(command)
-  if command.Group == "Admin" and command.Executor:IsInGroup(1) == false then
+Cmdr:AddHook("BeforeRun", function(context)
+  if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
     return "You don't have permission to run this command"
   end
 end)
@@ -266,8 +266,8 @@ If this callback returns a string, then it will replace the normal response on t
 This hook is most useful for logging.
 
 ```lua
-Cmdr:AddHook("AfterRun", function(command)
-  print(command.Response) -- see the actual response from the command execution
+Cmdr:AddHook("AfterRun", function(context)
+  print(context.Response) -- see the actual response from the command execution
   return "Returning a string from this hook replaces the response message with this text"
 end)
 ```
