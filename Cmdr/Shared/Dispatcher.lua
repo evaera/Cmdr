@@ -85,7 +85,7 @@ function Dispatcher:Run (...)
 	local text = args[1]
 
 	for i = 2, #args do
-		text = text .." " .. tostring(args[i])
+		text = text .. " " .. tostring(args[i])
 	end
 
 	local command, errorText = self:Evaluate(text, game.Players.LocalPlayer)

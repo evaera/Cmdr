@@ -14,7 +14,7 @@ function Util.MakeDictionary (array)
 end
 
 -- Takes an array of instances and returns (array<names>, array<instances>)
-function transformInstanceSet (instances)
+local function transformInstanceSet (instances)
 	local names = {}
 
 	for i = 1, #instances do
@@ -25,15 +25,24 @@ function transformInstanceSet (instances)
 end
 
 --- Returns a function that is a fuzzy finder for the specified set or container.
--- Can pass an array of strings, array of instances, or an instance (in which case its children will be used)
+-- Can pass an array of strings, array of instances, array of EnumItems,
+-- array of dictionaries with a Name key or an instance (in which case its children will be used)
+-- Exact matches will be inserted in the front of the resulting array
 function Util.MakeFuzzyFinder (setOrContainer)
 	local names
 	local instances = {}
 
 	if typeof(setOrContainer) == "Instance" then
 		names, instances = transformInstanceSet(setOrContainer:GetChildren())
-	elseif type(setOrContainer) == "table" then
-		if typeof(setOrContainer[1]) == "Instance" then
+	elseif typeof(setOrContainer) == "table" then
+		if
+			typeof(setOrContainer[1]) == "Instance"
+			or typeof(setOrContainer[1]) == "EnumItem"
+			or (
+				typeof(setOrContainer[1]) == "table"
+				and typeof(setOrContainer[1].Name) == "string"
+			)
+		then
 			names, instances = transformInstanceSet(setOrContainer)
 		elseif type(setOrContainer[1]) == "string" then
 			names = setOrContainer
@@ -51,15 +60,18 @@ function Util.MakeFuzzyFinder (setOrContainer)
 		local results = {}
 
 		for i, name in pairs(names) do
-			-- Exact match check first...
-			if returnFirst and name:lower() == text:lower() then
-				return instances and instances[i] or name
-			end
+			local value = instances and instances[i] or name
 
 			-- Continue on checking for non-exact matches...
-			-- Still need to loop through everything, even on returnFrist, because possibility of an exact match.
-			if name:lower():sub(1, #text) == text:lower() then
-				results[#results + 1] = instances and instances[i] or name
+			-- Still need to loop through everything, even on returnFirst, because possibility of an exact match.
+			if name:lower() == text:lower() then
+				if returnFirst then
+					return value
+				else
+					table.insert(results, 1, value)
+				end
+			elseif name:lower():sub(1, #text) == text:lower() then
+				results[#results + 1] = value
 			end
 		end
 

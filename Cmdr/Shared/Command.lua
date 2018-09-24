@@ -166,4 +166,9 @@ function Command:Reply(...)
 	return self:SendEvent(self.Executor, "AddLine", ...)
 end
 
+--- Alias of Registry:GetStore(...)
+function Command:GetStore(...)
+	return self.Dispatcher.Cmdr.Registry:GetStore(...)
+end
+
 return Command

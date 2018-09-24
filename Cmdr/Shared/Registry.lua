@@ -12,7 +12,13 @@ local Registry = {
 	Hooks = {
 		BeforeRun = {};
 		AfterRun = {}
-	}
+	};
+	Stores = setmetatable({}, {
+		__index = function (self, k)
+			self[k] = {}
+			return self[k]
+		end
+	})
 }
 
 --- Registers a type in the system.
@@ -156,6 +162,12 @@ function Registry:AddHook(hookName, callback)
 	end
 
 	table.insert(self.Hooks[hookName], callback)
+end
+
+--- Returns the store with the given name
+-- Used for commands that require persistent state, like bind or ban
+function Registry:GetStore(name)
+	return self.Stores[name]
 end
 
 return function (cmdr)

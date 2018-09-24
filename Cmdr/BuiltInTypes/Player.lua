@@ -30,7 +30,7 @@ local playerType = {
 
 		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
 
-		return findPlayer(text), text
+		return findPlayer(text)
 	end;
 
 	Validate = function (players)
