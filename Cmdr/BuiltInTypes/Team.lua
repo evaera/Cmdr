@@ -34,5 +34,6 @@ local teamPlayersType = {
 
 return function (cmdr)
 	cmdr:RegisterType("team", teamType)
+	cmdr:RegisterType("teams", Util.MakeListableType(teamType))
 	cmdr:RegisterType("teamPlayers", teamPlayersType)
 end
