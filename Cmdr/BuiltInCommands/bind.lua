@@ -1,4 +1,6 @@
 local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
 
 return {
 	Name = "bind";
@@ -7,8 +9,8 @@ return {
 	Group = "DefaultUtil";
 	Args = {
 		{
-			Type = "userInput";
-			Name = "Input/Key";
+			Type = "userInput ! bindableResource @ player";
+			Name = "Input";
 			Description = "The key or input type you'd like to bind the command to."
 		},
 		{
@@ -24,22 +26,43 @@ return {
 		}
 	};
 
-	Run = function(context, inputEnum, command, arguments)
+	Run = function(context, bind, command, arguments)
 		local binds = context:GetStore("CMDR_Binds")
 
-		if binds[inputEnum] then
-			binds[inputEnum]:Disconnect()
+		command = command .. " " .. arguments
+
+		command = context.Cmdr.Util.SubstituteAmbientArgs(command)
+
+		if binds[bind] then
+			binds[bind]:Disconnect()
 		end
 
-		binds[inputEnum] = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-			if gameProcessed then
-				return
-			end
+		local bindType = context:GetArgument(1).Type.Name
 
-			if input.UserInputType == inputEnum or input.KeyCode == inputEnum then
-				context:Reply(context.Dispatcher:EvaluateAndRun(command .. " " .. arguments))
-			end
-		end)
+		if bindType == "userInput" then
+			binds[bind] = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+				if gameProcessed then
+					return
+				end
+
+				if input.UserInputType == bind or input.KeyCode == bind then
+					context:Reply(context.Dispatcher:EvaluateAndRun(command))
+				end
+			end)
+		elseif bindType == "bindableResource" then
+			return "Unimplemented..."
+		elseif bindType == "player" then
+			binds[bind] = bind.Chatted:Connect(function(message)
+				local args = { message }
+				local chatCommand = context.Cmdr.Util.SubstituteArgs(command, args)
+				context:Reply(("%s $ %s : %s"):format(
+					bind.Name,
+					chatCommand,
+					context.Dispatcher:EvaluateAndRun(chatCommand)
+				), Color3.fromRGB(244, 92, 66))
+			end)
+		end
+
 
 		return "Bound command to input."
 	end

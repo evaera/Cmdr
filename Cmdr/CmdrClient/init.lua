@@ -63,6 +63,11 @@ function Cmdr:HandleEvent(name, callback)
 	self.Events[name] = callback
 end
 
+--- Creates an ambient argument for run, alias, and bind
+function Cmdr:SetAmbientArgument(name, callback)
+	self.Util.AmbientArgs[name] = callback
+end
+
 -- Only register when we aren't in studio because don't want to overwrite what the server portion did
 if RunService:IsServer() == false then
 	Cmdr.Registry:RegisterTypesIn(script:WaitForChild("Types"))

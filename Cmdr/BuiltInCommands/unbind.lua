@@ -5,7 +5,7 @@ return {
 	Group = "DefaultUtil";
 	Args = {
 		{
-			Type = "userInput";
+			Type = "userInput ! bindableResource @ player";
 			Name = "Input/Key";
 			Description = "The key or input type you'd like to unbind."
 		}

@@ -1,4 +1,5 @@
 local TextService = game:GetService("TextService")
+local Players = game:GetService("Players")
 
 local Util = {}
 
@@ -217,6 +218,40 @@ function Util.MakeListableType(type)
 	return listableType
 end
 
+--- Replaces arguments in the format $1, $2, $something with whatever the
+-- given function returns for it.
+function Util.SubstituteArgs(str, replace)
+	-- Convert numerical keys to strings
+	if type(replace) == "table" then
+		for i = 1, #replace do
+			replace[tostring(i)] = replace[i]
+		end
+	end
+	local s = str:gsub("$(%w+)", replace)
+	return s
+end
+
+--- Ambient arguments used in alias and bind command
+Util.AmbientArgs = {
+	hover = function ()
+		local mouse = Players.LocalPlayer:GetMouse()
+		local target = mouse.Target
+
+		local p = Players:GetPlayerFromCharacter(target:FindFirstAncestorOfClass("Model"))
+
+		return p and p.Name
+	end
+}
+
+--- Replaces ambient arguments (used in alias/bind)
+function Util.SubstituteAmbientArgs(text)
+	return Util.SubstituteArgs(text, function(k)
+		if Util.AmbientArgs[k] then
+			return Util.AmbientArgs[k]()
+		end
+	end)
+end
+
 --- Creates an alias command
 function Util.MakeAliasCommand(name, commandString)
 	return {
@@ -261,11 +296,14 @@ function Util.MakeAliasCommand(name, commandString)
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
 			for _, command in ipairs(commands) do
-				command = command:gsub("$(%d)", function (p)
-					return args[tonumber(p)] or ""
-				end)
-
-				context:Reply(context.Dispatcher:EvaluateAndRun(command))
+				context:Reply(context.Dispatcher:EvaluateAndRun(
+					Util.SubstituteArgs(command, function (p)
+						if Util.AmbientArgs[p] then
+							return Util.AmbientArgs[p]()
+						end
+						return args[tonumber(p)]
+					end)
+				))
 			end
 
 			return ""

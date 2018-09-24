@@ -282,7 +282,7 @@ end)
 - Potentially nil properties or return types are listed with a `?` following their type
 - `void` is interchangeable with `nil` in most circumstances
 - Varargs are in the format `...: type`, where the type applies to all values (`...: string`)
-- Callback functions are written as *arrow functions*, in the format `(param1: type, param2: type) => type`, where the return type follows the arrow
+- Callback functions are written as *arrow functions*, in the format `function(param1: type, param2: type) => type`, where the return type follows the arrow.
 
 ## Cmdr Server
 
@@ -299,6 +299,7 @@ end)
 #### `CmdrClient:SetPlaceName(labelText: string): void`
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
+#### `CmdrClient:SetAmbientArgument(name: string, callback: function() => string?): void`
 
 ### Properties
 
@@ -316,13 +317,13 @@ end)
 #### `Registry:RegisterTypesIn(container: Instance): void`
 #### `Registry:RegisterType(name: string, typeDefinition: TypeDefinition): void`
 #### `Registry:GetType(name: string): TypeDefinition?`
-#### `Registry:RegisterCommandsIn(container: Instance, filter?: (command: CommandDefinition) => boolean): void`
-#### `Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript?: ModuleScript, filter?: (command: CommandDefinition) => boolean): void`
+#### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
+#### `Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript?: ModuleScript, filter?: function(command: CommandDefinition) => boolean): void`
 #### `Registry:RegisterDefaultCommands(groups?: array<string>): void`
 #### `Registry:GetCommand(name: string): CommandDefinition?`
 #### `Registry:GetCommands(): array<CommandDefinition>`
 #### `Registry:GetCommandsAsStrings(): array<string>`
-#### `Registry:AddHook(hookName: string, callback: (context: CommandContext) => string?): void`
+#### `Registry:AddHook(hookName: string, callback: function(context: CommandContext) => string?): void`
 #### `Registry:GetStore(name: string): table`
 
 ## Dispatcher
