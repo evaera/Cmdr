@@ -307,7 +307,6 @@ end)
 #### `CmdrClient:SetPlaceName(labelText: string): void`
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
-#### `CmdrClient:SetAmbientArgument(name: string, callback: function() => string?): void`
 
 ### Properties
 

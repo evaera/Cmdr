@@ -45,7 +45,7 @@ return {
 		local text = conditionFunc(testAgainst, arg)
 
 		if text then
-			context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteAmbientArgs(command or text))))
+			context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text)))
 		end
 
 		return ""

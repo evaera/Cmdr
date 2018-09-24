@@ -29,8 +29,6 @@ return {
 
 		command = command .. " " .. arguments
 
-		command = context.Cmdr.Util.SubstituteAmbientArgs(command)
-
 		if binds[bind] then
 			binds[bind]:Disconnect()
 		end

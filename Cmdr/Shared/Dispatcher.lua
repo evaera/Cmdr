@@ -44,7 +44,6 @@ end
 --- A helper that evaluates and runs the command in one go.
 -- Either returns any validation errors as a string, or the output of the command as a string. Definitely a string, though.
 function Dispatcher:EvaluateAndRun (text, executor, data)
-	print(text, executor)
 	executor = executor or Players.LocalPlayer
 
 	local command, errorText = self:Evaluate(text, executor, data)

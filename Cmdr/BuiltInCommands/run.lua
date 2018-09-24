@@ -1,7 +1,7 @@
 return {
 	Name = "run";
 	Aliases = {};
-	Description = "Runs a given command string (replacing ambient arguments).";
+	Description = "Runs a given command string (replacing embedded commands).";
 	Group = "DefaultUtil";
 	Args = {
 		{
@@ -12,6 +12,6 @@ return {
 	};
 
 	Run = function(context, command)
-		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteAmbientArgs(command)))
+		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
 	end
 }
