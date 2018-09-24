@@ -13,7 +13,7 @@ return {
 
 	Run = function (context, commandName)
 		if commandName then
-			local command = context.Dispatcher.Cmdr.Registry:GetCommand(commandName)
+			local command = context.Cmdr.Registry:GetCommand(commandName)
 			context:Reply(("Command: %s"):format(command.Name), Color3.fromRGB(230, 126, 34))
 			context:Reply(command.Description, Color3.fromRGB(230, 230, 230))
 			for i, arg in ipairs(command.Args) do
@@ -25,7 +25,7 @@ return {
 				))
 			end
 		else
-			local commands = context.Dispatcher.Cmdr.Registry:GetCommands()
+			local commands = context.Cmdr.Registry:GetCommands()
 
 			for _, cmd in pairs(commands) do
 				context:Reply(("%s - %s"):format(cmd.Name, cmd.Description))

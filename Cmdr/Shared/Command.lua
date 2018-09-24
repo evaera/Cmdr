@@ -13,10 +13,11 @@ Command.__index = Command
 function Command.new (dispatcher, text, commandObject, executor, arguments, data)
 	local self = {
 		Dispatcher = dispatcher; -- The dispatcher that created this command context
+		Cmdr = dispatcher.Cmdr; -- A quick reference to Cmdr for command context
 		Name = commandObject.Name; -- The command name (not alias)
 		RawText = text; -- The raw text used to trigger this command
 		Object = commandObject; -- The command object (definition)
-		Group = commandObject.Group;
+		Group = commandObject.Group; -- The group this command is in
 		Aliases = commandObject.Aliases;
 		Description = commandObject.Description;
 		Executor = executor; -- The player who ran the command
