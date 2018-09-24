@@ -2,7 +2,7 @@ local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
-	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "Name", "Listable", "ValidateOnce"});
+	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce"});
 	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional", "Default"});
 	Types = {};
@@ -34,7 +34,8 @@ function Registry:RegisterType (name, typeObject)
 		error(('Type "%s" has already been registered.'):format(name))
 	end
 
-	typeObject.Name = typeObject.Name or name
+	typeObject.Name = name
+	typeObject.DisplayName = typeObject.DisplayName or name
 
 	self.Types[name] = typeObject
 end

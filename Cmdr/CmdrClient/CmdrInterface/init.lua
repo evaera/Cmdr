@@ -68,7 +68,7 @@ return function (Cmdr)
 					prefix = #lastArgument.RawSegments == 1 and lastArgument.Prefix or "";
 					isLast = #command.Arguments == #command.ArgumentDefinitions and #typedText > 0;
 					name = lastArgument.Name .. (lastArgument.Required and "" or "?");
-					type = lastArgument.Type.Name;
+					type = lastArgument.Type.DisplayName;
 					description = (valid == false and errorText) or lastArgument.Object.Description;
 					invalid = not valid;
 				})

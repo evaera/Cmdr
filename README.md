@@ -198,28 +198,26 @@ end
 ```
 
 ### Definition properties
-#### Transform
+#### DisplayName
+Optionally overrides the user-facing name of this type in the autocomplete menu. If omitted, the registered name of this type will be used.
 
+#### Transform
 `Transform` is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (Validate, Autocomplete, and Parse).
 
 #### Validate
-
 The `Validate` function is passed whatever is returned from the Transform function (or the raw value if there is no Transform function). If the value is valid for the type, it should return `true`. If it the value is invalid, it should return two values: `false`, and a string containing an error message.
 
 If this function isn't present, anything will be considered valid.
 
 #### ValidateOnce
-
 This function works exactly the same as the normal `Validate` function, except it only runs once (after the user presses Enter). This should only be used if the validation process is relatively expensive or needs to yield. For example, the `PlayerId` type uses this because it needs to call `GetUserIdFromNameAsync` in order to validate.
 
 For the vast majority of types, you should just use `Validate` instead.
 
 #### Autocomplete
-
 `Autocomplete` is optional and should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu.
 
 #### Parse
-
 Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
 
 #### Listable
