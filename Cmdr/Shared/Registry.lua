@@ -121,11 +121,17 @@ function Registry:RegisterCommandsIn (container, filter)
 	end
 end
 
-function Registry:RegisterDefaultCommands (groups)
-	groups = groups and Util.MakeDictionary(groups)
-	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, groups and function (command)
-		return groups[command.Group] or false
-	end)
+--- Registers the default commands, with an optional filter function or array of groups.
+function Registry:RegisterDefaultCommands (arrayOrFunc)
+	local isArray = type(arrayOrFunc) == "table"
+
+	if isArray then
+		arrayOrFunc = Util.MakeDictionary(arrayOrFunc)
+	end
+
+	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, isArray and function (command)
+		return arrayOrFunc[command.Group] or false
+	end or arrayOrFunc)
 end
 
 --- Gets a command definition by name. (Can be an alias)
