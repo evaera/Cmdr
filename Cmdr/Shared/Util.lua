@@ -219,13 +219,17 @@ end
 
 --- Runs embedded commands and replaces them
 function Util.RunEmbeddedCommands(dispatcher, str)
-	local s =
-		str:gsub(
-		"$(%b{})",
-		function(text)
-			return dispatcher:EvaluateAndRun(text:sub(2, #text-1))
+	local results = {}
+	-- We need to do this because you can't yield in the gsub function
+	for text in str:gmatch("$(%b{})") do
+		results[text] = dispatcher:EvaluateAndRun(text:sub(2, #text-1))
+
+		if results[text]:find("%s") then
+			results[text] = string.format("%q", results[text])
 		end
-	)
+	end
+
+	local s = str:gsub("$(%b{})", results) -- Only return the first return value
 	return s
 end
 
@@ -240,30 +244,6 @@ function Util.SubstituteArgs(str, replace)
 	end
 	local s = str:gsub("$(%w+)", replace)
 	return s
-end
-
---- Ambient arguments used in alias and bind command
-Util.AmbientArgs = {
-	hover = function()
-		local mouse = Players.LocalPlayer:GetMouse()
-		local target = mouse.Target
-
-		local p = Players:GetPlayerFromCharacter(target:FindFirstAncestorOfClass("Model"))
-
-		return p and p.Name
-	end
-}
-
---- Replaces ambient arguments (used in alias/bind)
-function Util.SubstituteAmbientArgs(text)
-	return Util.SubstituteArgs(
-		text,
-		function(k)
-			if Util.AmbientArgs[k] then
-				return Util.AmbientArgs[k]()
-			end
-		end
-	)
 end
 
 --- Creates an alias command
@@ -309,23 +289,23 @@ function Util.MakeAliasCommand(name, commandString)
 			local args = {...}
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
-			for _, command in ipairs(commands) do
-				context:Reply(
-					context.Dispatcher:EvaluateAndRun(
-						Util.RunEmbeddedCommands(
-							context.Dispatcher,
-							Util.SubstituteArgs(
-								command,
-								function(p)
-									if Util.AmbientArgs[p] then
-										return Util.AmbientArgs[p]()
-									end
-									return args[tonumber(p)]
-								end
-							)
+			for i, command in ipairs(commands) do
+				local output = context.Dispatcher:EvaluateAndRun(
+					Util.RunEmbeddedCommands(
+						context.Dispatcher,
+						Util.SubstituteArgs(
+							command,
+							function(p)
+								return args[tonumber(p)]
+							end
 						)
 					)
 				)
+				if i == #commands then
+					return output -- return last command's output
+				else
+					context:Reply(output)
+				end
 			end
 
 			return ""
