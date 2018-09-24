@@ -34,7 +34,7 @@ function Registry:RegisterType (name, typeObject)
 		error(('Type "%s" has already been registered.'):format(name))
 	end
 
-	typeObject.Name = name
+	typeObject.Name = typeObject.Name or name
 
 	self.Types[name] = typeObject
 end

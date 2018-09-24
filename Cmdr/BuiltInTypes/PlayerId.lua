@@ -21,6 +21,8 @@ local function getUserId(name)
 end
 
 local playerIdType = {
+	Name = "Full Player Name";
+
 	Transform = function (text)
 		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
 
