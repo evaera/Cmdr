@@ -222,9 +222,17 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 	local results = {}
 	-- We need to do this because you can't yield in the gsub function
 	for text in str:gmatch("$(%b{})") do
-		results[text] = dispatcher:EvaluateAndRun(text:sub(2, #text-1))
+		local doQuotes = true
+		local commandString = text:sub(2, #text-1)
 
-		if results[text]:find("%s") then
+		if commandString:match("^{.+}$") then -- Allow double curly for literal replacement
+			doQuotes = false
+			commandString = commandString:sub(2, #commandString-1)
+		end
+
+		results[text] = dispatcher:EvaluateAndRun(commandString)
+
+		if doQuotes and results[text]:find("%s") then
 			results[text] = string.format("%q", results[text])
 		end
 	end
