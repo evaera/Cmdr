@@ -2,12 +2,16 @@
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
+- Great for admin commands, but does much more.
+- Make commands that tie in specifically with your game systems.
+- Intelligent autocompletion and instant validation.
 - Run commands programmatically on behalf of the local user.
 - Bind commands to user input.
-- Make commands specifi
+- Secure: the client and server both validate input separately.
+- Embedded commands: dynamically use the output of an inner command when running a command.
 
 <p align="center">
-  <img src="https://i.eryn.io/bmzoz5gvhw.gif" alt="Cmdr Demo" />
+  <img src="https://giant.gfycat.com/DentalGrimyGermanshorthairedpointer.gif" alt="Cmdr Demo" />
 </p>
 
 Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard moderation commands (teleport, kill, kick, ban), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
@@ -15,6 +19,8 @@ Cmdr is designed specifically so that you can write your own commands and argume
 Cmdr provides a friendly API that lets the game developer choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
 
 Cmdr has a robust and friendly type validation system (making sure strings are strings, players are players, etc), which can give end users real time command validation as they type, and automatic error messages. By the time the command actually gets to your code, you can be assured that all of the arguments are present and of the correct type.
+
+If you have any questions, suggestions, or ideas for Cmdr, or you run into a bug, please don't hesitate to [open an issue](https://github.com/evaera/Cmdr/issues)! PRs are welcome as well.
 
 ## Set-up
 
@@ -34,7 +40,7 @@ You can download the latest model file release from the [releases section](https
 Cmdr has no dependencies, so it can also be easily included as a Git submodule and synced in with the rest of your project with [Rojo](https://github.com/LPGhatguy/rojo). If you don't know how to do this already, then please see method 1 :)
 
 ### Server
-You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded. However, you only need to register commands and types on the server.
+You should create a folder to keep your commands inside, and then register them on the server. You need to require Cmdr on the server *and* on the client for it to be fully loaded. However, you only need to register commands and types on the server. There should be no need to modify the actual Cmdr library itself.
 
 ```lua
 -- This is a script you would create in ServerScriptService, for example.
@@ -161,7 +167,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`
 
 Group: `Help`: `help`
 
@@ -177,11 +183,27 @@ Cmdr:RegisterDefaultCommands(function(cmd)
 end)
 ```
 
+### Prefixed Union Types
+An argument can be allowed to accept a different type when starting with a specific prefix. The most common example of this is with the `players` type, which when prefixed with % allows the user to select players based on team, rather than name.
+
+These can be defined on a per-argument basis, so that your commands can accept many types of arguments in a single slot. Under the Args section of command definition, each argument has a `Type` key.  For arguments that accept only a single type, it would look like `Type = "string"`. If we also wanted to accept a number when the user prefixes the argument with `#`, we could change it to: `Type = "string # number"`. Then, if the user provided `#33` for this argument, your function would be delivered the number value `33` in that position.
+
+This is infinitely expandable, and you can include as many prefixed union types as you wish: `Type = "string # number @ player % team"`, etc. Remember that there must be a space between the symbol and the type.
+
+Some default types automatically have a prefixed union type applied to them, because they would both resolve to the same type in the end. For example, whenever you define an argument of type `players`, under the hood this is perceived as `players % teamPlayers`. (`teamPlayers` is a type that matches based on team name, but resolves to an array of Players: the same thing that the normal `players` type would resolve with.)
+
+Here is a list of automatic prefixed union types:
+
+- `players`: `players % teamPlayers`
+- `playerId`: `playerId # integer`
+
 ## Types
 
 By default, these types are available:
 
 `string`, `number`, `integer`, `boolean`, `player`, `players`, `team`, `teams`, `teamPlayers`, `command`, `commands`, `userInput`, `userInputs`
+
+Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
 Custom types are defined as tables that implement specific named functions. When Types are in a ModuleScript, the ModuleScript should not return the table directly; instead it should return a function, which accepts the Registry as a parameter. You should then call `registry:RegisterType("typeName", yourTable)` to register it.
 
@@ -280,6 +302,65 @@ Cmdr:AddHook("AfterRun", function(context)
 end)
 ```
 
+## Network Event Handlers
+
+Some commands that run on the server might need to also do something on the client, or on every client. Network event handlers are callback functions that you can set to run when a server command sends a message back to the client. Only one handler can be set to a certain event at a time, so it's possible to change the handler for a specific event without needing to re-implement the entire command yourself.
+
+For example, consider the default `announce` command, which creates a message on every player's screen. By default, this creates a system chat message with the given text, because Cmdr has a default event handler for the `"Message"` event, which the `announce` command broadcasts,
+
+If you wanted to display announcements some other way, you could just override the default event handler:
+
+```lua
+CmdrClient:HandleEvent("Message", function (text, player)
+	print("Announcement from", player.Name, text)
+end)
+```
+
+You can send events from your own commands on the server (or to the local player if in a client-only command) by using `context:SendEvent(player, ...)` and `context:BroadcastEvent(...)`. The built-in `context:Reply(text)` method actually uses `SendEvent` under the hood, whose default handler on the client is set to just add a new line to the console window with the given text.
+
+## Bind, Alias, and Run
+The `bind`, `alias`, and `run` commands make use of *command strings*. A command string is raw text made up of a command name and possibly predefined arguments that is run in the background as a command itself. Before these command strings are run, they are preprocessed, replacing arguments (in the format `$1`, `$2`, `$3`, etc.) and embedded commands with their textual values.
+
+### Embedded commands
+Sub-commands may be embedded inside command strings, in the format `${command arg1 arg2 arg3}`. These sub-commands are evaluated just before the command string is run, and are run every time the command string runs. They evaluate to whatever the command returns as output.
+
+Embedded commands are nestable: `run echo ${run echo ${echo hello}!}` (displays `"hello!"`). We use `run` here instead of just running `echo` directly, because embedded commands are only evaluated in the preprocess step of commands that use *command strings* (which is only `run`, `alias`, and `bind`).
+
+By default, if the evaluated command output has a space in it, the return value will be encapsulated in quote marks so that the entire value is perceived as one argument to Cmdr. In cases where it's desirable for Cmdr to parse each word as a separate argument, you can use use a literal syntax: `run teleport ${{echo first second}}` (in this example, "first" and "second" would then become the first and second arguments to the `teleport` command, instead of the first argument being "first second")
+
+### Run
+Run is the simplest of the bunch, and does right what it says on the tin. It runs whatever text you give it immediately as a command. This is useful, because it evaluates embedded commands within the command string before running.
+
+```
+run ${{echo kill me}}
+```
+
+### Bind
+Bind is a command that allows you to run a certain command string every time some event happens. The default bind type is by user input (mouse or keyboard input), but you can also bind to other events.
+
+This is very powerful: You could define a command, like `cast_ability`, which casts a certain move in your game. Then, you could have a keybindings menu that allows the user to rebind keys, and whenever they do, it runs `CmdrClient:Run("bind", keyCode.Name, "cast_ability", abilityId)` in the background. By separating the user input from our hypothetical ability code, our code is made more robust as we can now trigger abilities from a number of possible events, in addition to the bound key.
+
+If you prefix the first argument with `@`, you can instead select a player to bind to, which will run this command string every time that player chats. You can get the chat text by using `$1` in your command string.
+
+In the future, you will be able to bind to network events as described in the previous section by prefixing the first argument with `!`.
+
+The `unbind` command can be used to unbind anything that `bind` can bind.
+
+### Alias
+The alias command lets you create a new, single command out of a command string. Alias commands can contain more than one distinct command, delimited by `&&`. You can also accept arguments from the command with `$1` through `$5`.
+
+```
+alias farewell announce Farewell, $1! && kill $1
+```
+
+Then, if we run `farewell evaera`, it would make an announcement saying "Farewell, evaera!" and then kill the player called "evaera".
+
+As another example, you could create a command that killed anyone your mouse was currently hovering over like so:
+
+```
+alias pointer_of_death kill ${hover}
+```
+
 # API
 
 ## How to read these function signatures:
@@ -296,101 +377,229 @@ end)
 
 ### Properties
 #### `Cmdr.Registry: Registry`
+Refers to the current command Registry, see Registry below.
+
 #### `Cmdr.Dispatcher: Dispatcher`
+Refers to the current command Dispatcher, see Dispatcher below.
+
 #### `Cmdr.Util: Util`
+Refers to a table containing many useful utility functions, see Util below.
 
 ## Cmdr Client
 
 ### Methods
 
 #### `CmdrClient:SetActivationKeys(keys: array<Enum.KeyCode>): void`
+Sets the key codes that will hide or show Cmdr.
+
 #### `CmdrClient:SetPlaceName(labelText: string): void`
+Sets the place name label that appears when executing commands. This is useful for a quick way to tell what game you're playing in a universe game.
+
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
+Sets whether or not Cmdr can be shown via the defined activation keys. Useful for when you want users to need to opt-in to show the console in a settings menu.
+
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
+Sets the event handler for a certain network event. See Network Event Handlers above.
 
 ### Properties
 
 #### `CmdrClient.Enabled: boolean`
+Whether or not the Cmdr console is enabled. See CmdrClient:SetEnabled.
+
 #### `CmdrClient.PlaceName: string`
+The current place name label text.
+
 #### `CmdrClient.ActivationKeys: dictionary<Enum.KeyCode, true>`
+A map containing the current activation keys,
+
 #### `CmdrClient.Registry: Registry`
+Refers to the current command Registry, see Registry below.
+
 #### `CmdrClient.Dispatcher: Dispatcher`
+Refers to the current command Dispatcher, see Dispatcher below.
+
 #### `CmdrClient.Util: Util`
+Refers to a table containing many useful utility functions, see Util below.
 
 ## Registry
+The registry handles registering commands, types, and hooks. Exists on both client and server.
 
 ### Methods
 
 #### `Registry:RegisterTypesIn(container: Instance): void`
+Registers all types from within a container. This only needs to be called server-side.
+
 #### `Registry:RegisterType(name: string, typeDefinition: TypeDefinition): void`
+Registers a type. This function should be called from within the type definition ModuleScript.
+
 #### `Registry:GetType(name: string): TypeDefinition?`
+Returns a type definition with the given name, or nil if it doesn't exist.
+
 #### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
+Registers all commands from within a container. `filter` is an optional function, and if given will be passed a command definition which will only be registered if the function returns `true`. This only needs to be called server-side.
+
 #### `Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript?: ModuleScript, filter?: function(command: CommandDefinition) => boolean): void`
-#### `Registry:RegisterDefaultCommands(groups?: array<string>): void`
+Registers an individual command directly from a module script and possible server script. For most cases, you should use RegisterCommandsIn instead.
+
+#### `Registry:RegisterDefaultCommands(groupsOrFilterFunc?: array<string> | function(command: CommandDefinition) => boolean): void`
+Registers the default set of commands. See Default Commands above for more details.
+
 #### `Registry:GetCommand(name: string): CommandDefinition?`
+Returns the CommandDefinition of the given name, or nil if not registered. Command aliases are also accepted.
+
 #### `Registry:GetCommands(): array<CommandDefinition>`
+Returns an array of all commands (aliases not included).
+
 #### `Registry:GetCommandsAsStrings(): array<string>`
+Returns an array of all command names.
+
 #### `Registry:AddHook(hookName: string, callback: function(context: CommandContext) => string?): void`
+Adds a hook. This should probably be run on the server, but can also work on the client.  See the Hooks section above.
+
 #### `Registry:GetStore(name: string): table`
+Returns a table saved with the given name. This is the same as `CommandContext:GetStore()`.
 
 ## Dispatcher
+The Dispatcher handles parsing, validating, and evaluating commands. Exists on both client and server.
 
 ### Methods
 
 #### `Dispatcher:Run(...: string): string`
+This should be used to invoke commands programmatically as the local player. Accepts a variable number of arguments, which are all joined with spaces before being run. This function will raise an error if any validations occur, since it's only for hard-coded (or generated) commands. Client only.
+
+#### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, data?: any): string`
+Runs a command as the given player. If called on the client, only text is required. Returns output or error test as a string. If the `data` parameter is given, it will be available with `CommandContext:GetData()`.
 
 ## CommandContext
+This object represents a single command being run. It is passed as the first argument to command implementations.
 
 ### Properties
 
+#### `CommandContext.Cmdr: Cmdr`
+A reference to Cmdr. This may either be the server or client version of Cmdr depending on where the command is running.
+
 #### `CommandContext.Dispatcher: Dispatcher`
+The dispatcher that created this command.
+
 #### `CommandContext.Name: string`
+The name of the command
+
 #### `CommandContext.RawText: string`
+The raw text that was used to trigger this command.
+
 #### `CommandContext.Group: any`
+The group this command is a part of. Defined in command definitions, typically a string.
+
 #### `CommandContext.Aliases: array<string>`
+Any aliases that can be used to also trigger this command in addition to its name.
+
 #### `CommandContext.Description: string`
+The description for this command from the command definition.
+
 #### `CommandContext.Executor: Player`
+The player who ran this command.
+
 #### `CommandContext.RawArguments: array<string>`
+An array of strings which is the raw value for each argument.
+
 #### `CommandContext.Arguments: array<ArgumentContext>`
+An array of ArgumentContext objects, the parsed equivalent to RawArguments.
+
 #### `CommandContext.Response: string?`
+The command output, if the command has already been run. Typically only accessible in the AfterRun hook.
 
 ### Methods
 
 #### `CommandContext:GetArgument(index: number): ArgumentContext`
+Returns the ArgumentContext for the given index.
+
 #### `CommandContext:GetData(): any`
+Returns the command data that was sent along with the command. This is the return value of the `Data` function from the command definition.
+
 #### `CommandContext:GetStore(name: string): table`
+Returns a table of the given name. Always returns the same table on subsequent calls. Useful for storing things like ban information. Same as Registry:GetStore.
+
 #### `CommandContext:SendEvent(player: Player, event: string, ...: any): void`
+Sends a network event of the given name to the given player. See Network Event Handlers.
+
 #### `CommandContext:BroadcastEvent(event: string, ...: any): void`
+Broadcasts a network event to all players. See Network Event Handlers.
+
 #### `CommandContext:Reply(text: string, color?: Color3): void`
+Prints the given text in the user's console. Useful for when a command needs to print more than one message or is long-running. You should still `return` a string from the command implementation when you are finished, `Reply` should only be used to send additional messages before the final message.
 
 ## ArgumentContext
+This object represents an argument from a CommandContext.
 
 ### Properties
 
 #### `ArgumentContext.Command: CommandContext`
+The command that this argument belongs to.
+
 #### `ArgumentContext.Name: string`
+The name of this argument.
+
+#### `ArgumentContext.Type: TypeDefinition`
+The type definition for this argument.
+
 #### `ArgumentContext.Required: boolean`
+Whether or not this argument was required.
+
 #### `ArgumentContext.Executor: Player`
+The player that ran the command this argument belongs to.
+
 #### `ArgumentContext.RawValue: string`
+The raw, unparsed value for this argument.
+
 #### `ArgumentContext.RawSegments: array<string>`
+An array of strings representing the values in a comma-separated list, if applicable. If this type isn't listable,
+
 #### `ArgumentContext.Prefix: string`
+The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See Prefixed Union Types for more details.
 
 ### Methods
 
 #### `ArgumentContext:GetValue(): any`
+Returns the parsed value for this argument.
+
 #### `ArgumentContext:GetTransformedValue(segment: number): any...`
+Returns the *transformed value* from this argument, see Types.
 
 ## Util
 
 ### Methods
 
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
-#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): fuzzyFinder(text: string, returnFirst: boolean)`
+Accepts an array flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
+
+#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst: boolean) => any`
+Makes a fuzzy finder for the given set or container. You can pass an array of strings, array of instances, array of EnumItems, array of dictionaries with a `Name` key or an instance (in which case its children will be used).
+
+Returns a function that accepts a string and returns a table of matching objects. Exact matches are inserted in the front of the resultant array.
+
 #### `Util.GetNames(instances: array<Instance>): array<string>`
-#### `Util.SplitStringSimple(text: string, seperator: string): array<string>`
-#### `Util.SplitString(text: string, max: number): array<string>`
+Accepts an array of instances (or anything with a `Name` property) and maps them into an array of their names.
+
+#### `Util.SplitStringSimple(text: string, separator: string): array<string>`
+Slits a string into an array split by the given separator.
+
+#### `Util.SplitString(text: string, max?: number): array<string>`
+Splits a string by spaces, but taking double-quoted sequences into account which will be treated as a single value.
+
 #### `Util.TrimString(text: string): string`
+Trims whitespace from both sides of a string.
+
 #### `Util.GetTextSize(text: string, label: TextLabel, size: number): Vector2`
+Returns the text bounds size as a Vector2 based on given
+
 #### `Util.MakeEnumType(name: string, values: array<string>): TypeDefinition`
+Makes an Enum type out of a name and an array of strings. See Enum Values.
+
 #### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
-#### `Util.MakeAliasCommand(name: string, commandString: string): CommandDefinition`
+Takes a singular type and produces a plural (listable) type out of it.
+
+#### `Util.SubstituteArgs(text: string, replace: array<string> | dictionary<string, string> | function(var: string) => string): string`
+Accepts a string with arguments (such as $1, $2, $3, etc) and a table or function to use with `string.gsub`. Returns a string with arguments replaced with their values.
+
+#### `Util.RunEmbeddedCommands(dispatcher: Dispatcher, commandString: string): string`
+Accepts the current dispatcher and a command string. Parses embedded commands from within the string, evaluating to the output of the command when run with `dispatcher:EvaluateAndRun`. Returns the compiled string.
