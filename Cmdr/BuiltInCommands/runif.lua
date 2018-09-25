@@ -31,7 +31,6 @@ return {
 			Type = "string";
 			Name = "Command";
 			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used.";
-			Optional = true;
 		},
 	};
 
@@ -45,7 +44,7 @@ return {
 		local text = conditionFunc(testAgainst, arg)
 
 		if text then
-			context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text)))
+			return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text))
 		end
 
 		return ""
