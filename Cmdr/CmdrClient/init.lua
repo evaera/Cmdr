@@ -16,7 +16,7 @@ local Cmdr do
 		RemoteEvent = script:WaitForChild("CmdrEvent");
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
 		Enabled = true;
-		PlaceName = "place";
+		PlaceName = "Cmdr";
 		Util = Util;
 		Events = {};
 	}, {
