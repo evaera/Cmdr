@@ -15,7 +15,7 @@ local Dispatcher = {
 -- data is for special networked Data about the command gathered on the client. Purely Optional.
 -- returns the command if successful, or (false, errorText) if not
 function Dispatcher:Evaluate (text, executor, allowIncompleteArguments, data)
-	if RunService:IsClient() == true and executor ~= game.Players.LocalPlayer then
+	if RunService:IsClient() == true and executor ~= Players.LocalPlayer then
 		error("Can't evaluate a command that isn't sent by the local player.")
 	end
 
@@ -72,7 +72,7 @@ end
 --- Send text as the local user to remote server to be evaluated there.
 function Dispatcher:Send (text, data)
 	if RunService:IsClient() == false then
-		error("Dispatcher::Send can only be called from the client.")
+		error("Dispatcher:Send can only be called from the client.")
 	end
 
 	return self.Cmdr.RemoteFunction:InvokeServer(text, data)
@@ -81,6 +81,10 @@ end
 --- Invoke a command programmatically as the local user e.g. from a settings menu
 -- Command should be the first argument, all arguments afterwards should be the arguments to the command.
 function Dispatcher:Run (...)
+	if not Players.LocalPlayer then
+		error("Dispatcher:Run can only be called from the client.")
+	end
+
 	local args = {...}
 	local text = args[1]
 
@@ -88,7 +92,7 @@ function Dispatcher:Run (...)
 		text = text .. " " .. tostring(args[i])
 	end
 
-	local command, errorText = self:Evaluate(text, game.Players.LocalPlayer)
+	local command, errorText = self:Evaluate(text, Players.LocalPlayer)
 
 	if not command then
 		error(errorText) -- We do a full-on error here since this is code-invoked and they should know better.
