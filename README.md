@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="assets/logo.png" alt="Cmdr" />
+	<img src="assets/logo.png" alt="Cmdr" height="150" />
 </div>
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
