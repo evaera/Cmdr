@@ -239,7 +239,12 @@ function Util.SubstituteArgs(str, replace)
 	-- Convert numerical keys to strings
 	if type(replace) == "table" then
 		for i = 1, #replace do
-			replace[tostring(i)] = replace[i]
+			local k = tostring(i)
+			replace[k] = replace[i]
+
+			if replace[k]:find("%s") then
+				replace[k] = string.format("%q", replace[k])
+			end
 		end
 	end
 	local s = str:gsub("$(%w+)", replace)
@@ -293,12 +298,7 @@ function Util.MakeAliasCommand(name, commandString)
 				local output = context.Dispatcher:EvaluateAndRun(
 					Util.RunEmbeddedCommands(
 						context.Dispatcher,
-						Util.SubstituteArgs(
-							command,
-							function(p)
-								return args[tonumber(p)]
-							end
-						)
+						Util.SubstituteArgs(command, args)
 					)
 				)
 				if i == #commands then
