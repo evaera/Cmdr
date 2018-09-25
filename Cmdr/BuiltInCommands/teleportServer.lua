@@ -1,4 +1,4 @@
-return function (context, fromPlayers, toPlayer)
+return function (_, fromPlayers, toPlayer)
   if toPlayer.Character and toPlayer.Character:FindFirstChild("HumanoidRootPart") then
     local position = toPlayer.Character.HumanoidRootPart.CFrame
 

@@ -1,3 +1,4 @@
+-- luacheck: ignore 212
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
@@ -19,7 +20,7 @@ return function (Cmdr)
 	AutoItem.Parent = nil
 
 	-- Helper function that sets text and resizes labels
-	function SetText(obj, textObj, text, sizeFromContents)
+	local function SetText(obj, textObj, text, sizeFromContents)
 		obj.Visible = text ~= nil
 		textObj.Text = text or ""
 
@@ -29,7 +30,7 @@ return function (Cmdr)
 	end
 
 	-- Update the info display (Name, type, and description) based on given options.
-	function UpdateInfoDisplay (options)
+	local function UpdateInfoDisplay (options)
 		-- Update the objects' text and sizes
 		SetText(Title, Title.Field, options.name, true)
 		SetText(Title.Field.Type, Title.Field.Type, options.type and ": " .. options.type:sub(1, 1):upper() .. options.type:sub(2))
@@ -39,7 +40,6 @@ return function (Cmdr)
 
 		-- Calculate needed width and height
 		local infoWidth = Title.Field.TextBounds.X + Title.Field.Type.TextBounds.X
-		local infoHeight = Title.Visible and 40 or 0
 
 		local guiWidth = math.max(infoWidth, Gui.Size.X.Offset)
 		Description.Size = UDim2.new(1, 0, 0, 40)
@@ -51,10 +51,6 @@ return function (Cmdr)
 			if Description.Size.Y.Offset > 500 then
 				break
 			end
-		end
-
-		if Description.Visible then
-			infoHeight = infoHeight + Description.AbsoluteSize.Y
 		end
 
 		-- Update container

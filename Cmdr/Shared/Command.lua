@@ -3,7 +3,6 @@ local Players = game:GetService("Players")
 local Argument = require(script.Parent.Argument)
 
 local IsServer = RunService:IsServer()
-local IsClient = RunService:IsClient()
 
 local Command = {}
 Command.__index = Command

@@ -11,7 +11,7 @@ return {
 		},
 	};
 
-	Run = function(context, text)
+	Run = function(_, text)
 		return text
 	end
 }

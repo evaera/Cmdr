@@ -1,5 +1,4 @@
 local TextService = game:GetService("TextService")
-local Players = game:GetService("Players")
 
 local Util = {}
 

@@ -53,7 +53,7 @@ function Dispatcher:EvaluateAndRun (text, executor, data)
 	end
 
 	local ok, out = pcall(function()
-		local valid, errorText = command:Validate(true)
+		local valid, errorText = command:Validate(true) -- luacheck: ignore
 
 		if not valid then
 			return errorText
@@ -98,7 +98,7 @@ function Dispatcher:Run (...)
 		error(errorText) -- We do a full-on error here since this is code-invoked and they should know better.
 	end
 
-	local success, errorText = command:Validate(true)
+	local success, errorText = command:Validate(true) -- luacheck: ignore
 
 	if not success then
 		error(errorText)
