@@ -49,6 +49,9 @@ function Registry:RegisterTypesIn (container)
 	end
 end
 
+-- These are exactly the same thing. No one will notice. Except for you, dear reader.
+Registry.RegisterHooksIn = Registry.RegisterTypesIn
+
 --- Registers a command based purely on its definition.
 -- Prefer using Registry:RegisterCommand for proper handling of server/client model.
 function Registry:RegisterCommandObject (commandObject)

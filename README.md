@@ -277,7 +277,7 @@ end
 
 Hooks are callback functions that you can register which *hook* into the command execution process. Hooks are extremely useful: they can be used for implementing a custom permission system, logging commands, or overriding command output.
 
-Hooks can be registered on the server or the client, but for most applications (permissions, logging, etc) they should be used on the server.
+Hooks can be registered on both the server and the client. Server commands will run server hooks, and client commands (such as `blink`) will run client hooks. Depending on your application, you may need to register hooks on one or both. For example, logging may only need to be registered on the server, but permissions might need to be registered on the client in addition to the server.
 
 There can be many hooks of each type, and they are all run until one returns a string, which will replace the command response in the console.
 
@@ -287,12 +287,17 @@ The callback is passed the CommandContext for the relevant command. The hooks ar
 
 This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
 
+As a quick way to register hooks on both the server and the client, you can make a folder for your hooks, with module scripts in them which return a function. Similar to Types, if you call `Cmdr:RegisterHooksIn(yourFolderHere)` from the server, Cmdr will load all ModuleScripts in the folder on the server and the client, so you only need to write your code once.
+
 ```lua
-Cmdr:AddHook("BeforeRun", function(context)
-  if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
-    return "You don't have permission to run this command"
-  end
-end)
+-- A ModuleScript inside your hooks folder.
+return function (registry)
+	registry:AddHook("BeforeRun", function(context)
+		if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
+			return "You don't have permission to run this command"
+		end
+	end)
+end
 ```
 
 ### AfterRun
@@ -301,10 +306,10 @@ The AfterRun hook runs, as its name implies, directly after a command is run. Th
 
 If this callback returns a string, then it will replace the normal response on the user's screen. If the callback returns nothing (`nil`), then the response will be shown normally.
 
-This hook is most useful for logging.
+This hook is most useful for logging. Since we don't want to add this hook on the client in this example, we can just require the server version of Cmdr and add this hook directly right here (as opposed to what we did in the BeforeRun example, which adds the hook to the client as well):
 
 ```lua
-Cmdr:AddHook("AfterRun", function(context)
+Cmdr.Registry:AddHook("AfterRun", function(context)
   print(context.Response) -- see the actual response from the command execution
   return "Returning a string from this hook replaces the response message with this text"
 end)
@@ -442,6 +447,9 @@ Registers a type. This function should be called from within the type definition
 
 #### `Registry:GetType(name: string): TypeDefinition?`
 Returns a type definition with the given name, or nil if it doesn't exist.
+
+#### `Registry:RegisterHooksIn(container: Instance): void`
+Registers all hooks from within a container. This only needs to be called server-side. See the Hooks section for examples.
 
 #### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
 Registers all commands from within a container. `filter` is an optional function, and if given will be passed a command definition which will only be registered if the function returns `true`. This only needs to be called server-side.
