@@ -16,7 +16,7 @@
   <img src="https://i.eryn.io/tx29vhqbla.gif" alt="Cmdr Demo" />
 </p>
 
-Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard moderation commands (teleport, kill, kick, ban), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
+Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard admin commands (teleport, kill, kick), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
 
 Cmdr provides a friendly API that lets the game developer choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
 
@@ -101,7 +101,9 @@ return {
 }
 ```
 
-The implementation should be in a separate file, which is never delivered to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
+The implementation should be in a separate ModuleScript. Cmdr will never deliver this script to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
+
+It is passed the CommandContext for this command, which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API section below for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
 ```lua
 -- TeleportServer.lua
@@ -123,6 +125,8 @@ return function (context, fromPlayers, toPlayer)
   return "Target player has no character."
 end
 ```
+
+Take a gander at the [built-in commands](https://github.com/evaera/Cmdr/tree/master/Cmdr/BuiltInCommands) for more examples.
 
 ### Definition properties
 
@@ -165,7 +169,7 @@ If you want your command to run entirely on the client, you can add this functio
 ### Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
-Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `ban`, `teleport` (`tp`), `kill`
+Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
@@ -228,6 +232,8 @@ return function (registry)
 	registry:RegisterType("integer", intType)
 end
 ```
+
+Take a look-see at the [built-in types](https://github.com/evaera/Cmdr/tree/master/Cmdr/BuiltInTypes) for more examples.
 
 ### Definition properties
 #### DisplayName
@@ -365,7 +371,7 @@ alias pointer_of_death kill ${hover}
 
 # API
 
-## How to read these function signatures:
+## How to read these function signatures
 
 - Parameters and properties are in the format `name: type` (`name: string`)
 - Return value types are listed following a colon after the closing paren (`example(): boolean`)
@@ -572,9 +578,9 @@ Returns the *transformed value* from this argument, see Types.
 ### Methods
 
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
-Accepts an array flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
+Accepts an array and flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
 
-#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst: boolean) => any`
+#### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst?: boolean) => any`
 Makes a fuzzy finder for the given set or container. You can pass an array of strings, array of instances, array of EnumItems, array of dictionaries with a `Name` key or an instance (in which case its children will be used).
 
 Returns a function that accepts a string and returns a table of matching objects. Exact matches are inserted in the front of the resultant array.
@@ -591,8 +597,8 @@ Splits a string by spaces, but taking double-quoted sequences into account which
 #### `Util.TrimString(text: string): string`
 Trims whitespace from both sides of a string.
 
-#### `Util.GetTextSize(text: string, label: TextLabel, size: number): Vector2`
-Returns the text bounds size as a Vector2 based on given
+#### `Util.GetTextSize(text: string, label: TextLabel, size?: Vector2): Vector2`
+Returns the text bounds size as a Vector2 based on the given label and optional display size. If size is omitted, the absolute width is used.
 
 #### `Util.MakeEnumType(name: string, values: array<string>): TypeDefinition`
 Makes an Enum type out of a name and an array of strings. See Enum Values.
