@@ -36,17 +36,11 @@ local brickColorFinder = Util.MakeFuzzyFinder(brickColorNames)
 
 local brickColorType =  {
     Transform = function(text)
-        local brickColorMatches = brickColorFinder(text)
-        -- If the BrickColor is invalid, it will default to Medium Stone grey. We need to verify that "medium stone grey" is the best match.
-        if #brickColorMatches == 1 and brickColorMatches[1] == "Medium stone grey" and (#text < 8 or text:lower():sub(1, 8) ~= "medium s") then
-            return {}
-        else
-            local brickColors = {}
-            for i, name in pairs(brickColorMatches) do
-                brickColors[i] = BrickColor.new(name)
-            end
-            return brickColors
+        local brickColors = {}
+        for i, name in pairs(brickColorFinder(text)) do
+            brickColors[i] = BrickColor.new(name)
         end
+        return brickColors
     end;
 
     Validate = function(brickColors)
@@ -62,37 +56,7 @@ local brickColorType =  {
     end;
 }
 
-local brickColorsType = {
-    Listable = true;
-
-    Transform = function(text)
-        local brickColorMatches = brickColorFinder(text)
-        -- If the BrickColor is invalid, it will default to Medium Stone grey. We need to verify that "medium stone grey" is the best match.
-        if #brickColorMatches == 1 and brickColorMatches[1] == "Medium stone grey" and (#text < 8 or text:lower():sub(1, 8) ~= "medium s") then
-            return {}
-        else
-            local brickColors = {}
-            for i, name in pairs(brickColorMatches) do
-                brickColors[i] = BrickColor.new(name)
-            end
-            return brickColors
-        end
-    end;
-
-    Validate = function(brickColors)
-        return #brickColors > 0, "No valid brick colors with that name could be found."
-    end;
-
-    Autocomplete = function(brickColors)
-		return Util.GetNames(brickColors)
-	end;
-
-    Parse = function(brickColors, returnAll)
-        return returnAll and brickColors or { brickColors[1] }
-    end;
-}
-
 return function(registry)
     registry:RegisterType("brickColor", brickColorType)
-    registry:RegisterType("brickColors", brickColorsType)
+    registry:RegisterType("brickColors", Util.MakeListableType(brickColorType))
 end
