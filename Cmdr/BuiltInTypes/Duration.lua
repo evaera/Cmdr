@@ -1,13 +1,13 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local unitTable = {
-    Year = 31556926,
-    Month = 2629744,
-    Week = 604800,
-    Day = 86400,
-    Hour = 3600,
-    Minute = 60,
-    Second = 1
+    Years = 31556926,
+    Months = 2629744,
+    Weeks = 604800,
+    Days = 86400,
+    Hours = 3600,
+    Minutes = 60,
+    Seconds = 1
 }
 
 local searchKeyTable = {}
@@ -19,78 +19,89 @@ local unitFinder = Util.MakeFuzzyFinder(searchKeyTable)
 local function stringToSecondDuration(stringDuration)
     -- The duration cannot be null or an empty string.
     if stringDuration == nil or stringDuration == "" then
-        return nil, stringDuration
+        return nil
+    end
+    -- Allow 0 by itself (without a unit) to indicate 0 seconds
+    local durationNum = tonumber(stringDuration)
+    if durationNum and durationNum == 0 then
+        return 0, 0, true
     end
     -- The duration must end with a unit,
-    -- if it doesn't then return true as the third value to indicate the need to offer autocomplete for units.
-    if stringDuration:find("^.*%d+$") then
-        return nil, stringDuration, true
+    -- if it doesn't then return true as the fourth value to indicate the need to offer autocomplete for units.
+    local endOnlyString = stringDuration:gsub("%d+%a+", "")
+    local endNumber = endOnlyString:match("%d+")
+    if endNumber then
+        return nil, tonumber(endNumber), true
     end
-    local secondValue = -1
+    local seconds = nil
+    local rawNum, rawUnit
     for rawComponent in stringDuration:gmatch("%d+%a+") do
-        local rawNum, rawUnit = rawComponent:match("(%d+)(%a+)")
+        rawNum, rawUnit = rawComponent:match("(%d+)(%a+)")
         local unitNames = unitFinder(rawUnit)
-        -- There were no matching units, it's invalid.
+        -- There were no matching units, it's invalid. Return the parsed number to be used for autocomplete
         if #unitNames == 0 then
-            return nil, stringDuration
-        -- There were multiple matching units, which can only happen with Minutes/Months, so we default to Minutes.
-        elseif #unitNames > 1 then
-            unitNames[1] = "Minute"
+            return nil, tonumber(rawNum)
         end
-        secondValue = secondValue + unitTable[unitNames[1]] * tonumber(rawNum)
+        if seconds == nil then seconds = 0 end
+        -- While it was already defaulting to use minutes when using just "m", this does it without worrying
+        -- about any consistency between list ordering.
+        seconds = seconds + (rawUnit:lower() == "m" and 60 or unitTable[unitNames[1]]) * tonumber(rawNum)
     end
-    -- No durations were actually provided, so return nil.
-    if secondValue == -1 then
-        -- Add 1 to escape the effect of having -1 as the original value.
+    -- If no durations were provided, return nil.
+    if seconds == nil then
         return nil
     else
-        return secondValue + 1, stringDuration
+        return seconds, tonumber(rawNum)
     end
+end
+
+local function mapUnits(units, rawText, lastNumber, subStart)
+    subStart = subStart or 1
+    local returnTable = {}
+    for i, unit in pairs(units) do
+        if lastNumber == 1 then
+            returnTable[i] = rawText .. unit:sub(subStart, #unit - 1)
+        else
+            returnTable[i] = rawText .. unit:sub(subStart)
+        end
+    end
+    return returnTable
 end
 
 local durationType = {
     Transform = function(text)
-        return stringToSecondDuration(text)
+        return text, stringToSecondDuration(text)
     end;
 
-    Validate = function(_, _, isUnitMissingOrMatchedUnits)
-        -- If the units are accurate, or the units are completely missing,
-        -- or there is exactly one matching unit then the duration is valid.
-        return isUnitMissingOrMatchedUnits == nil or isUnitMissingOrMatchedUnits == true or
-            (type(isUnitMissingOrMatchedUnits) == "table" and #isUnitMissingOrMatchedUnits == 1)
+    Validate = function(_, duration)
+        return duration ~= nil and duration >= 0
     end;
 
-    Autocomplete = function(duration, rawText, isUnitMissingOrMatchedUnits)
+    Autocomplete = function(rawText, duration, lastNumber, isUnitMissing, matchedUnits)
         local returnTable = {}
-        if isUnitMissingOrMatchedUnits then
-            local unitsTable = isUnitMissingOrMatchedUnits == true and unitFinder("") or isUnitMissingOrMatchedUnits
-            if isUnitMissingOrMatchedUnits == true then
+        if isUnitMissing or matchedUnits then
+            local unitsTable = isUnitMissing == true and unitFinder("") or matchedUnits
+            if isUnitMissing == true then
                 -- Concat the entire unit name to existing text.
-                for i, unit in pairs(unitsTable) do
-                    returnTable[i] = rawText .. unit
-                end
+                returnTable = mapUnits(unitsTable, rawText, lastNumber)
             else
                 -- Concat the rest of the unit based on what already exists of the unit name.
                 local existingUnitLength = rawText:match("^.*(%a+)$"):len()
-                for i, unit in pairs(unitsTable) do
-                    returnTable[i] = rawText .. unit:sub(existingUnitLength + 1)
-                end
+                returnTable = mapUnits(unitsTable, rawText, existingUnitLength + 1)
             end
         elseif duration ~= nil then
             local endingUnit = rawText:match("^.*%d+(%a+)$")
             -- Assume there is a singular match at this point
             local fuzzyUnits = unitFinder(endingUnit)
             -- List all possible fuzzy matches. This is for the Minutes/Months ambiguity case.
-            for i, unit in pairs(fuzzyUnits) do
-                returnTable[i] = rawText .. unit:sub(#endingUnit + 1)
-            end
+            returnTable = mapUnits(fuzzyUnits, rawText, lastNumber, #endingUnit + 1)
             -- Sort alphabetically in the Minutes/Months case, so Minutes are displayed on top.
             table.sort(returnTable)
         end
         return returnTable
     end;
 
-    Parse = function(duration)
+    Parse = function(_, duration)
         return duration
     end;
 }
