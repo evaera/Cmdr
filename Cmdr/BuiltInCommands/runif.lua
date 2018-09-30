@@ -31,6 +31,7 @@ return {
 			Type = "string";
 			Name = "Command";
 			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used.";
+			Optional = true;
 		},
 	};
 
