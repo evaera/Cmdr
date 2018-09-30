@@ -9,21 +9,22 @@ Command.__index = Command
 
 --- Returns a new CommandContext, an object which is created for every command validation.
 -- This is also what's passed as the context to the "Run" functions in commands
-function Command.new (dispatcher, text, commandObject, executor, arguments, data)
+function Command.new (options)
 	local self = {
-		Dispatcher = dispatcher; -- The dispatcher that created this command context
-		Cmdr = dispatcher.Cmdr; -- A quick reference to Cmdr for command context
-		Name = commandObject.Name; -- The command name (not alias)
-		RawText = text; -- The raw text used to trigger this command
-		Object = commandObject; -- The command object (definition)
-		Group = commandObject.Group; -- The group this command is in
-		Aliases = commandObject.Aliases;
-		Description = commandObject.Description;
-		Executor = executor; -- The player who ran the command
-		ArgumentDefinitions = commandObject.Args; -- The argument definitions from the command definition
-		RawArguments = arguments; -- Array of strings which are the unparsed values for the arguments
+		Dispatcher = options.Dispatcher; -- The dispatcher that created this command context
+		Cmdr = options.Dispatcher.Cmdr; -- A quick reference to Cmdr for command context
+		Name = options.CommandObject.Name; -- The command name (not alias)
+		RawText = options.Text; -- The raw text used to trigger this command
+		Object = options.CommandObject; -- The command object (definition)
+		Group = options.CommandObject.Group; -- The group this command is in
+		Aliases = options.CommandObject.Aliases;
+		Alias = options.Alias; -- The command name that was used
+		Description = options.CommandObject.Description;
+		Executor = options.Executor; -- The player who ran the command
+		ArgumentDefinitions = options.CommandObject.Args; -- The argument definitions from the command definition
+		RawArguments = options.Arguments; -- Array of strings which are the unparsed values for the arguments
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
-		Data = data; -- A special container for any additional data the command needs to collect from the client
+		Data = options.Data; -- A special container for any additional data the command needs to collect from the client
 		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
 	}
 

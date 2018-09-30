@@ -85,6 +85,9 @@ return function (Cmdr)
 		self.Items = items
 		self.Prefix = options.prefix or ""
 		self.LastItem = options.isLast or false
+		self.Command = options.command
+		self.Arg = options.arg
+		self.NumArgs = options.numArgs
 
 		-- Generate the new option labels
 		local autocompleteWidth = 200
