@@ -28,7 +28,15 @@ function Dispatcher:Evaluate (text, executor, allowIncompleteArguments, data)
 		arguments = Util.MashExcessArguments(arguments, #commandObject.Args)
 
 		-- Create the CommandContext and parse it.
-		local command = Command.new(self, text, commandObject, executor, arguments, data)
+		local command = Command.new({
+			Dispatcher = self,
+			Text = text,
+			CommandObject = commandObject,
+			Alias = commandName,
+			Executor = executor,
+			Arguments = arguments,
+			Data = data
+		})
 		local success, errorText = command:Parse(allowIncompleteArguments)
 
 		if success then

@@ -500,6 +500,9 @@ The dispatcher that created this command.
 #### `CommandContext.Name: string`
 The name of the command
 
+#### `CommandContext.Alias: string`
+The specific alias of this command that was used to trigger this command (may be the same as `Name`)
+
 #### `CommandContext.RawText: string`
 The raw text that was used to trigger this command.
 

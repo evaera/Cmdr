@@ -67,6 +67,9 @@ return function (Cmdr)
 					at = atEnd and #text - #typedText + (text:sub(#text, #text):match("%s") and -1 or 0);
 					prefix = #lastArgument.RawSegments == 1 and lastArgument.Prefix or "";
 					isLast = #command.Arguments == #command.ArgumentDefinitions and #typedText > 0;
+					numArgs = #arguments;
+					command = command;
+					arg = lastArgument;
 					name = lastArgument.Name .. (lastArgument.Required and "" or "?");
 					type = lastArgument.Type.DisplayName;
 					description = (valid == false and errorText) or lastArgument.Object.Description;

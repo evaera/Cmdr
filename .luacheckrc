@@ -38,7 +38,8 @@ stds.roblox = {
 		"UDim2",
 		"Rect",
 		"TweenInfo",
-		"Random"
+		"Random",
+		"BrickColor"
 	}
 }
 
