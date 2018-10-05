@@ -17,6 +17,7 @@ function Command.new (dispatcher, text, commandObject, executor, arguments, data
 		RawText = text; -- The raw text used to trigger this command
 		Object = commandObject; -- The command object (definition)
 		Group = commandObject.Group; -- The group this command is in
+		State = {}; -- A table which will hold any custom command state information
 		Aliases = commandObject.Aliases;
 		Description = commandObject.Description;
 		Executor = executor; -- The player who ran the command
@@ -24,7 +25,6 @@ function Command.new (dispatcher, text, commandObject, executor, arguments, data
 		RawArguments = arguments; -- Array of strings which are the unparsed values for the arguments
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = data; -- A special container for any additional data the command needs to collect from the client
-		State = {}; -- A table which will hold any custom command state information
 		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
 	}
 
