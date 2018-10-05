@@ -24,6 +24,7 @@ function Command.new (dispatcher, text, commandObject, executor, arguments, data
 		RawArguments = arguments; -- Array of strings which are the unparsed values for the arguments
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = data; -- A special container for any additional data the command needs to collect from the client
+		State = {}; -- A table which will hold any custom command state information
 		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
 	}
 
