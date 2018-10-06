@@ -17,7 +17,7 @@ function Command.new (options)
 		RawText = options.Text; -- The raw text used to trigger this command
 		Object = options.CommandObject; -- The command object (definition)
 		Group = options.CommandObject.Group; -- The group this command is in
-    State = {}; -- A table which will hold any custom command state information
+		State = {}; -- A table which will hold any custom command state information
 		Aliases = options.CommandObject.Aliases;
 		Alias = options.Alias; -- The command name that was used
 		Description = options.CommandObject.Description;
