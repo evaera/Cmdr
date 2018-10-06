@@ -509,6 +509,9 @@ The raw text that was used to trigger this command.
 #### `CommandContext.Group: any`
 The group this command is a part of. Defined in command definitions, typically a string.
 
+#### `CommandContext.State: table`
+A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume.
+
 #### `CommandContext.Aliases: array<string>`
 Any aliases that can be used to also trigger this command in addition to its name.
 
