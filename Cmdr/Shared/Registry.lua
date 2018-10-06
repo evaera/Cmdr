@@ -175,12 +175,13 @@ function Registry:GetType (name)
 end
 
 --- Adds a hook to be called when any command is run
-function Registry:AddHook(hookName, callback)
+function Registry:AddHook(hookName, callback, priority)
 	if not self.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
 	end
 
-	table.insert(self.Hooks[hookName], callback)
+	table.insert(self.Hooks[hookName], { callback = callback; priority = priority or 0; } )
+	table.sort(self.Hooks[hookName], function(a, b) return a.priority < b.priority end)
 end
 
 --- Returns the store with the given name
