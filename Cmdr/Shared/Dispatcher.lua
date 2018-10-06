@@ -122,7 +122,7 @@ function Dispatcher:RunHooks(hookName, ...)
 	end
 
 	for _, hook in ipairs(self.Registry.Hooks[hookName]) do
-		local value = hook(...)
+		local value = hook.callback(...)
 
 		if value ~= nil then
 			return tostring(value)
