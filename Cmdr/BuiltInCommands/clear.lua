@@ -22,6 +22,6 @@ return {
             end
             Frame.Size = Frame.Size - UDim2.new(0, 0, 0, -shrinkHeight)
         end
-		return nil
+		return "Window cleared."
 	end
 }
