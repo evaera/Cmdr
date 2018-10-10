@@ -62,6 +62,7 @@ end
 --- Add a line to the command bar
 function Window:AddLine(text, color)
 	if #text == 0 then
+		Window:UpdateWindowHeight()
 		return
 	end
 
