@@ -31,7 +31,7 @@ function Registry:RegisterType (name, typeObject)
 	end
 
 	if not name:find("^[%d%l]%w*$") then
-		error(('Invalid type name provided: "%s", type names must start with a lower-case letter and only contain letters.'):format(name))
+		error(('Invalid type name provided: "%s", type names must be alphanumeric and start with a lower-case letter or a digit.'):format(name))
 	end
 
 	for key in pairs(typeObject) do
