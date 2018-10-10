@@ -1,6 +1,7 @@
 -- Here be dragons
 
-local Player = game:GetService("Players").LocalPlayer
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
 
 return function (Cmdr)
 	local Util = Cmdr.Util
