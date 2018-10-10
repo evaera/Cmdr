@@ -30,7 +30,7 @@ function Registry:RegisterType (name, typeObject)
 		error("Invalid type name provided: nil")
 	end
 
-	if not name:find("^%l%w*$") then
+	if not name:find("^[%d%l]%w*$") then
 		error(('Invalid type name provided: "%s", type names must start with a lower-case letter and only contain letters.'):format(name))
 	end
 
