@@ -1,3 +1,5 @@
+local RunService = game:GetService("RunService")
+
 local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
@@ -69,6 +71,10 @@ function Registry:RegisterCommandObject (commandObject)
 				end
 			end
 		end
+	end
+
+	if RunService:IsClient() and commandObject.Data and commandObject.Run then
+		error(('Invalid command implementation provided for "%s": "Data" and "Run" sections are mutually exclusive'):format(commandObject.Name or "unknown"))
 	end
 
 	-- Unregister the old command if it exists...
