@@ -26,6 +26,14 @@ local Registry = {
 --- Registers a type in the system.
 -- name: The type Name. This must be unique.
 function Registry:RegisterType (name, typeObject)
+	if not name or not typeof(name) == "string" then
+		error("Invalid type name provided: nil")
+	end
+
+	if not name:find("^%l%a*$") then
+		error(('Invalid type name provided: "%s", type names must start with a lower-case letter and only contain letters.'):format(name))
+	end
+
 	for key in pairs(typeObject) do
 		if self.TypeMethods[key] == nil then
 			error("Unknown key/method in type \"" .. name .. "\": " .. key)
