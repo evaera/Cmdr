@@ -1,3 +1,5 @@
+local RunService = game:GetService("RunService")
+
 local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
@@ -24,6 +26,14 @@ local Registry = {
 --- Registers a type in the system.
 -- name: The type Name. This must be unique.
 function Registry:RegisterType (name, typeObject)
+	if not name or not typeof(name) == "string" then
+		error("Invalid type name provided: nil")
+	end
+
+	if not name:find("^[%d%l]%w*$") then
+		error(('Invalid type name provided: "%s", type names must be alphanumeric and start with a lower-case letter or a digit.'):format(name))
+	end
+
 	for key in pairs(typeObject) do
 		if self.TypeMethods[key] == nil then
 			error("Unknown key/method in type \"" .. name .. "\": " .. key)
@@ -69,6 +79,10 @@ function Registry:RegisterCommandObject (commandObject)
 				end
 			end
 		end
+	end
+
+	if RunService:IsClient() and commandObject.Data and commandObject.Run then
+		error(('Invalid command implementation provided for "%s": "Data" and "Run" sections are mutually exclusive'):format(commandObject.Name or "unknown"))
 	end
 
 	-- Unregister the old command if it exists...
