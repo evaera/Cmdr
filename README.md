@@ -449,7 +449,7 @@ Registers a type. This function should be called from within the type definition
 Returns a type definition with the given name, or nil if it doesn't exist.
 
 #### `Registry:RegisterHooksIn(container: Instance): void`
-Registers all hooks from within a container. This only needs to be called server-side. See the Hooks section for examples.
+Registers all hooks from within a container on both the server and the client. This only needs to be called server-side. See the Hooks section for examples. If you want to add a hook to the server or the client *only* (not on both), then you should use the Registry:AddHook method directly by requiring Cmdr in a server or client script.
 
 #### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
 Registers all commands from within a container. `filter` is an optional function, and if given will be passed a command definition which will only be registered if the function returns `true`. This only needs to be called server-side.
