@@ -54,7 +54,7 @@ end
 function Dispatcher:EvaluateAndRun (text, executor, data)
 	executor = executor or Players.LocalPlayer
 
-	local command, errorText = self:Evaluate(text, executor, data)
+	local command, errorText = self:Evaluate(text, executor, nil, data)
 
 	if not command then
 		return errorText
