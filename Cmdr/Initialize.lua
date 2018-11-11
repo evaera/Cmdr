@@ -16,7 +16,8 @@ return function (cmdr)
 
 	ReplicatedRoot = script.Parent.CmdrClient
 
-	if ReplicatedStorage:FindFirstChild("Resources") then -- If using RoStrap
+	if ReplicatedStorage:FindFirstChild("Resources") and
+		ReplicatedStorage.Resources:FindFirstChild("Libraries") then -- If using RoStrap
 		-- ReplicatedRoot.Name = "Cmdr"
 		ReplicatedRoot.Parent = ReplicatedStorage.Resources.Libraries
 	else
