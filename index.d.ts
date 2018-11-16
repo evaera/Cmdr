@@ -53,12 +53,13 @@ declare namespace Cmdr {
     DisplayName?: string
     Listable?: boolean
   }
-  export interface CommandContext {
+  export interface CommandContext<StateType = object> {
     Cmdr: Cmdr | CmdrClient
     Dispatcher: Cmdr.Dispatcher
     Name: string
     RawText: string
     Group: any
+    State: StateType
     Aliases: string[]
     Description: string
     Executor: Player
