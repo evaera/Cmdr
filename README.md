@@ -1,5 +1,6 @@
 <div align="center">
 	<img src="assets/logo.png" alt="Cmdr" height="150" />
+	<br>
 	<a href="https://www.npmjs.com/package/roblox-ts"><img src="https://badge.fury.io/js/roblox-ts.svg"></a>
 </div>
 
