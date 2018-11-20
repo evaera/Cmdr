@@ -149,20 +149,12 @@ function Window:BeginInput(input, gameProcessed)
 		self:Hide()
 	end
 
-	if self.Cmdr.Enabled == false then
-		if self:IsVisible() then
-			self:Hide()
-		end
-
-		return
-	end
-
 	if gameProcessed and self:IsVisible() == false then
 		return
 	end
 
 	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
-		if self.Cmdr.MashToEnable and not self:IsVisible() then
+		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
 			if tick() - lastPressTime < 1 then
 				if pressCount >= 5 then
 					return self.Cmdr:SetEnabled(true)
@@ -173,7 +165,7 @@ function Window:BeginInput(input, gameProcessed)
 				pressCount = 1
 			end
 			lastPressTime = tick()
-		else
+		elseif self.Cmdr.Enabled then
 			self:SetVisible(not self:IsVisible())
 			wait()
 			self:SetEntryText("")
@@ -182,7 +174,19 @@ function Window:BeginInput(input, gameProcessed)
 				self:Hide()
 			end
 		end
-	elseif input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
+
+		return
+	end
+
+	if self.Cmdr.Enabled == false then
+		if self:IsVisible() then
+			self:Hide()
+		end
+
+		return
+	end
+
+	if input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
 		self.AutoComplete:Select(1)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self.AutoComplete:Select(-1)
