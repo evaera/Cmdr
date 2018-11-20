@@ -87,20 +87,20 @@ declare namespace Cmdr {
   }
 }
 
-declare interface Cmdr {
-  Registry: Cmdr.Registry
-  Dispatcher: Cmdr.Dispatcher
-  Util: Cmdr.Util
+declare class Cmdr {
+  static Registry: Cmdr.Registry
+  static Dispatcher: Cmdr.Dispatcher
+  static Util: Cmdr.Util
 }
 
-declare interface CmdrClient extends Cmdr {
-  SetActivationKeys (keys: Enum.KeyCode[]): void
-  SetPlaceName (labelText: string): void
-  SetEnabled (isEnabled: boolean): void
-  HandleEvent (event: string, handler: (...args: any[]) => void): void
-  Enabled: boolean
-  PlaceName: string
-  ActivationKeys: Map<Enum.KeyCode, true>
+declare class CmdrClient extends Cmdr {
+  static SetActivationKeys (keys: Enum.KeyCode[]): void
+  static SetPlaceName (labelText: string): void
+  static SetEnabled (isEnabled: boolean): void
+  static HandleEvent (event: string, handler: (...args: any[]) => void): void
+  static Enabled: boolean
+  static PlaceName: string
+  static ActivationKeys: Map<Enum.KeyCode, true>
 }
 
 
