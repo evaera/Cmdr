@@ -16,6 +16,7 @@ local Cmdr do
 		RemoteEvent = script:WaitForChild("CmdrEvent");
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
 		Enabled = true;
+		MashToEnable = false;
 		PlaceName = "Cmdr";
 		Util = Util;
 		Events = {};
@@ -56,6 +57,15 @@ end
 --- Sets whether or not the console is enabled
 function Cmdr:SetEnabled (enabled)
 	self.Enabled = enabled
+end
+
+--- Enables the "Mash to open" feature
+function Cmdr:SetMashToEnable(isEnabled)
+	self.MashToEnable = isEnabled
+
+	if isEnabled then
+		self:SetEnabled(false)
+	end
 end
 
 --- Sets the handler for a certain event type
