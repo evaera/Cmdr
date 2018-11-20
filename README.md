@@ -1,5 +1,8 @@
 <div align="center">
 	<img src="assets/logo.png" alt="Cmdr" height="150" />
+	<br>
+	<a href="https://www.npmjs.com/package/rbx-cmdr"><img src="https://badge.fury.io/js/rbx-cmdr.svg"></a>
+	<br><br>
 </div>
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
