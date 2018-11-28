@@ -142,10 +142,41 @@ function Window:LoseFocus(submit)
 	end
 end
 
+local lastPressTime = 0
+local pressCount = 0
 --- Handles user input when the box is focused
 function Window:BeginInput(input, gameProcessed)
 	if GuiService.MenuIsOpen then
 		self:Hide()
+	end
+
+	if gameProcessed and self:IsVisible() == false then
+		return
+	end
+
+	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
+		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
+			if tick() - lastPressTime < 1 then
+				if pressCount >= 5 then
+					return self.Cmdr:SetEnabled(true)
+				else
+					pressCount = pressCount + 1
+				end
+			else
+				pressCount = 1
+			end
+			lastPressTime = tick()
+		elseif self.Cmdr.Enabled then
+			self:SetVisible(not self:IsVisible())
+			wait()
+			self:SetEntryText("")
+
+			if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
+				self:Hide()
+			end
+		end
+
+		return
 	end
 
 	if self.Cmdr.Enabled == false then
@@ -156,19 +187,7 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
-	if gameProcessed and self:IsVisible() == false then
-		return
-	end
-
-	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
-		self:SetVisible(not self:IsVisible())
-		wait()
-		self:SetEntryText("")
-
-		if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
-			self:Hide()
-		end
-	elseif input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
+	if input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
 		self.AutoComplete:Select(1)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self.AutoComplete:Select(-1)
