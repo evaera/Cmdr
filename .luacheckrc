@@ -1,3 +1,5 @@
+-- luacheck: ignore
+
 stds.roblox = {
 	globals = {
 		"game",
@@ -45,6 +47,6 @@ stds.roblox = {
 
 max_line_length = false
 
-ignore = { "111" }
+ignore = { "self" }
 
 std = "lua51+roblox"
