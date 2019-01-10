@@ -52,10 +52,14 @@ end
 
 --- Helper method that registers types from all module scripts in a specific container.
 function Registry:RegisterTypesIn (container)
-	for _, typeScript in pairs(container:GetChildren()) do
-		typeScript.Parent = self.Cmdr.ReplicatedRoot.Types
+	for _, object in pairs(container:GetChildren()) do
+		if object:IsA("ModuleScript") then
+			object.Parent = self.Cmdr.ReplicatedRoot.Types
 
-		require(typeScript)(self)
+			require(object)(self)
+		else
+			self:RegisterTypesIn(object)
+		end
 	end
 end
 
@@ -128,16 +132,20 @@ function Registry:RegisterCommandsIn (container, filter)
 	local usedServerScripts = {}
 
 	for _, commandScript in pairs(container:GetChildren()) do
-		if not commandScript.Name:find("Server") then
-			local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
+		if commandScript:IsA("ModuleScript") then
+			if not commandScript.Name:find("Server") then
+				local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
 
-			if serverCommandScript then
-				usedServerScripts[serverCommandScript] = true
+				if serverCommandScript then
+					usedServerScripts[serverCommandScript] = true
+				end
+
+				self:RegisterCommand(commandScript, serverCommandScript, filter)
+			else
+				skippedServerScripts[commandScript] = true
 			end
-
-			self:RegisterCommand(commandScript, serverCommandScript, filter)
 		else
-			skippedServerScripts[commandScript] = true
+			self:RegisterCommandsIn(commandScript)
 		end
 	end
 
