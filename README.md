@@ -492,6 +492,9 @@ This should be used to invoke commands programmatically as the local player. Acc
 #### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, data?: any): string`
 Runs a command as the given player. If called on the client, only text is required. Returns output or error test as a string. If the `data` parameter is given, it will be available with `CommandContext:GetData()`.
 
+#### `Dispatcher:GetHistory(): array<string>`
+(Client only) Returns an array of the user's command history. Most recent commands are inserted at the end of the array.
+
 ## CommandContext
 This object represents a single command being run. It is passed as the first argument to command implementations.
 
