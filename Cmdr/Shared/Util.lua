@@ -84,7 +84,7 @@ function Util.GetNames(instances)
 	local names = {}
 
 	for i = 1, #instances do
-		names[i] = instances[i].Name
+		names[i] = instances[i].Name or tostring(instances[i])
 	end
 
 	return names
