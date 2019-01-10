@@ -5,7 +5,7 @@ local Util = require(script.Parent.Util)
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
 	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce"});
-	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "Description", "Args", "Run", "Data", "Group"});
+	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "AutoExec", "Description", "Args", "Run", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional", "Default"});
 	Types = {};
 	Commands = {};
@@ -20,7 +20,8 @@ local Registry = {
 			self[k] = {}
 			return self[k]
 		end
-	})
+	});
+	AutoExecBuffer = {};
 }
 
 --- Registers a type in the system.
@@ -87,6 +88,11 @@ function Registry:RegisterCommandObject (commandObject)
 
 	if RunService:IsClient() and commandObject.Data and commandObject.Run then
 		error(('Invalid command implementation provided for "%s": "Data" and "Run" sections are mutually exclusive'):format(commandObject.Name or "unknown"))
+	end
+
+	if commandObject.AutoExec then
+		table.insert(self.AutoExecBuffer, commandObject.AutoExec)
+		self:FlushAutoExecBufferDeferred()
 	end
 
 	-- Unregister the old command if it exists...
@@ -210,6 +216,28 @@ end
 -- Used for commands that require persistent state, like bind or ban
 function Registry:GetStore(name)
 	return self.Stores[name]
+end
+
+--- Calls self:FlushAutoExecBuffer at the end of the frame
+function Registry:FlushAutoExecBufferDeferred()
+	if self.AutoExecFlushConnection then
+		return
+	end
+
+	self.AutoExecFlushConnection = RunService.Heartbeat:Connect(function()
+		self.AutoExecFlushConnection:Disconnect()
+		self.AutoExecFlushConnection = nil
+		self:FlushAutoExecBuffer()
+	end)
+end
+
+--- Runs all pending auto exec commands in Registry.AutoExecBuffer
+function Registry:FlushAutoExecBuffer()
+	for _, commandGroup in ipairs(self.AutoExecBuffer) do
+		for _, command in ipairs(commandGroup) do
+			self.Cmdr.Dispatcher:EvaluateAndRun(command)
+		end
+	end
 end
 
 return function (cmdr)

@@ -169,6 +169,9 @@ If your command needs to gather some extra data from the client that's only avai
 #### Run?: function (context: CommandContext, ...: any)
 If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
 
+#### AutoExec?: array<string>
+A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame.
+
 ### Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
