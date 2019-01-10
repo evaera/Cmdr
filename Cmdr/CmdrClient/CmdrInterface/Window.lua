@@ -14,7 +14,8 @@ local Window = {
 	AutoComplete = nil,
 	ProcessEntry = nil,
 	OnTextChanged = nil,
-	Cmdr = nil
+	Cmdr = nil,
+	HistoryState = nil,
 }
 
 local Gui = Player:WaitForChild("PlayerGui"):WaitForChild("Cmdr"):WaitForChild("Frame")
@@ -126,6 +127,8 @@ end
 function Window:LoseFocus(submit)
 	local text = Entry.TextBox.Text
 
+	self:ClearHistoryState()
+
 	if Gui.Visible and not GuiService.MenuIsOpen then
 		-- self:SetEntryText("")
 		Entry.TextBox:CaptureFocus()
@@ -139,6 +142,37 @@ function Window:LoseFocus(submit)
 		self.ProcessEntry(text)
 	elseif submit then
 		self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+	end
+end
+
+function Window:TraverseHistory(delta)
+	local history = self.Cmdr.Dispatcher:GetHistory()
+
+	if self.HistoryState == nil then
+		self.HistoryState = {
+			Position = #history + 1;
+			InitialText = self:GetEntryText();
+		}
+	end
+
+	self.HistoryState.Position = math.clamp(self.HistoryState.Position + delta, 1, #history + 1)
+
+	self:SetEntryText(
+		self.HistoryState.Position == #history + 1
+			and self.HistoryState.InitialText
+			or history[self.HistoryState.Position]
+	)
+end
+
+function Window:ClearHistoryState()
+	self.HistoryState = nil
+end
+
+function Window:SelectVertical(delta)
+	if self.AutoComplete:IsVisible() and not self.HistoryState then
+		self.AutoComplete:Select(delta)
+	else
+		self:TraverseHistory(delta)
 	end
 end
 
@@ -188,9 +222,9 @@ function Window:BeginInput(input, gameProcessed)
 	end
 
 	if input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
-		self.AutoComplete:Select(1)
+		self:SelectVertical(1)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
-		self.AutoComplete:Select(-1)
+		self:SelectVertical(-1)
 	elseif input.KeyCode == Enum.KeyCode.Return then -- Eat new lines
 		wait()
 		self:SetEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
@@ -242,6 +276,8 @@ function Window:BeginInput(input, gameProcessed)
 			wait()
 			self:SetEntryText(self:GetEntryText())
 		end
+	else
+		self:ClearHistoryState()
 	end
 end
 
