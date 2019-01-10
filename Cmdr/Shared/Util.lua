@@ -32,6 +32,10 @@ function Util.MakeFuzzyFinder(setOrContainer)
 	local names
 	local instances = {}
 
+	if typeof(setOrContainer) == "Enum" then
+		setOrContainer = setOrContainer:GetEnumItems()
+	end
+
 	if typeof(setOrContainer) == "Instance" then
 		names, instances = transformInstanceSet(setOrContainer:GetChildren())
 	elseif typeof(setOrContainer) == "table" then
@@ -48,7 +52,7 @@ function Util.MakeFuzzyFinder(setOrContainer)
 			names = {}
 		end
 	else
-		error("MakeFuzzyFinder only accepts a table or an Instance.")
+		error("MakeFuzzyFinder only accepts a table, Enum, or Instance.")
 	end
 
 	-- Searches the set (checking exact matches first)
@@ -164,7 +168,8 @@ function Util.MakeEnumType(name, values)
 			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
 		end,
 		Autocomplete = function(text)
-			return findValue(text)
+			local list = findValue(text)
+			return type(list[1]) ~= "string" and Util.GetNames(list) or list
 		end,
 		Parse = function(text)
 			return findValue(text, true)
