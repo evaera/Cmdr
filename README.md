@@ -176,7 +176,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `ki
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`
 
 Group: `Help`: `help`
 
