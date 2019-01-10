@@ -13,9 +13,13 @@ declare namespace Cmdr {
     AddHook (hookName: string, callback: (context: CommandContext) => string | void): void
     GetStore<T extends (any[] | Map<any, any>)>(name: string): T
   }
+  export interface EvaluateAndRunOptions {
+    Data?: any
+    IsHuman?: boolean
+  }
   export interface Dispatcher {
     Run (...segments: string[]): string
-    EvaluateAndRun (text: string, executor?: Player, data?: any): string
+    EvaluateAndRun (text: string, executor?: Player, data?: EvaluateAndRunOptions): string
   }
   export interface Util {
     MakeDictionary: <T>(array: T[]) => Map<T, true>

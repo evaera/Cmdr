@@ -10,6 +10,7 @@ local HISTORY_SETTING_NAME = "CmdrCommandHistory"
 local Dispatcher = {
 	Cmdr = nil;
 	Registry = nil;
+
 }
 
 --- Takes in raw command information and generates a command out of it.
@@ -54,14 +55,15 @@ end
 
 --- A helper that evaluates and runs the command in one go.
 -- Either returns any validation errors as a string, or the output of the command as a string. Definitely a string, though.
-function Dispatcher:EvaluateAndRun (text, executor, data)
+function Dispatcher:EvaluateAndRun (text, executor, options)
 	executor = executor or Players.LocalPlayer
+	options = options or {}
 
-	if RunService:IsClient() then
+	if RunService:IsClient() and options.IsHuman then
 		self:PushHistory(text)
 	end
 
-	local command, errorText = self:Evaluate(text, executor, nil, data)
+	local command, errorText = self:Evaluate(text, executor, nil, options.Data)
 
 	if not command then
 		return errorText

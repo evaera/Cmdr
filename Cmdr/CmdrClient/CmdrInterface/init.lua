@@ -21,7 +21,9 @@ return function (Cmdr)
 
 		Window:AddLine(Window:GetLabel() .. " " .. text, Color3.fromRGB(255, 223, 93))
 
-		Window:AddLine(Cmdr.Dispatcher:EvaluateAndRun(text, Player))
+		Window:AddLine(Cmdr.Dispatcher:EvaluateAndRun(text, Player, {
+			IsHuman = true
+		}))
 	end
 
 	-- Sets the Window.OnTextChanged callback so we can update the auto complete

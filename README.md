@@ -489,7 +489,7 @@ The Dispatcher handles parsing, validating, and evaluating commands. Exists on b
 #### `Dispatcher:Run(...: string): string`
 This should be used to invoke commands programmatically as the local player. Accepts a variable number of arguments, which are all joined with spaces before being run. This function will raise an error if any validations occur, since it's only for hard-coded (or generated) commands. Client only.
 
-#### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, data?: any): string`
+#### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, options: { Data?: any, IsHuman?: boolean }): string`
 Runs a command as the given player. If called on the client, only text is required. Returns output or error test as a string. If the `data` parameter is given, it will be available with `CommandContext:GetData()`.
 
 #### `Dispatcher:GetHistory(): array<string>`
