@@ -4,6 +4,7 @@ return {
 	AutoExec = {
 		"alias ! run ${history $1}";
 		"alias ^ run ${run replace ${history -1} $1 $2}";
+		"alias !! ! -1";
 	};
 	Description = "Displays previous commands from history.";
 	Group = "DefaultUtil";
