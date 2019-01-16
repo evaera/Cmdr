@@ -224,7 +224,7 @@ By default, these types are available:
 - `boolean`, `booleans`: `boolean`, `array<boolean>`
 - `player`, `players`: `Player`, `array<Player>`
 - `team`, `teams`: `Team`, `array<Team>`
-- `teamPlayers`: Player, array<Player>
+- `teamPlayers`: `Player`, `array<Player>`
 - `teamPlayers`: `Player`, `array<Player>`
 - `command`, `commands`: `string`, `array<string>`
 - `userInput`, `userInputs`: `Enum.UserInputType | Enum.KeyCode`, `array<Enum.UserInputType | Enum.KeyCode>`
