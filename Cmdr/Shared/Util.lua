@@ -325,6 +325,14 @@ function Util.MakeAliasCommand(name, commandString)
 	}
 end
 
+function Util.ParsePrioritizedDelimeter(text, delimeters)
+	for i, delimeter in ipairs(delimeters) do
+		if text:find(delimeter) or i == #delimeters then
+			return Util.SplitStringSimple(text, delimeter)
+		end
+	end
+end
+
 function Util.Map(array, callback)
 	local results = {}
 
