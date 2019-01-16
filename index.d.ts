@@ -20,6 +20,7 @@ declare namespace Cmdr {
   export interface Dispatcher {
     Run (...segments: string[]): string
     EvaluateAndRun (text: string, executor?: Player, data?: EvaluateAndRunOptions): string
+    GetHistory (): string[]
   }
   interface BaseMakeSequenceTypeOptions<T, R> {
     TransformEach?: (value: string) => T
