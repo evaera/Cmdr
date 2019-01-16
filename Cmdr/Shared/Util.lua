@@ -325,6 +325,7 @@ function Util.MakeAliasCommand(name, commandString)
 	}
 end
 
+--- Makes a type that contains a sequence, e.g. Vector3 or Color3
 function Util.MakeSequenceType(options)
 	options = options or {}
 
@@ -367,6 +368,8 @@ function Util.MakeSequenceType(options)
 	}
 end
 
+--- Splits a string by a single delimeter chosen from the given set.
+-- The first matching delimeter from the set becomes the split character.
 function Util.ParsePrioritizedDelimeter(text, delimeters)
 	for i, delimeter in ipairs(delimeters) do
 		if text:find(delimeter) or i == #delimeters then
@@ -375,6 +378,7 @@ function Util.ParsePrioritizedDelimeter(text, delimeters)
 	end
 end
 
+--- Maps values of an array through a callback and returns an array of mapped values
 function Util.Map(array, callback)
 	local results = {}
 
@@ -385,6 +389,7 @@ function Util.Map(array, callback)
 	return results
 end
 
+--- Maps arguments #2-n through callback and returns values as tuple
 function Util.Each(callback, ...)
 	local results = {}
 	for i, value in ipairs({...}) do
