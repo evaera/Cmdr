@@ -1,15 +1,21 @@
-return function (_, fromPlayers, toPlayer)
-	if toPlayer.Character and toPlayer.Character:FindFirstChild("HumanoidRootPart") then
-		local position = toPlayer.Character.HumanoidRootPart.CFrame
+return function (_, fromPlayers, destination)
+	local cframe
 
-		for _, player in ipairs(fromPlayers) do
-			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-				player.Character.HumanoidRootPart.CFrame = position
-			end
+	if typeof(destination) == "Instance" then
+		if destination.Character and destination.Character:FindFirstChild("HumanoidRootPart") then
+			cframe = destination.Character.HumanoidRootPart.CFrame
+		else
+			return "Target player has no character."
 		end
-
-		return ("Teleported %d players."):format(#fromPlayers)
+	elseif typeof(destination) == "Vector3" then
+		cframe = CFrame.new(destination)
 	end
 
-	return "Target player has no character."
+	for _, player in ipairs(fromPlayers) do
+		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			player.Character.HumanoidRootPart.CFrame = cframe
+		end
+	end
+
+	return ("Teleported %d players."):format(#fromPlayers)
 end
