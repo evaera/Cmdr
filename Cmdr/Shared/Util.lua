@@ -452,7 +452,7 @@ function Util.EmulateTabstops(text, tabWidth)
 	for i = 1, #text do
 		local char = text:sub(i, i)
 
-		result = result .. (char == "\t" and string.rep(" ", 4 - #result % tabWidth) or char)
+		result = result .. (char == "\t" and string.rep(" ", tabWidth - #result % tabWidth) or char)
 	end
 	return result
 end
