@@ -385,4 +385,12 @@ function Util.Map(array, callback)
 	return results
 end
 
+function Util.Each(callback, ...)
+	local results = {}
+	for i, value in ipairs({...}) do
+		results[i] = callback(value)
+	end
+	return unpack(results)
+end
+
 return Util
