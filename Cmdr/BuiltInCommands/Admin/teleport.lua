@@ -6,7 +6,7 @@ return {
 	Args = {
 		{
 			Type = "players";
-			Name = "Fromrom";
+			Name = "From";
 			Description = "The players to teleport";
 		},
 		{
