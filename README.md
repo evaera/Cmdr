@@ -626,6 +626,12 @@ Returns the *transformed value* from this argument, see Types.
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
 Accepts an array and flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
 
+#### `Util.Map(array: array<any>, callback: (value: any, index: number) => any): array<any>`
+Maps values from one array to a new array. Passes each value through the given callback and uses its return value in the same position in the new array.
+
+#### `Util.Each(callback: (value: any) => any, ...: any): any...
+Maps arguments #2-n through callback and returns all values as tuple.
+
 #### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst?: boolean) => any`
 Makes a fuzzy finder for the given set or container. You can pass an array of strings, array of instances, array of EnumItems, array of dictionaries with a `Name` key or an instance (in which case its children will be used).
 
@@ -652,8 +658,27 @@ Makes an Enum type out of a name and an array of strings. See Enum Values.
 #### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
 Takes a singular type and produces a plural (listable) type out of it.
 
+#### `Util.MakeSequenceType(options: dictionary): TypeDefinition`
+A helper function that makes a type which contains a sequence, like Vector3 or Color3. The delimeter can be either `,` or whitespace, checking `,` first. `options` is a table that can contain:
+
+- `TransformEach(value: any) => any`: a function that is run on each member of the sequence, transforming it individually.
+- `ValidateEach(value: any, index: number) => boolean, string`: a function is run on each member of the sequence validating it. It is passed the value and the index at which it occurs in the sequence. It should return true if it is valid, or false and a string reason if it is not.
+
+And one of:
+- `Parse(values: array<any>) => any`: A function that parses all of the values into a single type.
+- `Constructor(...: any) => any`: A function that expects the values unpacked as parameters to create the parsed object. This is a shorthand that allows you to set `Constructor` directly to `Vector3.new`, for example.
+
+#### `Util.SplitPrioritizedDelimeter(text: string, delimiters: array<string>): array<string>`
+Splits a string by a single delimeter chosen from the given set. The first matching delimeter from the set becomes the split character.
+
 #### `Util.SubstituteArgs(text: string, replace: array<string> | dictionary<string, string> | function(var: string) => string): string`
 Accepts a string with arguments (such as $1, $2, $3, etc) and a table or function to use with `string.gsub`. Returns a string with arguments replaced with their values.
 
 #### `Util.RunEmbeddedCommands(dispatcher: Dispatcher, commandString: string): string`
 Accepts the current dispatcher and a command string. Parses embedded commands from within the string, evaluating to the output of the command when run with `dispatcher:EvaluateAndRun`. Returns the compiled string.
+
+#### `Util.EmulateTabstops(text: string, tabWidth: number): string`
+Returns a string emulating \t tab stops with spaces.
+
+#### `Util.ParseEscapeSequences(text: string): string`
+Replaces escape sequences with their fully qualified characters in a string. This only parses `\n`, `\t`, `\uXXXX`, and `\xXX` where `X` is any hexadecimal character.
