@@ -346,6 +346,10 @@ function Util.MakeSequenceType(options)
 		end;
 
 		Validate = function (components)
+			if options.Length and #components > options.Length then
+				return false, ("Maximum of %d values allowed in sequence"):format(options.Length)
+			end
+
 			for i = 1, options.Length or #components do
 				local valid, reason = options.Validate(components[i], i)
 
