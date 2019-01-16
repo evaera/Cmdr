@@ -325,4 +325,14 @@ function Util.MakeAliasCommand(name, commandString)
 	}
 end
 
+function Util.Map(array, callback)
+	local results = {}
+
+	for i, v in ipairs(array) do
+		results[i] = callback(v, i)
+	end
+
+	return results
+end
+
 return Util
