@@ -110,6 +110,8 @@ end
 
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
 function Util.SplitString(text, max)
+	text = text:gsub("\\\\", string.char(17))
+	text = text:gsub("\\\"", string.char(18))
 	max = max or math.huge
 	local t = {}
 	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
@@ -125,12 +127,12 @@ function Util.SplitString(text, max)
 			buf = buf .. " " .. str
 		end
 		if not buf then
-			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat, ""):gsub(epat, ""))
+			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat, ""):gsub(epat, "")):gsub(string.char(17), "\\"):gsub(string.char(18), "\"")
 		end
 	end
 
 	if buf then
-		t[#t + (#t > max and 0 or 1)] = buf
+		t[#t + (#t > max and 0 or 1)] = buf:gsub(string.char(17), "\\"):gsub(string.char(18), "\"")
 	end
 
 	return t
