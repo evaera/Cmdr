@@ -68,4 +68,9 @@ return function (cmdr)
 	cmdr:RegisterType("number", numberType)
 	cmdr:RegisterType("integer", intType)
 	cmdr:RegisterType("boolean", boolType)
+
+	cmdr:RegisterType("strings", Util.MakeListableType(stringType))
+	cmdr:RegisterType("numbers", Util.MakeListableType(numberType))
+	cmdr:RegisterType("integers", Util.MakeListableType(intType))
+	cmdr:RegisterType("booleans", Util.MakeListableType(boolType))
 end
