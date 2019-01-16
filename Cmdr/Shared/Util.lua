@@ -388,7 +388,7 @@ function Util.MakeSequenceType(options)
 
 	return {
 		Transform = function (text)
-			return Util.Map(Util.ParsePrioritizedDelimeter(text, {",", "%s"}), function(value)
+			return Util.Map(Util.SplitPrioritizedDelimeter(text, {",", "%s"}), function(value)
 				return options.TransformEach(value)
 			end)
 		end;
@@ -417,7 +417,7 @@ end
 
 --- Splits a string by a single delimeter chosen from the given set.
 -- The first matching delimeter from the set becomes the split character.
-function Util.ParsePrioritizedDelimeter(text, delimeters)
+function Util.SplitPrioritizedDelimeter(text, delimeters)
 	for i, delimeter in ipairs(delimeters) do
 		if text:find(delimeter) or i == #delimeters then
 			return Util.SplitStringSimple(text, delimeter)
