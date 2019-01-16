@@ -10,7 +10,7 @@ end
 local function ShorthandMultiple (text, executor)
 	if text == "*" or text == "all" then
 		return Players:GetPlayers()
-	elseif Text == "others" then
+	elseif text == "others" then
 		local Others = Players:GetPlayers()
 		for i = 1, #Others do
 			if Others[i] == executor then
