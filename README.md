@@ -218,22 +218,23 @@ Here is a list of automatic prefixed union types:
 
 By default, these types are available:
 
-- `string`, `strings`: string, array<string>
-- `number`, `numbers`: number, array<number>
-- `integer`, `integers`: number, array<number>
-- `boolean`, `booleans`: boolean, array<boolean>
-- `player`, `players`: Player, array<Player>
-- `team`, `teams`: Team, array<Team>
+- `string`, `strings`: `string`, `array<string>`
+- `number`, `numbers`: `number`, `array<number>`
+- `integer`, `integers`: `number`, `array<number>`
+- `boolean`, `booleans`: `boolean`, `array<boolean>`
+- `player`, `players`: `Player`, `array<Player>`
+- `team`, `teams`: `Team`, `array<Team>`
 - `teamPlayers`: Player, array<Player>
-- `command`, `commands`: string, array<string>
+- `teamPlayers`: `Player`, `array<Player>`
+- `command`, `commands`: `string`, `array<string>`
 - `userInput`, `userInputs` Enum.UserInputType | Enum.KeyCode, array<Enum.UserInputType | Enum.KeyCode>
-- `brickColor`, `brickColors`: BrickColor, array<BrickColor>
-- `teamColor`, `teamColors`: BrickColor, array<BrickColor>
-- `color3`, `color3s`: Color3, array<Color3>
-- `hexColor3`, `hexColor3s`: Color3, array<Color3>
-- `brickColor3`, `brickColor3s`: Color3, array<Color3>
-- `vector3`, `vector3s`: Vector3, array<Vector3>
-- `vector2`, `vector2s`: Vector2, array<Vector2>
+- `brickColor`, `brickColors`: `BrickColor`, `array<BrickColor>`
+- `teamColor`, `teamColors`: `BrickColor`, `array<BrickColor>`
+- `color3`, `color3s`: `Color3`, `array<Color3>`
+- `hexColor3`, `hexColor3s`: `Color3`, `array<Color3>`
+- `brickColor3`, `brickColor3s`: `Color3`, `array<Color3>`
+- `vector3`, `vector3s`: `Vector3`, `array<Vector3>`
+- `vector2`, `vector2s`: `Vector2`, `array<Vector2>`
 
 Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
