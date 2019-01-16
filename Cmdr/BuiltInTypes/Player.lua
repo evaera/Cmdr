@@ -7,9 +7,18 @@ local function ShorthandSingle (text, executor)
 	end
 end
 
-local function ShorthandMultiple (text)
+local function ShorthandMultiple (text, executor)
 	if text == "*" or text == "all" then
 		return Players:GetPlayers()
+	elseif Text == "others" then
+		local Others = Players:GetPlayers()
+		for i = 1, #Others do
+			if Others[i] == executor then
+				table.remove(Others, i)
+				break
+			end
+		end
+		return Others
 	end
 end
 
