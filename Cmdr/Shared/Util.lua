@@ -426,4 +426,15 @@ function Util.Each(callback, ...)
 	return unpack(results)
 end
 
+--- Emulates tabstops with spaces
+function Util.EmulateTabstops(text, tabWidth)
+	local result = ""
+	for i = 1, #text do
+		local char = text:sub(i, i)
+
+		result = result .. (char == "\t" and string.rep(" ", 4 - #result % tabWidth) or char)
+	end
+	return result
+end
+
 return Util

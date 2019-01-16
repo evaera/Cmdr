@@ -68,7 +68,7 @@ function Window:AddLine(text, color)
 	end
 
 	local line = Line:Clone()
-	line.Text = text or "nil"
+	line.Text = self.Cmdr.Util.EmulateTabstops(text, 4) or "nil"
 	line.TextColor3 = color or line.TextColor3
 	line.Parent = Gui
 end
