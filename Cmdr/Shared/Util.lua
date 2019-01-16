@@ -112,28 +112,36 @@ local function charCode(n)
 	return utf8.char(tonumber(n, 16))
 end
 
+-- Discard any excess return values
+local function first(x)
+	return x
+end
+
 function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
 		t = "\t";
 		n = "\n";
-		["$"] = string.char(20);
 	})
 	:gsub("\\u(%x%x%x%x)", charCode)
 	:gsub("\\x(%x%x)", charCode)
 end
 
 local function encodeControlChars(text)
-	return text
+	return first(
+		text
 		:gsub("\\\\", string.char(17))
 		:gsub("\\\"", string.char(18))
 		:gsub("\\'", string.char(19))
+	)
 end
 
 local function decodeControlChars(text)
-	return text
+	return first(
+		text
 		:gsub(string.char(17), "\\")
 		:gsub(string.char(18), "\"")
 		:gsub(string.char(19), "'")
+	)
 end
 
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
@@ -251,8 +259,18 @@ function Util.MakeListableType(type)
 	return listableType
 end
 
+local function encodeCommandEscape(text)
+	return first(text:gsub("\\%$", string.char(20)))
+end
+
+local function decodeCommandEscape(text)
+	return first(text:gsub(string.char(20), "$"))
+end
+
 --- Runs embedded commands and replaces them
 function Util.RunEmbeddedCommands(dispatcher, str)
+	str = encodeCommandEscape(str)
+
 	local results = {}
 	-- We need to do this because you can't yield in the gsub function
 	for text in str:gmatch("$(%b{})") do
@@ -271,13 +289,13 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 		end
 	end
 
-	local s = str:gsub("$(%b{})", results) -- Only return the first return value
-	return s
+	return decodeCommandEscape(str:gsub("$(%b{})", results))
 end
 
 --- Replaces arguments in the format $1, $2, $something with whatever the
 -- given function returns for it.
 function Util.SubstituteArgs(str, replace)
+	str = encodeCommandEscape(str)
 	-- Convert numerical keys to strings
 	if type(replace) == "table" then
 		for i = 1, #replace do
@@ -289,8 +307,7 @@ function Util.SubstituteArgs(str, replace)
 			end
 		end
 	end
-	local s = str:gsub("$(%w+)", replace)
-	return s
+	return decodeCommandEscape(str:gsub("$(%w+)", replace))
 end
 
 --- Creates an alias command

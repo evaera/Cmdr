@@ -125,8 +125,6 @@ function Command:Run ()
 		self.Response = self.Dispatcher:Send(self.RawText, self.Object.Data and self.Object.Data(self))
 	end
 
-	self.Response = self.Response:gsub(string.char(20), "$") -- Unescape embedded commands
-
 	local afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)
 	if afterRunHook then
 		return afterRunHook
