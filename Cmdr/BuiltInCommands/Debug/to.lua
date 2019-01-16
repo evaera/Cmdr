@@ -4,9 +4,9 @@ return {
 	Group = "DefaultDebug";
 	Args = {
 		{
-			Type = "player";
-			Name = "target";
-			Description = "The player to teleport to."
+			Type = "player @ vector3";
+			Name = "Destination";
+			Description = "The player or location to teleport to."
 		}
 	};
 }

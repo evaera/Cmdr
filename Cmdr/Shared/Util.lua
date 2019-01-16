@@ -32,6 +32,10 @@ function Util.MakeFuzzyFinder(setOrContainer)
 	local names
 	local instances = {}
 
+	if typeof(setOrContainer) == "Enum" then
+		setOrContainer = setOrContainer:GetEnumItems()
+	end
+
 	if typeof(setOrContainer) == "Instance" then
 		names, instances = transformInstanceSet(setOrContainer:GetChildren())
 	elseif typeof(setOrContainer) == "table" then
@@ -48,7 +52,7 @@ function Util.MakeFuzzyFinder(setOrContainer)
 			names = {}
 		end
 	else
-		error("MakeFuzzyFinder only accepts a table or an Instance.")
+		error("MakeFuzzyFinder only accepts a table, Enum, or Instance.")
 	end
 
 	-- Searches the set (checking exact matches first)
@@ -84,7 +88,7 @@ function Util.GetNames(instances)
 	local names = {}
 
 	for i = 1, #instances do
-		names[i] = instances[i].Name
+		names[i] = instances[i].Name or tostring(instances[i])
 	end
 
 	return names
@@ -104,12 +108,51 @@ function Util.SplitStringSimple(inputstr, sep)
 	return t
 end
 
+local function charCode(n)
+	return utf8.char(tonumber(n, 16))
+end
+
+-- Discard any excess return values
+local function first(x)
+	return x
+end
+
+--- Parses escape sequences into their fully qualified characters
+function Util.ParseEscapeSequences(text)
+	return text:gsub("\\(.)", {
+		t = "\t";
+		n = "\n";
+	})
+	:gsub("\\u(%x%x%x%x)", charCode)
+	:gsub("\\x(%x%x)", charCode)
+end
+
+local function encodeControlChars(text)
+	return first(
+		text
+		:gsub("\\\\", string.char(17))
+		:gsub("\\\"", string.char(18))
+		:gsub("\\'", string.char(19))
+	)
+end
+
+local function decodeControlChars(text)
+	return first(
+		text
+		:gsub(string.char(17), "\\")
+		:gsub(string.char(18), "\"")
+		:gsub(string.char(19), "'")
+	)
+end
+
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
 function Util.SplitString(text, max)
+	text = encodeControlChars(text)
 	max = max or math.huge
 	local t = {}
 	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
 	for str in text:gmatch("%S+") do
+		str = Util.ParseEscapeSequences(str)
 		local squoted = str:match(spat)
 		local equoted = str:match(epat)
 		local escaped = str:match([=[(\*)['"]$]=])
@@ -121,12 +164,12 @@ function Util.SplitString(text, max)
 			buf = buf .. " " .. str
 		end
 		if not buf then
-			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat, ""):gsub(epat, ""))
+			t[#t + (#t > max and 0 or 1)] = decodeControlChars(str:gsub(spat, ""):gsub(epat, ""))
 		end
 	end
 
 	if buf then
-		t[#t + (#t > max and 0 or 1)] = buf
+		t[#t + (#t > max and 0 or 1)] = decodeControlChars(buf)
 	end
 
 	return t
@@ -164,7 +207,8 @@ function Util.MakeEnumType(name, values)
 			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
 		end,
 		Autocomplete = function(text)
-			return findValue(text)
+			local list = findValue(text)
+			return type(list[1]) ~= "string" and Util.GetNames(list) or list
 		end,
 		Parse = function(text)
 			return findValue(text, true)
@@ -216,8 +260,18 @@ function Util.MakeListableType(type)
 	return listableType
 end
 
+local function encodeCommandEscape(text)
+	return first(text:gsub("\\%$", string.char(20)))
+end
+
+local function decodeCommandEscape(text)
+	return first(text:gsub(string.char(20), "$"))
+end
+
 --- Runs embedded commands and replaces them
 function Util.RunEmbeddedCommands(dispatcher, str)
+	str = encodeCommandEscape(str)
+
 	local results = {}
 	-- We need to do this because you can't yield in the gsub function
 	for text in str:gmatch("$(%b{})") do
@@ -236,13 +290,13 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 		end
 	end
 
-	local s = str:gsub("$(%b{})", results) -- Only return the first return value
-	return s
+	return decodeCommandEscape(str:gsub("$(%b{})", results))
 end
 
 --- Replaces arguments in the format $1, $2, $something with whatever the
 -- given function returns for it.
 function Util.SubstituteArgs(str, replace)
+	str = encodeCommandEscape(str)
 	-- Convert numerical keys to strings
 	if type(replace) == "table" then
 		for i = 1, #replace do
@@ -254,8 +308,7 @@ function Util.SubstituteArgs(str, replace)
 			end
 		end
 	end
-	local s = str:gsub("$(%w+)", replace)
-	return s
+	return decodeCommandEscape(str:gsub("$(%w+)", replace))
 end
 
 --- Creates an alias command
@@ -318,6 +371,90 @@ function Util.MakeAliasCommand(name, commandString)
 			return ""
 		end
 	}
+end
+
+--- Makes a type that contains a sequence, e.g. Vector3 or Color3
+function Util.MakeSequenceType(options)
+	options = options or {}
+
+	assert(options.Parse ~= nil or options.Constructor ~= nil, "MakeSequenceType: Must provide one of: Constructor, Parse")
+
+	options.TransformEach = options.TransformEach or function(...)
+		return ...
+	end
+
+	options.ValidateEach = options.ValidateEach or function()
+		return true
+	end
+
+	return {
+		Transform = function (text)
+			return Util.Map(Util.SplitPrioritizedDelimeter(text, {",", "%s"}), function(value)
+				return options.TransformEach(value)
+			end)
+		end;
+
+		Validate = function (components)
+			if options.Length and #components > options.Length then
+				return false, ("Maximum of %d values allowed in sequence"):format(options.Length)
+			end
+
+			for i = 1, options.Length or #components do
+				local valid, reason = options.ValidateEach(components[i], i)
+
+				if not valid then
+					return false, reason
+				end
+			end
+
+			return true
+		end;
+
+		Parse = options.Parse or function(components)
+			return options.Constructor(unpack(components))
+		end
+	}
+end
+
+--- Splits a string by a single delimeter chosen from the given set.
+-- The first matching delimeter from the set becomes the split character.
+function Util.SplitPrioritizedDelimeter(text, delimeters)
+	for i, delimeter in ipairs(delimeters) do
+		if text:find(delimeter) or i == #delimeters then
+			return Util.SplitStringSimple(text, delimeter)
+		end
+	end
+end
+
+--- Maps values of an array through a callback and returns an array of mapped values
+function Util.Map(array, callback)
+	local results = {}
+
+	for i, v in ipairs(array) do
+		results[i] = callback(v, i)
+	end
+
+	return results
+end
+
+--- Maps arguments #2-n through callback and returns values as tuple
+function Util.Each(callback, ...)
+	local results = {}
+	for i, value in ipairs({...}) do
+		results[i] = callback(value)
+	end
+	return unpack(results)
+end
+
+--- Emulates tabstops with spaces
+function Util.EmulateTabstops(text, tabWidth)
+	local result = ""
+	for i = 1, #text do
+		local char = text:sub(i, i)
+
+		result = result .. (char == "\t" and string.rep(" ", 4 - #result % tabWidth) or char)
+	end
+	return result
 end
 
 return Util

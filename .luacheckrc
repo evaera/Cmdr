@@ -1,3 +1,5 @@
+-- luacheck: ignore
+
 stds.roblox = {
 	globals = {
 		"game",
@@ -16,6 +18,7 @@ stds.roblox = {
 		"tick",
 		"typeof",
 		"settings",
+		"utf8",
 
 		-- Global Namespaces
 		"Enum",
@@ -38,12 +41,13 @@ stds.roblox = {
 		"UDim2",
 		"Rect",
 		"TweenInfo",
-		"Random"
+		"Random",
+		"BrickColor"
 	}
 }
 
 max_line_length = false
 
-ignore = { "111" }
+ignore = { "self" }
 
 std = "lua51+roblox"

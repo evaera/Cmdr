@@ -1,12 +1,16 @@
 local RunService = game:GetService("RunService")
+local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local Util = require(script.Parent.Util)
 local Command = require(script.Parent.Command)
+
+local HISTORY_SETTING_NAME = "CmdrCommandHistory"
 
 --- The dispatcher handles creating and running commands during the game.
 local Dispatcher = {
 	Cmdr = nil;
 	Registry = nil;
+
 }
 
 --- Takes in raw command information and generates a command out of it.
@@ -51,10 +55,15 @@ end
 
 --- A helper that evaluates and runs the command in one go.
 -- Either returns any validation errors as a string, or the output of the command as a string. Definitely a string, though.
-function Dispatcher:EvaluateAndRun (text, executor, data)
+function Dispatcher:EvaluateAndRun (text, executor, options)
 	executor = executor or Players.LocalPlayer
+	options = options or {}
 
-	local command, errorText = self:Evaluate(text, executor, nil, data)
+	if RunService:IsClient() and options.IsHuman then
+		self:PushHistory(text)
+	end
+
+	local command, errorText = self:Evaluate(text, executor, nil, options.Data)
 
 	if not command then
 		return errorText
@@ -122,12 +131,33 @@ function Dispatcher:RunHooks(hookName, ...)
 	end
 
 	for _, hook in ipairs(self.Registry.Hooks[hookName]) do
-		local value = hook(...)
+		local value = hook.callback(...)
 
 		if value ~= nil then
 			return tostring(value)
 		end
 	end
+end
+
+function Dispatcher:PushHistory(text)
+	assert(RunService:IsClient(), "PushHistory may only be used from the client.")
+
+	local history = self:GetHistory()
+
+	-- Remove duplicates
+	if Util.TrimString(text) == "" or text == history[#history] then
+		return
+	end
+
+	history[#history + 1] = text
+
+	TeleportService:SetTeleportSetting(HISTORY_SETTING_NAME, history)
+end
+
+function Dispatcher:GetHistory()
+	assert(RunService:IsClient(), "GetHistory may only be used from the client.")
+
+	return TeleportService:GetTeleportSetting(HISTORY_SETTING_NAME) or {}
 end
 
 return function (cmdr)

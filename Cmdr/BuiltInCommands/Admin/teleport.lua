@@ -6,12 +6,12 @@ return {
 	Args = {
 		{
 			Type = "players";
-			Name = "from";
+			Name = "Fromrom";
 			Description = "The players to teleport";
 		},
 		{
-			Type = "player";
-			Name = "to";
+			Type = "player @ vector3";
+			Name = "Destination";
 			Description = "The player to teleport to"
 		}
 	};

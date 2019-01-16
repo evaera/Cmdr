@@ -30,8 +30,8 @@ local Cmdr do
 end
 
 -- Handle command invocations from the clients.
-Cmdr.RemoteFunction.OnServerInvoke = function (player, text, data)
-	return Cmdr.Dispatcher:EvaluateAndRun(text, player, data)
+Cmdr.RemoteFunction.OnServerInvoke = function (player, text, options)
+	return Cmdr.Dispatcher:EvaluateAndRun(text, player, options)
 end
 
 return Cmdr

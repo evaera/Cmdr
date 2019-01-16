@@ -1,5 +1,8 @@
 <div align="center">
 	<img src="assets/logo.png" alt="Cmdr" height="150" />
+	<br>
+	<a href="https://www.npmjs.com/package/rbx-cmdr"><img src="https://badge.fury.io/js/rbx-cmdr.svg"></a>
+	<br><br>
 </div>
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
@@ -166,14 +169,17 @@ If your command needs to gather some extra data from the client that's only avai
 #### Run?: function (context: CommandContext, ...: any)
 If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
 
+#### AutoExec?: array<string>
+A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame.
+
 ### Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`
 
-Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`)
+Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`), `position`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`
 
 Group: `Help`: `help`
 
@@ -202,12 +208,32 @@ Here is a list of automatic prefixed union types:
 
 - `players`: `players % teamPlayers`
 - `playerId`: `playerId # integer`
+- `playerIds`: `playerIds # integers`
+- `brickColor`: `brickColor % teamColor`
+- `brickColors`: `brickColors % teamColors`
+- `color3`: `color3 # hexColor3 ! brickColor3`
+- `color3s`: `color3s # hexColor3s ! brickColor3s`
 
 ## Types
 
 By default, these types are available:
 
-`string`, `number`, `integer`, `boolean`, `player`, `players`, `team`, `teams`, `teamPlayers`, `command`, `commands`, `userInput`, `userInputs`
+`string`, `strings`: string, array<string>
+`number`, `numbers`: number, array<number>
+`integer`, `integers`: number, array<number>
+`boolean`, `booleans`: boolean, array<boolean>
+`player`, `players`: Player, array<Player>
+`team`, `teams`: Team, array<Team>
+`teamPlayers`: Player, array<Player>
+`command`, `commands`: string, array<string>
+`userInput`, `userInputs` Enum.UserInputType | Enum.KeyCode, array<Enum.UserInputType | Enum.KeyCode>
+`brickColor`, `brickColors`: BrickColor, array<BrickColor>
+`teamColor`, `teamColors`: BrickColor, array<BrickColor>
+`color3`, `color3s`: Color3, array<Color3>
+`hexColor3`, `hexColor3s`: Color3, array<Color3>
+`brickColor3`, `brickColor3s`: Color3, array<Color3>
+`vector3`, `vector3s`: Vector3, array<Vector3>
+`vector2`, `vector2s`: Vector2, array<Vector2>
 
 Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
@@ -292,7 +318,7 @@ As a quick way to register hooks on both the server and the client, you can make
 ```lua
 -- A ModuleScript inside your hooks folder.
 return function (registry)
-	registry:AddHook("BeforeRun", function(context)
+	registry:RegisterHook("BeforeRun", function(context)
 		if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
 			return "You don't have permission to run this command"
 		end
@@ -309,7 +335,7 @@ If this callback returns a string, then it will replace the normal response on t
 This hook is most useful for logging. Since we don't want to add this hook on the client in this example, we can just require the server version of Cmdr and add this hook directly right here (as opposed to what we did in the BeforeRun example, which adds the hook to the client as well):
 
 ```lua
-Cmdr.Registry:AddHook("AfterRun", function(context)
+Cmdr.Registry:RegisterHook("AfterRun", function(context)
   print(context.Response) -- see the actual response from the command execution
   return "Returning a string from this hook replaces the response message with this text"
 end)
@@ -414,6 +440,9 @@ Sets whether or not Cmdr can be shown via the defined activation keys. Useful fo
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
 Sets the event handler for a certain network event. See Network Event Handlers above.
 
+#### `CmdrClient:SetMashToEnable(isEnabled: boolean): void`
+Enables the "Mash to Enable" feature, which requires the player to press the activation key 7 times in quick succession to open the Cmdr menu for the first time. This is not meant as a security feature, rather, as a way to ensure that the console is not accidentally obtrusive to regular players of your game.
+
 ### Properties
 
 #### `CmdrClient.Enabled: boolean`
@@ -449,7 +478,7 @@ Registers a type. This function should be called from within the type definition
 Returns a type definition with the given name, or nil if it doesn't exist.
 
 #### `Registry:RegisterHooksIn(container: Instance): void`
-Registers all hooks from within a container on both the server and the client. This only needs to be called server-side. See the Hooks section for examples. If you want to add a hook to the server or the client *only* (not on both), then you should use the Registry:AddHook method directly by requiring Cmdr in a server or client script.
+Registers all hooks from within a container on both the server and the client. This only needs to be called server-side. See the Hooks section for examples. If you want to add a hook to the server or the client *only* (not on both), then you should use the Registry:RegisterHook method directly by requiring Cmdr in a server or client script.
 
 #### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
 Registers all commands from within a container. `filter` is an optional function, and if given will be passed a command definition which will only be registered if the function returns `true`. This only needs to be called server-side.
@@ -469,8 +498,8 @@ Returns an array of all commands (aliases not included).
 #### `Registry:GetCommandsAsStrings(): array<string>`
 Returns an array of all command names.
 
-#### `Registry:AddHook(hookName: string, callback: function(context: CommandContext) => string?): void`
-Adds a hook. This should probably be run on the server, but can also work on the client.  See the Hooks section above.
+#### `Registry:RegisterHook(hookName: string, callback: function(context: CommandContext) => string?, priority: number = 0): void`
+Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first). See the Hooks section above.
 
 #### `Registry:GetStore(name: string): table`
 Returns a table saved with the given name. This is the same as `CommandContext:GetStore()`.
@@ -483,8 +512,11 @@ The Dispatcher handles parsing, validating, and evaluating commands. Exists on b
 #### `Dispatcher:Run(...: string): string`
 This should be used to invoke commands programmatically as the local player. Accepts a variable number of arguments, which are all joined with spaces before being run. This function will raise an error if any validations occur, since it's only for hard-coded (or generated) commands. Client only.
 
-#### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, data?: any): string`
+#### `Dispatcher:EvaluateAndRun(text: string, executor?: Player, options: { Data?: any, IsHuman?: boolean }): string`
 Runs a command as the given player. If called on the client, only text is required. Returns output or error test as a string. If the `data` parameter is given, it will be available with `CommandContext:GetData()`.
+
+#### `Dispatcher:GetHistory(): array<string>`
+(Client only) Returns an array of the user's command history. Most recent commands are inserted at the end of the array.
 
 ## CommandContext
 This object represents a single command being run. It is passed as the first argument to command implementations.
@@ -508,6 +540,9 @@ The raw text that was used to trigger this command.
 
 #### `CommandContext.Group: any`
 The group this command is a part of. Defined in command definitions, typically a string.
+
+#### `CommandContext.State: table`
+A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume.
 
 #### `CommandContext.Aliases: array<string>`
 Any aliases that can be used to also trigger this command in addition to its name.
@@ -591,6 +626,12 @@ Returns the *transformed value* from this argument, see Types.
 #### `Util.MakeDictionary(array: array<any>): dictionary<any, true>`
 Accepts an array and flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
 
+#### `Util.Map(array: array<any>, callback: (value: any, index: number) => any): array<any>`
+Maps values from one array to a new array. Passes each value through the given callback and uses its return value in the same position in the new array.
+
+#### `Util.Each(callback: (value: any) => any, ...: any): any...
+Maps arguments #2-n through callback and returns all values as tuple.
+
 #### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst?: boolean) => any`
 Makes a fuzzy finder for the given set or container. You can pass an array of strings, array of instances, array of EnumItems, array of dictionaries with a `Name` key or an instance (in which case its children will be used).
 
@@ -617,8 +658,27 @@ Makes an Enum type out of a name and an array of strings. See Enum Values.
 #### `Util.MakeListableType(type: TypeDefinition): TypeDefinition`
 Takes a singular type and produces a plural (listable) type out of it.
 
+#### `Util.MakeSequenceType(options: dictionary): TypeDefinition`
+A helper function that makes a type which contains a sequence, like Vector3 or Color3. The delimeter can be either `,` or whitespace, checking `,` first. `options` is a table that can contain:
+
+- `TransformEach(value: any) => any`: a function that is run on each member of the sequence, transforming it individually.
+- `ValidateEach(value: any, index: number) => boolean, string`: a function is run on each member of the sequence validating it. It is passed the value and the index at which it occurs in the sequence. It should return true if it is valid, or false and a string reason if it is not.
+
+And one of:
+- `Parse(values: array<any>) => any`: A function that parses all of the values into a single type.
+- `Constructor(...: any) => any`: A function that expects the values unpacked as parameters to create the parsed object. This is a shorthand that allows you to set `Constructor` directly to `Vector3.new`, for example.
+
+#### `Util.SplitPrioritizedDelimeter(text: string, delimiters: array<string>): array<string>`
+Splits a string by a single delimeter chosen from the given set. The first matching delimeter from the set becomes the split character.
+
 #### `Util.SubstituteArgs(text: string, replace: array<string> | dictionary<string, string> | function(var: string) => string): string`
 Accepts a string with arguments (such as $1, $2, $3, etc) and a table or function to use with `string.gsub`. Returns a string with arguments replaced with their values.
 
 #### `Util.RunEmbeddedCommands(dispatcher: Dispatcher, commandString: string): string`
 Accepts the current dispatcher and a command string. Parses embedded commands from within the string, evaluating to the output of the command when run with `dispatcher:EvaluateAndRun`. Returns the compiled string.
+
+#### `Util.EmulateTabstops(text: string, tabWidth: number): string`
+Returns a string emulating \t tab stops with spaces.
+
+#### `Util.ParseEscapeSequences(text: string): string`
+Replaces escape sequences with their fully qualified characters in a string. This only parses `\n`, `\t`, `\uXXXX`, and `\xXX` where `X` is any hexadecimal character.

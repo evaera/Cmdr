@@ -32,8 +32,22 @@ local teamPlayersType = {
 	end;
 }
 
+local teamColorType = {
+	Transform = teamType.Transform;
+	Validate = teamType.Validate;
+	Autocomplete = teamType.Autocomplete;
+
+	Parse = function (teams)
+		return teams[1].TeamColor
+	end;
+}
+
 return function (cmdr)
 	cmdr:RegisterType("team", teamType)
 	cmdr:RegisterType("teams", Util.MakeListableType(teamType))
+
 	cmdr:RegisterType("teamPlayers", teamPlayersType)
+
+	cmdr:RegisterType("teamColor", teamColorType)
+	cmdr:RegisterType("teamColors", Util.MakeListableType(teamColorType))
 end
