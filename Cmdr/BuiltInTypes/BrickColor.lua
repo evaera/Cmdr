@@ -56,7 +56,20 @@ local brickColorType =  {
     end;
 }
 
+local brickColor3Type = {
+	Transform = brickColorType.Transform;
+	Validate = brickColorType.Validate;
+	Autocomplete = brickColorType.Autocomplete;
+
+	Parse = function(brickColors)
+		return brickColors[1].Color
+	end;
+}
+
 return function(registry)
     registry:RegisterType("brickColor", brickColorType)
-    registry:RegisterType("brickColors", Util.MakeListableType(brickColorType))
+	registry:RegisterType("brickColors", Util.MakeListableType(brickColorType))
+
+	registry:RegisterType("brickColor3", brickColor3Type)
+    registry:RegisterType("brickColor3s", Util.MakeListableType(brickColor3Type))
 end
