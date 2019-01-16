@@ -10,7 +10,7 @@ declare namespace Cmdr {
     GetCommand (name: string): CommandDefinition | undefined
     GetCommands (): CommandDefinition[]
     GetCommandsAsStrings (): string[]
-    AddHook (hookName: string, callback: (context: CommandContext) => string | void): void
+    RegisterHook (hookName: string, callback: (context: CommandContext) => string | void, priority?: number): void
     GetStore<T extends (any[] | Map<any, any>)>(name: string): T
   }
   export interface EvaluateAndRunOptions {
@@ -21,6 +21,17 @@ declare namespace Cmdr {
     Run (...segments: string[]): string
     EvaluateAndRun (text: string, executor?: Player, data?: EvaluateAndRunOptions): string
   }
+  interface BaseMakeSequenceTypeOptions<T, R> {
+    TransformEach?: (value: string) => T
+    ValidateEach?: (value: T, index: number) => [boolean, string?]
+  }
+  interface ConstructorMakeSequenceTypeOptions<T, R> extends BaseMakeSequenceTypeOptions<T, R> {
+    Constructor: (...values: T[]) => R
+  }
+  interface ParseMakeSequenceTypeOptions<T, R> extends BaseMakeSequenceTypeOptions<T, R> {
+    Parse: (values: T[]) => R
+  }
+  export type MakeSequenceTypeOptions<T, R> = ConstructorMakeSequenceTypeOptions<T, R> | ParseMakeSequenceTypeOptions<T, R>
   export interface Util {
     MakeDictionary: <T>(array: T[]) => Map<T, true>
     MakeFuzzyFinder: <T extends string | Instance | { Name: string } | keyof typeof Enum>(setOrContainer: T[] | Instance) => (text: string, returnFirst?: boolean) => T
@@ -31,6 +42,10 @@ declare namespace Cmdr {
     MakeListableType: (type: TypeDefinition) => TypeDefinition
     SubstituteArgs: (text: string, replace: string[] | { [index: string]: string } | ((variable: string) => string)) => string
     RunEmbeddedCommands: (dispatcher: Dispatcher, commandString: string) => string
+    MakeSequenceType: <T, R>(options: MakeSequenceTypeOptions<T, R>) => TypeDefinition
+    SplitPrioritizedDelimeter: (text: string, delimeters: string[]) => string[]
+    EmulateTabstops: (text: string, tabWidth: number): string
+    ParseEscapeSequences: (text: string) => string
   }
   export interface ArgumentDefinition {
     Type: string
@@ -42,6 +57,7 @@ declare namespace Cmdr {
   export interface CommandDefinition {
     Name: string
     Aliases: string[]
+    AutoExec: string[]
     Description: string
     Args: ArgumentDefinition[]
     Group?: any
@@ -99,6 +115,7 @@ declare class Cmdr {
 
 declare class CmdrClient extends Cmdr {
   static SetActivationKeys (keys: Enum.KeyCode[]): void
+  static SetMashToEnable (isEnabled: boolean): void
   static SetPlaceName (labelText: string): void
   static SetEnabled (isEnabled: boolean): void
   static HandleEvent (event: string, handler: (...args: any[]) => void): void
