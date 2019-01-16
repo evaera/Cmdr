@@ -117,6 +117,7 @@ local function first(x)
 	return x
 end
 
+--- Parses escape sequences into their fully qualified characters
 function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
 		t = "\t";
