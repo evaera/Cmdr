@@ -203,7 +203,7 @@ function Registry:GetType (name)
 end
 
 --- Adds a hook to be called when any command is run
-function Registry:AddHook(hookName, callback, priority)
+function Registry:RegisterHook(hookName, callback, priority)
 	if not self.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
 	end
@@ -211,6 +211,9 @@ function Registry:AddHook(hookName, callback, priority)
 	table.insert(self.Hooks[hookName], { callback = callback; priority = priority or 0; } )
 	table.sort(self.Hooks[hookName], function(a, b) return a.priority < b.priority end)
 end
+
+-- Backwards compatability (deprecated)
+Registry.AddHook = Registry.RegisterHook
 
 --- Returns the store with the given name
 -- Used for commands that require persistent state, like bind or ban

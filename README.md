@@ -298,7 +298,7 @@ As a quick way to register hooks on both the server and the client, you can make
 ```lua
 -- A ModuleScript inside your hooks folder.
 return function (registry)
-	registry:AddHook("BeforeRun", function(context)
+	registry:RegisterHook("BeforeRun", function(context)
 		if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
 			return "You don't have permission to run this command"
 		end
@@ -315,7 +315,7 @@ If this callback returns a string, then it will replace the normal response on t
 This hook is most useful for logging. Since we don't want to add this hook on the client in this example, we can just require the server version of Cmdr and add this hook directly right here (as opposed to what we did in the BeforeRun example, which adds the hook to the client as well):
 
 ```lua
-Cmdr.Registry:AddHook("AfterRun", function(context)
+Cmdr.Registry:RegisterHook("AfterRun", function(context)
   print(context.Response) -- see the actual response from the command execution
   return "Returning a string from this hook replaces the response message with this text"
 end)
@@ -458,7 +458,7 @@ Registers a type. This function should be called from within the type definition
 Returns a type definition with the given name, or nil if it doesn't exist.
 
 #### `Registry:RegisterHooksIn(container: Instance): void`
-Registers all hooks from within a container on both the server and the client. This only needs to be called server-side. See the Hooks section for examples. If you want to add a hook to the server or the client *only* (not on both), then you should use the Registry:AddHook method directly by requiring Cmdr in a server or client script.
+Registers all hooks from within a container on both the server and the client. This only needs to be called server-side. See the Hooks section for examples. If you want to add a hook to the server or the client *only* (not on both), then you should use the Registry:RegisterHook method directly by requiring Cmdr in a server or client script.
 
 #### `Registry:RegisterCommandsIn(container: Instance, filter?: function(command: CommandDefinition) => boolean): void`
 Registers all commands from within a container. `filter` is an optional function, and if given will be passed a command definition which will only be registered if the function returns `true`. This only needs to be called server-side.
@@ -478,8 +478,8 @@ Returns an array of all commands (aliases not included).
 #### `Registry:GetCommandsAsStrings(): array<string>`
 Returns an array of all command names.
 
-#### `Registry:AddHook(hookName: string, callback: function(context: CommandContext) => string?): void`
-Adds a hook. This should probably be run on the server, but can also work on the client.  See the Hooks section above.
+#### `Registry:RegisterHook(hookName: string, callback: function(context: CommandContext) => string?, priority: number = 0): void`
+Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first). See the Hooks section above.
 
 #### `Registry:GetStore(name: string): table`
 Returns a table saved with the given name. This is the same as `CommandContext:GetStore()`.
