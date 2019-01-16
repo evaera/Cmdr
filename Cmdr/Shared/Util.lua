@@ -325,6 +325,44 @@ function Util.MakeAliasCommand(name, commandString)
 	}
 end
 
+function Util.MakeSequenceType(options)
+	options = options or {}
+
+	assert(options.Parse ~= nil or options.Constructor ~= nil, "MakeSequenceType: Must provide one of: Constructor, Parse")
+
+	options.TransformEach = options.TransformEach or function(...)
+		return ...
+	end
+
+	options.Validate = options.Validate or function()
+		return true
+	end
+
+	return {
+		Transform = function (text)
+			return Util.Map(Util.ParsePrioritizedDelimeter(text, {",", "%s"}), function(value)
+				return options.TransformEach(value)
+			end)
+		end;
+
+		Validate = function (components)
+			for i = 1, options.Length or #components do
+				local valid, reason = options.Validate(components[i], i)
+
+				if not valid then
+					return false, reason
+				end
+			end
+
+			return true
+		end;
+
+		Parse = options.Parse or function(components)
+			return options.Constructor(unpack(components))
+		end
+	}
+end
+
 function Util.ParsePrioritizedDelimeter(text, delimeters)
 	for i, delimeter in ipairs(delimeters) do
 		if text:find(delimeter) or i == #delimeters then
