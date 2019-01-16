@@ -1,7 +1,7 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local color3Type = Util.MakeSequenceType({
-	Validate = function(value, i)
+	ValidateEach = function(value, i)
 		if value == nil then
 			return false, ("Invalid or missing number at position %d in Color3 type."):format(i)
 		elseif value < 0 or value > 255 then

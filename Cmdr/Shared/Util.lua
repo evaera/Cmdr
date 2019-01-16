@@ -382,7 +382,7 @@ function Util.MakeSequenceType(options)
 		return ...
 	end
 
-	options.Validate = options.Validate or function()
+	options.ValidateEach = options.ValidateEach or function()
 		return true
 	end
 
@@ -399,7 +399,7 @@ function Util.MakeSequenceType(options)
 			end
 
 			for i = 1, options.Length or #components do
-				local valid, reason = options.Validate(components[i], i)
+				local valid, reason = options.ValidateEach(components[i], i)
 
 				if not valid then
 					return false, reason

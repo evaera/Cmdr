@@ -9,14 +9,14 @@ local function validateVector(value, i)
 end
 
 local vector3Type = Util.MakeSequenceType({
-	Validate = validateVector;
+	ValidateEach = validateVector;
 	TransformEach = tonumber;
 	Constructor = Vector3.new;
 	Length = 3;
 })
 
 local vector2Type = Util.MakeSequenceType({
-	Validate = validateVector;
+	ValidateEach = validateVector;
 	TransformEach = tonumber;
 	Constructor = Vector2.new;
 	Length = 2;
