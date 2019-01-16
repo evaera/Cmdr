@@ -2,7 +2,14 @@ local TYPE_DEFAULTS = {
 	-- Make all `players` types also be able to match by team
 	players = "players % teamPlayers";
 
-	playerId = "playerId # integer"
+	playerId = "playerId # integer";
+	playerIds = "playerIds # integers";
+
+	brickColor = "brickColor % teamColor";
+	brickColors = "brickColors % teamColors";
+
+	color3 = "color3 # hexColor3 ! brickColor3";
+	color3s = "color3s # hexColor3s ! brickColor3s";
 }
 
 local Util = require(script.Parent.Util)
@@ -142,7 +149,7 @@ function Argument:GetValue()
 		local parsedValue = self:ParseValue(i)
 
 		if type(parsedValue) ~= "table" then
-			error("Listable types must return a table from Parse")
+			error(("Listable types must return a table from Parse (%s)"):format(self.Type.Name))
 		end
 
 		for _, value in pairs(parsedValue) do
