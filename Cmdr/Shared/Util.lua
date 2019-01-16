@@ -116,6 +116,7 @@ function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
 		t = "\t";
 		n = "\n";
+		["$"] = string.char(20);
 	})
 	:gsub("\\u(%x%x%x%x)", charCode)
 	:gsub("\\x(%x%x)", charCode)
@@ -137,11 +138,12 @@ end
 
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
 function Util.SplitString(text, max)
-	text = Util.ParseEscapeSequences(encodeControlChars(text))
+	text = encodeControlChars(text)
 	max = max or math.huge
 	local t = {}
 	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
 	for str in text:gmatch("%S+") do
+		str = Util.ParseEscapeSequences(str)
 		local squoted = str:match(spat)
 		local equoted = str:match(epat)
 		local escaped = str:match([=[(\*)['"]$]=])
