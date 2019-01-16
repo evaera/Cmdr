@@ -18,6 +18,7 @@ stds.roblox = {
 		"tick",
 		"typeof",
 		"settings",
+		"utf8",
 
 		-- Global Namespaces
 		"Enum",

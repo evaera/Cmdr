@@ -108,10 +108,36 @@ function Util.SplitStringSimple(inputstr, sep)
 	return t
 end
 
+local function charCode(n)
+	return utf8.char(tonumber(n, 16))
+end
+
+function Util.ParseEscapeSequences(text)
+	return text:gsub("\\(.)", {
+		t = "\t";
+		n = "\n";
+	})
+	:gsub("\\u(%x%x%x%x)", charCode)
+	:gsub("\\x(%x%x)", charCode)
+end
+
+local function encodeControlChars(text)
+	return text
+		:gsub("\\\\", string.char(17))
+		:gsub("\\\"", string.char(18))
+		:gsub("\\'", string.char(19))
+end
+
+local function decodeControlChars(text)
+	return text
+		:gsub(string.char(17), "\\")
+		:gsub(string.char(18), "\"")
+		:gsub(string.char(19), "'")
+end
+
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
 function Util.SplitString(text, max)
-	text = text:gsub("\\\\", string.char(17))
-	text = text:gsub("\\\"", string.char(18))
+	text = Util.ParseEscapeSequences(encodeControlChars(text))
 	max = max or math.huge
 	local t = {}
 	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
@@ -127,12 +153,12 @@ function Util.SplitString(text, max)
 			buf = buf .. " " .. str
 		end
 		if not buf then
-			t[#t + (#t > max and 0 or 1)] = (str:gsub(spat, ""):gsub(epat, "")):gsub(string.char(17), "\\"):gsub(string.char(18), "\"")
+			t[#t + (#t > max and 0 or 1)] = decodeControlChars(str:gsub(spat, ""):gsub(epat, ""))
 		end
 	end
 
 	if buf then
-		t[#t + (#t > max and 0 or 1)] = buf:gsub(string.char(17), "\\"):gsub(string.char(18), "\"")
+		t[#t + (#t > max and 0 or 1)] = decodeControlChars(buf)
 	end
 
 	return t
