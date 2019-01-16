@@ -225,7 +225,6 @@ By default, these types are available:
 - `player`, `players`: `Player`, `array<Player>`
 - `team`, `teams`: `Team`, `array<Team>`
 - `teamPlayers`: `Player`, `array<Player>`
-- `teamPlayers`: `Player`, `array<Player>`
 - `command`, `commands`: `string`, `array<string>`
 - `userInput`, `userInputs`: `Enum.UserInputType | Enum.KeyCode`, `array<Enum.UserInputType | Enum.KeyCode>`
 - `brickColor`, `brickColors`: `BrickColor`, `array<BrickColor>`
@@ -235,6 +234,7 @@ By default, these types are available:
 - `brickColor3`, `brickColor3s`: `Color3`, `array<Color3>`
 - `vector3`, `vector3s`: `Vector3`, `array<Vector3>`
 - `vector2`, `vector2s`: `Vector2`, `array<Vector2>`
+- `duration`, `durations`: `number`, `array<number>`
 
 Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
