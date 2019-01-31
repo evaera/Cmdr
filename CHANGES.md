@@ -2,7 +2,10 @@
 
 - Added `others` shorthand for players type
 
-# v1.1
+# v1.1.3
+- Fix an issue where the arrow keys could be used to open auto complete when the menu is closed
+
+# v1.1.2
 ## Command history
   - Up/down arrow now traverses command history when you haven't entered any text.
   - New `history` utility command which dynamically returns your previously-entered commands based on a number index.
