@@ -213,7 +213,7 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
-	if self.Cmdr.Enabled == false then
+	if self.Cmdr.Enabled == false or not self:IsVisible() then
 		if self:IsVisible() then
 			self:Hide()
 		end
