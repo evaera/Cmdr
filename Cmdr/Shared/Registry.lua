@@ -90,7 +90,7 @@ function Registry:RegisterCommandObject (commandObject)
 		error(('Invalid command implementation provided for "%s": "Data" and "Run" sections are mutually exclusive'):format(commandObject.Name or "unknown"))
 	end
 
-	if commandObject.AutoExec then
+	if commandObject.AutoExec and RunService:IsClient() then
 		table.insert(self.AutoExecBuffer, commandObject.AutoExec)
 		self:FlushAutoExecBufferDeferred()
 	end
