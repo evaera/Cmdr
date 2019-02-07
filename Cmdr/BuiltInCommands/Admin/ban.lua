@@ -1,7 +1,7 @@
 return {
 	Name = "ban",
 	Description = "Bans player(s) for a give amount of time.",
-	Group = "Gamemaster",
+	Group = "DefaultAdmin",
 	Args = {
 		{
 			Type = "players",
