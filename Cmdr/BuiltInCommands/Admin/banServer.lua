@@ -4,6 +4,8 @@ local textService = game:GetService("TextService")
 local dataStoreService = game:GetService("DataStoreService")
 local banService = dataStoreService:GetDataStore("BanService")
 
+local kickMessage = "You have been banned from this game for %s. This ban will be lifted on %s."
+
 local months = {
 	"January",
 	"February",
@@ -20,61 +22,50 @@ local months = {
 }
 
 local function getDateFromTime(timeAmount)
+	if timeAmount == "permanent" then
+		return "December 31, 9999 at 11:59 PM UTC"
+	end	
 	local date = os.date("!*t", timeAmount)
-	
 	local month = months[date.month]
 	local day = date.day
 	local year = date.year
-	
-	local hour = date.hour 
-	
+	local hour = date.hour
 	local isPM = false
-	
 	if hour > 12 then
 		hour = hour - 12
 		isPM = true
 	end 
-		
 	if hour < 10 then
 		hour = "0" .. hour
 	end
-	
 	local min = date.min < 10 and "0" .. date.min or date.min
-	local sec = date.sec < 10 and "0" .. date.sec or date.sec
-	
 	local dateFormat = month .. " " .. day .. ", " .. year
-	local timeFormat = hour .. ":" .. min .. ":" .. sec .. " " .. (isPM and "PM" or "AM")
-	
-	return dateFormat .. " at " .. timeFormat
+	local timeFormat = hour .. ":" .. min .. " " .. (isPM and "PM" or "AM")
+	return dateFormat .. " at " .. timeFormat .. " UTC."
+end
+
+local function returnFilteredReason(reason)
+	local reason = ""
+	pcall(function()
+		reason = textService:FilterStringAsync(reason, player.UserId, Enum.TextFilterContext.PublicChat) 
+	end)
+	return string.lower(reason)
 end
 
 players.PlayerAdded:Connect(function(player)
 	local banData
-	
 	pcall(function()
 		banData = banService:GetAsync(player.UserId)
 	end)
-	
 	if banData then
-		local reason = banData.Reason
+		local reason = returnFilteredReason(banData.Reason)
 		local duration = banData.Duration
-		
-		local filteredReason = ""
-		
-		pcall(function()
-			filteredReason = textService:FilterStringAsync(reason, player.UserId, Enum.TextFilterContext.PublicChat)
-		end)
-		
-		if duration ~= "permanent" then
-			if duration - os.time() >= 0 then
-				player:Kick("You have been banned from this game for " .. string.lower(filteredReason) .. ". This ban will be lifted on " .. getDateFromTime(duration) .. " UTC.")
-			else
-				local success, err = pcall(function()
-					banService:RemoveAsync(player.UserId)
-				end)
-			end
+		if duration ~= "permanent" and duration - os.time() > 0 then
+			player:Kick(string.format(kickMessage, reason, getDateFromTime(duration)))
 		else
-			player:Kick("You have been banned from this game for " .. string.lower(filteredReason) .. ". This ban will be lifted on December 31, 9999 at 11:59:59 PM UTC.")
+			pcall(function()
+				banService:RemoveAsync(player.UserId)
+			end)
 		end
 	end
 end)
@@ -82,27 +73,21 @@ end)
 return function(context, fromPlayers, reason, duration)
 	for _, player in ipairs(fromPlayers) do
 		if reason then
-			
 			local banData
-			
-			local success, err = pcall(function()
+			local dataRetrieval pcall(function()
 				banData = banService:GetAsync(player.UserId)
 			end)
-			
-			if not banData and success then			
+			if not banData and dataRetrieval then	
 				local timeAmount = duration and math.clamp(os.time() + duration, 0, 2147483647) or "permanent"
-				
 				local data = {
 					Reason = reason,
 					Duration = timeAmount
 				}
-				
-				local success, err = pcall(function()
+				local setBan = pcall(function()
 					banService:SetAsync(player.UserId, data)
 				end)
-				
-				if success then
-					player:Kick("You have been banned from this game for " .. string.lower(reason) .. ". This ban will be lifted on " .. getDateFromTime(timeAmount) .. " UTC.")
+				if setBan then
+					player:Kick(string.format(kickMessage, reason, getDateFromTime(duration)))
 				end
 			end
 		end
