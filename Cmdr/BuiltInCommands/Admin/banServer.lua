@@ -24,7 +24,7 @@ local months = {
 local function getDateFromTime(timeAmount)
 	if timeAmount == "permanent" then
 		return "December 31, 9999 at 11:59 PM UTC"
-	end	
+	end
 	local date = os.date("!*t", timeAmount)
 	local month = months[date.month]
 	local day = date.day
@@ -34,7 +34,7 @@ local function getDateFromTime(timeAmount)
 	if hour > 12 then
 		hour = hour - 12
 		isPM = true
-	end 
+	end
 	if hour < 10 then
 		hour = "0" .. hour
 	end
@@ -44,12 +44,12 @@ local function getDateFromTime(timeAmount)
 	return dateFormat .. " at " .. timeFormat .. " UTC."
 end
 
-local function returnFilteredReason(reason)
-	local reason = ""
+local function returnFilteredReason(player, reason)
+	local returnedReason = ""
 	pcall(function()
-		reason = textService:FilterStringAsync(reason, player.UserId, Enum.TextFilterContext.PublicChat) 
+		reason = textService:FilterStringAsync(reason, player.UserId, Enum.TextFilterContext.PublicChat)
 	end)
-	return string.lower(reason)
+	return string.lower(returnedReason)
 end
 
 players.PlayerAdded:Connect(function(player)
@@ -58,7 +58,7 @@ players.PlayerAdded:Connect(function(player)
 		banData = banService:GetAsync(player.UserId)
 	end)
 	if banData then
-		local reason = returnFilteredReason(banData.Reason)
+		local reason = returnFilteredReason(player, banData.Reason)
 		local duration = banData.Duration
 		if duration ~= "permanent" and duration - os.time() > 0 then
 			player:Kick(string.format(kickMessage, reason, getDateFromTime(duration)))
@@ -74,7 +74,7 @@ return function(context, fromPlayers, reason, duration)
 	for _, player in ipairs(fromPlayers) do
 		if reason then
 			local banData
-			local dataRetrieval pcall(function()
+			local dataRetrieval = pcall(function()
 				banData = banService:GetAsync(player.UserId)
 			end)
 			if not banData and dataRetrieval then	
@@ -87,7 +87,8 @@ return function(context, fromPlayers, reason, duration)
 					banService:SetAsync(player.UserId, data)
 				end)
 				if setBan then
-					player:Kick(string.format(kickMessage, reason, getDateFromTime(timeAmount)))
+					local filteredReason = returnFilteredReason(player, banData.Reason)
+					player:Kick(string.format(kickMessage, filteredReason, getDateFromTime(timeAmount)))
 				end
 			end
 		end
