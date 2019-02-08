@@ -78,7 +78,7 @@ return function(context, fromPlayers, reason, duration)
 				banData = banService:GetAsync(player.UserId)
 			end)
 			if not banData and dataRetrieval then	
-				local timeAmount = duration and math.clamp(os.time() + duration, 0, 2147483647) or "permanent"
+				local timeAmount = duration and math.min(os.time() + duration, 2147483647) or "permanent"
 				local data = {
 					Reason = reason,
 					Duration = timeAmount
