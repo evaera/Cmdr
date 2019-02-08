@@ -87,7 +87,7 @@ return function(context, fromPlayers, reason, duration)
 					banService:SetAsync(player.UserId, data)
 				end)
 				if setBan then
-					player:Kick(string.format(kickMessage, reason, getDateFromTime(duration)))
+					player:Kick(string.format(kickMessage, reason, getDateFromTime(timeAmount)))
 				end
 			end
 		end
