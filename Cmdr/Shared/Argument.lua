@@ -139,6 +139,10 @@ end
 
 --- Returns the final value of the argument.
 function Argument:GetValue()
+	if #self.RawValue == 0 and not self.Required and self.Object.Default ~= nil then
+		return self.Object.Default
+	end
+
 	if not self.Type.Listable then
 		return self:ParseValue(1)
 	end
