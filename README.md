@@ -630,7 +630,7 @@ Accepts an array and flips it into a dictionary, its values becoming keys in the
 #### `Util.Map(array: array<any>, callback: (value: any, index: number) => any): array<any>`
 Maps values from one array to a new array. Passes each value through the given callback and uses its return value in the same position in the new array.
 
-#### `Util.Each(callback: (value: any) => any, ...: any): any...
+#### `Util.Each(callback: (value: any) => any, ...: any): any...`
 Maps arguments #2-n through callback and returns all values as tuple.
 
 #### `Util.MakeFuzzyFinder(setOrContainer: array<string> | array<Instance> | array<EnumItem> | array<{Name: string}> | Instance): function(text: string, returnFirst?: boolean) => any`

@@ -2,6 +2,9 @@
 
 - Added `others` shorthand for players type
 
+# v1.1.5
+- Empty quoted sequences (`""`) can now be used to skip arguments which have default values
+
 # v1.1.4
 - Fix an issue where the `filter` argument of `RegisterDefaultCommands` was nonfunctional.
 
