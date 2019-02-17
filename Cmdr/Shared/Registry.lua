@@ -151,7 +151,7 @@ function Registry:RegisterCommandsIn (container, filter)
 				skippedServerScripts[commandScript] = true
 			end
 		else
-			self:RegisterCommandsIn(commandScript)
+			self:RegisterCommandsIn(commandScript, filter)
 		end
 	end
 
