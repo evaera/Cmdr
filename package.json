@@ -1,6 +1,6 @@
 {
   "name": "rbx-cmdr",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Cmdr is a fully extensible and type safe command console for Roblox developers.",
   "main": "./Cmdr/init.lua",
   "dependencies": {},
