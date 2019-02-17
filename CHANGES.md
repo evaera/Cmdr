@@ -2,6 +2,9 @@
 
 - Added `others` shorthand for players type
 
+# v1.1.4
+- Fix an issue where the `filter` argument of `RegisterDefaultCommands` was nonfunctional.
+
 # v1.1.3
 - Fix an issue where the arrow keys could be used to open auto complete when the menu is closed (#62)
 - Make AutoExec commands only run on the client (#61)
