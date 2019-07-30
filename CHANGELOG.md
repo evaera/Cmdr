@@ -1,4 +1,4 @@
-# Next
+# v1.2.0
 
 - Added `others` shorthand for players type
 - Added APIs for showing and hiding the Cmdr window explicitly
