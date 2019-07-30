@@ -209,35 +209,40 @@ Some default types automatically have a prefixed union type applied to them, bec
 
 Here is a list of automatic prefixed union types:
 
-- `players`: `players % teamPlayers`
-- `playerId`: `playerId # integer`
-- `playerIds`: `playerIds # integers`
-- `brickColor`: `brickColor % teamColor`
-- `brickColors`: `brickColors % teamColors`
-- `color3`: `color3 # hexColor3 ! brickColor3`
-- `color3s`: `color3s # hexColor3s ! brickColor3s`
+-------------------------
+| Type | Union |
+|------|-------|
+| `players` | `players % teamPlayers`
+| `playerId` | `playerId # integer`
+| `playerIds` | `playerIds # integers`
+| `brickColor` | `brickColor % teamColor`
+| `brickColors` | `brickColors % teamColors`
+| `color3` | `color3 # hexColor3 ! brickColor3`
+| `color3s` | `color3s # hexColor3s ! brickColor3s`
 
 ## Types
 
 By default, these types are available:
 
-- `string`, `strings`: `string`, `array<string>`
-- `number`, `numbers`: `number`, `array<number>`
-- `integer`, `integers`: `number`, `array<number>`
-- `boolean`, `booleans`: `boolean`, `array<boolean>`
-- `player`, `players`: `Player`, `array<Player>`
-- `team`, `teams`: `Team`, `array<Team>`
-- `teamPlayers`: `Player`, `array<Player>`
-- `command`, `commands`: `string`, `array<string>`
-- `userInput`, `userInputs`: `Enum.UserInputType | Enum.KeyCode`, `array<Enum.UserInputType | Enum.KeyCode>`
-- `brickColor`, `brickColors`: `BrickColor`, `array<BrickColor>`
-- `teamColor`, `teamColors`: `BrickColor`, `array<BrickColor>`
-- `color3`, `color3s`: `Color3`, `array<Color3>`
-- `hexColor3`, `hexColor3s`: `Color3`, `array<Color3>`
-- `brickColor3`, `brickColor3s`: `Color3`, `array<Color3>`
-- `vector3`, `vector3s`: `Vector3`, `array<Vector3>`
-- `vector2`, `vector2s`: `Vector2`, `array<Vector2>`
-- `duration`, `durations`: `number`, `array<number>`
+| Type name | Data type | Type name | Data type
+| --------- | --------- | --------- | ---------
+| `string` | `string` | `strings` | `array<string>`
+| `number` | `number` | `numbers` | `array<number>`
+| `integer` | `number` | `integers` | `array<number>`
+| `boolean` | `boolean` | `booleans` | `array<boolean>`
+| `player` | `Player` | `players` | `array<Player>`
+| `team` | `Team` | `teams` | `array<Team>`
+| || `teamPlayers` | `array<Player>`
+| `command` | `string` | `commands` | `array<string>`
+| `userInput` | `Enum.UserInputType | Enum.KeyCode` | `userInputs` | `array<Enum.UserInputType | Enum.KeyCode>`
+| `brickColor` | `BrickColor` | `brickColors` | `array<BrickColor>`
+| `teamColor` | `BrickColor` | `teamColors` | `array<BrickColor>`
+| `color3` | `Color3` | `color3s` | `array<Color3>`
+| `hexColor3` | `Color3` | `hexColor3s` | `array<Color3>`
+| `brickColor3` | `Color3` | `brickColor3s` | `array<Color3>`
+| `vector3` | `Vector3` | `vector3s` | `array<Vector3>`
+| `vector2` | `Vector2` | `vector2s` | `array<Vector2>`
+| `duration` | `number` | `durations` | `array<number>`
 
 Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
