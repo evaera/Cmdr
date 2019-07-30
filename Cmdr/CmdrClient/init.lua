@@ -59,6 +59,29 @@ function Cmdr:SetEnabled (enabled)
 	self.Enabled = enabled
 end
 
+--- Shows Cmdr window
+function Cmdr:Show ()
+	if not self.Enabled then
+		return
+	end
+
+	Interface.Window:Show()
+end
+
+--- Hides Cmdr window
+function Cmdr:Hide ()
+	Interface.Window:Hide()
+end
+
+--- Toggles Cmdr window
+function Cmdr:Toggle ()
+	if not self.Enabled then
+		return self:Hide()
+	end
+
+	Interface.Window:SetVisible(not Interface.Window:IsVisible())
+end
+
 --- Enables the "Mash to open" feature
 function Cmdr:SetMashToEnable(isEnabled)
 	self.MashToEnable = isEnabled

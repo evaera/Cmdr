@@ -441,6 +441,15 @@ Sets the place name label that appears when executing commands. This is useful f
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
 Sets whether or not Cmdr can be shown via the defined activation keys. Useful for when you want users to need to opt-in to show the console in a settings menu.
 
+#### `CmdrClient:Show(): void`
+Shows the Cmdr window explicitly. Does not do anything if Cmdr is not enabled.
+
+#### `CmdrClient:Hide(): void`
+Hides the Cmdr window.
+
+#### `CmdrClient:Toggle(): void`
+Toggles visibility of the Cmdr window. Will not show if Cmdr is not enabled.
+
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
 Sets the event handler for a certain network event. See Network Event Handlers above.
 
