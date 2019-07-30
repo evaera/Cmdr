@@ -456,6 +456,9 @@ Sets the event handler for a certain network event. See Network Event Handlers a
 #### `CmdrClient:SetMashToEnable(isEnabled: boolean): void`
 Enables the "Mash to Enable" feature, which requires the player to press the activation key 7 times in quick succession to open the Cmdr menu for the first time. This is not meant as a security feature, rather, as a way to ensure that the console is not accidentally obtrusive to regular players of your game.
 
+#### `CmdrClient:SetActivationUnlocksMouse(isEnabled: boolean): void`
+Sets whether or not the mouse behavior will be set to default upon the window being shown and restored when it is hidden.
+
 ### Properties
 
 #### `CmdrClient.Enabled: boolean`

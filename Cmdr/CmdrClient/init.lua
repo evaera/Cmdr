@@ -17,6 +17,7 @@ local Cmdr do
 		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
 		Enabled = true;
 		MashToEnable = false;
+		ActivationUnlocksMouse = false;
 		PlaceName = "Cmdr";
 		Util = Util;
 		Events = {};
@@ -57,6 +58,11 @@ end
 --- Sets whether or not the console is enabled
 function Cmdr:SetEnabled (enabled)
 	self.Enabled = enabled
+end
+
+--- Sets if activation will free the mouse.
+function Cmdr:SetActivationUnlocksMouse (enabled)
+	self.ActivationUnlocksMouse = enabled
 end
 
 --- Shows Cmdr window
