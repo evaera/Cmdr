@@ -1,3 +1,9 @@
+# v1.2.0
+
+- Added `others` shorthand for players type
+- Added APIs for showing and hiding the Cmdr window explicitly
+- Added `CmdrClient:SetActivationUnlocksMouse` for freeing mouse upon activation
+
 # v1.1.5
 - Empty quoted sequences (`""`) can now be used to skip arguments which have default values
 

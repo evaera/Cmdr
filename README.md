@@ -441,11 +441,23 @@ Sets the place name label that appears when executing commands. This is useful f
 #### `CmdrClient:SetEnabled(isEnabled: boolean): void`
 Sets whether or not Cmdr can be shown via the defined activation keys. Useful for when you want users to need to opt-in to show the console in a settings menu.
 
+#### `CmdrClient:Show(): void`
+Shows the Cmdr window explicitly. Does not do anything if Cmdr is not enabled.
+
+#### `CmdrClient:Hide(): void`
+Hides the Cmdr window.
+
+#### `CmdrClient:Toggle(): void`
+Toggles visibility of the Cmdr window. Will not show if Cmdr is not enabled.
+
 #### `CmdrClient:HandleEvent(event: string, handler: function(...: any) => void): void`
 Sets the event handler for a certain network event. See Network Event Handlers above.
 
 #### `CmdrClient:SetMashToEnable(isEnabled: boolean): void`
 Enables the "Mash to Enable" feature, which requires the player to press the activation key 7 times in quick succession to open the Cmdr menu for the first time. This is not meant as a security feature, rather, as a way to ensure that the console is not accidentally obtrusive to regular players of your game.
+
+#### `CmdrClient:SetActivationUnlocksMouse(isEnabled: boolean): void`
+Sets whether or not the mouse behavior will be set to default upon the window being shown and restored when it is hidden.
 
 ### Properties
 
