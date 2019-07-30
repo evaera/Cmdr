@@ -234,7 +234,7 @@ By default, these types are available:
 | `team` | `Team` | `teams` | `array<Team>`
 | || `teamPlayers` | `array<Player>`
 | `command` | `string` | `commands` | `array<string>`
-| `userInput` | `Enum.UserInputType | Enum.KeyCode` | `userInputs` | `array<Enum.UserInputType | Enum.KeyCode>`
+| `userInput` | `Enum.UserInputType \| Enum.KeyCode` | `userInputs` | `array<Enum.UserInputType \| Enum.KeyCode>`
 | `brickColor` | `BrickColor` | `brickColors` | `array<BrickColor>`
 | `teamColor` | `BrickColor` | `teamColors` | `array<BrickColor>`
 | `color3` | `Color3` | `color3s` | `array<Color3>`
