@@ -85,9 +85,19 @@ function Window:SetVisible(visible)
 	if visible then
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
+
+		if self.Cmdr.ActivationUnlocksMouse then
+			self.PreviousMouseBehavior = UserInputService.MouseBehavior
+			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		end
 	else
 		Entry.TextBox:ReleaseFocus()
 		self.AutoComplete:Hide()
+
+		if self.PreviousMouseBehavior then
+			UserInputService.MouseBehavior = self.PreviousMouseBehavior
+			self.PreviousMouseBehavior = nil
+		end
 	end
 end
 

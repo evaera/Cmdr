@@ -1,0 +1,29 @@
+{
+	"name": "Cmdr",
+	"servePort": 8000,
+	"tree": {
+		"$className": "DataModel",
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+			"Repository": {
+				"$ignoreUnknownInstances": true,
+				"$className": "Folder",
+				"Vendor": {
+					"$className": "Folder",
+					"$ignoreUnknownInstances": true,
+					"Cmdr": {
+						"$className": "Folder",
+						"$ignoreUnknownInstances": true,
+						"Server": {
+							"$className": "Folder",
+							"$ignoreUnknownInstances": true,
+							"Cmdr": {
+								"$path": "./Cmdr"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

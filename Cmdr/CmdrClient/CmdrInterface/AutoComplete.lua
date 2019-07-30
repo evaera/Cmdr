@@ -10,7 +10,7 @@ return function (Cmdr)
 	}
 
 	local Util = Cmdr.Util
-	local Shorthands = Util.MakeDictionary({"me", "all", ".", "*"})
+	local Shorthands = Util.MakeDictionary({"me", "all", ".", "*", "others"})
 
 	local Gui = Player:WaitForChild("PlayerGui"):WaitForChild("Cmdr"):WaitForChild("Autocomplete")
 	local AutoItem = Gui:WaitForChild("TextButton")
