@@ -1,5 +1,5 @@
 -- Here be dragons
--- luacheck: ignore 212
+-- luacheck: ignore 224
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local TextService = game:GetService("TextService")
@@ -39,24 +39,24 @@ end
 
 --- Recalculate the window height
 function Window:UpdateWindowHeight()
-	local lineHeight = LINE_HEIGHT
+	local windowHeight = LINE_HEIGHT
 
 	for _, child in pairs(Gui:GetChildren()) do
 		if child:IsA("GuiObject") then
-			lineHeight = lineHeight + child.Size.Y.Offset
+			windowHeight = windowHeight + child.Size.Y.Offset
 		end
 	end
 
-	Gui.CanvasSize = UDim2.new(Gui.CanvasSize.X.Scale, Gui.CanvasSize.X.Offset, 0, lineHeight)
+	Gui.CanvasSize = UDim2.new(Gui.CanvasSize.X.Scale, Gui.CanvasSize.X.Offset, 0, windowHeight)
 	Gui.Size =
 		UDim2.new(
 		Gui.Size.X.Scale,
 		Gui.Size.X.Offset,
 		0,
-		lineHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or lineHeight
+		windowHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or windowHeight
 	)
 
-	Gui.CanvasPosition = Vector2.new(0, math.clamp(lineHeight - 300, 0, math.huge))
+	Gui.CanvasPosition = Vector2.new(0, math.clamp(windowHeight - 300, 0, math.huge))
 end
 
 --- Add a line to the command bar
