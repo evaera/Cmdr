@@ -2,6 +2,7 @@
 -- luacheck: ignore 212
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
+local TextService = game:GetService("TextService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
@@ -38,26 +39,24 @@ end
 
 --- Recalculate the window height
 function Window:UpdateWindowHeight()
-	local numLines = 0
+	local lineHeight = LINE_HEIGHT
 
 	for _, child in pairs(Gui:GetChildren()) do
 		if child:IsA("GuiObject") then
-			numLines = numLines + 1
+			lineHeight = lineHeight + child.Size.Y.Offset
 		end
 	end
 
-	local windowHeight = (numLines * LINE_HEIGHT) + 20
-
-	Gui.CanvasSize = UDim2.new(Gui.CanvasSize.X.Scale, Gui.CanvasSize.X.Offset, 0, windowHeight)
+	Gui.CanvasSize = UDim2.new(Gui.CanvasSize.X.Scale, Gui.CanvasSize.X.Offset, 0, lineHeight)
 	Gui.Size =
 		UDim2.new(
 		Gui.Size.X.Scale,
 		Gui.Size.X.Offset,
 		0,
-		windowHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or windowHeight
+		lineHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or lineHeight
 	)
 
-	Gui.CanvasPosition = Vector2.new(0, math.clamp(windowHeight - 300, 0, math.huge))
+	Gui.CanvasPosition = Vector2.new(0, math.clamp(lineHeight - 300, 0, math.huge))
 end
 
 --- Add a line to the command bar
@@ -67,8 +66,21 @@ function Window:AddLine(text, color)
 		return
 	end
 
+	local str = self.Cmdr.Util.EmulateTabstops(text or "nil", 8)
 	local line = Line:Clone()
-	line.Text = self.Cmdr.Util.EmulateTabstops(text or "nil", 8)
+	line.Size = 
+		UDim2.new(
+		line.Size.X.Scale, 
+		line.Size.X.Offset, 
+		0, 
+		TextService:GetTextSize(
+			str, 
+			line.TextSize, 
+			line.Font, 
+			Vector2.new(Gui.UIListLayout.AbsoluteContentSize.X, math.huge)
+		).Y + (LINE_HEIGHT - line.TextSize)
+	)
+	line.Text = str
 	line.TextColor3 = color or line.TextColor3
 	line.Parent = Gui
 end
