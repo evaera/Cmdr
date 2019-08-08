@@ -27,8 +27,7 @@ stds.roblox = {
 		math = {
 			fields = {
 				"clamp",
-				"sign",
-				"huge"
+				"sign"
 			}
 		},
 
