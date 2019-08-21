@@ -19,7 +19,7 @@
 - Embedded commands: dynamically use the output of an inner command when running a command.
 
 <p align="center">
-  <img src="https://i.eryn.io/tx29vhqbla.gif" alt="Cmdr Demo" />
+  <a href="https://giant.gfycat.com/HatefulTanAzurewingedmagpie.mp4"><img src="https://thumbs.gfycat.com/HatefulTanAzurewingedmagpie-size_restricted.gif" alt="Demo video" /></a>
 </p>
 
 Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard admin commands (teleport, kill, kick), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
