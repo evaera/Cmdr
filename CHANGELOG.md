@@ -1,4 +1,4 @@
-# Next
+# v1.2.1
 
 - Fix bug where Data did not get sent correctly (#85)
 
