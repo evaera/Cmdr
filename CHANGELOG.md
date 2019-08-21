@@ -1,3 +1,7 @@
+# Next
+
+- Fix bug where Data did not get sent correctly (#85)
+
 # v1.2.0
 
 - Added `others` shorthand for players type

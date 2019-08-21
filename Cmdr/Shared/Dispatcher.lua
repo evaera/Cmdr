@@ -92,7 +92,9 @@ function Dispatcher:Send (text, data)
 		error("Dispatcher:Send can only be called from the client.")
 	end
 
-	return self.Cmdr.RemoteFunction:InvokeServer(text, data)
+	return self.Cmdr.RemoteFunction:InvokeServer(text, {
+		Data = data
+	})
 end
 
 --- Invoke a command programmatically as the local user e.g. from a settings menu

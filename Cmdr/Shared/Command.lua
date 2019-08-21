@@ -147,7 +147,7 @@ function Command:GetData ()
 		return self.Data
 	end
 
-	if self.Object.Data then
+	if self.Object.Data and not IsServer then
 		self.Data = self.Object.Data(self)
 	end
 
