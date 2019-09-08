@@ -1,0 +1,105 @@
+---
+title: Commands
+---
+
+# Commands
+
+No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling `Cmdr:RegisterDefaultCommands()`. See [Default Commands](#default-commands) for a list.
+
+Custom commands are defined in ModuleScripts that return a single table.
+
+```lua
+-- Teleport.lua, inside your commands folder as defined above.
+return {
+	Name = "teleport";
+	Aliases = {"tp"};
+	Description = "Teleports a player or set of players to one target.";
+	Group = "Admin";
+	Args = {
+		{
+			Type = "players";
+			Name = "from";
+			Description = "The players to teleport";
+		},
+		{
+			Type = "player";
+			Name = "to";
+			Description = "The player to teleport to"
+		}
+	};
+}
+```
+
+Check out the <ApiLink to="Registry.CommandDefinition">API reference</ApiLink> full details.
+
+The implementation should be in a separate ModuleScript. Cmdr will never deliver this script to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
+
+It is passed the CommandContext for this command, which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API section below for more details. After the context, any arguments you defined in the command definition will be passed in order.
+
+```lua
+-- TeleportServer.lua
+
+-- These arguments are guaranteed to exist and be correctly typed.
+return function (context, fromPlayers, toPlayer)
+  if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
+    local position = toPlayer.Character.HumanoidRootPart.CFrame
+
+    for _, player in ipairs(fromPlayers) do
+      if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = position
+      end
+    end
+
+    return "Teleported players."
+  end
+
+  return "Target player has no character."
+end
+```
+
+Take a gander at the [built-in commands](https://github.com/evaera/Cmdr/tree/master/Cmdr/BuiltInCommands) for more examples.
+
+### Default Commands
+If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
+
+Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`
+
+Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`), `position`
+
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`
+
+Group: `Help`: `help`
+
+#### Registering a subset of the default commands
+If you only want some, but not all, of the default commands, you can restrict the commands that you register in two ways.
+
+1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr:RegisterDefaultCommands({"Help", "DefaultUtil"})`
+2. Pass a filter function that accepts a CommandDefinition and either returns `true` or `false`:
+
+```lua
+Cmdr:RegisterDefaultCommands(function(cmd)
+	return #cmd.Name < 6 -- This is absurd... but possible!
+end)
+```
+
+### Prefixed Union Types
+An argument can be allowed to accept a different type when starting with a specific prefix. The most common example of this is with the `players` type, which when prefixed with % allows the user to select players based on team, rather than name.
+
+These can be defined on a per-argument basis, so that your commands can accept many types of arguments in a single slot. Under the Args section of command definition, each argument has a `Type` key.  For arguments that accept only a single type, it would look like `Type = "string"`. If we also wanted to accept a number when the user prefixes the argument with `#`, we could change it to: `Type = "string # number"`. Then, if the user provided `#33` for this argument, your function would be delivered the number value `33` in that position.
+
+This is infinitely expandable, and you can include as many prefixed union types as you wish: `Type = "string # number @ player % team"`, etc. Remember that there must be a space between the symbol and the type.
+
+Some default types automatically have a prefixed union type applied to them, because they would both resolve to the same type in the end. For example, whenever you define an argument of type `players`, under the hood this is perceived as `players % teamPlayers`. (`teamPlayers` is a type that matches based on team name, but resolves to an array of Players: the same thing that the normal `players` type would resolve with.)
+
+Here is a list of automatic prefixed union types:
+
+-------------------------
+| Type | Union |
+|------|-------|
+| `players` | `players % teamPlayers`
+| `playerId` | `playerId # integer`
+| `playerIds` | `playerIds # integers`
+| `brickColor` | `brickColor % teamColor`
+| `brickColors` | `brickColors % teamColors`
+| `color3` | `color3 # hexColor3 ! brickColor3`
+| `color3s` | `color3s # hexColor3s ! brickColor3s`

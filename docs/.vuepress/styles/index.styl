@@ -1,0 +1,37 @@
+body .navbar .site-name {
+  display: none;
+}
+
+body .navbar .links {
+  display: grid;
+  grid: 1fr / 1fr;
+  grid-gap: 1rem;
+  grid-template-areas: "left right";
+}
+
+body .navbar .search-box {
+  grid-area: right;
+  margin-right: 0;
+}
+
+body .navbar nav {
+  grid-area: left;
+}
+
+// body main.page {
+//   display: grid;
+//   grid: 1fr 1fr / 8fr 1fr;
+//   grid-template-areas: "left right" "bottom bottom";
+// }
+
+// .theme-default-content {
+//   grid-area: left;
+// }
+
+// body footer {
+//   grid-area: bottom;
+// }
+
+// .page-nav {
+//   grid-area: bottom;
+// }
