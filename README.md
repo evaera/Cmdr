@@ -3,10 +3,8 @@
 	<br>
 	<a href="https://discord.gg/g5PdMxh"><img src="https://img.shields.io/discord/425800792679645204.svg?label=discord" /></a>
 	<a href="https://www.npmjs.com/package/rbx-cmdr"><img src="https://badge.fury.io/js/rbx-cmdr.svg"></a>
-	<br><br>
+	<p><a href="https://eryn.io/Cmdr/">View Docs</p>
 </div>
-
-> Need help? Have a suggestion, comment, or problem? Join the [Discord server](https://discord.gg/g5PdMxh).
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
