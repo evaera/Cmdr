@@ -141,7 +141,7 @@ docs:
     - name: SplitPrioritizedDelimeter
       static: true
       params: "text: string, delimters: array<string>"
-      returns: array,string>
+      returns: array<string>
       desc: Splits a string by a single delimeter chosen from the given set. The first matching delimeter from the set becomes the split character.
     - name: SubstituteArgs
       static: true
