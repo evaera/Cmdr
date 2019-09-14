@@ -14,7 +14,9 @@
   "devDependencies": {
     "gh-pages": "^2.1.1",
     "markdown-it-attrs": "^3.0.1",
-    "vuepress": "^1.0.3"
+    "vue-tabs-component": "^1.5.0",
+    "vuepress": "^1.0.3",
+    "vuepress-plugin-tabs": "^0.2.2"
   },
   "dependencies": {
     "node-balanced": "0.0.14",

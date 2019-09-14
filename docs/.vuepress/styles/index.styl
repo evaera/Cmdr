@@ -1,3 +1,5 @@
+@require '~vuepress-plugin-tabs/dist/themes/default.styl'
+
 body .navbar .site-name {
   display: none;
 }
@@ -17,6 +19,12 @@ body .navbar .search-box {
 body .navbar nav {
   grid-area: left;
 }
+
+.tabs-component-tab
+  padding 5px 10px
+
+  a:hover
+    text-decoration none !important
 
 // body main.page {
 //   display: grid;

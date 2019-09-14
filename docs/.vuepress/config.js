@@ -11,6 +11,7 @@ module.exports = () => ({
   base: '/Cmdr/',
 
   plugins: [
+    'tabs',
     ['api-docs', {
       defaults: {
         returns: ['void'],
