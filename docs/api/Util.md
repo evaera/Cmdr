@@ -15,6 +15,7 @@ docs:
       static: true
       desc: Accepts an array and flips it into a dictionary, its values becoming keys in the dictionary with the value of `true`.
     - name: Map
+      static: true
       desc: Maps values from one array to a new array. Passes each value through the given callback and uses its return value in the same position in the new array.
       params:
         - name: array
