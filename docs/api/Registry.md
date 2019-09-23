@@ -80,7 +80,7 @@ docs:
           type: boolean?
           desc: If this is present and set to `true`, then the user can run the command without filling out this value. The argument will be sent to your commands as `nil`.
         Default:
-          type: boolean?
+          type: any?
           desc: If present, the argument will be optional and if the user doesn't supply a value, your function will receive whatever you set this to. Default being set implies Optional = true, so Optional can be omitted.
 
     - name: CommandDefinition
