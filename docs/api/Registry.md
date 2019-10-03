@@ -10,6 +10,9 @@ docs:
         DisplayName:
           type: string
           desc: Optionally overrides the user-facing name of this type in the autocomplete menu. If omitted, the registered name of this type will be used.
+        Prefixes:
+          type: string
+          desc: String containing default <a href="https://eryn.io/Cmdr/guide/Commands.html#prefixed-union-types">Prefixed Union Types</a> for this type. This property should omit the initial type name, so this string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`.
         Transform:
           kind: union
           desc: "Transform is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (`Validate`, `Autocomplete`, and `Parse`)."
@@ -134,12 +137,36 @@ docs:
           type: string
         - name: typeDefinition
           type: TypeDefinition
+    - name: RegisterTypePrefix
+      since: v1.3.0
+      desc: Registers a <a href="https://eryn.io/Cmdr/guide/Commands.html#prefixed-union-types">Prefixed Union Type</a> string for the given type. If there are already type prefixes for the given type name, they will be **concatenated**. This allows you to contribute prefixes for default types, like `players`.
+      params:
+        - name: name
+          type: string
+        - name: union
+          type: string
+          desc: The string should omit the initial type name, so this string should begin with a prefix character, e.g. `"# integer ! boolean"`.
+    - name: RegisterTypeAlias
+      since: v1.3.0
+      desc: "Allows you to register a name which will be expanded into a longer type which will can be used as command argument types. For example, if you register the alias `\"stringOrNumber\"` it could be interpreted as `\"string # number\"` when used."
+      params:
+        - name: name
+          type: string
+        - name: union
+          type: string
+          desc: "The string should *include* the initial type name, e.g. `\"string # integer ! boolean\"`."
     - name: GetType
       desc: Returns a type definition with the given name, or nil if it doesn't exist.
       params:
         - name: name
           type: string
       returns: TypeDefinition?
+    - name: GetTypeName
+      desc: Returns a type name taking aliases into account. If there is no alias, the `name` parameter is simply returned as a pass through.
+      params:
+        - name: name
+          type: string
+      returns: string
     - name: RegisterHooksIn
       tags: [ 'server only' ]
       desc: Registers all hooks from within a container on both the server and the client. If you want to add a hook to the server or the client only (not on both), then you should use the [[Registry.RegisterHook]] method directly by requiring Cmdr in a server or client script.

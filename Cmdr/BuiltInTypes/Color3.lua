@@ -1,6 +1,7 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local color3Type = Util.MakeSequenceType({
+	Prefixes = "# hexColor3 ! brickCOlor3";
 	ValidateEach = function(value, i)
 		if value == nil then
 			return false, ("Invalid or missing number at position %d in Color3 type."):format(i)
@@ -42,7 +43,9 @@ local hexColor3Type = {
 
 return function (cmdr)
 	cmdr:RegisterType("color3", color3Type)
-	cmdr:RegisterType("color3s", Util.MakeListableType(color3Type))
+	cmdr:RegisterType("color3s", Util.MakeListableType(color3Type, {
+		Prefixes = "# hexColor3s ! brickColor3s"
+	}))
 
 	cmdr:RegisterType("hexColor3", hexColor3Type)
 	cmdr:RegisterType("hexColor3s", Util.MakeListableType(hexColor3Type))

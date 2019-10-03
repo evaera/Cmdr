@@ -246,7 +246,7 @@ function Util.ParsePrefixedUnionType(typeValue, rawValue)
 end
 
 --- Creates a listable type from a singlular type
-function Util.MakeListableType(type)
+function Util.MakeListableType(type, override)
 	local listableType = {
 		Listable = true,
 		Transform = type.Transform,
@@ -256,6 +256,12 @@ function Util.MakeListableType(type)
 			return {type.Parse(...)}
 		end
 	}
+
+	if override then
+		for key, value in pairs(override) do
+			listableType[key] = value
+		end
+	end
 
 	return listableType
 end
@@ -388,6 +394,8 @@ function Util.MakeSequenceType(options)
 	end
 
 	return {
+		Prefixes = options.Prefixes;
+
 		Transform = function (text)
 			return Util.Map(Util.SplitPrioritizedDelimeter(text, {",", "%s"}), function(value)
 				return options.TransformEach(value)

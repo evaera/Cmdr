@@ -1,17 +1,3 @@
-local TYPE_DEFAULTS = {
-	-- Make all `players` types also be able to match by team
-	players = "players % teamPlayers";
-
-	playerId = "playerId # integer";
-	playerIds = "playerIds # integers";
-
-	brickColor = "brickColor % teamColor";
-	brickColors = "brickColors % teamColors";
-
-	color3 = "color3 # hexColor3 ! brickColor3";
-	color3s = "color3s # hexColor3s ! brickColor3s";
-}
-
 local Util = require(script.Parent.Util)
 
 local Argument = {}
@@ -33,7 +19,8 @@ function Argument.new (command, argumentObject, value)
 	}
 
 	local parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(
-		TYPE_DEFAULTS[argumentObject.Type] or argumentObject.Type, value
+		command.Cmdr.Registry:GetTypeName(argumentObject.Type),
+		value
 	)
 
 	self.Type = command.Dispatcher.Registry:GetType(parsedType)

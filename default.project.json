@@ -1,6 +1,5 @@
 {
 	"name": "Cmdr",
-	"servePort": 8000,
 	"tree": {
 		"$className": "DataModel",
 		"ServerScriptService": {

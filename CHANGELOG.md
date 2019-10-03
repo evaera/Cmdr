@@ -1,3 +1,10 @@
+# v1.3.0
+
+- Add `Prefixes` to Types
+- Add `Registry:RegisterTypePrefix`
+- Add `Registry:RegisterTypeAlias`
+- Add `override` paramter to `Util.MakeListableType`
+
 # v1.2.2
 
 - Make new lines work in command window. (#84)

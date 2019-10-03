@@ -4,10 +4,11 @@ local Util = require(script.Parent.Util)
 
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
-	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce"});
+	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce", "Prefixes"});
 	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "AutoExec", "Description", "Args", "Run", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional", "Default"});
 	Types = {};
+	TypeAliases = {};
 	Commands = {};
 	CommandsArray = {};
 	Cmdr = nil;
@@ -49,6 +50,23 @@ function Registry:RegisterType (name, typeObject)
 	typeObject.DisplayName = typeObject.DisplayName or name
 
 	self.Types[name] = typeObject
+
+	if typeObject.Prefixes then
+		self:RegisterTypePrefix(name, typeObject.Prefixes)
+	end
+end
+
+function Registry:RegisterTypePrefix (name, union)
+	if not self.TypeAliases[name] then
+		self.TypeAliases[name] = name
+	end
+
+	self.TypeAliases[name] = ("%s %s"):format(self.TypeAliases[name], union)
+end
+
+function Registry:RegisterTypeAlias (name, alias)
+	assert(self.TypeAliases[name] == nil, ("Type alias %s already exists!"):format(alias))
+	self.TypeAliases[name] = alias
 end
 
 --- Helper method that registers types from all module scripts in a specific container.
@@ -200,6 +218,11 @@ end
 --- Gets a type definition by name.
 function Registry:GetType (name)
 	return self.Types[name]
+end
+
+--- Returns a type name, parsing aliases.
+function Registry:GetTypeName (name)
+	return self.TypeAliases[name] or name
 end
 
 --- Adds a hook to be called when any command is run

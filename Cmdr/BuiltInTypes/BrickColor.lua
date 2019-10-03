@@ -35,6 +35,8 @@ local brickColorNames = {
 local brickColorFinder = Util.MakeFuzzyFinder(brickColorNames)
 
 local brickColorType =  {
+	Prefixes = "% teamColor";
+
     Transform = function(text)
         local brickColors = {}
         for i, name in pairs(brickColorFinder(text)) do
@@ -68,7 +70,9 @@ local brickColor3Type = {
 
 return function(registry)
     registry:RegisterType("brickColor", brickColorType)
-	registry:RegisterType("brickColors", Util.MakeListableType(brickColorType))
+	registry:RegisterType("brickColors", Util.MakeListableType(brickColorType, {
+		Prefixes = "% teamColors"
+	}))
 
 	registry:RegisterType("brickColor3", brickColor3Type)
     registry:RegisterType("brickColor3s", Util.MakeListableType(brickColor3Type))

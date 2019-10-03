@@ -57,6 +57,7 @@ local playerType = {
 
 local playersType = {
 	Listable = true;
+	Prefixes = "% teamPlayers";
 
 	Transform = function (text, executor)
 		local shorthand = CheckShorthands(text, executor, ShorthandSingle, ShorthandMultiple)
