@@ -162,6 +162,7 @@ docs:
           type: string
       returns: TypeDefinition?
     - name: GetTypeName
+      since: v1.3.0
       desc: Returns a type name taking aliases into account. If there is no alias, the `name` parameter is simply returned as a pass through.
       params:
         - name: name

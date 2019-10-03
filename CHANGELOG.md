@@ -3,7 +3,7 @@
 - Add `Prefixes` to Types
 - Add `Registry:RegisterTypePrefix`
 - Add `Registry:RegisterTypeAlias`
-- Add `override` paramter to `Util.MakeListableType`
+- Add `override` parameter to `Util.MakeListableType`
 
 # v1.2.2
 
