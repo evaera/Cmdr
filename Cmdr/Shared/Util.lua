@@ -486,4 +486,19 @@ function Util.GetInstanceFromStringPath(stringPath)
 	return currentObjectReference
 end
 
+--- Returns the TRUE full pathname of a given instance. (i.e. Workspace will return as "game.Workspace" instead of just "Workspace")
+function Util.GetInstanceFullName(Instance)
+	local FullName = ""
+
+	if Instance.Parent == game then
+		FullName = "game."..Instance.Name
+	elseif Instance == game then
+		FullName = "game"
+	else
+		FullName = "game."..Instance:GetFullName()
+	end
+
+	return FullName
+end
+
 return Util
