@@ -465,4 +465,25 @@ function Util.EmulateTabstops(text, tabWidth)
 	return result
 end
 
+--- Returns an instance from the given string path (i.e. "Workspace.Baseplate")
+function Util.GetInstanceFromStringPath(stringPath)
+	local currentObjectReference = game
+
+	if stringPath == "game" then
+		return game
+	else
+		stringPath = stringPath:gsub("^game%.", "")
+	end
+
+	for _, objectName in pairs(Util.SplitStringSimple(stringPath, ".")) do
+		if currentObjectReference:FindFirstChild(objectName) ~= nil then
+			currentObjectReference = currentObjectReference[objectName]
+		else
+			return nil
+		end
+	end
+
+	return currentObjectReference
+end
+
 return Util
