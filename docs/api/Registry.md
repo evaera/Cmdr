@@ -238,7 +238,7 @@ docs:
       desc: Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first).
       params:
         - name: hookName
-          type: string
+          type: "BeforeRun" | "AfterRun"
         - name: callback
           type:
             kind: function
