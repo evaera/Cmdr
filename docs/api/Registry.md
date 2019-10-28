@@ -237,8 +237,8 @@ docs:
     - name: RegisterHook
       desc: Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first).
       params:
-        - name: "BeforeRun" | "AfterRun"
-          type: string
+        - name: hookName
+          type: "BeforeRun" | "AfterRun"
         - name: callback
           type:
             kind: function
