@@ -18,7 +18,7 @@ local Cmdr do
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;
-		InputLabel = "Cmdr";
+		Prompt = "Cmdr";
 		Util = Util;
 		Events = {};
 	}, {
@@ -49,16 +49,16 @@ function Cmdr:SetActivationKeys (keysArray)
 	self.ActivationKeys = Util.MakeDictionary(keysArray)
 end
 
---- Sets the input label on the interface
-function Cmdr:SetInputLabel (label)
-	self.InputLabel = label
+--- Sets the prompt on the interface
+function Cmdr:SetPrompt (prompt)
+	self.Prompt = prompt
 	Interface.Window:UpdateLabel()
 end
 
 --- Sets the place name label on the interface
 --! Legacy method, kept for backwards compatibility
-function Cmdr:SetPlaceName (label)
-	self:SetInputLabel(label)
+function Cmdr:SetPlaceName (placeName)
+	self:SetPrompt(placeName)
 end
 
 --- Sets whether or not the console is enabled

@@ -10,8 +10,8 @@ docs:
       params:
         - name: keys
           type: array<Enum.KeyCode>
-    - name: SetInputLabel
-      desc: Sets the input label that appears when executing commands. This is useful for a quick way to tell what game you're playing in a universe game, and what your current working instance is.
+    - name: SetPrompt
+      desc: Sets the prompt that appears when executing commands. This is useful for a quick way to tell what game you're playing in a universe game, and what your current working instance is.
       params:
         - name: labelText
           type: string
@@ -47,7 +47,7 @@ docs:
   properties:
     - name: Enabled
       type: boolean
-    - name: InputLabel
+    - name: Prompt
       type: string
     - name: ActivationKeys
       type: dictionary<Enum.KeyCode, true>

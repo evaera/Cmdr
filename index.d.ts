@@ -118,11 +118,11 @@ declare class CmdrClient extends Cmdr {
   static SetActivationKeys (keys: Enum.KeyCode[]): void
   static SetMashToEnable (isEnabled: boolean): void
   static SetPlaceName (labelText: string): void
-  static SetInputLabel (labelText: string): void
+  static SetPrompt (labelText: string): void
   static SetEnabled (isEnabled: boolean): void
   static HandleEvent (event: string, handler: (...args: any[]) => void): void
   static Enabled: boolean
-  static InputLabel: string
+  static Prompt: string
   static ActivationKeys: Map<Enum.KeyCode, true>
 }
 
