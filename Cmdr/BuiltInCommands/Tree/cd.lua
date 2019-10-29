@@ -31,6 +31,8 @@ return {
 			else -- Relative path specified
 				if stringPath == ".." then -- Move up an Instance
 					Instance = treeView.WorkingInstance.Parent
+				elseif string.split(stringPath,".")[1] == "." then --Instance with reserved word specified
+					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance).."."..stringPath:sub(1))
 				else
 					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance).."."..stringPath)
 				end
