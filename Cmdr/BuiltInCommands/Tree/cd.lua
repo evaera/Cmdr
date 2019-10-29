@@ -40,7 +40,7 @@ return {
 				return ("'%s' is not recognized as a valid Instance."):format(stringPath)
 			else
 				treeView.WorkingInstance = Instance
-				context.Cmdr:SetPlaceName(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(Instance)))
+				context.Cmdr:SetInputLabel(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(Instance)))
 				return "Directory changed to "..util.GetInstanceFullName(treeView.WorkingInstance)
 			end
 		end
