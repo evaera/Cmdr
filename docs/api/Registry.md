@@ -14,52 +14,57 @@ docs:
           type: string
           desc: String containing default <a href="https://eryn.io/Cmdr/guide/Commands.html#prefixed-union-types">Prefixed Union Types</a> for this type. This property should omit the initial type name, so this string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`.
         Transform:
-          kind: union
           desc: "Transform is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (`Validate`, `Autocomplete`, and `Parse`)."
-          types:
-            - nil
-            - kind: function
-              params: "rawText: string, executor: Player"
-              returns: T
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "rawText: string, executor: Player"
+                returns: T
         Validate:
           desc: |
             The `Validate` function is passed whatever is returned from the Transform function (or the raw value if there is no Transform function). If the value is valid for the type, it should return `true`. If it the value is invalid, it should return two values: false, and a string containing an error message.
 
             If this function isn't present, anything will be considered valid.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns:
-                - boolean
-                - string?
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns:
+                  - boolean
+                  - string?
         ValidateOnce:
-          kind: union
           desc: |
             This function works exactly the same as the normal `Validate` function, except it only runs once (after the user presses Enter). This should only be used if the validation process is relatively expensive or needs to yield. For example, the PlayerId type uses this because it needs to call `GetUserIdFromNameAsync` in order to validate.
 
             For the vast majority of types, you should just use `Validate` instead.
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns:
-                - boolean
-                - string?
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns:
+                  - boolean
+                  - string?
         Autocomplete:
           desc: Should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns: array<string>
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns: array<string>
         Parse:
           desc: Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
-          kind: function
-          params: "value: T"
-          returns: any
+          type:
+            kind: function
+            params: "value: T"
+            returns: any
         Listable:
           type: boolean?
           desc: |
@@ -238,7 +243,7 @@ docs:
       desc: Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first).
       params:
         - name: hookName
-          type: "BeforeRun" | "AfterRun"
+          type: "\"BeforeRun\" | \"AfterRun\""
         - name: callback
           type:
             kind: function
