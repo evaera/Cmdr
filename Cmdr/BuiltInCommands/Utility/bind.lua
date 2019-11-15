@@ -24,7 +24,7 @@ return {
 		}
 	};
 
-	Run = function(context, bind, command, arguments)
+	ClientRun = function(context, bind, command, arguments)
 		local binds = context:GetStore("CMDR_Binds")
 
 		command = command .. " " .. arguments

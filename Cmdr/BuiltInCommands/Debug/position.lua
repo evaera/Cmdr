@@ -14,7 +14,7 @@ return {
 		}
 	};
 
-	Run = function(_, player)
+	ClientRun = function(_, player)
 		local character = player.Character
 
 		if not character or not character:FindFirstChild("HumanoidRootPart") then

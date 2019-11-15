@@ -16,9 +16,10 @@ return {
 		},
 	};
 
-	Run = function(context, name, commandString)
+	ClientRun = function(context, name, commandString)
 		context.Cmdr.Registry:RegisterCommandObject(
-			context.Cmdr.Util.MakeAliasCommand(name, commandString)
+			context.Cmdr.Util.MakeAliasCommand(name, commandString),
+			true
 		)
 
 		return ("Created alias %q"):format(name)

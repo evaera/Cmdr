@@ -106,23 +106,35 @@ docs:
         Group:
           type: any?
           desc: Optional, can be be any value you wish. This property is intended to be used in hooks, so that you can categorize commands and decide if you want a specific user to be able to run them or not.
-        Args: array<CommandArgument>
+        Args:
+          type: array<CommandArgument>
+          desc: Array of `CommandArgument` objects.
         Data:
-          desc: If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available on the server command with [[CommandContext.GetData]].
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "context: CommandContext"
-              returns: any
-        Run:
-          desc: If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "context: CommandContext, ...: any"
-              returns: any
+          desc: If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available in the command with [[CommandContext.GetData]].
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "context: CommandContext, ...: any"
+                returns: any
+        ClientRun:
+          desc: |
+            If you want your command to run on the client, you can add this function to the command definition itself. It works exactly like the function that you would return from the Server module.
+
+            - If this function returns a string, the command will run entirely on the client and won't touch the server (which means server-only hooks won't run).
+            - If this function doesn't return anything, it will fall back to executing the Server module on the server.
+
+            ::: warning
+            If this function is present and there isn't a Server module for this command, it is considered an error to not return a string from this function.
+            :::
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "context: CommandContext, ...: any"
+                returns: string?
         AutoExec:
           desc: A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the built-in `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame.
           type: array<string>

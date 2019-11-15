@@ -5,7 +5,7 @@ return {
 	Group = "DefaultDebug";
 	Args = {};
 
-	Run = function(context)
+	ClientRun = function(context)
 		-- We implement this here because player position is owned by the client.
 		-- No reason to bother the server for this!
 

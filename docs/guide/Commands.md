@@ -32,7 +32,7 @@ return {
 
 Check out the <ApiLink to="Registry.CommandDefinition">API reference</ApiLink> full details.
 
-The implementation should be in a separate ModuleScript. Cmdr will never deliver this script to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
+The implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
 
 It is passed the CommandContext for this command, which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API section below for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
@@ -59,7 +59,44 @@ end
 
 Take a gander at the [built-in commands](https://github.com/evaera/Cmdr/tree/master/Cmdr/BuiltInCommands) for more examples.
 
-### Default Commands
+## Command Data
+
+If you need to gather some data from the client before the command runs, you can create a <ApiLink to="Registry.CommandDefinition">`Data`</ApiLink> function in your command. This function will run on the client, and whatever is returned from it will be available with `context:GetData()` in the command implementation.
+
+As an example, you might want to know the local player's current mouse world position in a server command. This can be achieved by returning `LocalPlayer:GetMouse().Hit.Position` from the Data function, then using `context:GetData()` to get the Vector3.
+
+`context:GetData()` will work on both client and server commands.
+
+## Client commands
+
+It is possible to have commands that run on the client exclusively or both.
+
+If you want your command to run on the client, you can add a <ApiLink to="Registry.CommandDefinition">`ClientRun`</ApiLink> function to the command definition itself. It works exactly like the function that you would return from the Server module.
+
+If using `ClientRun`, having a Server module associated with this command is optional.
+
+- If your `ClientRun` function returns a string, the command will run entirely on the client and won't touch the server at all (which means server-only hooks won't run).
+- If this function doesn't return anything, it will then execute the associated Server module implementation on the server.
+
+::: warning
+If this function is present and there isn't a Server module for this command, it is considered an error to not return a string from this function.
+:::
+
+## Execution order
+
+Including [Hooks](Hooks.md), the full execution order is:
+
+1. `BeforeRun` hook on client.
+2. `Data` function on client.
+3. `ClientRun` function on client.
+4. `BeforeRun` hook on server. *
+5. Server command implementation returned from Server module. *
+6. `AfterRun` hook on server. *
+7. `AfterRun` hook on client.
+
+\* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`.
+
+## Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`
@@ -70,7 +107,7 @@ Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`
 
 Group: `Help`: `help`
 
-#### Registering a subset of the default commands
+### Registering a subset of the default commands
 If you only want some, but not all, of the default commands, you can restrict the commands that you register in two ways.
 
 1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr:RegisterDefaultCommands({"Help", "DefaultUtil"})`
@@ -82,7 +119,7 @@ Cmdr:RegisterDefaultCommands(function(cmd)
 end)
 ```
 
-### Prefixed Union Types
+## Prefixed Union Types
 An argument can be allowed to accept a different type when starting with a specific prefix. The most common example of this is with the `players` type, which when prefixed with % allows the user to select players based on team, rather than name.
 
 These can be defined on a per-argument basis, so that your commands can accept many types of arguments in a single slot. Under the Args section of command definition, each argument has a `Type` key.  For arguments that accept only a single type, it would look like `Type = "string"`. If we also wanted to accept a number when the user prefixes the argument with `#`, we could change it to: `Type = "string # number"`. Then, if the user provided `#33` for this argument, your function would be delivered the number value `33` in that position.

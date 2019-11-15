@@ -11,7 +11,7 @@ return {
 		}
 	};
 
-	Run = function(context, inputEnum)
+	ClientRun = function(context, inputEnum)
 		local binds = context:GetStore("CMDR_Binds")
 
 		if binds[inputEnum] then

@@ -53,6 +53,7 @@ module.exports = () => ({
     lastUpdated: true,
     sidebarDepth: 3,
     activeHeaderLinks: false,
+    searchPlaceholder: 'Press S to search...',
 
     nav: [
       { text: 'Guide', link: '/guide/Setup' },
@@ -62,17 +63,26 @@ module.exports = () => ({
     ],
 
     // .concat(...API.map(page => slugify(page.name))),
-    sidebar: {
-      '/guide/': [
-        'Setup',
-        'Commands',
-        'Types',
-        'Hooks',
-        'NetworkEventHandlers',
-        'MetaCommands'
-      ],
-      '/api/': fromDir('api'),
-      '/': ['/', 'guide/Setup', 'api/Cmdr']
-    }
+    sidebar: [
+      {
+        title: 'Guide',
+        sidebarDepth: 3,
+        collapsable: false,
+        children: [
+          'Setup',
+          'Commands',
+          'Types',
+          'Hooks',
+          'NetworkEventHandlers',
+          'MetaCommands'
+        ].map(link => `/guide/${link}`),
+      },
+      {
+        title: 'API Reference',
+        sidebarDepth: 3,
+        collapsable: false,
+        children: fromDir('api').map(link => `/api/${link}`)
+      }
+    ]
   }
 })

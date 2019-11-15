@@ -6,7 +6,7 @@ return {
 	Group = "DefaultUtil";
 	Args = {};
 
-	Run = function()
+	ClientRun = function()
 		local mouse = Players.LocalPlayer:GetMouse()
 		local target = mouse.Target
 

@@ -6,7 +6,7 @@ return {
 	Description = "Clear all lines above the entry line of the Cmdr window.",
 	Group = "DefaultUtil",
 	Args = {},
-	Run = function()
+	ClientRun = function()
 		local player = Players.LocalPlayer
 		local gui = player:WaitForChild("PlayerGui"):WaitForChild("Cmdr")
 		local frame = gui:WaitForChild("Frame")
