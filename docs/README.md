@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 actionText: Get Started →
-actionLink: /guide/setup
+actionLink: /guide/Setup
 features:
 - title: Integrates with your systems
   details: Make commands that integrate and control your existing systems. Use commands to help debug your game during development by triggering events in your game or print out targeted debug information.
