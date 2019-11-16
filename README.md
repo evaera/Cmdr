@@ -2,7 +2,6 @@
 	<img src="assets/logo.png" alt="Cmdr" height="150" />
 	<br>
 	<a href="https://discord.gg/g5PdMxh"><img src="https://img.shields.io/discord/425800792679645204.svg?label=discord" /></a>
-	<a href="https://www.npmjs.com/package/rbx-cmdr"><img src="https://badge.fury.io/js/rbx-cmdr.svg"></a>
 	<p><a href="https://eryn.io/Cmdr/">View Docs</a></p>
 </div>
 

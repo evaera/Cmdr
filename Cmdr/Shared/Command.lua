@@ -116,13 +116,29 @@ function Command:Run ()
 		return beforeRunHook
 	end
 
-	if self.Object.Run then -- We can just Run it here on this machine
-		self.Response = self.Object.Run(self, unpack(self:GatherArgumentValues()))
-	elseif IsServer then -- Uh oh, we're already on the server and there's no Run function.
-		warn(self.Name, "command has no implementation!")
-		self.Response = "No implementation."
-	else -- We're on the client, so we send this off to the server to let the server see what it can do with it.
-		self.Response = self.Dispatcher:Send(self.RawText, self.Object.Data and self.Object.Data(self))
+	if not IsServer and self.Object.Data and self.Data == nil then
+		self.Data = self.Object.Data(self, unpack(self:GatherArgumentValues()))
+	end
+
+	if not IsServer and self.Object.ClientRun then
+		self.Response = self.Object.ClientRun(self, unpack(self:GatherArgumentValues()))
+	end
+
+	if self.Response == nil then
+		if self.Object.Run then -- We can just Run it here on this machine
+			self.Response = self.Object.Run(self, unpack(self:GatherArgumentValues()))
+
+		elseif IsServer then -- Uh oh, we're already on the server and there's no Run function.
+			if self.Object.ClientRun then
+				warn(self.Name, "command fell back to the server because ClientRun returned nil, but there is no server implementation! Either return a string from ClientRun, or create a server implementation for this command.")
+			else
+				warn(self.Name, "command has no implementation!")
+			end
+
+			self.Response = "No implementation."
+		else -- We're on the client, so we send this off to the server to let the server see what it can do with it.
+			self.Response = self.Dispatcher:Send(self.RawText, self.Data)
+		end
 	end
 
 	local afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)

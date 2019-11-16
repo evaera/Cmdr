@@ -5,7 +5,7 @@ local Util = require(script.Parent.Util)
 --- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
 	TypeMethods = Util.MakeDictionary({"Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce", "Prefixes"});
-	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "AutoExec", "Description", "Args", "Run", "Data", "Group"});
+	CommandMethods = Util.MakeDictionary({"Name", "Aliases", "AutoExec", "Description", "Args", "Run", "ClientRun", "Data", "Group"});
 	CommandArgProps = Util.MakeDictionary({"Name", "Type", "Description", "Optional", "Default"});
 	Types = {};
 	TypeAliases = {};
@@ -87,7 +87,7 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 
 --- Registers a command based purely on its definition.
 -- Prefer using Registry:RegisterCommand for proper handling of server/client model.
-function Registry:RegisterCommandObject (commandObject)
+function Registry:RegisterCommandObject (commandObject, fromCmdr)
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
 			error("Unknown key/method in command " .. (commandObject.Name or "unknown command") .. ": " .. key)
@@ -104,8 +104,8 @@ function Registry:RegisterCommandObject (commandObject)
 		end
 	end
 
-	if RunService:IsClient() and commandObject.Data and commandObject.Run then
-		error(('Invalid command implementation provided for "%s": "Data" and "Run" sections are mutually exclusive'):format(commandObject.Name or "unknown"))
+	if not fromCmdr and RunService:IsClient() and commandObject.Run then
+		warn(commandObject.Name, "command has `Run` in its command definition; prefer using `ClientRun` for new work.")
 	end
 
 	if commandObject.AutoExec and RunService:IsClient() then

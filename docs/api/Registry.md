@@ -14,52 +14,57 @@ docs:
           type: string
           desc: String containing default <a href="https://eryn.io/Cmdr/guide/Commands.html#prefixed-union-types">Prefixed Union Types</a> for this type. This property should omit the initial type name, so this string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`.
         Transform:
-          kind: union
           desc: "Transform is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (`Validate`, `Autocomplete`, and `Parse`)."
-          types:
-            - nil
-            - kind: function
-              params: "rawText: string, executor: Player"
-              returns: T
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "rawText: string, executor: Player"
+                returns: T
         Validate:
           desc: |
             The `Validate` function is passed whatever is returned from the Transform function (or the raw value if there is no Transform function). If the value is valid for the type, it should return `true`. If it the value is invalid, it should return two values: false, and a string containing an error message.
 
             If this function isn't present, anything will be considered valid.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns:
-                - boolean
-                - string?
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns:
+                  - boolean
+                  - string?
         ValidateOnce:
-          kind: union
           desc: |
             This function works exactly the same as the normal `Validate` function, except it only runs once (after the user presses Enter). This should only be used if the validation process is relatively expensive or needs to yield. For example, the PlayerId type uses this because it needs to call `GetUserIdFromNameAsync` in order to validate.
 
             For the vast majority of types, you should just use `Validate` instead.
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns:
-                - boolean
-                - string?
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns:
+                  - boolean
+                  - string?
         Autocomplete:
           desc: Should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "value: T"
-              returns: array<string>
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "value: T"
+                returns: array<string>
         Parse:
           desc: Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
-          kind: function
-          params: "value: T"
-          returns: any
+          type:
+            kind: function
+            params: "value: T"
+            returns: any
         Listable:
           type: boolean?
           desc: |
@@ -101,23 +106,35 @@ docs:
         Group:
           type: any?
           desc: Optional, can be be any value you wish. This property is intended to be used in hooks, so that you can categorize commands and decide if you want a specific user to be able to run them or not.
-        Args: array<CommandArgument>
+        Args:
+          type: array<CommandArgument>
+          desc: Array of `CommandArgument` objects.
         Data:
-          desc: If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available on the server command with [[CommandContext.GetData]].
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "context: CommandContext"
-              returns: any
-        Run:
-          desc: If you want your command to run entirely on the client, you can add this function directly to the command definition itself. It works exactly like the function that you would return from the Server module. Hooks defined on the server won't fire if this function is present, since it runs entirely on the client and the server will not know if the user runs this command.
-          kind: union
-          types:
-            - nil
-            - kind: function
-              params: "context: CommandContext, ...: any"
-              returns: any
+          desc: If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available in the command with [[CommandContext.GetData]].
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "context: CommandContext, ...: any"
+                returns: any
+        ClientRun:
+          desc: |
+            If you want your command to run on the client, you can add this function to the command definition itself. It works exactly like the function that you would return from the Server module.
+
+            - If this function returns a string, the command will run entirely on the client and won't touch the server (which means server-only hooks won't run).
+            - If this function doesn't return anything, it will fall back to executing the Server module on the server.
+
+            ::: warning
+            If this function is present and there isn't a Server module for this command, it is considered an error to not return a string from this function.
+            :::
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "context: CommandContext, ...: any"
+                returns: string?
         AutoExec:
           desc: A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the built-in `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame.
           type: array<string>
@@ -238,7 +255,7 @@ docs:
       desc: Adds a hook. This should probably be run on the server, but can also work on the client. Hooks run in order of priority (lower number runs first).
       params:
         - name: hookName
-          type: string
+          type: "\"BeforeRun\" | \"AfterRun\""
         - name: callback
           type:
             kind: function

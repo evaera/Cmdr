@@ -11,7 +11,7 @@ return {
 		},
 	};
 
-	Run = function (context, commandName)
+	ClientRun = function (context, commandName)
 		if commandName then
 			local command = context.Cmdr.Registry:GetCommand(commandName)
 			context:Reply(("Command: %s"):format(command.Name), Color3.fromRGB(230, 126, 34))

@@ -1,3 +1,7 @@
+# v1.4.0
+
+- Add support for `ClientRun` (#97).
+
 # v1.3.0
 
 - Add `Prefixes` to Types
