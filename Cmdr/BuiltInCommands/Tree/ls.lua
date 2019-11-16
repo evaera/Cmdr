@@ -10,24 +10,31 @@ return {
 			Optional = true
 		}
 	},
-	Run = function(context, stringPath)
+	ClientRun = function(context, stringPath)
 		local util = context.Cmdr.Util
 		local treeView = context:GetStore("_TreeView")
-		stringPath = stringPath or util.GetInstanceFullName(treeView.WorkingInstance)
+		stringPath = stringPath or ""
 
 		--[[ Changing active instance ]]--
 		if treeView.View == "Client" then
 			local Instance;
-	
+			
 			if string.split(stringPath,".")[1] == "game" then -- Absolute path specified
 				Instance = util.GetInstanceFromStringPath(stringPath)
 			else -- Relative path specified
+				local StartingInstance;
+				if not game:IsAncestorOf(treeView.WorkingInstance) and treeView.WorkingInstance ~= game then --Instance is in a detached state from the datamodel
+					context:Reply("The current working instance has been destroyed, unexpected behavior may occur!\n")
+					StartingInstance = util.GetInstanceRootAncestor(treeView.WorkingInstance)
+					context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(treeView.WorkingInstance)))
+				end
+
 				if stringPath == ".." then -- Move up an Instance
 					Instance = treeView.WorkingInstance.Parent
-				elseif string.split(stringPath,".")[1] == "." then --Instance with reserved word specified
-					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance).."."..stringPath:sub(1))
+				elseif stringPath:sub(1,1) == "." then --Instance with reserved word specified
+					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance)..stringPath, StartingInstance)
 				else
-					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance).."."..stringPath)
+					Instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(treeView.WorkingInstance).."."..stringPath, StartingInstance)
 				end
 			end
 	
@@ -40,6 +47,8 @@ return {
 
 				return ""
 			end
+		else
+			return nil
 		end
 	end
 }
