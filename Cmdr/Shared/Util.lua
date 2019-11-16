@@ -501,4 +501,17 @@ function Util.GetInstanceFullName(Instance)
 	return FullName
 end
 
+--- Returns the root ancestor of a given instance.
+function Util.GetInstanceRootAncestor(Instance)
+	local currentObjectReference = Instance
+
+	while true do
+		if currentObjectReference.Parent == nil then
+			return currentObjectReference
+		else
+			currentObjectReference = currentObjectReference.Parent
+		end
+	end
+end
+
 return Util
