@@ -9,7 +9,7 @@ return function(context,stringPath,RelativeInstance)
 		local StartingInstance;
 		if not game:IsAncestorOf(RelativeInstance) and RelativeInstance ~= game then --Instance is in a detached state from the datamodel
 			StartingInstance = util.GetInstanceRootAncestor(RelativeInstance)
-			context:Reply("The current working instance has been destroyed, unexpected behavior may occur!\n")
+			context:Reply("Warning: the current working instance has been detached from the Data Model\n")
 		end
 
 		if stringPath == ".." then -- Move up an Instance
