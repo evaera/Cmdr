@@ -8,7 +8,7 @@ return {
 		{
 			Type = "string",
 			Name = "Instance",
-			Description = "The instance to list the children of. Can be a relative path or afull path.",
+			Description = "The instance to list the children of. Can be a relative path or a full path.",
 			Optional = true
 		}
 	},
