@@ -21,6 +21,7 @@ return {
 		--[[ Initializing state ]]--
 		if treeView.View == nil then
 			treeView.View = "Client"
+			treeView.WorkingInstance = game
 		end
 
 		--[[ Changing active instance ]]--
