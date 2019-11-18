@@ -157,16 +157,20 @@ function Registry:RegisterCommandsIn (container, filter)
 
 	for _, commandScript in pairs(container:GetChildren()) do
 		if commandScript:IsA("ModuleScript") then
-			if not commandScript.Name:find("Server") then
-				local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
+			if commandScript.Name:sub(1,1) ~= "_" then -- Module isn't a shared resource between commands
+				if not commandScript.Name:find("Server") then
+					local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
 
-				if serverCommandScript then
-					usedServerScripts[serverCommandScript] = true
+					if serverCommandScript then
+						usedServerScripts[serverCommandScript] = true
+					end
+
+					self:RegisterCommand(commandScript, serverCommandScript, filter)
+				else
+					skippedServerScripts[commandScript] = true
 				end
-
-				self:RegisterCommand(commandScript, serverCommandScript, filter)
-			else
-				skippedServerScripts[commandScript] = true
+			else -- Module is a shared resource between various commands
+				commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
 			end
 		else
 			self:RegisterCommandsIn(commandScript, filter)
