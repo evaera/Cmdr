@@ -1,5 +1,6 @@
 local ResolvePath = require(script.Parent._ResolvePath)
 local AncestryChanged;
+local DETACHED_WARNING_MESSAGE = "Warning: the current working instance has been detached from the Data Model\n"
 
 return {
 	Name = "cd",
@@ -40,7 +41,7 @@ return {
 				AncestryChanged = instance.AncestryChanged:connect(function(_,Parent)
 					context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(instance)))
 					if not game:IsAncestorOf(instance) and instance ~= game then
-						context:Reply("The current working instance has been destroyed, unexpected behavior may occur!\n")
+						context:Reply(DETACHED_WARNING_MESSAGE)
 					end
 				end)
 
