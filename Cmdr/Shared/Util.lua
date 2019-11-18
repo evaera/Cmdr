@@ -477,7 +477,7 @@ function Util.GetInstanceFromStringPath(stringPath,startingReference)
 		stringPath = stringPath:gsub("^"..startingReference.Name.."%.", "")
 	end
 
-	for _, objectName in pairs(Util.SplitStringSimple(stringPath, ".")) do
+	for _, objectName in pairs(string.split(stringPath, ".")) do
 		if currentObjectReference:FindFirstChild(objectName) ~= nil then
 			currentObjectReference = currentObjectReference[objectName]
 		else
