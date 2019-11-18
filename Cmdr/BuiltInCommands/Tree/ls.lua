@@ -38,10 +38,10 @@ return {
 				end
 			end
 	
-			if Instance == nil then
+			if instance == nil then
 				return ("'%s' is not recognized as a valid Instance."):format(stringPath)
 			else
-				for _, Child in pairs(Instance:GetChildren()) do
+				for _, Child in pairs(instance:GetChildren()) do
 					context:Reply(Child.Name)
 				end
 

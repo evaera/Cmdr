@@ -489,27 +489,27 @@ function Util.GetInstanceFromStringPath(stringPath,startingReference)
 end
 
 --- Returns the TRUE full pathname of a given instance. (i.e. Workspace will return as "game.Workspace" instead of just "Workspace")
-function Util.GetInstanceFullName(Instance)
+function Util.GetInstanceFullName(instance)
 	local FullName = ""
 
-	if Instance == nil then
+	if instance == nil then
 		error("Instance expected, got nil instead")
-	elseif not game:IsAncestorOf(Instance) and Instance~=game then
-		FullName = Instance:GetFullName()
-	elseif Instance.Parent == game then
-		FullName = "game."..Instance.Name
-	elseif Instance == game then
+	elseif not game:IsAncestorOf(instance) and instance~=game then
+		FullName = instance:GetFullName()
+	elseif instance.Parent == game then
+		FullName = "game."..instance.Name
+	elseif instance == game then
 		FullName = "game"
 	else
-		FullName = "game."..Instance:GetFullName()
+		FullName = "game."..instance:GetFullName()
 	end
 
 	return FullName
 end
 
 --- Returns the root ancestor of a given instance.
-function Util.GetInstanceRootAncestor(Instance)
-	local currentObjectReference = Instance
+function Util.GetInstanceRootAncestor(instance)
+	local currentObjectReference = instance
 
 	while true do
 		if currentObjectReference.Parent == nil then

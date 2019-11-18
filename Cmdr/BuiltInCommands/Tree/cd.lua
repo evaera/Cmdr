@@ -46,7 +46,7 @@ return {
 				end
 			end
 	
-			if Instance == nil then
+			if instance == nil then
 				return ("'%s' is not recognized as a valid Instance."):format(stringPath)
 			else
 
@@ -54,15 +54,15 @@ return {
 				if AncestryChanged~=nil then
 					AncestryChanged:Disconnect()
 				end
-				AncestryChanged = Instance.AncestryChanged:connect(function(_,Parent)
-					context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(Instance)))
-					if not game:IsAncestorOf(Instance) and Instance ~= game then
+				AncestryChanged = instance.AncestryChanged:connect(function(_,Parent)
+					context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(instance)))
+					if not game:IsAncestorOf(instance) and instance ~= game then
 						context:Reply("The current working instance has been destroyed, unexpected behavior may occur!\n")
 					end
 				end)
 
-				treeView.WorkingInstance = Instance				
-				context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(Instance)))
+				treeView.WorkingInstance = instance				
+				context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(instance)))
 				return "Directory changed to "..util.GetInstanceFullName(treeView.WorkingInstance)
 			end
 		else
