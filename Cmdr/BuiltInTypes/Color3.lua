@@ -1,7 +1,7 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local color3Type = Util.MakeSequenceType({
-	Prefixes = "# hexColor3 ! brickCOlor3";
+	Prefixes = "# hexColor3 ! brickColor3";
 	ValidateEach = function(value, i)
 		if value == nil then
 			return false, ("Invalid or missing number at position %d in Color3 type."):format(i)
