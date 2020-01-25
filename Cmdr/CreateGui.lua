@@ -8,6 +8,7 @@ return function ()
 	Cmdr.DisplayOrder = 1000
 	Cmdr.Name = "Cmdr"
 	Cmdr.ResetOnSpawn = false
+	Cmdr.AutoLocalize = false
 
 	local Frame = Instance.new("ScrollingFrame")
 	Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
