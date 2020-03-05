@@ -88,6 +88,7 @@ return function (Cmdr)
 		self.Command = options.command
 		self.Arg = options.arg
 		self.NumArgs = options.numArgs
+		self.IsPartial = options.isPartial
 
 		-- Generate the new option labels
 		local autocompleteWidth = 200

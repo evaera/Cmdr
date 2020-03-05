@@ -51,14 +51,24 @@ docs:
                   - boolean
                   - string?
         Autocomplete:
-          desc: Should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu.
+          desc: Should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu. It can also return a second value, which can be a  dictionary with options such as `IsPartial` as described above.
           type:
             kind: union
             types:
               - nil
               - kind: function
                 params: "value: T"
-                returns: array<string>
+                returns:
+                  - array<string>
+                  - type:
+                      kind: union
+                      types:
+                        - nil
+                        - kind: interface
+                          type:
+                            IsPartial:
+                              type: boolean?
+                              desc: If `true`, pressing Tab to auto complete won't continue onwards to the next argument.
         Parse:
           desc: Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions.
           type:

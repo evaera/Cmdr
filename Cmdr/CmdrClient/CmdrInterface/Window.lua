@@ -263,7 +263,7 @@ function Window:BeginInput(input, gameProcessed)
 				local lastArg = self.AutoComplete.Arg
 
 				newText = command.Alias
-				insertSpace = self.AutoComplete.NumArgs ~= #command.ArgumentDefinitions
+				insertSpace = self.AutoComplete.NumArgs ~= #command.ArgumentDefinitions and self.AutoComplete.IsPartial == false
 
 				local args = command.Arguments
 				for i = 1, #args do

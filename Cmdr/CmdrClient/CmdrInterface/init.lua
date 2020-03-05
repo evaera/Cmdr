@@ -55,7 +55,9 @@ return function (Cmdr)
 			local lastArgument = command:GetArgument(#arguments)
 			if lastArgument then
 				local typedText = lastArgument.RawSegments[#lastArgument.RawSegments]
-				local items = lastArgument:GetAutocomplete()
+				local items, options = lastArgument:GetAutocomplete()
+				options = options or {}
+
 				for i, item in pairs(items) do
 					acItems[i] = {typedText, item}
 				end
@@ -77,6 +79,7 @@ return function (Cmdr)
 					type = lastArgument.Type.DisplayName;
 					description = (valid == false and errorText) or lastArgument.Object.Description;
 					invalid = not valid;
+					isPartial = options.IsPartial or false;
 				})
 			end
 		elseif commandText and #arguments == 0 then
