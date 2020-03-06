@@ -40,6 +40,10 @@ end
 function Command:Parse (allowIncompleteArguments)
 	local hadOptional = false
 	for i, definition in ipairs(self.ArgumentDefinitions) do
+		if type(definition) == "function" then
+			definition = definition(self)
+		end
+
 		local required = (definition.Default == nil and definition.Optional ~= true)
 
 		if required and hadOptional then

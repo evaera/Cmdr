@@ -86,8 +86,12 @@ docs:
       kind: interface
       type:
         Type:
-          type: string
-          desc: The argument type (case sensitive).
+          type:
+            kind: union
+            types:
+              - string
+              - TypeDefinition
+          desc: The argument type (case sensitive), or an inline TypeDefinition object
         Name:
           type: string
           desc: The argument name, this is displayed to the user as they type.
@@ -117,8 +121,8 @@ docs:
           type: any?
           desc: Optional, can be be any value you wish. This property is intended to be used in hooks, so that you can categorize commands and decide if you want a specific user to be able to run them or not.
         Args:
-          type: array<CommandArgument>
-          desc: Array of `CommandArgument` objects.
+          type: array<CommandArgument | function(context) → CommandArgument>
+          desc: Array of `CommandArgument` objects, or functions that return `CommandArgument` objects.
         Data:
           desc: If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the CommandContext for the current command as an argument, and return a single value which will be available in the command with [[CommandContext.GetData]].
           type:
