@@ -101,7 +101,7 @@ function Command:GatherArgumentValues ()
 		end
 	end
 
-	return values
+	return values, #self.ArgumentDefinitions
 end
 
 --- Runs the command. Handles dispatching to the server if necessary.
@@ -117,16 +117,19 @@ function Command:Run ()
 	end
 
 	if not IsServer and self.Object.Data and self.Data == nil then
-		self.Data = self.Object.Data(self, unpack(self:GatherArgumentValues()))
+		local values, length = self:GatherArgumentValues()
+		self.Data = self.Object.Data(self, unpack(values, 1, length))
 	end
 
 	if not IsServer and self.Object.ClientRun then
-		self.Response = self.Object.ClientRun(self, unpack(self:GatherArgumentValues()))
+		local values, length = self:GatherArgumentValues()
+		self.Response = self.Object.ClientRun(self, unpack(values, 1, length))
 	end
 
 	if self.Response == nil then
 		if self.Object.Run then -- We can just Run it here on this machine
-			self.Response = self.Object.Run(self, unpack(self:GatherArgumentValues()))
+			local values, length = self:GatherArgumentValues()
+			self.Response = self.Object.Run(self, unpack(values, 1, length))
 
 		elseif IsServer then -- Uh oh, we're already on the server and there's no Run function.
 			if self.Object.ClientRun then
