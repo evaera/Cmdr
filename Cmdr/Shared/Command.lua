@@ -42,6 +42,10 @@ function Command:Parse (allowIncompleteArguments)
 	for i, definition in ipairs(self.ArgumentDefinitions) do
 		if type(definition) == "function" then
 			definition = definition(self)
+
+			if definition == nil then
+				break
+			end
 		end
 
 		local required = (definition.Default == nil and definition.Optional ~= true)
