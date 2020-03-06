@@ -150,7 +150,8 @@ function Util.SplitString(text, max)
 	text = encodeControlChars(text)
 	max = max or math.huge
 	local t = {}
-	local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
+	local spat, epat = [=[^(['"])]=], [=[(['"])$]=]
+	local buf, quoted
 	for str in text:gmatch("%S+") do
 		str = Util.ParseEscapeSequences(str)
 		local squoted = str:match(spat)
