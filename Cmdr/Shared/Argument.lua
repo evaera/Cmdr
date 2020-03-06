@@ -12,23 +12,27 @@ function Argument.new (command, argumentObject, value)
 		Object = argumentObject; -- The raw ArgumentObject (definition)
 		Required = argumentObject.Default == nil and argumentObject.Optional ~= true; -- If the argument is required or not.
 		Executor = command.Executor; -- The player who is running the command
-		RawValue = nil; -- The raw, unparsed value
+		RawValue = value; -- The raw, unparsed value
 		RawSegments = {}; -- The raw, unparsed segments (if the raw value was comma-sep)
 		TransformedValues = {}; -- The transformed value (generated later)
-		Prefix = nil; -- The prefix for this command (%Team)
+		Prefix = ""; -- The prefix for this command (%Team)
 	}
 
-	local parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(
-		command.Cmdr.Registry:GetTypeName(argumentObject.Type),
-		value
-	)
+	if type(argumentObject.Type) == "table" then
+		self.Type = argumentObject.Type
+	else
+		local parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(
+			command.Cmdr.Registry:GetTypeName(argumentObject.Type),
+			value
+		)
 
-	self.Type = command.Dispatcher.Registry:GetType(parsedType)
-	self.RawValue = parsedRawValue
-	self.Prefix = prefix
+		self.Type = command.Dispatcher.Registry:GetType(parsedType)
+		self.RawValue = parsedRawValue
+		self.Prefix = prefix
 
-	if self.Type == nil then
-		error(string.format("%s has an unregistered type %q", self.Name or "<none>", parsedType or "<none>"))
+		if self.Type == nil then
+			error(string.format("%s has an unregistered type %q", self.Name or "<none>", parsedType or "<none>"))
+		end
 	end
 
 	setmetatable(self, Argument)
