@@ -104,7 +104,7 @@ function Command:GatherArgumentValues ()
 		local arg = self.Arguments[i]
 		if arg then
 			values[i] = arg:GetValue()
-		else
+		elseif type(self.ArgumentDefinitions[i]) == "table" then
 			values[i] = self.ArgumentDefinitions[i].Default
 		end
 	end
