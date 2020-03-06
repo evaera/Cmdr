@@ -96,9 +96,11 @@ function Registry:RegisterCommandObject (commandObject, fromCmdr)
 
 	if commandObject.Args then
 		for i, arg in pairs(commandObject.Args) do
-			for key in pairs(arg) do
-				if self.CommandArgProps[key] == nil then
-					error(('Unknown propery in command "%s" argument #%d: %s'):format(commandObject.Name or "unknown", i, key))
+			if type(arg) == "table" then
+				for key in pairs(arg) do
+					if self.CommandArgProps[key] == nil then
+						error(('Unknown propery in command "%s" argument #%d: %s'):format(commandObject.Name or "unknown", i, key))
+					end
 				end
 			end
 		end

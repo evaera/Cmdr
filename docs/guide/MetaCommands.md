@@ -11,7 +11,7 @@ Sub-commands may be embedded inside command strings, in the format `${command ar
 
 Embedded commands are nestable: `run echo ${run echo ${echo hello}!}` (displays `"hello!"`). We use `run` here instead of just running `echo` directly, because embedded commands are only evaluated in the preprocess step of commands that use *command strings* (which is only `run`, `alias`, and `bind`).
 
-By default, if the evaluated command output has a space in it, the return value will be encapsulated in quote marks so that the entire value is perceived as one argument to Cmdr. In cases where it's desirable for Cmdr to parse each word as a separate argument, you can use use a literal syntax: `run teleport ${{"echo first second"}}` (in this example, "first" and "second" would then become the first and second arguments to the `teleport` command, instead of the first argument being "first second")
+By default, if the evaluated command output has a space in it, the return value will be encapsulated in quote marks so that the entire value is perceived as one argument to Cmdr. In cases where it's desirable for Cmdr to parse each word as a separate argument, you can use use a literal syntax: `run teleport ${{"echo first second"}​}` (in this example, "first" and "second" would then become the first and second arguments to the `teleport` command, instead of the first argument being "first second")
 
 ## Run
 Run is the simplest of the bunch, and does right what it says on the tin. It runs whatever text you give it immediately as a command. This is useful, because it evaluates embedded commands within the command string before running.
