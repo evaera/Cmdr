@@ -182,6 +182,24 @@ function Registry:RegisterCommandsIn (container, filter)
 	end
 end
 
+--- A helper method that registers all commands inside a specific container and sources the server implementations from a given table.
+function Registry:RegisterCommandsInContainerUsingTable (container, serverCmdTable)
+    for _, commandScript in pairs(container:GetChildren()) do
+        if commandScript:IsA("ModuleScript") then
+            local commandObject = require(commandScript)
+            local serverCommand = serverCmdTable[commandScript.Name]
+            if serverCommand then
+                commandObject.Run = serverCommand
+            end
+
+            self:RegisterCommandObject(commandObject)
+            commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
+        else
+            self:RegisterCommandsInContainerUsingTable(commandScript, serverCmdTable)
+        end
+    end
+end
+
 --- Registers the default commands, with an optional filter function or array of groups.
 function Registry:RegisterDefaultCommands (arrayOrFunc)
 	local isArray = type(arrayOrFunc) == "table"
