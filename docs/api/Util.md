@@ -89,7 +89,7 @@ docs:
       desc: Returns the text bounds size as a Vector2 based on the given label and optional display size. If size is omitted, the absolute width is used.
     - name: MakeEnumType
       static: true
-      params: "type: string, values: array<string>"
+      params: "type: string, values: array<string | { Name: string }>"
       returns: TypeDefinition
       desc: Makes an Enum type out of a name and an array of strings. See Enum Values.
     - name: MakeListableType
