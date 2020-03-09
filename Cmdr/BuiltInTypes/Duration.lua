@@ -28,15 +28,15 @@ local function stringToSecondDuration(stringDuration)
     end
     -- The duration must end with a unit,
     -- if it doesn't then return true as the fourth value to indicate the need to offer autocomplete for units.
-    local endOnlyString = stringDuration:gsub("%d+%a+", "")
-    local endNumber = endOnlyString:match("%d+")
+    local endOnlyString = stringDuration:gsub("-?%d+%a+", "")
+    local endNumber = endOnlyString:match("-?%d+")
     if endNumber then
         return nil, tonumber(endNumber), true
     end
     local seconds = nil
     local rawNum, rawUnit
-    for rawComponent in stringDuration:gmatch("%d+%a+") do
-        rawNum, rawUnit = rawComponent:match("(%d+)(%a+)")
+    for rawComponent in stringDuration:gmatch("-?%d+%a+") do
+        rawNum, rawUnit = rawComponent:match("(-?%d+)(%a+)")
         local unitNames = unitFinder(rawUnit)
         -- There were no matching units, it's invalid. Return the parsed number to be used for autocomplete
         if #unitNames == 0 then
@@ -74,7 +74,7 @@ local durationType = {
     end;
 
     Validate = function(_, duration)
-        return duration ~= nil and duration >= 0
+        return duration ~= nil
     end;
 
     Autocomplete = function(rawText, duration, lastNumber, isUnitMissing, matchedUnits)
@@ -90,7 +90,7 @@ local durationType = {
                 returnTable = mapUnits(unitsTable, rawText, existingUnitLength + 1)
             end
         elseif duration ~= nil then
-            local endingUnit = rawText:match("^.*%d+(%a+)$")
+            local endingUnit = rawText:match("^.*-?%d+(%a+)$")
             -- Assume there is a singular match at this point
             local fuzzyUnits = unitFinder(endingUnit)
             -- List all possible fuzzy matches. This is for the Minutes/Months ambiguity case.
