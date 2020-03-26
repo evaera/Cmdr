@@ -4,4 +4,5 @@ return function(_, players)
 			player:LoadCharacter()
 		end
 	end
+	return ("Respawned %d players."):format(#players)
 end
