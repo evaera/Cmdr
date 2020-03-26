@@ -99,7 +99,7 @@ Including [Hooks](Hooks.md), the full execution order is:
 ## Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
-Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`
+Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`
 
 Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`), `position`
 
