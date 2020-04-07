@@ -1,3 +1,12 @@
+# v1.5.0
+
+- Adds AutoComplete IsPartial (#103)
+- Added dynamic argument types (#93)
+- Allow type inlining in command defs
+- Duration type now allows negative values
+- Fix a bug where sparse values in value list caused dropped arguments
+- Added default command: respawn (#113)
+
 # v1.4.0
 
 - Add support for `ClientRun` (#97).
