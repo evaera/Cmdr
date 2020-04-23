@@ -57,9 +57,7 @@ end
 
 --- Sets the place name label on the interface
 --! Legacy method, kept for backwards compatibility
-function Cmdr:SetPlaceName (placeName)
-	self:SetPrompt(placeName)
-end
+Cmdr.SetPlaceName = Cmdr.SetPrompt
 
 --- Sets whether or not the console is enabled
 function Cmdr:SetEnabled (enabled)
