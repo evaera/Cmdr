@@ -32,13 +32,7 @@ local function ShorthandMultiple (text, executor)
 			local players = {}
 			local remainingPlayers = Players:GetPlayers()
 			for i = 1,math.min(maxSize,#remainingPlayers) do
-				local index = 1
-				if #remainingPlayers > 1 then
-					index = math.random(1,#remainingPlayers)
-				end
-				
-				table.insert(players,remainingPlayers[i])
-				table.remove(remainingPlayers,i)
+				table.insert(players,table.remove(remainingPlayers,math.random(1,#remainingPlayers)))
 			end
 			
 			return players
