@@ -31,7 +31,7 @@ local function ShorthandMultiple (text, executor)
 			local players = {}
 			local remainingPlayers = Players:GetPlayers()
 			for i = 1, math.min(maxSize, #remainingPlayers) do
-				table.insert(players,table.remove(remainingPlayers, math.random(1, #remainingPlayers)))
+				table.insert(players, table.remove(remainingPlayers, math.random(1, #remainingPlayers)))
 			end
 			
 			return players
