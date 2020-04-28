@@ -30,7 +30,7 @@ local function ShorthandMultiple (text, executor)
 		if maxSize and maxSize > 0 then
 			local players = {}
 			local remainingPlayers = Players:GetPlayers()
-			for i = 1,math.min(maxSize, #remainingPlayers) do
+			for i = 1, math.min(maxSize, #remainingPlayers) do
 				table.insert(players,table.remove(remainingPlayers, math.random(1, #remainingPlayers)))
 			end
 			
