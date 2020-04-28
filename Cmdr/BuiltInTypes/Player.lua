@@ -6,11 +6,7 @@ local function ShorthandSingle (text, executor)
 		return {executor}
 	elseif text == "?" then
 		local players = Players:GetPlayers()
-		if #players <= 1 then
-			return players
-		else
-			return {players[math.random(1, #players)]}
-		end
+		return {players[math.random(1, #players)]}
 	end
 end
 
