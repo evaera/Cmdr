@@ -22,8 +22,11 @@ local function ShorthandMultiple (text, executor)
 			end
 		end
 		return Others
-	elseif string.match(text, "%?(%d+)") then
-		local maxSize = tonumber(string.match(text, "%?(%d+)"))
+	end
+	
+	local randomMatch = text:match("%?(%d+)")
+	if randomMatch then
+		local maxSize = tonumber(randomMatch)
 		if maxSize and maxSize > 0 then
 			local players = {}
 			local remainingPlayers = Players:GetPlayers()
