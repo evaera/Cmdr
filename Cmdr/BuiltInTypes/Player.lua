@@ -4,6 +4,13 @@ local Players = game:GetService("Players")
 local function ShorthandSingle (text, executor)
 	if text == "." or text == "me" then
 		return {executor}
+	elseif text == "random" or text == "?" then
+		local players = Players:GetPlayers()
+		if #players <= 1 then
+			return players
+		else
+			return {players[math.random(1,#players)]}
+		end
 	end
 end
 
@@ -19,6 +26,23 @@ local function ShorthandMultiple (text, executor)
 			end
 		end
 		return Others
+	elseif (string.sub(text,1,7) == "random[" or string.sub(text,1,2) == "?[") and string.sub(text,string.len(text)) == "]" then
+		local maxSize = tonumber(string.match(text,"random%[(.+)%]")) or tonumber(string.match(text,"%?%[(.+)%]"))
+		if maxSize and maxSize > 0 then
+			local players = {}
+			local remainingPlayers = Players:GetPlayers()
+			for i = 1,math.min(maxSize,#remainingPlayers) do
+				local index = 1
+				if #remainingPlayers > 1 then
+					index = math.random(1,#remainingPlayers)
+				end
+				
+				table.insert(players,remainingPlayers[i])
+				table.remove(remainingPlayers,i)
+			end
+			
+			return players
+		end
 	end
 end
 
