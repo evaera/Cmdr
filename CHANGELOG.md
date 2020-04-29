@@ -1,3 +1,7 @@
+# Next
+
+- Add random selector for player type (#122)
+
 # v1.5.0
 
 - Adds AutoComplete IsPartial (#103)
