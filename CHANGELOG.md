@@ -1,6 +1,7 @@
 # Next
 
 - Add random selector for player type (#122)
+- Fixed so TextBox is not selectable using controller (#124)
 
 # v1.5.0
 
