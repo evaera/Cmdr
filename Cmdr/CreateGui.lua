@@ -1,8 +1,3 @@
---[[
-	DO NOT MODIFY. This file is auto-generated.
-	Plugin: https://www.roblox.com/library/2307140444/Object-to-Lua
-]]
-
 return function ()
 	local Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
@@ -109,6 +104,7 @@ return function ()
 	TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TextBox.TextSize = 14
 	TextBox.TextXAlignment = Enum.TextXAlignment.Left
+	TextBox.Selectable = false
 	TextBox.Parent = Entry
 
 	local TextLabel = Instance.new("TextLabel")
