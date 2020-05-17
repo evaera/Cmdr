@@ -4,7 +4,6 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
-local SetPromptCallback;
 
 if RunService:IsClient() == false then
 	error("Server scripts cannot require the client library. Please require the server library to use Cmdr in your own code.")
@@ -54,11 +53,6 @@ end
 function Cmdr:SetPrompt (prompt)
 	self.Prompt = prompt
 	Interface.Window:UpdateLabel()
-end
-
--- Sets the callback to be ran when the prompt is changed
-function Cmdr:SetPromptchangeCallback(Callback)
-	SetPromptCallback = Callback
 end
 
 --- Sets the place name label on the interface
