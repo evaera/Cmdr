@@ -1,4 +1,4 @@
-local ResolvePath = require(script.Parent._ResolvePath) --! The shared module shouldn't have to be parented to a given module, it's not ergonomic.
+local ResolvePath;
 
 return {
 	Name = "ls",
@@ -13,6 +13,7 @@ return {
 		}
 	},
 	ClientRun = function(context, stringPath)
+		ResolvePath = require(context.Cmdr.ReplicatedRoot.Shared.ResolvePath)
 		local util = context.Cmdr.Util
 		local treeView = context:GetStore("_TreeView")
 		stringPath = stringPath or ""

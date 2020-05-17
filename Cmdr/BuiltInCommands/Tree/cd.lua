@@ -1,4 +1,4 @@
-local ResolvePath = require(script.Parent._ResolvePath)
+local ResolvePath;
 local AncestryChanged;
 local DETACHED_WARNING_MESSAGE = "Warning: the current working instance has been detached from the Data Model\n"
 
@@ -17,6 +17,7 @@ return {
 		"cd game"
 	},
 	ClientRun = function(context, stringPath)
+		ResolvePath = require(context.Cmdr.ReplicatedRoot.Shared.ResolvePath)
 		local util = context.Cmdr.Util
 		local treeView = context:GetStore("_TreeView")
 
