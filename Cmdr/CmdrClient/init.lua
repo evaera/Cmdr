@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
+local PromptFormatters = {}
 
 if RunService:IsClient() == false then
 	error("Server scripts cannot require the client library. Please require the server library to use Cmdr in your own code.")
@@ -51,8 +52,17 @@ end
 
 --- Sets the prompt on the interface
 function Cmdr:SetPrompt (prompt)
+	for Index = 1,#PromptFormatters do
+		prompt = PromptFormatters[Index](prompt)
+	end
+
 	self.Prompt = prompt
 	Interface.Window:UpdateLabel()
+end
+
+function Cmdr:RegisterPromptFormatter(Formatter)
+	table.insert(PromptFormatters,Formatter)
+	self:UpdatePrompt()
 end
 
 --- Sets the place name label on the interface
