@@ -4,7 +4,6 @@ return {
 	Group = "DefaultTree",
 	Args = {},
 	ClientRun = function(context)
-		ResolvePath = require(context.Cmdr.ReplicatedRoot.Shared.ResolvePath)
 		local util = context.Cmdr.Util
 		local treeView = context:GetStore("_TreeView")
 
