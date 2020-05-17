@@ -16,7 +16,7 @@ return {
 		ResolvePath = require(context.Cmdr.ReplicatedRoot.Shared.ResolvePath)
 		local util = context.Cmdr.Util
 		local treeView = context:GetStore("_TreeView")
-		stringPath = stringPath or ""
+		stringPath = stringPath or "."
 
 		--[[ Changing active instance ]]--
 		if treeView.View == "Client" then

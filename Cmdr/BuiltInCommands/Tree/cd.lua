@@ -26,6 +26,8 @@ return {
 			treeView.View = "Client"
 			treeView.WorkingInstance = game
 		end
+		
+		stringPath = stringPath or "."
 
 		--[[ Changing active instance ]]--
 		if treeView.View == "Client" then

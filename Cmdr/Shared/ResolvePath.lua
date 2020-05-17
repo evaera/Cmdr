@@ -14,6 +14,12 @@ return function(context,stringPath,RelativeInstance)
 
 		if stringPath == ".." then -- Move up an Instance
 			instance = RelativeInstance.Parent
+		elseif stringPath == "." then -- Current instance specified, equivilant to ./ on filesystems
+			if StartingInstance ~= RelativeInstance then
+				instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(RelativeInstance),StartingInstance)
+			else
+				instance = StartingInstance
+			end
 		elseif stringPath:sub(1,1) == "." then --Instance with reserved word specified
 			instance = util.GetInstanceFromStringPath(util.GetInstanceFullName(RelativeInstance)..stringPath, StartingInstance)
 		else
