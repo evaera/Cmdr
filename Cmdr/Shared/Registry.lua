@@ -266,6 +266,8 @@ function Registry:FlushAutoExecBuffer()
 			self.Cmdr.Dispatcher:EvaluateAndRun(command)
 		end
 	end
+
+	self.AutoExecBuffer = {}
 end
 
 return function (cmdr)
