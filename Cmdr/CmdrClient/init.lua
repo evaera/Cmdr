@@ -50,11 +50,6 @@ function Cmdr:SetActivationKeys (keysArray)
 	self.ActivationKeys = Util.MakeDictionary(keysArray)
 end
 
--- Returns the currentprompt
-function Cmdr:GetPrompt()
-	return self.Prompt
-end
-
 --- Sets the prompt on the interface
 function Cmdr:SetPrompt (prompt)
 	self.Prompt = prompt
