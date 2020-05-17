@@ -56,10 +56,6 @@ function Cmdr:SetPrompt (prompt)
 	Interface.Window:UpdateLabel()
 end
 
-function Cmdr:GetPromptchangeCallback()
-	return SetPromptCallback
-end
-
 -- Sets the callback to be ran when the prompt is changed
 function Cmdr:SetPromptchangeCallback(Callback)
 	SetPromptCallback = Callback
