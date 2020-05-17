@@ -19,6 +19,7 @@ local Cmdr do
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;
+		UnformattedPrompt = "Cmdr";
 		Prompt = "Cmdr";
 		Util = Util;
 		Events = {};
@@ -52,12 +53,18 @@ end
 
 --- Sets the prompt on the interface
 function Cmdr:SetPrompt (prompt)
+	self.UnformattedPrompt = prompt
+
 	for Index = 1,#PromptFormatters do
 		prompt = PromptFormatters[Index](prompt)
 	end
 
 	self.Prompt = prompt
 	Interface.Window:UpdateLabel()
+end
+
+function Cmdr:UpdatePrompt()
+	self:SetPrompt(self.UnformattedPrompt)
 end
 
 function Cmdr:RegisterPromptFormatter(Formatter)
