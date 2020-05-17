@@ -56,12 +56,8 @@ function Cmdr:GetPrompt()
 end
 
 --- Sets the prompt on the interface
-function Cmdr:SetPrompt (prompt, ignoreCallback)
-	if ignoreCallback or SetPromptCallback == nil then
-		self.Prompt = prompt
-	else
-		self.Prompt = SetPromptCallback(prompt)
-	end
+function Cmdr:SetPrompt (prompt)
+	self.Prompt = prompt
 	Interface.Window:UpdateLabel()
 end
 
