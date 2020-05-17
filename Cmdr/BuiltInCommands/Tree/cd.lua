@@ -1,6 +1,12 @@
 local ResolvePath;
 local AncestryChanged;
 local DETACHED_WARNING_MESSAGE = "Warning: the current working instance has been detached from the Data Model\n"
+local util;
+local treeView;
+
+local function FormatPrompt(prompt)
+	return ("%s (%s):%s"):format(prompt, treeView.View, util.GetInstanceFullName(treeView.WorkingInstance))
+end
 
 return {
 	Name = "cd",
@@ -18,13 +24,14 @@ return {
 	},
 	ClientRun = function(context, stringPath)
 		ResolvePath = require(context.Cmdr.ReplicatedRoot.Shared.ResolvePath)
-		local util = context.Cmdr.Util
-		local treeView = context:GetStore("_TreeView")
+		util = context.Cmdr.Util
+		treeView = context:GetStore("_TreeView")
 
 		--[[ Initializing state ]]--
 		if treeView.View == nil then
 			treeView.View = "Client"
 			treeView.WorkingInstance = game
+			context.Cmdr:RegisterPromptFormatter(FormatPrompt)
 		end
 		
 		stringPath = stringPath or "."
@@ -42,14 +49,14 @@ return {
 					AncestryChanged:Disconnect()
 				end
 				AncestryChanged = instance.AncestryChanged:connect(function(_,Parent)
-					context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(instance)))
+					context.Cmdr:UpdatePrompt()
 					if not game:IsAncestorOf(instance) and instance ~= game then
 						context:Reply(DETACHED_WARNING_MESSAGE)
 					end
 				end)
 
 				treeView.WorkingInstance = instance				
-				context.Cmdr:SetPrompt(("%s.%s:%s"):format(game.Name, treeView.View, util.GetInstanceFullName(instance)))
+				context.Cmdr:UpdatePrompt()
 				return "Directory changed to "..util.GetInstanceFullName(treeView.WorkingInstance)
 			end
 		else
