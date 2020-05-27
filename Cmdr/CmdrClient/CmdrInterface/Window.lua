@@ -243,7 +243,16 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
-	if input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
+	if table.find({Enum.UserInputType.MouseButton1,Enum.UserInputType.MouseButton2,Enum.UserInputType.Touch},input.UserInputType) then
+		local ps = input.Position
+		local xPos = Gui.AbsolutePosition.X
+		local yPos = Gui.AbsolutePosition.Y
+		local xOff = Gui.AbsoluteSize.X
+		local yOff = Gui.AbsoluteSize.Y
+		if not(ps.X >= xPos and ps.X <= xPos+xOff and ps.Y >= yPos and ps.Y <= yPos+yOff) then
+			self:Hide()
+		end
+	elseif input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
 		self:SelectVertical(1)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self:SelectVertical(-1)
