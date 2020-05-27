@@ -14,7 +14,7 @@ There can be many hooks of each type, and they are all run until one returns a s
 
 The callback is passed the CommandContext for the relevant command. The hooks are the last thing to run before the command itself, so all properties are available.
 
-This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
+This hook can be used to interrupt server-sided command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
 
 As a quick way to register hooks on both the server and the client, you can make a folder for your hooks, with module scripts in them which return a function. Similar to Types, if you call `Cmdr:RegisterHooksIn(yourFolderHere)` from the server, Cmdr will load all ModuleScripts in the folder on the server and the client, so you only need to write your code once.
 
