@@ -45,6 +45,7 @@ docs:
         - name: isEnabled
           type: boolean
     - name: SetHideOnLostFocus
+      since: NEXT
       params:
         - name: isEnabled
           type: boolean
