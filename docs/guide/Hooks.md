@@ -6,7 +6,7 @@ title: Hooks
 
 Hooks are callback functions that you can register which *hook* into the command execution process. Hooks are extremely useful: they can be used for implementing a custom permission system, logging commands, or overriding command output.
 
-Hooks can be registered on both the server and the client. Server commands will run server hooks, and client commands (such as `blink`) will run client hooks. Depending on your application, you may need to register hooks on one or both. For example, logging may only need to be registered on the server, but permissions might need to be registered on the client in addition to the server.
+Hooks can be registered on both the server and the client. Server commands will run server and client hooks, and client commands will run only client hooks. Depending on your application, you may need to register hooks on one or both. For example, logging may only need to be registered on the server, but permissions might need to be registered on the client in addition to the server.
 
 There can be many hooks of each type, and they are all run until one returns a string, which will replace the command response in the console.
 

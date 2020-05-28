@@ -8,6 +8,7 @@ local Player = Players.LocalPlayer
 
 local LINE_HEIGHT = 20
 local WINDOW_MAX_HEIGHT = 300
+local MOUSE_TOUCH_ENUM = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch}
 
 --- Window handles the command bar GUI
 local Window = {
@@ -243,7 +244,14 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
-	if input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
+	if self.Cmdr.HideOnLostFocus and table.find(MOUSE_TOUCH_ENUM, input.UserInputType) then
+		local ps = input.Position
+		local ap = Gui.AbsolutePosition
+		local as = Gui.AbsoluteSize
+		if ps.X < ap.X or ps.X > ap.X + as.X or ps.Y < ap.Y or ps.Y > ap.Y + as.Y then
+			self:Hide()
+		end
+	elseif input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
 		self:SelectVertical(1)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self:SelectVertical(-1)

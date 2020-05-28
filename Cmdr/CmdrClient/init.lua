@@ -18,6 +18,7 @@ local Cmdr do
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;
+		HideOnLostFocus = true;
 		PlaceName = "Cmdr";
 		Util = Util;
 		Events = {};
@@ -95,6 +96,11 @@ function Cmdr:SetMashToEnable(isEnabled)
 	if isEnabled then
 		self:SetEnabled(false)
 	end
+end
+
+--- Sets the hide on 'lost focus' feature.
+function Cmdr:SetHideOnLostFocus(enabled)
+	self.HideOnLostFocus = enabled
 end
 
 --- Sets the handler for a certain event type
