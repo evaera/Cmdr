@@ -243,7 +243,7 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
-	if table.find({Enum.UserInputType.MouseButton1,Enum.UserInputType.MouseButton2,Enum.UserInputType.Touch},input.UserInputType) then
+	if self.Cmdr.HideOnLostFocus and table.find({Enum.UserInputType.MouseButton1,Enum.UserInputType.MouseButton2,Enum.UserInputType.Touch},input.UserInputType) then
 		local ps = input.Position
 		local ap = Gui.AbsolutePosition
 		local as = Gui.AbsoluteSize
