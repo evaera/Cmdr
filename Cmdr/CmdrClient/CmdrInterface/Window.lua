@@ -245,11 +245,9 @@ function Window:BeginInput(input, gameProcessed)
 
 	if table.find({Enum.UserInputType.MouseButton1,Enum.UserInputType.MouseButton2,Enum.UserInputType.Touch},input.UserInputType) then
 		local ps = input.Position
-		local xPos = Gui.AbsolutePosition.X
-		local yPos = Gui.AbsolutePosition.Y
-		local xOff = Gui.AbsoluteSize.X
-		local yOff = Gui.AbsoluteSize.Y
-		if not(ps.X >= xPos and ps.X <= xPos+xOff and ps.Y >= yPos and ps.Y <= yPos+yOff) then
+		local ap = Gui.AbsolutePosition
+		local as = Gui.AbsoluteSize
+		if ps.X < ap.X or ps.X > ap.X + as.X or ps.Y < ap.Y or ps.Y > ap.Y + as.Y then
 			self:Hide()
 		end
 	elseif input.KeyCode == Enum.KeyCode.Down then -- Auto Complete Down
