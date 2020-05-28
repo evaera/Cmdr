@@ -8,7 +8,7 @@ local Player = Players.LocalPlayer
 
 local LINE_HEIGHT = 20
 local WINDOW_MAX_HEIGHT = 300
-local MOUSE_TOUCH_ENUM = {Enum.UserInputType.MouseButton1,Enum.UserInputType.MouseButton2,Enum.UserInputType.Touch}
+local MOUSE_TOUCH_ENUM = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch}
 
 --- Window handles the command bar GUI
 local Window = {
