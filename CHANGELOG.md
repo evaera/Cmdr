@@ -3,6 +3,7 @@
 - Add random selector for player type (#122)
 - Fixed so TextBox is not selectable using controller (#124)
 - Fixed AutoExec commands being executed multiple times (#127)
+- Added version command (#129)
 
 # v1.5.0
 
