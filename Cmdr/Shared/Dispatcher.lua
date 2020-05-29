@@ -127,13 +127,21 @@ function Dispatcher:Run (...)
 end
 
 --- Runs hooks matching name and returns nil for ok or a string for cancellation
-function Dispatcher:RunHooks(hookName, ...)
+function Dispatcher:RunHooks(hookName, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
 	end
+	
+	if hookName == "BeforeRun" and RunService:IsServer() and #self.Registry.Hooks[hookName] == 0 then
+		if RunService:IsStudio() then
+			commandContext:Reply("Server commands will not run in-game if no server-sided BeforeRun hook is configured.", Color3.fromRGB(255,228,26))
+		else
+			return "Server command blocked as no server-sided BeforeRun hook is configured."
+		end
+	end
 
 	for _, hook in ipairs(self.Registry.Hooks[hookName]) do
-		local value = hook.callback(...)
+		local value = hook.callback(commandContext, ...)
 
 		if value ~= nil then
 			return tostring(value)
