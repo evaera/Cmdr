@@ -1,3 +1,6 @@
+---
+title: Setup
+---
 # Set-up
 
 ### Installation

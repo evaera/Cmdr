@@ -22,6 +22,6 @@
     "node-balanced": "0.0.14",
     "node-fetch": "^2.6.0",
     "slugify": "^1.3.4",
-    "vuepress-plugin-api-docs-generator": "^1.0.18"
+    "vuepress-plugin-api-docs-generator": "^1.0.19"
   }
 }
