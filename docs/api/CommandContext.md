@@ -22,6 +22,9 @@ docs:
     - name: State
       desc: A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume.
       type: table
+    - name: HasClientRun
+      desc: Returns true if the command has ClientRun function.
+      type: boolean
     - name: Aliases
       type: array<string>
       desc: Any aliases that can be used to also trigger this command in addition to its name.
