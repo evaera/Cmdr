@@ -18,6 +18,7 @@ function Command.new (options)
 		Object = options.CommandObject; -- The command object (definition)
 		Group = options.CommandObject.Group; -- The group this command is in
 		State = {}; -- A table which will hold any custom command state information
+		HasClientRun = options.CommandObject.ClientRun and true or false; -- Checks if the command has client run function.
 		Aliases = options.CommandObject.Aliases;
 		Alias = options.Alias; -- The command name that was used
 		Description = options.CommandObject.Description;
