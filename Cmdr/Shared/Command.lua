@@ -18,7 +18,14 @@ function Command.new (options)
 		Object = options.CommandObject; -- The command object (definition)
 		Group = options.CommandObject.Group; -- The group this command is in
 		State = {}; -- A table which will hold any custom command state information
-		HasClientRun = options.CommandObject.ClientRun and true or false; -- Checks if the command has client run function.
+		HasImplementation = function() --Returns true if the command has an implementation on the caller's machine.
+			if RunService:IsClient() then
+				return options.CommandObject.ClientRun and true or false
+			elseif RunService:IsServer() then
+				--Assuming the server implementation of the command is the Run function of CommandObject.
+				return options.CommandObject.Run and true or false
+			end
+		end
 		Aliases = options.CommandObject.Aliases;
 		Alias = options.Alias; -- The command name that was used
 		Description = options.CommandObject.Description;

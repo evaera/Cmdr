@@ -22,9 +22,11 @@ docs:
     - name: State
       desc: A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume.
       type: table
-    - name: HasClientRun
-      desc: Returns true if the command has ClientRun function.
-      type: boolean
+    - name: HasImplementation
+      desc: Returns `true` if the command has an implementation on the caller's machine. For example, this function will return `false` from the client if you call it on a command that only has a server-side implementation.
+      Note that commands can potentially run on both the client and the server, so what this property returns on the server is not related to what it returns on the client, and vice versa. Likewise, receiving a return value of `true` on the client does not mean that the command won't run on the server, because Cmdr commands can run a first part on the client and a second part on the server.
+      This function only answers one question if you run the command; does it run any code as a result of that on this machine?
+      type: function
     - name: Aliases
       type: array<string>
       desc: Any aliases that can be used to also trigger this command in addition to its name.
