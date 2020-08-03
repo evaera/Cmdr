@@ -216,12 +216,7 @@ end
 
 --- Returns true if the command has an implementation on the caller's machine.
 function Command:HasImplementation()
-	if RunService:IsClient() then
-		return self.Object.ClientRun and true or false
-	elseif RunService:IsServer() then
-		--Assuming the server implementation of the command is the Run function of CommandObject.
-		return self.Object.Run and true or false
-	end
+	return ((RunService:IsClient() and self.Object.ClientRun) or self.Object.Run) and true or false
 end
 
 return Command
