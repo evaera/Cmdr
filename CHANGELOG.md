@@ -6,6 +6,7 @@
 - Added configurable hide on lost focus behavior (#129)
 - Added version command (#130)
 - Fix Window auto complete cursor positions (#141)
+- Add CommandContext:HasImplementation (#138)
 
 # v1.5.0
 
