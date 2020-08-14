@@ -214,4 +214,9 @@ function Command:GetStore(...)
 	return self.Dispatcher.Cmdr.Registry:GetStore(...)
 end
 
+--- Returns true if the command has an implementation on the caller's machine.
+function Command:HasImplementation()
+	return ((RunService:IsClient() and self.Object.ClientRun) or self.Object.Run) and true or false
+end
+
 return Command
