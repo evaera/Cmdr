@@ -71,7 +71,7 @@ docs:
        Note that commands can potentially run on both the client and the server, so what this property returns on the server is not related to what it returns on the client, and vice versa. Likewise, receiving a return value of `true` on the client does not mean that the command won't run on the server, because Cmdr commands can run a first part on the client and a second part on the server.
        This function only answers one question if you run the command; does it run any code as a result of that on this machine?
       returns: boolean
-      since: NEXT
+      since: v1.6.0
 ---
 
 <ApiDocs />

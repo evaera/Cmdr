@@ -58,6 +58,7 @@ module.exports = () => ({
     nav: [
       { text: 'Guide', link: '/guide/Setup' },
       { text: 'API Reference', link: '/api/Cmdr' },
+      { text: 'Changelog', link: '/Changelog' },
       { text: 'Discord', link: 'https://discord.gg/g5PdMxh' },
 			{ text: 'GitHub', link: 'https://github.com/evaera/Cmdr' }
     ],
