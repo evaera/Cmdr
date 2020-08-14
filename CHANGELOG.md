@@ -7,6 +7,7 @@
 - Added version command (#130)
 - Fix Window auto complete cursor positions (#141)
 - Add CommandContext:HasImplementation (#138)
+- Commands will no longer run in-game if no BeforeRun hook is configured (#132)
 
 # v1.5.0
 
