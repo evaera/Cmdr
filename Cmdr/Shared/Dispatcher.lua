@@ -5,12 +5,12 @@ local Util = require(script.Parent.Util)
 local Command = require(script.Parent.Command)
 
 local HISTORY_SETTING_NAME = "CmdrCommandHistory"
+local displayedBeforeRunHookWarning = false
 
 --- The dispatcher handles creating and running commands during the game.
 local Dispatcher = {
 	Cmdr = nil;
 	Registry = nil;
-
 }
 
 --- Takes in raw command information and generates a command out of it.
@@ -131,12 +131,21 @@ function Dispatcher:RunHooks(hookName, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
 	end
-	
-	if hookName == "BeforeRun" and RunService:IsServer() and #self.Registry.Hooks[hookName] == 0 then
+
+	if
+		hookName == "BeforeRun"
+		and #self.Registry.Hooks[hookName] == 0
+		and commandContext.Group ~= "DefaultUtil"
+		and commandContext:HasImplementation()
+	then
+
 		if RunService:IsStudio() then
-			commandContext:Reply("Server commands will not run in-game if no server-sided BeforeRun hook is configured.", Color3.fromRGB(255,228,26))
+			if displayedBeforeRunHookWarning == false then
+				commandContext:Reply("Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/guide/Hooks.html", Color3.fromRGB(255,228,26))
+				displayedBeforeRunHookWarning = true
+			end
 		else
-			return "Server command blocked as no server-sided BeforeRun hook is configured."
+			return "Command blocked for security as no BeforeRun hook is configured."
 		end
 	end
 
