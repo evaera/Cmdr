@@ -42,7 +42,7 @@ docs:
       desc: The command output, if the command has already been run. Typically only accessible in the AfterRun hook.
 
   functions:
-    - name: GetArguments
+    - name: GetArgument
       params:
         - name: index
           type: number

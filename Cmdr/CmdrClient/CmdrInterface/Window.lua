@@ -130,6 +130,7 @@ function Window:SetEntryText(text)
 
 	if self:IsVisible() then
 		Entry.TextBox:CaptureFocus()
+		Entry.TextBox.CursorPosition = #text + 1
 	end
 end
 

@@ -12,7 +12,7 @@ module.exports = () => ({
 
   plugins: [
     'tabs',
-    ['api-docs', {
+    ['api-docs-generator', {
       defaults: {
         returns: ['void'],
         property_tags: [{
