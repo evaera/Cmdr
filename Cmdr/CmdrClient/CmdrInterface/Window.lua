@@ -127,6 +127,7 @@ end
 --- Sets the text in the command bar text box, and captures focus
 function Window:SetEntryText(text)
 	Entry.TextBox.Text = text
+	Entry.TextBox.CursorPosition = #text + 1
 
 	if self:IsVisible() then
 		Entry.TextBox:CaptureFocus()

@@ -5,6 +5,7 @@
 - Fixed AutoExec commands being executed multiple times (#127)
 - Added configurable hide on lost focus behavior (#129)
 - Added version command (#130)
+- Fix Window auto complete cursor positions (#141)
 
 # v1.5.0
 
