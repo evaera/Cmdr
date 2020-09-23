@@ -45,3 +45,22 @@ As another example, you could create a command that killed anyone your mouse was
 ```
 alias pointer_of_death kill ${hover}
 ```
+
+### Types and Descriptions
+
+You can optionally provide types, names, and descriptions to your alias arguments, like so: `$1{type|Name|Description here}`. For example:
+
+```
+alias goodbye kill $1{player|Player|The player you want to kill.}
+```
+
+Name and Description are optional. These are all okay:
+- `alias goodbye kill $1{player}`
+- `alias goodbye kill $1{player|Player}`
+- `alias goodbye kill $1{player|Player|The player you want to kill.}`
+
+Additionally, you can supply a description for the command itself:
+
+```
+alias "goodbye|Kills a player." kill $1{player|Player|The player you want to kill.}
+```

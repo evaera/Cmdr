@@ -315,57 +315,47 @@ function Util.SubstituteArgs(str, replace)
 			end
 		end
 	end
-	return decodeCommandEscape(str:gsub("$(%w+)", replace))
+	return decodeCommandEscape(str:gsub("($%d+)%b{}", "%1"):gsub("$(%w+)", replace))
 end
 
 --- Creates an alias command
 function Util.MakeAliasCommand(name, commandString)
+	local commandName, commandDescription = unpack(name:split("|"))
+	local args = {}
+
+	for arg in commandString:gmatch("$(%d+)") do
+		local options = commandString:match("$" .. arg .. "{(.*)}")
+
+		local argType, argName, argDescription
+		if options then
+			argType, argName, argDescription = unpack(options:split("|"))
+		end
+
+		argType = argType or "string"
+		argName = argName or ("Argument " .. arg)
+		argDescription = argDescription or ""
+
+		table.insert(args, {
+			Type = argType;
+			Name = argName;
+			Description = argDescription;
+		})
+	end
+
 	return {
-		Name = name,
+		Name = commandName,
 		Aliases = {},
-		Description = commandString,
+		Description = "<Alias> " .. (commandDescription or commandString),
 		Group = "UserAlias",
-		Args = {
-			{
-				Type = "string",
-				Name = "Argument 1",
-				Description = "",
-				Default = ""
-			},
-			{
-				Type = "string",
-				Name = "Argument 2",
-				Description = "",
-				Default = ""
-			},
-			{
-				Type = "string",
-				Name = "Argument 3",
-				Description = "",
-				Default = ""
-			},
-			{
-				Type = "string",
-				Name = "Argument 4",
-				Description = "",
-				Default = ""
-			},
-			{
-				Type = "string",
-				Name = "Argument 5",
-				Description = "",
-				Default = ""
-			}
-		},
-		Run = function(context, ...)
-			local args = {...}
+		Args = args,
+		Run = function(context)
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
 			for i, command in ipairs(commands) do
 				local output = context.Dispatcher:EvaluateAndRun(
 					Util.RunEmbeddedCommands(
 						context.Dispatcher,
-						Util.SubstituteArgs(command, args)
+						Util.SubstituteArgs(command, context.RawArguments)
 					)
 				)
 				if i == #commands then
