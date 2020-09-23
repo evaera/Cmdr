@@ -1,3 +1,7 @@
+# Next
+- Cmdr now calls tostring on error objects emitted from commands (#144)
+- Cmdr now includes the full trace back in error messages.
+
 # v1.6.0
 
 - Add random selector for player type (#122)

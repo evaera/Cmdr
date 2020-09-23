@@ -69,7 +69,7 @@ function Dispatcher:EvaluateAndRun (text, executor, options)
 		return errorText
 	end
 
-	local ok, out = pcall(function()
+	local ok, out = xpcall(function()
 		local valid, errorText = command:Validate(true) -- luacheck: ignore
 
 		if not valid then
@@ -77,10 +77,10 @@ function Dispatcher:EvaluateAndRun (text, executor, options)
 		end
 
 		return command:Run() or "Command executed."
-	end)
+	end, debug.traceback)
 
 	if not ok then
-		warn(("Error occurred while evaluating command string %q\n%s"):format(text, out))
+		warn(("Error occurred while evaluating command string %q\n%s"):format(text, tostring(out)))
 	end
 
 	return ok and out or "An error occurred while running this command."
