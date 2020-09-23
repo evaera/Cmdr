@@ -49,7 +49,7 @@ function Dispatcher:Evaluate (text, executor, allowIncompleteArguments, data)
 			return false, errorText
 		end
 	else
-		return false, "Invalid command. Use the help command to see all available commands."
+		return false, ("%q is not a valid command name. Use the help command to see all available commands."):format(tostring(commandName))
 	end
 end
 
@@ -83,7 +83,7 @@ function Dispatcher:EvaluateAndRun (text, executor, options)
 		warn(("Error occurred while evaluating command string %q\n%s"):format(text, tostring(out)))
 	end
 
-	return ok and out or "An error occurred while running this command."
+	return ok and out or "An error occurred while running this command. Check the console for more information."
 end
 
 --- Send text as the local user to remote server to be evaluated there.
@@ -136,12 +136,13 @@ function Dispatcher:RunHooks(hookName, commandContext, ...)
 		hookName == "BeforeRun"
 		and #self.Registry.Hooks[hookName] == 0
 		and commandContext.Group ~= "DefaultUtil"
+		and commandContext.Group ~= "UserAlias"
 		and commandContext:HasImplementation()
 	then
 
 		if RunService:IsStudio() then
 			if displayedBeforeRunHookWarning == false then
-				commandContext:Reply("Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/guide/Hooks.html", Color3.fromRGB(255,228,26))
+				commandContext:Reply((RunService:IsServer() and "<Server>" or "<Client>") .. " Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/guide/Hooks.html", Color3.fromRGB(255,228,26))
 				displayedBeforeRunHookWarning = true
 			end
 		else
