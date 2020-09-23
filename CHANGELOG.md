@@ -3,6 +3,7 @@
 - Cmdr now includes the full trace back in error messages.
 - [Aliases can now include type checking and name information in arguments](https://eryn.io/Cmdr/guide/MetaCommands.html#alias) (#56)
 - New default command: "me". Displays the current player's name.
+- Make `bring` and `to` commands built-in aliases for `teleport`. `to` has effectively moved from the `DefaultDebug` group to the `DefaultAdmin` group. (#115)
 
 # v1.6.0
 
