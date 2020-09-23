@@ -2,6 +2,7 @@
 - Cmdr now calls tostring on error objects emitted from commands (#144)
 - Cmdr now includes the full trace back in error messages.
 - [Aliases can now include type checking and name information in arguments](https://eryn.io/Cmdr/guide/MetaCommands.html#alias) (#56)
+- New default command: "me". Displays the current player's name.
 
 # v1.6.0
 

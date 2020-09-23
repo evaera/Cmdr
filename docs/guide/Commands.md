@@ -99,11 +99,11 @@ Including [Hooks](Hooks.md), the full execution order is:
 ## Default Commands
 If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
 
-Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`
+Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
 
-Group: `DefaultDebug`: `to`, `blink` (`b`), `thru` (`t`), `position`, `version`
+Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`
 
 Group: `Help`: `help`
 
