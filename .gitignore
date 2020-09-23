@@ -41,3 +41,4 @@ luac.out
 
 node_modules/
 docs/CHANGELOG.md
+.vscode
