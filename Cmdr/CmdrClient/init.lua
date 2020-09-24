@@ -14,7 +14,7 @@ local Cmdr do
 		ReplicatedRoot = script;
 		RemoteFunction = script:WaitForChild("CmdrFunction");
 		RemoteEvent = script:WaitForChild("CmdrEvent");
-		ActivationKeys = {[Enum.KeyCode.Semicolon] = true};
+		ActivationKeys = {[Enum.KeyCode.F2] = true};
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;

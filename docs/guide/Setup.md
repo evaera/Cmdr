@@ -67,7 +67,7 @@ local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
 local Cmdr = Resources:LoadLibrary("CmdrClient")
 
 -- Configurable, and you can choose multiple keys
-Cmdr:SetActivationKeys({ Enum.KeyCode.Semicolon })
+Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
 -- See below for the full API.
 ```
 ::: -->
@@ -77,7 +77,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Configurable, and you can choose multiple keys
-Cmdr:SetActivationKeys({ Enum.KeyCode.Semicolon })
+Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
 -- See below for the full API.
 ```
 :::
