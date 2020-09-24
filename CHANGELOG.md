@@ -1,4 +1,4 @@
-# Next
+# v1.7.0
 - Cmdr now calls tostring on error objects emitted from commands (#144)
 - Cmdr now includes the full trace back in error messages.
 - [Aliases can now include type checking and name information in arguments](https://eryn.io/Cmdr/guide/MetaCommands.html#alias) (#56)
