@@ -1,3 +1,6 @@
+# v1.7.1
+- Handle non-string error values correctly
+
 # v1.7.0
 - Cmdr now calls tostring on error objects emitted from commands (#144)
 - Cmdr now includes the full trace back in error messages.

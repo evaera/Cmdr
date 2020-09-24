@@ -77,7 +77,9 @@ function Dispatcher:EvaluateAndRun (text, executor, options)
 		end
 
 		return command:Run() or "Command executed."
-	end, debug.traceback)
+	end, function(value)
+		return debug.traceback(tostring(value))
+	end)
 
 	if not ok then
 		warn(("Error occurred while evaluating command string %q\n%s"):format(text, tostring(out)))
