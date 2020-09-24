@@ -1,4 +1,4 @@
-local version = "v1.7.0"
+local version = "v1.7.1"
 
 return {
 	Name = "version",
