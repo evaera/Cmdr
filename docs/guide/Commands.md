@@ -103,7 +103,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `ki
 
 Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`
 
 Group: `Help`: `help`
 
