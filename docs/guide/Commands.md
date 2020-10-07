@@ -101,7 +101,7 @@ If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available wi
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
 
-Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`
+Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`
 
 Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`
 

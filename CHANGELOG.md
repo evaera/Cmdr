@@ -3,6 +3,7 @@
   - Keys can begin with a dot to be per-session only.
   - Keys can begin with a $ to be game-wide, shared among all players.
   - Keys can begin with $. to be game-wide and per-session.
+- Add `fetch` command, which fetches and returns data from the Internet.
 
 # v1.7.1
 - Handle non-string error values correctly

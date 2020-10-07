@@ -13,6 +13,17 @@ function Util.MakeDictionary(array)
 	return dictionary
 end
 
+--- Takes a dictionary and returns its keys.
+function Util.DictionaryKeys(dict)
+	local keys = {}
+
+	for key in pairs(dict) do
+		table.insert(keys, key)
+	end
+
+	return keys
+end
+
 -- Takes an array of instances and returns (array<names>, array<instances>)
 local function transformInstanceSet(instances)
 	local names = {}

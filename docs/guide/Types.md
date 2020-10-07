@@ -25,6 +25,8 @@ By default, these types are available:
 | `vector3` | `Vector3` | `vector3s` | `array<Vector3>`
 | `vector2` | `Vector2` | `vector2s` | `array<Vector2>`
 | `duration` | `number` | `durations` | `array<number>`
+| `storedKey` | `string` | `storedKeys` | `array<strings>`
+| `url` | `string` | `urls` | `array<strings>`
 
 Plural types (types that return a table) are listable, so you can provide a comma-separated list of values.
 
