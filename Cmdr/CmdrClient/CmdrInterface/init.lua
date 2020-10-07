@@ -54,18 +54,31 @@ return function (Cmdr)
 
 			local lastArgument = command:GetArgument(#arguments)
 			if lastArgument then
-				local typedText = lastArgument.RawSegments[#lastArgument.RawSegments]
-				local items, options = lastArgument:GetAutocomplete()
-				options = options or {}
+				local typedText = lastArgument.TextSegmentInProgress
 
-				for i, item in pairs(items) do
-					acItems[i] = {typedText, item}
+				local isPartial = false
+				if lastArgument.RawSegmentsAreAutocomplete then
+					for i, segment in ipairs(lastArgument.RawSegments) do
+						acItems[i] = {segment, segment}
+					end
+				else
+					local items, options = lastArgument:GetAutocomplete()
+					options = options or {}
+					isPartial = options.IsPartial
+
+					for i, item in pairs(items) do
+						acItems[i] = {typedText, item}
+					end
 				end
 
 				local valid = true
 
 				if #typedText > 0 then
 					valid, errorText = lastArgument:Validate()
+				end
+
+				if not atEnd and valid then
+					Window:HideInvalidState()
 				end
 
 				return AutoComplete:Show(acItems, {
@@ -79,7 +92,7 @@ return function (Cmdr)
 					type = lastArgument.Type.DisplayName;
 					description = (valid == false and errorText) or lastArgument.Object.Description;
 					invalid = not valid;
-					isPartial = options.IsPartial or false;
+					isPartial = isPartial;
 				})
 			end
 		elseif commandText and #arguments == 0 then
@@ -91,6 +104,18 @@ return function (Cmdr)
 					name = exactCommand.Name;
 					description = exactCommand.Description;
 				}}
+
+				if
+					exactCommand.Args
+					and exactCommand.Args[1]
+					and (not exactCommand.Args[1].Optional
+					and exactCommand.Args[1].Default == nil)
+				then
+					Window:SetIsValidInput(false, "This command has required arguments.")
+					Window:HideInvalidState()
+				end
+			else
+				Window:SetIsValidInput(false, ("%q is not a valid command name. Use the help command to see all available commands."):format(commandText))
 			end
 
 			local acItems = {exactMatch}
@@ -107,7 +132,7 @@ return function (Cmdr)
 			return AutoComplete:Show(acItems)
 		end
 
-		Window:SetIsValidInput(false, "Invalid command. Use the help command to see all available commands.")
+		Window:SetIsValidInput(false, "Use the help command to see all available commands.")
 		AutoComplete:Hide()
 	end
 

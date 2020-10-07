@@ -264,6 +264,7 @@ function Util.MakeListableType(type, override)
 		Transform = type.Transform,
 		Validate = type.Validate,
 		Autocomplete = type.Autocomplete,
+		Default = type.Default,
 		Parse = function(...)
 			return {type.Parse(...)}
 		end

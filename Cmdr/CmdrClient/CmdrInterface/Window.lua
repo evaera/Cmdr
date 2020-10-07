@@ -147,6 +147,10 @@ function Window:SetIsValidInput(isValid, errorText)
 	self._errorText = errorText
 end
 
+function Window:HideInvalidState()
+	Entry.TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+end
+
 --- Event handler for text box focus lost
 function Window:LoseFocus(submit)
 	local text = Entry.TextBox.Text

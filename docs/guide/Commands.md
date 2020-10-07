@@ -119,6 +119,37 @@ Cmdr:RegisterDefaultCommands(function(cmd)
 end)
 ```
 
+## Argument Value Operators
+
+Instead of typing out an entire argument, you can insert the following operators as a shorthand.
+
+| Operator | Meaning | Listable types only |
+| -------- | ------- | ------------------- |
+| `.`      | Default value for the type | No
+| `?`      | A random value from all possible values | No
+| `*`      | A list of all possible values | Yes
+| `**`     | All possible values minus the default value. | Yes
+| `?N`     | N random values picked from all possible values | Yes
+
+"All possible values" is determined automatically by using the values that are displayed in the autocomplete menu when you haven't typed anything for that argument yet.
+
+If you want Cmdr to interpret the operator as literal text, you can escape these operators by inserting a `\` before them. For example: `\*` will be interpreted as a literal `*`.
+
+### Example
+
+For the `players` type, this is the meaning of the operators:
+
+
+| Operator | Meaning |
+| -------- | ------ |
+| `.`      | "me", or the player who is running the command.
+| `?`      | A random single player.
+| `*`      | All players.
+| `**`     | "others", or all players who aren't the player running the command.
+| `?N`     | N random players.
+
+So: `kill *` kills all players, while `kill **` kills all players but you.
+
 ## Prefixed Union Types
 An argument can be allowed to accept a different type when starting with a specific prefix. The most common example of this is with the `players` type, which when prefixed with % allows the user to select players based on team, rather than name.
 
@@ -130,7 +161,6 @@ Some default types automatically have a prefixed union type applied to them, bec
 
 Here is a list of automatic prefixed union types:
 
--------------------------
 | Type | Union |
 |------|-------|
 | `players` | `players % teamPlayers`

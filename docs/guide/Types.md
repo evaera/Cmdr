@@ -56,6 +56,12 @@ end
 
 Take a gander at the [built-in types](https://github.com/evaera/Cmdr/tree/master/Cmdr/BuiltInTypes) for more examples.
 
+## Default value
+
+You can specify a "default value" for your type by adding a `Default` function to it. For example, the default value for the `players` type is the name of the player who ran the command. The `Default` function should always return a **string**, as this is inserted BEFORE parsing.
+
+For any argument that is type with a default value, you can simply type a `.` in Cmdr and the default value will automatically be used in its place.
+
 ## Enum types
 
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).

@@ -4,6 +4,13 @@
   - Keys can begin with a $ to be game-wide, shared among all players.
   - Keys can begin with $. to be game-wide and per-session.
 - Add `fetch` command, which fetches and returns data from the Internet.
+- Generalize the `*`, `.`, `?`, and `?N` operators from the player type for all types.
+  - Adds a `Default` function to types to determine their "default" value, this maps to `.`
+  - `*` is determined by calling the `Autocomplete` function with an empty string
+  - `?` is a single random value from the above;
+  - `?N` represents a list of N random values;
+  - `**` is `*` (all) minus `.` (default), which is commonly referred to as "others" in the `player` type
+- Fix client side validation to disallow sending commands with incomplete arguments
 
 # v1.7.1
 - Handle non-string error values correctly

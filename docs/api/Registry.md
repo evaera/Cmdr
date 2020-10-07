@@ -75,6 +75,17 @@ docs:
             kind: function
             params: "value: T"
             returns: any
+        Default:
+          desc: |
+            The `Default` function is optional and should return the "default" value for this type, as a **string**. For example, the default value of the `players` type is the name of the player who ran the command.
+          type:
+            kind: union
+            types:
+              - nil
+              - kind: function
+                params: "player: Player"
+                returns:
+                  - string
         Listable:
           type: boolean?
           desc: |
