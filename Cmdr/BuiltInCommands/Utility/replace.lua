@@ -21,7 +21,7 @@ return {
 		},
 	};
 
-	ClientRun = function(_, haystack, needle, replacement)
+	Run = function(_, haystack, needle, replacement)
 		return haystack:gsub(needle, replacement)
 	end
 }

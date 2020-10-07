@@ -14,7 +14,7 @@ return {
 		},
 	};
 
-	ClientRun = function(context, command)
+	Run = function(context, command)
 		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
 	end
 }

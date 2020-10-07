@@ -1,5 +1,3 @@
-local Players = game:GetService("Players")
-
 return {
 	Name = "me";
 	Aliases = {};
@@ -7,7 +5,7 @@ return {
 	Group = "DefaultUtil";
 	Args = {};
 
-	ClientRun = function()
-		return Players.LocalPlayer.Name
+	Run = function(context)
+		return context.Executor.Name
 	end
 }
