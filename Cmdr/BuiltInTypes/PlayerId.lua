@@ -41,6 +41,10 @@ local playerIdType = {
 	Parse = function (text)
 		return getUserId(text)
 	end;
+
+	Default = function(player)
+		return player.Name
+	end;
 }
 
 return function (cmdr)
