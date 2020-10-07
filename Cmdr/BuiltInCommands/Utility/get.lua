@@ -12,6 +12,8 @@ return {
 	};
 
 	ClientRun = function(context, key)
+		context:GetStore("vars_used")[key] = true
+
 		if key:sub(1, 1) == "$" then
 			-- Global keys always need to run server side.
 			return
