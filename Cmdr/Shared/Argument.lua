@@ -2,7 +2,7 @@ local Util = require(script.Parent.Util)
 
 local function unescapeOperators(text)
 	for _, operator in ipairs({"%.", "%?", "%*", "%*%*"}) do
-		text = text:gsub("\\%" .. operator, operator:gsub("%%", ""))
+		text = text:gsub("\\" .. operator, operator:gsub("%%", ""))
 	end
 
 	return text

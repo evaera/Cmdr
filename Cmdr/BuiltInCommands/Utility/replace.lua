@@ -1,6 +1,6 @@
 return {
 	Name = "replace";
-	Aliases = {};
+	Aliases = {"gsub", "//"};
 	Description = "Replaces text A with text B";
 	Group = "DefaultUtil";
 	Args = {
@@ -17,7 +17,8 @@ return {
 		{
 			Type = "string";
 			Name = "Replacement";
-			Description = "The string to replace matches (%1 to insert matches)."
+			Description = "The string to replace matches (%1 to insert matches).";
+			Default = "";
 		},
 	};
 

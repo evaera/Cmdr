@@ -141,18 +141,18 @@ end
 local function encodeControlChars(text)
 	return first(
 		text
-		:gsub("\\\\", string.char(17))
-		:gsub("\\\"", string.char(18))
-		:gsub("\\'", string.char(19))
+		:gsub("\\\\", "___!CMDR_ESCAPE!___")
+		:gsub("\\\"", "___!CMDR_QUOTE!___")
+		:gsub("\\'", "___!CMDR_SQUOTE!___")
 	)
 end
 
 local function decodeControlChars(text)
 	return first(
 		text
-		:gsub(string.char(17), "\\")
-		:gsub(string.char(18), "\"")
-		:gsub(string.char(19), "'")
+		:gsub("___!CMDR_ESCAPE!___", "\\")
+		:gsub("___!CMDR_QUOTE!___", "\"")
+		:gsub("___!CMDR_SQUOTE!___", "'")
 	)
 end
 
@@ -280,11 +280,11 @@ function Util.MakeListableType(type, override)
 end
 
 local function encodeCommandEscape(text)
-	return first(text:gsub("\\%$", string.char(20)))
+	return first(text:gsub("\\%$", "___!CMDR_DOLLAR!___"))
 end
 
 local function decodeCommandEscape(text)
-	return first(text:gsub(string.char(20), "$"))
+	return first(text:gsub("___!CMDR_DOLLAR!___", "$"))
 end
 
 --- Runs embedded commands and replaces them
@@ -335,6 +335,8 @@ function Util.MakeAliasCommand(name, commandString)
 	local commandName, commandDescription = unpack(name:split("|"))
 	local args = {}
 
+	commandString = commandString:gsub("&&&", "___!CMDR_SPLIT!___")
+
 	for arg in commandString:gmatch("$(%d+)") do
 		local options = commandString:match("$" .. arg .. "{(.*)}")
 
@@ -364,6 +366,8 @@ function Util.MakeAliasCommand(name, commandString)
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
 			for i, command in ipairs(commands) do
+				command = command:gsub("___!CMDR_SPLIT!___", "&&")
+
 				local output = context.Dispatcher:EvaluateAndRun(
 					Util.RunEmbeddedCommands(
 						context.Dispatcher,

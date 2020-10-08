@@ -15,9 +15,11 @@ return {
 	};
 
 	Run = function(context, fullCommand)
+		fullCommand = fullCommand:gsub("&&&", "___!CMDR_SPLIT!___")
 		local commands = fullCommand:split("&&")
 
 		for i, command in ipairs(commands) do
+			command = command:gsub("___!CMDR_SPLIT!___", "&&")
 			local output = context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
 
 			if i == #commands then
