@@ -273,7 +273,7 @@ docs:
     - name: GetCommands
       returns: array<CommandDefinition>
       desc: Returns an array of all commands (aliases not included).
-    - name: GetCommandsAsStrings
+    - name: GetCommandNames
       returns: array<string>
       desc: Returns an array of all command names.
     - name: RegisterHook

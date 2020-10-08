@@ -203,7 +203,7 @@ function Registry:GetCommands ()
 end
 
 --- Returns an array of the names of all registered commands (not including aliases)
-function Registry:GetCommandsAsStrings ()
+function Registry:GetCommandNames ()
 	local commands = {}
 
 	for _, command in pairs(self.CommandsArray) do
@@ -212,6 +212,20 @@ function Registry:GetCommandsAsStrings ()
 
 	return commands
 end
+
+Registry.GetCommandsAsStrings = Registry.GetCommandNames
+
+--- Returns an array of the names of all registered types (not including aliases)
+function Registry:GetTypeNames ()
+	local typeNames = {}
+
+	for typeName in pairs(self.Types) do
+		typeNames[#typeNames + 1] = typeName
+	end
+
+	return typeNames
+end
+
 
 --- Gets a type definition by name.
 function Registry:GetType (name)

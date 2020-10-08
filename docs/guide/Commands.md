@@ -103,7 +103,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `ki
 
 Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`, `json_array_encode`, `json_array_decode`, `math`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`, `json_array_encode`, `json_array_decode`, `resolve`, `len`, `pick`, `rand`, `math`
 
 Group: `Help`: `help`
 
@@ -149,6 +149,19 @@ For the `players` type, this is the meaning of the operators:
 | `?N`     | N random players.
 
 So: `kill *` kills all players, while `kill **` kills all players but you.
+
+### `resolve` command
+
+The `resolve` command can be used to retrieve the true value of these operators as a list. It takes a type and an operator as arguments, and returns the list as a string.
+
+Examples:
+
+| Input | Output |
+| ----- | ------ |
+| `resolve players .` | `Player1`
+| `resolve players *` | `Player1,Player2,Player3,Player4`
+| `resolve players **`| `Player2,Player3,Player4`
+| `resolve players ?` | `Player3`
 
 ## Prefixed Union Types
 An argument can be allowed to accept a different type when starting with a specific prefix. The most common example of this is with the `players` type, which when prefixed with % allows the user to select players based on team, rather than name.
