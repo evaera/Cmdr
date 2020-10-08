@@ -16,6 +16,7 @@
 - New command `resolve`, which resolves the argument value operators into lists.
 - New commands `len`, `pick`, and `rand`.
 - `run` command now supports multiple commands delimited by `&&`
+- `edit` command allows you to edit text within a text area
 
 # v1.7.1
 - Handle non-string error values correctly
