@@ -119,7 +119,7 @@ return function (Cmdr)
 			end
 
 			local acItems = {exactMatch}
-			for _, cmd in pairs(Cmdr.Registry:GetCommandsAsStrings()) do
+			for _, cmd in pairs(Cmdr.Registry:GetCommandNames()) do
 				if commandText:lower() == cmd:lower():sub(1, #commandText) and (exactMatch == nil or exactMatch[1] ~= commandText) then
 					local commandObject = Cmdr.Registry:GetCommand(cmd)
 					acItems[#acItems + 1] = {commandText, cmd, options = {

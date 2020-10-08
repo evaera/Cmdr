@@ -11,6 +11,9 @@
   - `?N` represents a list of N random values;
   - `**` is `*` (all) minus `.` (default), which is commonly referred to as "others" in the `player` type
 - Fix client side validation to disallow sending commands with incomplete arguments
+- New commands `json_array_encode` and `json_array_decode`
+- `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
+- New command `resolve`, which resolves the argument value operators into lists.
 
 # v1.7.1
 - Handle non-string error values correctly
