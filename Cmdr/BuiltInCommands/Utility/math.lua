@@ -7,7 +7,7 @@ return {
 		{
 			Type = "string";
 			Name = "Operation";
-			Description = "A math operation (/ * ^ + - % rand)"
+			Description = "A math operation (/ * ^ + - %)"
 		},
 		{
 			Type = "number";
@@ -35,9 +35,6 @@ return {
 			result = value1 - value2
 		elseif op == "%" then
 			result = value1 % value2
-		elseif op == "rand" and value1 <= value2 then
-			result = math.random(value1, value2)
-		end
 		return tostring(result)
 	end
 }
