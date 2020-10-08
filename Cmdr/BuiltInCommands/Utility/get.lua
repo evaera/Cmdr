@@ -1,6 +1,6 @@
 return {
 	Name = "get";
-	Aliases = {};
+	Aliases = {"$"};
 	Description = "Gets a stored value.";
 	Group = "DefaultUtil";
 	Args = {

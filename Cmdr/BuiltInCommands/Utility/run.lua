@@ -1,6 +1,6 @@
 return {
 	Name = "run";
-	Aliases = {};
+	Aliases = {">"};
 	AutoExec = {
 		"alias discard replace ${run $1} .* \\\"\\\""
 	};
@@ -15,12 +15,18 @@ return {
 	};
 
 	Run = function(context, fullCommand)
-		fullCommand = fullCommand:gsub("&&&", "___!CMDR_SPLIT!___")
+		fullCommand = fullCommand
+			:gsub("&&&", "___!CMDR_SPLIT!___")
+			:gsub("|||", "___!CMDR_DOUBLE_PIPE!___")
 		local commands = fullCommand:split("&&")
 
+		local output = ""
 		for i, command in ipairs(commands) do
-			command = command:gsub("___!CMDR_SPLIT!___", "&&")
-			local output = context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
+			command = command
+				:gsub("||", output:find("%s") and ("%q"):format(output) or output)
+				:gsub("___!CMDR_SPLIT!___", "&&")
+				:gsub("___!CMDR_DOUBLE_PIPE!___", "||")
+			output = tostring(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command)))
 
 			if i == #commands then
 				return output

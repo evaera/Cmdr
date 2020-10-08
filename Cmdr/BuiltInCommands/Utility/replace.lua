@@ -3,6 +3,10 @@ return {
 	Aliases = {"gsub", "//"};
 	Description = "Replaces text A with text B";
 	Group = "DefaultUtil";
+	AutoExec = {
+		"alias \"map|Maps a CSV into another CSV\" replace $1{string|CSV} ([^,]+) \"$2{string|mapped value|Use %1 to insert the element}\"",
+		"alias join replace $1{string|CSV} , $2{string|Delimiter}"
+	},
 	Args = {
 		{
 			Type = "string";

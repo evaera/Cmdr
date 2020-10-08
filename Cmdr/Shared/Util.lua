@@ -335,13 +335,16 @@ function Util.MakeAliasCommand(name, commandString)
 	local commandName, commandDescription = unpack(name:split("|"))
 	local args = {}
 
-	commandString = commandString:gsub("&&&", "___!CMDR_SPLIT!___")
+	commandString = commandString
+		:gsub("&&&", "___!CMDR_SPLIT!___")
+		:gsub("|||", "___!CMDR_DOUBLE_PIPE!___")
 
 	for arg in commandString:gmatch("$(%d+)") do
-		local options = commandString:match("$" .. arg .. "{(.*)}")
+		local options = commandString:match("$" .. arg .. "(%b{})")
 
 		local argType, argName, argDescription
 		if options then
+			options = options:sub(2, #options-1) -- remove braces
 			argType, argName, argDescription = unpack(options:split("|"))
 		end
 
@@ -365,10 +368,14 @@ function Util.MakeAliasCommand(name, commandString)
 		Run = function(context)
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
+			local output = ""
 			for i, command in ipairs(commands) do
-				command = command:gsub("___!CMDR_SPLIT!___", "&&")
+				command = command
+					:gsub("||", output:find("%s") and ("%q"):format(output) or output)
+					:gsub("___!CMDR_SPLIT!___", "&&")
+					:gsub("___!CMDR_DOUBLE_PIPE!___", "||")
 
-				local output = context.Dispatcher:EvaluateAndRun(
+				output = context.Dispatcher:EvaluateAndRun(
 					Util.RunEmbeddedCommands(
 						context.Dispatcher,
 						Util.SubstituteArgs(command, context.RawArguments)
