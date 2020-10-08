@@ -103,7 +103,7 @@ Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `ki
 
 Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`, `json_array_encode`, `json_array_decode`, `resolve`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run`, `runif`, `echo`, `hover`, `replace`, `history`, `me`, `get`, `set`, `json_array_encode`, `json_array_decode`, `resolve`, `len`, `pick`, `rand`
 
 Group: `Help`: `help`
 

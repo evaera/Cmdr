@@ -14,6 +14,7 @@
 - New commands `json_array_encode` and `json_array_decode`
 - `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 - New command `resolve`, which resolves the argument value operators into lists.
+- New commands `len`, `pick`, and `rand`.
 
 # v1.7.1
 - Handle non-string error values correctly
