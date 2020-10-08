@@ -16,6 +16,8 @@ By default, if the evaluated command output has a space in it, the return value 
 ## Run
 Run is the simplest of the bunch, and does right what it says on the tin. It runs whatever text you give it immediately as a command. This is useful, because it evaluates embedded commands within the command string before running.
 
+Commands can contain more than one distinct command, delimited by `&&`.
+
 ```
 run ${{"echo kill me"}}
 ```

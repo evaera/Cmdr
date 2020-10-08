@@ -14,7 +14,15 @@ return {
 		},
 	};
 
-	Run = function(context, command)
-		return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
+	Run = function(context, fullCommand)
+		local commands = fullCommand:split("&&")
+
+		for i, command in ipairs(commands) do
+			local output = context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command))
+
+			if i == #commands then
+				return output
+			end
+		end
 	end
 }

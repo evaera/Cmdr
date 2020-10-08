@@ -15,6 +15,7 @@
 - `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 - New command `resolve`, which resolves the argument value operators into lists.
 - New commands `len`, `pick`, and `rand`.
+- `run` command now supports multiple commands delimited by `&&`
 
 # v1.7.1
 - Handle non-string error values correctly
