@@ -20,6 +20,14 @@ Run is the simplest of the bunch, and does right what it says on the tin. It run
 run ${{"echo kill me"}}
 ```
 
+Commands can contain more than one distinct command, delimited by `&&`. This can be escaped by adding an additional ampersand, for example: `&&&`. You can escape an additional level by adding more. `&&&&` is a two level deep escape.
+
+When using `&&`, you can access the previous command's output by using the `||` slot operator. For example
+
+`run echo evaera && kill ||` (evaera dies)
+
+The `run` command has a single-character alias, `>`, which can also be used to invoke it.
+
 ## Bind
 Bind is a command that allows you to run a certain command string every time some event happens. The default bind type is by user input (mouse or keyboard input), but you can also bind to other events.
 

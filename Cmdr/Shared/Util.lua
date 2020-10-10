@@ -141,18 +141,18 @@ end
 local function encodeControlChars(text)
 	return first(
 		text
-		:gsub("\\\\", string.char(17))
-		:gsub("\\\"", string.char(18))
-		:gsub("\\'", string.char(19))
+		:gsub("\\\\", "___!CMDR_ESCAPE!___")
+		:gsub("\\\"", "___!CMDR_QUOTE!___")
+		:gsub("\\'", "___!CMDR_SQUOTE!___")
 	)
 end
 
 local function decodeControlChars(text)
 	return first(
 		text
-		:gsub(string.char(17), "\\")
-		:gsub(string.char(18), "\"")
-		:gsub(string.char(19), "'")
+		:gsub("___!CMDR_ESCAPE!___", "\\")
+		:gsub("___!CMDR_QUOTE!___", "\"")
+		:gsub("___!CMDR_SQUOTE!___", "'")
 	)
 end
 
@@ -280,11 +280,11 @@ function Util.MakeListableType(type, override)
 end
 
 local function encodeCommandEscape(text)
-	return first(text:gsub("\\%$", string.char(20)))
+	return first(text:gsub("\\%$", "___!CMDR_DOLLAR!___"))
 end
 
 local function decodeCommandEscape(text)
-	return first(text:gsub(string.char(20), "$"))
+	return first(text:gsub("___!CMDR_DOLLAR!___", "$"))
 end
 
 --- Runs embedded commands and replaces them
@@ -335,11 +335,16 @@ function Util.MakeAliasCommand(name, commandString)
 	local commandName, commandDescription = unpack(name:split("|"))
 	local args = {}
 
+	commandString = commandString
+		:gsub("&&&", "___!CMDR_SPLIT!___")
+		:gsub("|||", "___!CMDR_DOUBLE_PIPE!___")
+
 	for arg in commandString:gmatch("$(%d+)") do
-		local options = commandString:match("$" .. arg .. "{(.*)}")
+		local options = commandString:match("$" .. arg .. "(%b{})")
 
 		local argType, argName, argDescription
 		if options then
+			options = options:sub(2, #options-1) -- remove braces
 			argType, argName, argDescription = unpack(options:split("|"))
 		end
 
@@ -363,8 +368,14 @@ function Util.MakeAliasCommand(name, commandString)
 		Run = function(context)
 			local commands = Util.SplitStringSimple(commandString, "&&")
 
+			local output = ""
 			for i, command in ipairs(commands) do
-				local output = context.Dispatcher:EvaluateAndRun(
+				command = command
+					:gsub("||", output:find("%s") and ("%q"):format(output) or output)
+					:gsub("___!CMDR_SPLIT!___", "&&")
+					:gsub("___!CMDR_DOUBLE_PIPE!___", "||")
+
+				output = context.Dispatcher:EvaluateAndRun(
 					Util.RunEmbeddedCommands(
 						context.Dispatcher,
 						Util.SubstituteArgs(command, context.RawArguments)
@@ -466,6 +477,28 @@ function Util.EmulateTabstops(text, tabWidth)
 		result = result .. (char == "\t" and string.rep(" ", tabWidth - #result % tabWidth) or char)
 	end
 	return result
+end
+
+function Util.Mutex()
+	local queue = {}
+	local locked = false
+
+	return function ()
+		if locked then
+			table.insert(queue, coroutine.running())
+			coroutine.yield()
+		else
+			locked = true
+		end
+
+		return function()
+			if #queue > 0 then
+				coroutine.resume(table.remove(queue, 1))
+			else
+				locked = false
+			end
+		end
+	end
 end
 
 return Util

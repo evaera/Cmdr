@@ -1,6 +1,6 @@
 return {
 	Name = "set";
-	Aliases = {};
+	Aliases = {"$="};
 	Description = "Sets a stored value.";
 	Group = "DefaultUtil";
 	Args = {

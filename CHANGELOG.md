@@ -15,6 +15,12 @@
 - `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 - New command `resolve`, which resolves the argument value operators into lists.
 - New commands `len`, `pick`, and `rand`.
+- `run` now has an alias: `>`
+- `replace` now has an alias: `//`
+- `run` command now supports multiple commands delimited by `&&`
+  - Slot operator allows you to insert the output of the previous command in a chain of commands separated by `&&`. For example: `> echo evaera && kill ||` (evaera dies)
+- `edit` command allows you to edit text within a text area
+- New `join` and `map` commands
 
 # v1.7.1
 - Handle non-string error values correctly
