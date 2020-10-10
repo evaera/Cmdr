@@ -339,24 +339,30 @@ function Util.MakeAliasCommand(name, commandString)
 		:gsub("&&&", "___!CMDR_SPLIT!___")
 		:gsub("|||", "___!CMDR_DOUBLE_PIPE!___")
 
+
+	local seenArgs = {}
+
 	for arg in commandString:gmatch("$(%d+)") do
-		local options = commandString:match("$" .. arg .. "(%b{})")
+		if seenArgs[arg] == nil then
+			seenArgs[arg] = true
+			local options = commandString:match("$" .. arg .. "(%b{})")
 
-		local argType, argName, argDescription
-		if options then
-			options = options:sub(2, #options-1) -- remove braces
-			argType, argName, argDescription = unpack(options:split("|"))
+			local argType, argName, argDescription
+			if options then
+				options = options:sub(2, #options-1) -- remove braces
+				argType, argName, argDescription = unpack(options:split("|"))
+			end
+
+			argType = argType or "string"
+			argName = argName or ("Argument " .. arg)
+			argDescription = argDescription or ""
+
+			table.insert(args, {
+				Type = argType;
+				Name = argName;
+				Description = argDescription;
+			})
 		end
-
-		argType = argType or "string"
-		argName = argName or ("Argument " .. arg)
-		argDescription = argDescription or ""
-
-		table.insert(args, {
-			Type = argType;
-			Name = argName;
-			Description = argDescription;
-		})
 	end
 
 	return {
