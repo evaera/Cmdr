@@ -1,7 +1,7 @@
 return {
-	Name = "get";
-	Aliases = {"$"};
-	Description = "Gets a stored value.";
+	Name = "var";
+	Aliases = {};
+	Description = "Gets a stored variable.";
 	Group = "DefaultUtil";
 	Args = {
 		{

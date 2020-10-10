@@ -1,6 +1,6 @@
 return {
 	Name = "echo";
-	Aliases = {};
+	Aliases = {"="};
 	Description = "Echoes your text back to you.";
 	Group = "DefaultUtil";
 	Args = {

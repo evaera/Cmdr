@@ -33,10 +33,16 @@ return {
 			Name = "Input text";
 			Description = "The text you wish to edit";
 			Default = "";
+		},
+		{
+			Type = "string";
+			Name = "Delimiter";
+			Description = "The character that separates each line";
+			Default = ",";
 		}
 	};
 
-	ClientRun = function(context, text)
+	ClientRun = function(context, text, delimeter)
 		lock = lock or context.Cmdr.Util.Mutex()
 
 		local unlock = lock()
@@ -52,7 +58,7 @@ return {
 			textBox[key] = value
 		end
 
-		textBox.Text = text
+		textBox.Text = text:gsub(delimeter, "\n")
 		textBox.Parent = screenGui
 
 		screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -61,7 +67,7 @@ return {
 
 		textBox.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton2 then
-				coroutine.resume(thread, textBox.Text:gsub("\n", ","))
+				coroutine.resume(thread, textBox.Text:gsub("\n", delimeter))
 				screenGui:Destroy()
 				unlock()
 			end
