@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 
 return {
-	Name = "json_array_encode";
+	Name = "json-array-encode";
 	Aliases = {};
 	Description = "Encodes a comma-separated list into a JSON array";
 	Group = "DefaultUtil";
