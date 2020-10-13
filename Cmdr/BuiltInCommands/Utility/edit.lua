@@ -51,6 +51,7 @@ return {
 
 		local screenGui = Instance.new("ScreenGui")
 		screenGui.Name = "CmdrEditBox"
+		screenGui.ResetOnSpawn = false
 
 		local textBox = Instance.new("TextBox")
 
