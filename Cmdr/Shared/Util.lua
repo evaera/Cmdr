@@ -123,11 +123,6 @@ local function charCode(n)
 	return utf8.char(tonumber(n, 16))
 end
 
--- Discard any excess return values
-local function first(x)
-	return x
-end
-
 --- Parses escape sequences into their fully qualified characters
 function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
@@ -138,21 +133,43 @@ function Util.ParseEscapeSequences(text)
 	:gsub("\\x(%x%x)", charCode)
 end
 
+function Util.EncodeEscapedOperator(text, op)
+	local first = op:sub(1, 1)
+	local escapedOp = op:gsub(".", "%%%1")
+	local escapedFirst = "%" .. first
+
+	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, op)
+			return (esc:sub(1, #esc-1) .. op):gsub(".", function(char)
+					return "\\u" .. string.format("%04x", string.byte(char), 16)
+			end)
+	end)
+end
+
+local OPERATORS = {"&&", "||", ";"}
+function Util.EncodeEscapedOperators(text)
+	for _, operator in ipairs(OPERATORS) do
+		text = Util.EncodeEscapedOperator(text, operator)
+	end
+
+	return text
+end
+
 local function encodeControlChars(text)
-	return first(
+	return (
 		text
 		:gsub("\\\\", "___!CMDR_ESCAPE!___")
 		:gsub("\\\"", "___!CMDR_QUOTE!___")
 		:gsub("\\'", "___!CMDR_SQUOTE!___")
+		:gsub("\\\n", "___!CMDR_NL!___")
 	)
 end
 
 local function decodeControlChars(text)
-	return first(
+	return (
 		text
 		:gsub("___!CMDR_ESCAPE!___", "\\")
 		:gsub("___!CMDR_QUOTE!___", "\"")
-		:gsub("___!CMDR_SQUOTE!___", "'")
+		:gsub("___!CMDR_NL!___", "\n")
 	)
 end
 
@@ -163,7 +180,7 @@ function Util.SplitString(text, max)
 	local t = {}
 	local spat, epat = [=[^(['"])]=], [=[(['"])$]=]
 	local buf, quoted
-	for str in text:gmatch("%S+") do
+	for str in text:gmatch("[^ ]+") do
 		str = Util.ParseEscapeSequences(str)
 		local squoted = str:match(spat)
 		local equoted = str:match(epat)
@@ -280,11 +297,37 @@ function Util.MakeListableType(type, override)
 end
 
 local function encodeCommandEscape(text)
-	return first(text:gsub("\\%$", "___!CMDR_DOLLAR!___"))
+	return (text:gsub("\\%$", "___!CMDR_DOLLAR!___"))
 end
 
 local function decodeCommandEscape(text)
-	return first(text:gsub("___!CMDR_DOLLAR!___", "$"))
+	return (text:gsub("___!CMDR_DOLLAR!___", "$"))
+end
+
+function Util.RunCommandString(dispatcher, commandString)
+	commandString = Util.ParseEscapeSequences(commandString)
+	commandString = Util.EncodeEscapedOperators(commandString)
+
+	local commands = commandString:split("&&")
+
+	local output = ""
+	for i, command in ipairs(commands) do
+		local outputEncoded = output:gsub("%$", "\\x24")
+		command = command:gsub("||", output:find("%s") and ("%q"):format(outputEncoded) or outputEncoded)
+
+		output = tostring(
+			dispatcher:EvaluateAndRun(
+				(
+					Util.RunEmbeddedCommands(dispatcher, command)
+				)
+			)
+		)
+
+
+		if i == #commands then
+			return output
+		end
+	end
 end
 
 --- Runs embedded commands and replaces them
@@ -302,10 +345,12 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 			commandString = commandString:sub(2, #commandString-1)
 		end
 
-		results[text] = dispatcher:EvaluateAndRun(commandString)
+		results[text] = Util.RunCommandString(dispatcher, commandString)
 
-		if doQuotes and results[text]:find("%s") then
-			results[text] = string.format("%q", results[text])
+		if doQuotes then
+			if results[text]:find("%s") or results[text] == "" then
+				results[text] = string.format("%q", results[text])
+			end
 		end
 	end
 
@@ -335,9 +380,7 @@ function Util.MakeAliasCommand(name, commandString)
 	local commandName, commandDescription = unpack(name:split("|"))
 	local args = {}
 
-	commandString = commandString
-		:gsub("&&&", "___!CMDR_SPLIT!___")
-		:gsub("|||", "___!CMDR_DOUBLE_PIPE!___")
+	commandString = Util.EncodeEscapedOperators(commandString)
 
 
 	local seenArgs = {}
@@ -372,29 +415,7 @@ function Util.MakeAliasCommand(name, commandString)
 		Group = "UserAlias",
 		Args = args,
 		Run = function(context)
-			local commands = Util.SplitStringSimple(commandString, "&&")
-
-			local output = ""
-			for i, command in ipairs(commands) do
-				command = command
-					:gsub("||", output:find("%s") and ("%q"):format(output) or output)
-					:gsub("___!CMDR_SPLIT!___", "&&")
-					:gsub("___!CMDR_DOUBLE_PIPE!___", "||")
-
-				output = context.Dispatcher:EvaluateAndRun(
-					Util.RunEmbeddedCommands(
-						context.Dispatcher,
-						Util.SubstituteArgs(command, context.RawArguments)
-					)
-				)
-				if i == #commands then
-					return output -- return last command's output
-				else
-					context:Reply(output)
-				end
-			end
-
-			return ""
+			return Util.RunCommandString(context.Dispatcher, commandString)
 		end
 	}
 end

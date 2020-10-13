@@ -1,10 +1,10 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local VALID_STORED_KEY_NAME_PATTERNS = {
-	"^%a%w*$",
-	"^%$%a%w*$",
-	"^%.%a%w*$",
-	"^%$%.%a%w*$",
+	"^%a[%w_]*$",
+	"^%$%a[%w_]*$",
+	"^%.%a[%w_]*$",
+	"^%$%.%a[%w_]*$",
 }
 
 return function (registry)

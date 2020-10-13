@@ -3,6 +3,12 @@ return {
 	Aliases = {};
 	Description = "Gets a stored variable.";
 	Group = "DefaultUtil";
+	AutoExec = {
+		"alias init-edit edit ${var init} \\\\\n && var= init ||",
+		"alias init-edit-global edit ${var $init} \\\\\n && var= $init ||",
+		"alias init-run run-lines ${var init} && run-lines ${var $init}",
+		"init-run",
+	},
 	Args = {
 		{
 			Type = "storedKey";
@@ -13,20 +19,5 @@ return {
 
 	ClientRun = function(context, key)
 		context:GetStore("vars_used")[key] = true
-
-		if key:sub(1, 1) == "$" then
-			-- Global keys always need to run server side.
-			return
-		end
-
-		if key:sub(1, 1) == "." then
-			local value = context:GetStore("var_local")[key]
-
-			if type(value) == "table" then
-				return table.concat(value, ",") or ""
-			end
-
-			return value or ""
-		end
 	end
 }

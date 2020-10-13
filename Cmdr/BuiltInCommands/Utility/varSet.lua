@@ -12,26 +12,12 @@ return {
 		{
 			Type = "string";
 			Name = "Value";
-			Description = "Value or values to set."
+			Description = "Value or values to set.";
+			Default = "";
 		}
 	};
 
-	ClientRun = function(context, key, value)
+	ClientRun = function(context, key)
 		context:GetStore("vars_used")[key] = true
-
-		if key:sub(1, 1) == "$" then
-			-- Global keys always need to run server side.
-			return
-		end
-
-		if key:sub(1, 1) == "." then
-			context:GetStore("var_local")[key] = value
-
-			if type(value) == "table" then
-				return table.concat(value, ",") or ""
-			end
-
-			return value or ""
-		end
 	end
 }
