@@ -23,6 +23,7 @@
 - New `join` and `map` commands
 - New `goto-place`, `follow-player`, `rejoin`, and `get-player-place-instance` commands.
 - New `refresh` command.
+- New `uptime` command.
 - Cmdr no longer removes preceding skipped arguments (`""`) when using AutoComplete on a later argument (#104)
 
 # v1.7.1
