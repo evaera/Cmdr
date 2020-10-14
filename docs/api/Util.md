@@ -94,7 +94,7 @@ docs:
       desc: Makes an Enum type out of a name and an array of strings. See Enum Values.
     - name: MakeListableType
       static: true
-      params: "type: TypeDefinition, override: dictionary"
+      params: "type: TypeDefinition, override?: dictionary"
       returns: TypeDefinition
       desc: Takes a singular type and produces a plural (listable) type out of it.
     - name: MakeSequenceType
