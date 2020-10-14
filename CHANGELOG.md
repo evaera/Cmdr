@@ -1,5 +1,5 @@
-# Next
-- Add `get` and `set` default commands, which act as a persistent key-value store.
+# v1.8.0
+- Add `var` and `var=` default commands, which act as a persistent key-value store.
   - Keys can begin with a dot to be per-session only.
   - Keys can begin with a $ to be game-wide, shared among all players.
   - Keys can begin with $. to be game-wide and per-session.
@@ -12,19 +12,19 @@
   - `**` is `*` (all) minus `.` (default), which is commonly referred to as "others" in the `player` type
 - Fix client side validation to disallow sending commands with incomplete arguments
 - New commands `json-array-encode` and `json-array-decode`
-- `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 - New command `resolve`, which resolves the argument value operators into lists.
 - New commands `len`, `pick`, and `rand`.
 - `run` now has an alias: `>`
 - `replace` now has an alias: `//`
 - `run` command now supports multiple commands delimited by `&&`
   - Slot operator allows you to insert the output of the previous command in a chain of commands separated by `&&`. For example: `> echo evaera && kill ||` (evaera dies)
-- `edit` command allows you to edit text within a text area
+- New command `edit` allows you to edit text within a text area
 - New `join` and `map` commands
 - New `goto-place`, `follow-player`, `rejoin`, and `get-player-place-instance` commands.
 - New `refresh` command.
 - New `uptime` command.
 - Cmdr no longer removes preceding skipped arguments (`""`) when using AutoComplete on a later argument (#104)
+- `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 
 # v1.7.1
 - Handle non-string error values correctly
