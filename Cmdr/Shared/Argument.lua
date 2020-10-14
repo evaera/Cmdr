@@ -145,7 +145,7 @@ function Argument:Transform()
 			self.TransformedValues[i] = { self:TransformSegment(rawSegment) }
 		end
 
-		self.TextSegmentInProgress = Util.SplitStringSimple(self.RawValue, ",")[1]
+		self.TextSegmentInProgress = rawSegments[#rawSegments]
 	else
 		rawValue = unescapeOperators(rawValue)
 
