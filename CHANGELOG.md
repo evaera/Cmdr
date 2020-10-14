@@ -11,7 +11,7 @@
   - `?N` represents a list of N random values;
   - `**` is `*` (all) minus `.` (default), which is commonly referred to as "others" in the `player` type
 - Fix client side validation to disallow sending commands with incomplete arguments
-- New commands `json_array_encode` and `json_array_decode`
+- New commands `json-array-encode` and `json-array-decode`
 - `GetCommandsAsStrings` has been renamed to `GetCommandNames`; old name still works for backwards compatibility
 - New command `resolve`, which resolves the argument value operators into lists.
 - New commands `len`, `pick`, and `rand`.
@@ -21,6 +21,8 @@
   - Slot operator allows you to insert the output of the previous command in a chain of commands separated by `&&`. For example: `> echo evaera && kill ||` (evaera dies)
 - `edit` command allows you to edit text within a text area
 - New `join` and `map` commands
+- New `goto-place`, `follow-player`, `rejoin`, and `get-player-place-instance` commands.
+- New `refresh` command.
 - Cmdr no longer removes preceding skipped arguments (`""`) when using AutoComplete on a later argument (#104)
 
 # v1.7.1
