@@ -308,6 +308,8 @@ function Util.RunCommandString(dispatcher, commandString)
 	commandString = Util.ParseEscapeSequences(commandString)
 	commandString = Util.EncodeEscapedOperators(commandString)
 
+	print(commandString)
+
 	local commands = commandString:split("&&")
 
 	local output = ""
@@ -415,7 +417,7 @@ function Util.MakeAliasCommand(name, commandString)
 		Group = "UserAlias",
 		Args = args,
 		Run = function(context)
-			return Util.RunCommandString(context.Dispatcher, commandString)
+			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
 		end
 	}
 end

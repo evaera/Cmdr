@@ -101,9 +101,9 @@ If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available wi
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
 
-Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`
+Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`, `get-player-place-instance`
 
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run` (`>`), `runif`, `echo`, `hover`, `replace` (`//`, `gsub`), `history`, `me`, `get` (`$`), `set` (`$=`), `json_array_encode`, `json_array_decode`, `resolve`, `len`, `pick`, `rand`, `edit`
+Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run` (`>`), `runif`, `echo`, `hover`, `replace` (`//`, `gsub`), `history`, `me`, `var`, `var=`, `json-array-encode`, `json-array-decode`, `resolve`, `len`, `pick`, `rand`, `edit`, `goto-place`
 
 Group: `Help`: `help`
 
