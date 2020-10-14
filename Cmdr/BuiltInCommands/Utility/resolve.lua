@@ -4,7 +4,7 @@ return {
 	Description = "Resolves Argument Value Operators into lists. E.g., resolve players * gives you a list of all players.";
 	Group = "DefaultUtil";
 	AutoExec = {
-		"alias me resolve players ."
+		"alias \"me|Displays your username\" resolve players ."
 	};
 	Args = {
 		{

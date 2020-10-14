@@ -2,7 +2,7 @@ return {
 	Name = "run";
 	Aliases = {">"};
 	AutoExec = {
-		"alias discard replace ${run $1} .* \\\"\\\""
+		"alias \"discard|Run a command and discard the output.\" replace ${run $1} .* \\\"\\\""
 	};
 	Description = "Runs a given command string (replacing embedded commands).";
 	Group = "DefaultUtil";
