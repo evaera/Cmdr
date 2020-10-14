@@ -308,8 +308,6 @@ function Util.RunCommandString(dispatcher, commandString)
 	commandString = Util.ParseEscapeSequences(commandString)
 	commandString = Util.EncodeEscapedOperators(commandString)
 
-	print(commandString)
-
 	local commands = commandString:split("&&")
 
 	local output = ""
