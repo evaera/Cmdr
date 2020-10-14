@@ -291,7 +291,7 @@ function Window:BeginInput(input, gameProcessed)
 					local argText = arg.Prefix .. table.concat(segments, ",")
 
 					-- Put auto completion options in quotation marks if they have a space
-					if argText:find(" ") then
+					if argText:find(" ") or argText == "" then
 						argText = ("%q"):format(argText)
 					end
 

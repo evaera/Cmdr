@@ -21,6 +21,7 @@
   - Slot operator allows you to insert the output of the previous command in a chain of commands separated by `&&`. For example: `> echo evaera && kill ||` (evaera dies)
 - `edit` command allows you to edit text within a text area
 - New `join` and `map` commands
+- Cmdr no longer removes preceding skipped arguments (`""`) when using AutoComplete on a later argument (#104)
 
 # v1.7.1
 - Handle non-string error values correctly
