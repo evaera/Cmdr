@@ -2,6 +2,10 @@
 title: Dispatcher
 docs:
   desc: The Dispatcher handles parsing, validating, and evaluating commands. Exists on both client and server.
+  properties:
+    - name: Cmdr
+      type: Cmdr | CmdrClient
+      desc: A reference to Cmdr. This may either be the server or client version of Cmdr depending on where the code is running.
   functions:
     - name: Run
       tags: [ 'client only' ]

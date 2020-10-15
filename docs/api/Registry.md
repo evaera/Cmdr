@@ -164,6 +164,10 @@ docs:
           desc: A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the built-in `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame.
           type: array<string>
 
+  properties:
+    - name: Cmdr
+      type: Cmdr | CmdrClient
+      desc: A reference to Cmdr. This may either be the server or client version of Cmdr depending on where the code is running.
 
   functions:
     - name: RegisterTypesIn
