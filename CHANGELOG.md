@@ -1,3 +1,8 @@
+# v1.8.1
+- Fixes issue with autocomplete in lists
+- Fixes init-run command in unpublished games
+- Fix boolean type erroring given the empty string
+
 # v1.8.0
 - Add `var` and `var=` default commands, which act as a persistent key-value store.
   - Keys can begin with a dot to be per-session only.
