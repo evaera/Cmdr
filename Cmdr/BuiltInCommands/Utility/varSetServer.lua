@@ -19,7 +19,7 @@ return function (context, key, value)
 	end
 
 	if saved and not DataStoresActive then
-		return "You must publish this place to the web to use saved keys."
+		return "# You must publish this place to the web to use saved keys."
 	end
 
 	local namespace = "var_" .. (gameWide and "global" or tostring(context.Executor.UserId))

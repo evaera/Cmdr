@@ -19,9 +19,13 @@ return {
 
 		local shouldPrintOutput = context.Dispatcher:Run("var", "INIT_PRINT_OUTPUT") ~= ""
 
-		local commands = text:gsub("\n+", "\n"):gsub("\n#.*\n", "\n"):split("\n")
+		local commands = text:gsub("\n+", "\n"):split("\n")
 
 		for _, command in ipairs(commands) do
+			if command:sub(1, 1) == "#" then
+				continue
+			end
+
 			local output = context.Dispatcher:EvaluateAndRun(command)
 
 			if shouldPrintOutput then
