@@ -1,0 +1,26 @@
+{
+  "name": "@rbxts/cmdr",
+  "version": "1.8.1-ts.0",
+  "description": "",
+  "main": "TS/init.lua",
+  "types": "TS/index.d.ts",
+  "files": [
+    "Cmdr",
+    "TS"
+  ],
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osyrisrblx/Cmdr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/osyrisrblx/Cmdr/issues"
+  },
+  "homepage": "https://github.com/osyrisrblx/Cmdr#readme",
+  "devDependencies": {
+    "@rbxts/types": "^1.0.386"
+  }
+}
