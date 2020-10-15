@@ -57,7 +57,7 @@ local boolType do
 			elseif falsy[value] then
 				return false
 			else
-				error("Unknown boolean value.")
+				return nil
 			end
 		end;
 	}
