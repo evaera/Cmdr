@@ -64,7 +64,7 @@ return function (Cmdr)
 				else
 					local items, options = lastArgument:GetAutocomplete()
 					options = options or {}
-					isPartial = options.IsPartial
+					isPartial = options.IsPartial or false
 
 					for i, item in pairs(items) do
 						acItems[i] = {typedText, item}

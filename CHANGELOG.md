@@ -1,3 +1,6 @@
+# Next
+- Fix pressing tab doesn't insert space (#149)
+
 # v1.8.1
 - Fixes issue with autocomplete in lists
 - Fixes init-run command in unpublished games
