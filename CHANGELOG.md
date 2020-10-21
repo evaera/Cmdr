@@ -1,4 +1,4 @@
-# Next
+# v1.8.2
 - Fix pressing tab doesn't insert space (#149)
 
 # v1.8.1
