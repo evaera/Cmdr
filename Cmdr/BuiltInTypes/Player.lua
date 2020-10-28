@@ -27,5 +27,7 @@ local playerType = {
 
 return function (cmdr)
 	cmdr:RegisterType("player", playerType)
-	cmdr:RegisterType("players", Util.MakeListableType(playerType))
+	cmdr:RegisterType("players", Util.MakeListableType(playerType, {
+		Prefixes = "% teamPlayers";
+	}))
 end
