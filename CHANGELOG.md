@@ -1,3 +1,6 @@
+# v1.8.4
+- Fix an error when using function arguments.
+
 # v1.8.3
 - "% teamPlayers" prefix was accidentally removed from `players` type, so this adds it back.
 
