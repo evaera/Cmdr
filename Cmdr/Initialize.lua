@@ -47,7 +47,7 @@ return function (cmdr)
 	end
 
 	for _, player in pairs(Players:GetPlayers()) do
-		if player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
+		if player.Character ~= nil and player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
 			StarterGui.Cmdr:Clone().Parent = player.PlayerGui
 		end
 	end
