@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local CreateGui = require(script.Parent.CreateGui)
@@ -43,5 +44,11 @@ return function (cmdr)
 
 	if StarterGui:FindFirstChild("Cmdr") == nil then
 		CreateGui()
+	end
+
+	for _, player in pairs(Players:GetPlayers()) do
+		if player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
+			StarterGui.Cmdr:Clone().Parent = player.PlayerGui
+		end
 	end
 end
