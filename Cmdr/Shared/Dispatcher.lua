@@ -63,17 +63,17 @@ function Dispatcher:EvaluateAndRun (text, executor, options)
 		self:PushHistory(text)
 	end
 
-	local command, errorText = self:Evaluate(text, executor, nil, options.Data)
+	local command, errorEvaluate = self:Evaluate(text, executor, nil, options.Data)
 
 	if not command then
-		return errorText
+		return errorEvaluate
 	end
 
 	local ok, out = xpcall(function()
-		local valid, errorText = command:Validate(true) -- luacheck: ignore
+		local valid, errorValidate = command:Validate(true) -- luacheck: ignore
 
 		if not valid then
-			return errorText
+			return errorValidate
 		end
 
 		return command:Run() or "Command executed."
@@ -113,16 +113,16 @@ function Dispatcher:Run (...)
 		text = text .. " " .. tostring(args[i])
 	end
 
-	local command, errorText = self:Evaluate(text, Players.LocalPlayer)
+	local command, errorEvaluate = self:Evaluate(text, Players.LocalPlayer)
 
 	if not command then
-		error(errorText) -- We do a full-on error here since this is code-invoked and they should know better.
+		error(errorEvaluate) -- We do a full-on error here since this is code-invoked and they should know better.
 	end
 
-	local success, errorText = command:Validate(true) -- luacheck: ignore
+	local success, errorValidate = command:Validate(true) -- luacheck: ignore
 
 	if not success then
-		error(errorText)
+		error(errorValidate)
 	end
 
 	return command:Run()

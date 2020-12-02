@@ -87,7 +87,7 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 
 --- Registers a command based purely on its definition.
 -- Prefer using Registry:RegisterCommand for proper handling of server/client model.
-function Registry:RegisterCommandObject (commandObject, fromCmdr)
+function Registry:RegisterCommandObject (commandObject) --fromCmdr [Hidden for Selene]
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
 			error("Unknown key/method in command " .. (commandObject.Name or "unknown command") .. ": " .. key)
@@ -244,7 +244,9 @@ function Registry:RegisterHook(hookName, callback, priority)
 	end
 
 	table.insert(self.Hooks[hookName], { callback = callback; priority = priority or 0; } )
-	table.sort(self.Hooks[hookName], function(a, b) return a.priority < b.priority end)
+	table.sort(self.Hooks[hookName], function(a, b)
+		return a.priority < b.priority
+	end)
 end
 
 -- Backwards compatability (deprecated)

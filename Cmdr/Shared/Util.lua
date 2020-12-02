@@ -138,8 +138,8 @@ function Util.EncodeEscapedOperator(text, op)
 	local escapedOp = op:gsub(".", "%%%1")
 	local escapedFirst = "%" .. first
 
-	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, op)
-			return (esc:sub(1, #esc-1) .. op):gsub(".", function(char)
+	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, operator)
+			return (esc:sub(1, #esc-1) .. operator):gsub(".", function(char)
 					return "\\u" .. string.format("%04x", string.byte(char), 16)
 			end)
 	end)
