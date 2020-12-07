@@ -87,7 +87,7 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 
 --- Registers a command based purely on its definition.
 -- Prefer using Registry:RegisterCommand for proper handling of server/client model.
-function Registry:RegisterCommandObject (commandObject) --fromCmdr [Hidden for Selene]
+function Registry:RegisterCommandObject (commandObject, _fromCmdr)
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
 			error("Unknown key/method in command " .. (commandObject.Name or "unknown command") .. ": " .. key)
