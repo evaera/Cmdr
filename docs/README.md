@@ -19,9 +19,9 @@ footer: MIT licensed | Copyright © 2018-present eryn L. K.
 
 <br><br>
 
-Cmdr is designed specifically so that you can write your own commands and argument types, so that it can fit right in with the rest of your game. In addition to the standard admin commands (teleport, kill, kick), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
+Cmdr is designed specifically to write your own commands and argument types, so that it can fit with the rest of your game nicely. In addition to the standard admin commands (teleport, kill, kick), Cmdr is also great for debug commands in your game (say, if you wanted to have a command to give you a weapon, reset a round, teleport you between places in your universe).
 
-Cmdr provides a friendly API that lets the game developer choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
+Cmdr provides a friendly API that lets game developers choose if they want to register the default admin commands, register their own commands, choose a different key bind for activating the console, and disabling Cmdr altogether.
 
 Cmdr has a robust and friendly type validation system (making sure strings are strings, players are players, etc), which can give end users real time command validation as they type, and automatic error messages. By the time the command actually gets to your code, you can be assured that all of the arguments are present and of the correct type.
 
