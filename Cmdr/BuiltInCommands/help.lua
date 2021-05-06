@@ -36,8 +36,9 @@ Notes to consider!
 ------------------
 . = Me/Self
 * = All/Everyone
-? = Random
 ** = Others
+? = Random
+?N = List of N random values	
 ]])
 			for _, groupName in pairs(groups) do
 				context:Reply(([[
