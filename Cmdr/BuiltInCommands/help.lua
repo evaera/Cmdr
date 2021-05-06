@@ -29,9 +29,26 @@ return {
 			end
 		else
 			local commands = context.Cmdr.Registry:GetCommands()
-
-			for _, cmd in pairs(commands) do
-				context:Reply(("%s - %s"):format(cmd.Name, cmd.Description))
+			local groups = context.Cmdr.Registry:GetGroups()
+			
+			context:Reply([[
+Notes to consider!
+------------------
+. = Me/Self
+* = All/Everyone
+? = Random
+** = Others
+]])
+			for _, groupName in pairs(groups) do
+				context:Reply(([[
+%s
+------------------
+]]):format(groupName))
+				for _, cmd in pairs(commands) do
+					if cmd.Group == groupName then
+						context:Reply(("%s - %s"):format(cmd.Name, cmd.Description))
+					end
+				end
 			end
 		end
 		return ""

@@ -215,6 +215,20 @@ end
 
 Registry.GetCommandsAsStrings = Registry.GetCommandNames
 
+--- Returns and array of all registered command groups
+function Registry:GetGroups()
+	local groups = {}
+
+	for _, group in pairs(Registry:GetCommands()) do
+		if not table.find(groups, group.Group) then
+			table.insert(groups, group.Group)
+		end
+	end
+	table.sort(groups)
+	
+	return groups
+end
+
 --- Returns an array of the names of all registered types (not including aliases)
 function Registry:GetTypeNames ()
 	local typeNames = {}
