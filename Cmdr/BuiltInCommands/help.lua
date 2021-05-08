@@ -38,13 +38,14 @@ return {
 				))
 			end
 		else
+			context:Reply(ARGUMENT_SHORTHANDS)
+
 			local commands = context.Cmdr.Registry:GetCommands()
 			table.sort(commands, function(a, b)
 				return a.Group < b.Group
 			end)
-			context:Reply(ARGUMENT_SHORTHANDS)
 			local lastGroup
-			for _, command in pairs(commands) do
+			for _, command in ipairs(commands) do
 				if lastGroup ~= command.Group then
 					context:Reply(("\n%s\n-------------------"):format(command.Group))
 					lastGroup = command.Group	
