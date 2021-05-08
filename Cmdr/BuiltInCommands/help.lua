@@ -1,3 +1,13 @@
+local ARGUMENT_SHORTHANDS = [[
+Argument Shorthands
+-------------------			
+.   Me/Self
+*   All/Everyone 
+**  Others 
+?   Random
+?N  List of N random values			
+]]
+
 return {
 	Name = "help";
 	Description = "Displays a list of all commands, or inspects one command.";
@@ -28,10 +38,19 @@ return {
 				))
 			end
 		else
-			local commands = context.Cmdr.Registry:GetCommands()
+			context:Reply(ARGUMENT_SHORTHANDS)
 
-			for _, cmd in pairs(commands) do
-				context:Reply(("%s - %s"):format(cmd.Name, cmd.Description))
+			local commands = context.Cmdr.Registry:GetCommands()
+			table.sort(commands, function(a, b)
+				return a.Group < b.Group
+			end)
+			local lastGroup
+			for _, command in ipairs(commands) do
+				if lastGroup ~= command.Group then
+					context:Reply(("\n%s\n-------------------"):format(command.Group))
+					lastGroup = command.Group	
+				end
+				context:Reply(("%s - %s"):format(command.Name, command.Description))
 			end
 		end
 		return ""
