@@ -1,4 +1,4 @@
-local ARGUMENT_SHORTHANDS = ([[
+local ARGUMENT_SHORTHANDS = [[
 Argument Shorthands
 -------------------			
 .   Me/Self
@@ -6,7 +6,7 @@ Argument Shorthands
 **  Others 
 ?   Random
 ?N  List of N random values			
-]])
+]]
 
 return {
 	Name = "help";
