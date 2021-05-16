@@ -16,7 +16,7 @@ return function(context, players, placeId, jobId)
 			TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
 		end
 	else
-		TeleportService:TeleportPartyAsync(placeId, players)
+		TeleportService:TeleportAsync(placeId, players)
 	end
 
 	return "Teleported."
