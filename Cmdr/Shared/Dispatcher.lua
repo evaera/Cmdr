@@ -144,7 +144,7 @@ function Dispatcher:RunHooks(hookName, commandContext, ...)
 
 		if RunService:IsStudio() then
 			if displayedBeforeRunHookWarning == false then
-				commandContext:Reply((RunService:IsServer() and "<Server>" or "<Client>") .. " Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/guide/Hooks.html", Color3.fromRGB(255,228,26))
+				commandContext:Reply((RunService:IsServer() and "<Server>" or "<Client>") .. " Commands will not run in-game if no BeforeRun hook is configured. Learn more about from the Hooks guide within the Cmdr docs.", Color3.fromRGB(255,228,26))
 				displayedBeforeRunHookWarning = true
 			end
 		else
