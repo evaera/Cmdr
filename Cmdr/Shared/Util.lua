@@ -219,8 +219,9 @@ function Util.MashExcessArguments(arguments, max)
 end
 
 --- Trims whitespace from both sides of a string.
-function Util.TrimString(s)
-	return s:match "^%s*(.-)%s*$"
+function Util.TrimString(str)
+	local from = string.match(str, "^%s*()")
+	return from > #str and "" or string.match(str, ".*%S", from) -- this check is to prevent quadratic backtracking
 end
 
 --- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
