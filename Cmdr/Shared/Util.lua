@@ -220,8 +220,9 @@ end
 
 --- Trims whitespace from both sides of a string.
 function Util.TrimString(str)
-	local from = string.match(str, "^%s*()")
-	return from > #str and "" or string.match(str, ".*%S", from) -- this check is to prevent quadratic backtracking
+	local _, from = string.find(str, "^%s*")
+	-- trim the string in two steps to prevent quadratic backtracking when no "%S" match is found
+	return from == #str and "" or string.match(str, ".*%S", from + 1)
 end
 
 --- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
