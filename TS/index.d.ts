@@ -70,6 +70,8 @@ interface CommandContext {
   Name: string;
   /** The specific alias of this command that was used to trigger this command (may be the same as `Name`) */
   Alias: string;
+  /** The raw text that was used to trigger this command. */
+  RawText: string;
   /** The group this command is a part of. Defined in command definitions, typically a string. */
   Group: unknown;
   /** A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume. */
