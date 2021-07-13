@@ -1,3 +1,12 @@
+# v1.8.4
+- Fix an error when using function arguments.
+
+# v1.8.3
+- "% teamPlayers" prefix was accidentally removed from `players` type, so this adds it back.
+
+# v1.8.2
+- Fix pressing tab doesn't insert space (#149)
+
 # v1.8.1
 - Fixes issue with autocomplete in lists
 - Fixes init-run command in unpublished games

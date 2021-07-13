@@ -64,7 +64,7 @@ return function (Cmdr)
 				else
 					local items, options = lastArgument:GetAutocomplete()
 					options = options or {}
-					isPartial = options.IsPartial
+					isPartial = options.IsPartial or false
 
 					for i, item in pairs(items) do
 						acItems[i] = {typedText, item}
@@ -105,11 +105,16 @@ return function (Cmdr)
 					description = exactCommand.Description;
 				}}
 
+				local arg = exactCommand.Args and exactCommand.Args[1]
+
+				if type(arg) == "function" then
+					arg = arg(command)
+				end
+
 				if
-					exactCommand.Args
-					and exactCommand.Args[1]
-					and (not exactCommand.Args[1].Optional
-					and exactCommand.Args[1].Default == nil)
+					arg
+					and (not arg.Optional
+					and arg.Default == nil)
 				then
 					Window:SetIsValidInput(false, "This command has required arguments.")
 					Window:HideInvalidState()

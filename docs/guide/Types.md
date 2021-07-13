@@ -13,6 +13,7 @@ By default, these types are available:
 | `integer` | `number` | `integers` | `array<number>`
 | `boolean` | `boolean` | `booleans` | `array<boolean>`
 | `player` | `Player` | `players` | `array<Player>`
+| `playerId` | `number` | `playerIds` | `array<number>`
 | `team` | `Team` | `teams` | `array<Team>`
 | || `teamPlayers` | `array<Player>`
 | `command` | `string` | `commands` | `array<string>`
