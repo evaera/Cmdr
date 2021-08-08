@@ -312,7 +312,7 @@ function Util.RunCommandString(dispatcher, commandString)
 
 	local output = ""
 	for i, command in ipairs(commands) do
-		local outputEncoded = output:gsub("%$", "\\x24")
+		local outputEncoded = output:gsub("%$", "\\x24"):gsub("%%","%%%%")
 		command = command:gsub("||", output:find("%s") and ("%q"):format(outputEncoded) or outputEncoded)
 
 		output = tostring(
