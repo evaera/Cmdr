@@ -17,7 +17,7 @@ return {
 			return ""
 		end
 
-		local shouldPrintOutput = context.Dispatcher:Run("var", "INIT_PRINT_OUTPUT") ~= ""
+		local shouldPrintOutput = context.Dispatcher:EvaluateAndRun("var INIT_PRINT_OUTPUT", context.Executor) ~= ""
 
 		local commands = text:gsub("\n+", "\n"):split("\n")
 
@@ -26,7 +26,7 @@ return {
 				continue
 			end
 
-			local output = context.Dispatcher:EvaluateAndRun(command)
+			local output = context.Dispatcher:EvaluateAndRun(command, context.Executor)
 
 			if shouldPrintOutput then
 				context:Reply(output)
