@@ -12,12 +12,12 @@ return {
 		}
 	};
 
-	Run = function(context, text)
+	ClientRun = function(context, text)
 		if #text == 0 then
 			return ""
 		end
 
-		local shouldPrintOutput = context.Dispatcher:EvaluateAndRun("var INIT_PRINT_OUTPUT", context.Executor) ~= ""
+		local shouldPrintOutput = context.Dispatcher:Run("var", "INIT_PRINT_OUTPUT") ~= ""
 
 		local commands = text:gsub("\n+", "\n"):split("\n")
 
@@ -26,7 +26,7 @@ return {
 				continue
 			end
 
-			local output = context.Dispatcher:EvaluateAndRun(command, context.Executor)
+			local output = context.Dispatcher:EvaluateAndRun(command)
 
 			if shouldPrintOutput then
 				context:Reply(output)
