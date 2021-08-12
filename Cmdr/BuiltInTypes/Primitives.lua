@@ -39,28 +39,19 @@ local intType = {
 }
 
 local boolType do
-	local truthy = Util.MakeDictionary({"true", "t", "yes", "y", "on", "enable", "enabled", "1", "+"});
-	local falsy = Util.MakeDictionary({"false"; "f"; "no"; "n"; "off"; "disable"; "disabled"; "0"; "-"});
+	local booleanEnum = Util.MakeEnumType("boolean", {"true", "false"})
 
-	boolType = {
-		Transform = function (text)
-			return text:lower()
-		end;
+	booleanEnum.Parse = function(value)
+		if value == "true" then
+			return true
+		elseif value == "false" then
+			return false
+		else
+			return nil
+		end
+	end
 
-		Validate = function (value)
-			return truthy[value] ~= nil or falsy[value] ~= nil, "Please use true/yes/on or false/no/off."
-		end;
-
-		Parse = function (value)
-			if truthy[value] then
-				return true
-			elseif falsy[value] then
-				return false
-			else
-				return nil
-			end
-		end;
-	}
+	boolType = booleanEnum
 end
 
 return function (cmdr)
