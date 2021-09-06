@@ -29,7 +29,7 @@ return {
 		}
 	};
 
-	ClientRun = function(_, operator, a, b)
-		return operator.Perform(a, b)
+	ClientRun = function(_, operation, a, b)
+		return operation.Perform(a, b)
 	end
 }
