@@ -522,7 +522,7 @@ function Util.Mutex()
 
 		return function()
 			if #queue > 0 then
-				coroutine.resume(table.remove(queue, 1))
+				task.spawn(table.remove, queue, 1)
 			else
 				locked = false
 			end
