@@ -500,8 +500,9 @@ end
 --- Emulates tabstops with spaces
 function Util.EmulateTabstops(text, tabWidth)
 	local column = 0
-	local result = {}
-	for i = 1, #text do
+	local textLength = #text
+	local result = table.create(textLength)
+	for i = 1, textLength do
 		local char = string.sub(text, i, i)
 		if char == "\t" then
 			local spaces = tabWidth - column % tabWidth
