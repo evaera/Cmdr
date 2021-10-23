@@ -166,6 +166,10 @@ end
 
 local directories = {}
 function Directory.new(player)
+	if not player then
+		return Directory
+	end
+
 	local existing = directories[player]
 	if existing then
 		return existing
