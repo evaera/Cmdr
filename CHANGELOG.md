@@ -1,5 +1,5 @@
 # Next
-- Fix a new error caused by `var` & `varSet` in places with DataStore access disabled.
+- Fix a new error caused by `var` & `varSet` in places with DataStore access disabled. (#188)
 
 # v1.8.4
 - Fix an error when using function arguments.
