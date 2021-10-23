@@ -1,7 +1,9 @@
 local DataStoreService = game:GetService("DataStoreService")
 
 local DataStoresActive, DataStore = pcall(function()
-	return DataStoreService:GetGlobalDataStore("_package/eryn.io/Cmdr")
+	local DataStore = DataStoreService:GetGlobalDataStore("_package/eryn.io/Cmdr")
+	DataStore:GetAsync("test_key")
+	return DataStore
 end)
 
 return function (context, key)
