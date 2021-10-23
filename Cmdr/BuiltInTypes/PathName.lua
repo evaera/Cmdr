@@ -4,12 +4,13 @@ local autocompleteSettings = {
 	IsPartial = true
 }
 
-local FUZZY_PREFIX_PATTERN = "^(.*/)(.*)$"
+-- TODO: Escape separator?
+local FUZZY_PREFIX_PATTERN = "^(.*" .. Directory.PATH_SEPARATOR .. ")(.*)$"
 local function fuzzyFind(value)
 	local prefix, suffix = string.match(value, FUZZY_PREFIX_PATTERN)
 	
 	if not prefix then
-		return Directory:GetInstance("./"), "", value
+		return Directory:GetInstance(Directory.CD_WORD .. Directory.PATH_SEPARATOR), "", value
 	end
 	return Directory:GetInstance(prefix), prefix, suffix
 end
@@ -35,8 +36,8 @@ local pathnamePathType = {
 				end
 			end
 
-			if string.find("..", suffix, nil, true) then
-				table.insert(paths, 1, prefix .. "..")
+			if string.find(Directory.PARENT_WORD, suffix, nil, true) then
+				table.insert(paths, 1, prefix .. Directory.PARENT_WORD)
 			end
 
 			-- If the paths are empty we should skip to the next argument

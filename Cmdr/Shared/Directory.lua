@@ -12,8 +12,15 @@ local PARENT_WORD = ".."
 local CD_WORD = "."
 local PATH_SEPARATOR = "/"
 
+Directory.HOME_WORD = HOME_WORD
+Directory.PARENT_WORD = PARENT_WORD
+Directory.CD_WORD = CD_WORD
+Directory.PATH_SEPARATOR = PATH_SEPARATOR
+
 -- Root instance
 local ROOT_INSTANCE = game
+
+Directory.ROOT_INSTANCE = ROOT_INSTANCE
 
 -- Gets the current directory
 function Directory:GetCD()
