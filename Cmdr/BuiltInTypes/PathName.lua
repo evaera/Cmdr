@@ -1,4 +1,4 @@
-local Directory = require(script.Parent.Parent.Shared.Directory)
+local Directory = require(script.Parent.Parent.Shared.Directory).new()
 
 local autocompleteSettings = {
 	IsPartial = true

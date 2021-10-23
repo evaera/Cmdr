@@ -173,10 +173,8 @@ end
 local directories = {}
 function Directory.new(player)
 	player = player or Players.LocalPlayer
-	if not RunService:IsServer() then
-		if not player then
-			return Directory
-		end
+	if not player then
+		return Directory
 	end
 
 	local existing = directories[player]
