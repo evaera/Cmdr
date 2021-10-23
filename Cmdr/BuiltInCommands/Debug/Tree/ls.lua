@@ -18,12 +18,13 @@ return {
 		local instance = pathname and Directory:GetInstance(pathname)
 
 		-- Get the instance at the current directory
-		if not instance then
+		if not pathname then
 			instance = Directory:GetInstance("./")
+		end
 
-			if not instance then
-				return "# The current directory is invalid."
-			end
+		-- Return an error if there's no instance
+		if not instance then
+			return "# The directory is invalid."
 		end
 
 		-- List all children
