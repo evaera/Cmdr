@@ -15,7 +15,7 @@ local function fuzzyFind(value)
 	return Directory:GetInstance(prefix), prefix, suffix
 end
 
-local pathnamePathType = {
+local pathnameType = {
 	DisplayName = "pathname",
 	Validate = function(value)
 		return fuzzyFind(value) ~= nil, "Not a valid instance '" .. value .. "'"
@@ -52,12 +52,17 @@ local pathnamePathType = {
 		return Directory.new(player):GetCD()
 	end,
 	Parse = function(value)
-		-- Would need to know which player is parsing this type to properly handle things like home directories
-		-- return Directory:ResolveAbsolutePathname(value)
-		return value
+		return Directory:ResolveAbsolutePathname(value) or false
 	end
 }
 
+local instanceType = setmetatable({
+	Parse = function(value)
+		return Directory:GetInstance(value)
+	end
+}, {__index = pathnameType})
+
 return function(registry)
-	registry:RegisterType("pathname", pathnamePathType)
+	registry:RegisterType("pathname", pathnameType)
+	registry:RegisterType("instance", instanceType)
 end

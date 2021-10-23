@@ -4,27 +4,24 @@ return {
 	Group = "DefaultDebug",
 	Args = {
 		{
-			Type = "pathname",
+			Type = "instance",
 			Name = "Instance",
 			Description = "The path of the target relative to the cd.",
 			Optional = true
 		}
 	},
-	ClientRun = function(context, pathname)
+	ClientRun = function(context, instance)
 		-- Get the local directory for the player
 		local Directory = context.Directory
 
-		-- Get the instance
-		local instance = pathname and Directory:GetInstance(pathname)
-
-		-- Get the instance at the current directory
-		if not pathname then
-			instance = Directory:GetInstance("./")
+		-- Return an error if there's no instance
+		if instance == false then
+			return "# The directory is invalid."
 		end
 
-		-- Return an error if there's no instance
+		-- Get the instance at the current directory if not specified
 		if not instance then
-			return "# The directory is invalid."
+			instance = Directory:GetInstance("./")
 		end
 
 		-- List all children
