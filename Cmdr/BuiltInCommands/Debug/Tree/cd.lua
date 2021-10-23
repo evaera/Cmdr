@@ -10,12 +10,9 @@ return {
 			Optional = true
 		}
 	},
-	AutoExec = {
-		"cd ~"
-	},
 	ClientRun = function(context, pathname)
-		local cmdr = context.Cmdr
-		local Directory = cmdr.Directory
+		-- Get the local directory for the player
+		local Directory = context.Directory
 
 		if pathname then
 			Directory:SetCD(pathname)

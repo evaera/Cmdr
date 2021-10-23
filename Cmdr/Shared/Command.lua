@@ -1,6 +1,7 @@
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local Argument = require(script.Parent.Argument)
+local Directory = require(script.Parent.Directory)
 
 local IsServer = RunService:IsServer()
 
@@ -13,6 +14,7 @@ function Command.new (options)
 	local self = {
 		Dispatcher = options.Dispatcher; -- The dispatcher that created this command context
 		Cmdr = options.Dispatcher.Cmdr; -- A quick reference to Cmdr for command context
+		Directory = Directory.new(options.Executor); -- A Directory object owned by the executor
 		Name = options.CommandObject.Name; -- The command name (not alias)
 		RawText = options.Text; -- The raw text used to trigger this command
 		Object = options.CommandObject; -- The command object (definition)

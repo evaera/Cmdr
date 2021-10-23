@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local Directory = {
@@ -21,8 +22,6 @@ end
 
 -- Changes the current directory
 function Directory:SetCD(directory)
-	assert(RunService:IsClient(), "SetCD may only be used from the client.")
-
 	local cd = self:GetCD()
 
 	-- Resolve absolute path, and don't set it if it hasn't changed
@@ -96,7 +95,7 @@ function Directory:JoinPaths(...)
 		-- Replace the first segment with the home directory
 		table.remove(combined, 1)
 
-		local segments = Directory:ParsePathname(self:GetHomeDirectory())
+		local segments = self:ParsePathname(self:GetHomeDirectory())
 		for index, segment in ipairs(segments) do
 			table.insert(combined, index, segment)
 		end
@@ -104,7 +103,7 @@ function Directory:JoinPaths(...)
 		-- Replace the first segment with the current directory
 		table.remove(combined, 1)
 
-		local segments = Directory:ParsePathname(self:GetCD())
+		local segments = self:ParsePathname(self:GetCD())
 		for index, segment in ipairs(segments) do
 			table.insert(combined, index, segment)
 		end
@@ -150,7 +149,7 @@ end
 -- Gets the current home directory
 function Directory:GetHomeDirectory()
 	local homeStack = self.HomeStack
-	return homeStack[#homeStack] or (PATH_SEPARATOR .. CD_WORD)
+	return homeStack[#homeStack] or self.HomeRoot or (PATH_SEPARATOR .. CD_WORD)
 end
 
 -- Push/pop for home directories, can properly handle "sudo" behaviour where a user invokes stuff on the home folder of another user
@@ -166,8 +165,11 @@ end
 
 local directories = {}
 function Directory.new(player)
-	if not player then
-		return Directory
+	player = player or Players.LocalPlayer
+	if not RunService:IsServer() then
+		if not player then
+			return Directory
+		end
 	end
 
 	local existing = directories[player]
@@ -176,16 +178,9 @@ function Directory.new(player)
 	end
 
 	local directory = setmetatable({
-		HomeStack = {}
+		HomeRoot = Directory:JoinPaths(PATH_SEPARATOR .. "Workspace", player.Name)
 	}, Directory)
-
-	-- Push the player's character to their home directory
-	local character = player.Character
-	if character then
-		directory:PushHomeDirectory(
-			directory:ResolveAbsolutePathname(PATH_SEPARATOR .. string.gsub(character:GetFullName(), "%.", PATH_SEPARATOR))
-		)
-	end
+	directory:SetCD(HOME_WORD)
 
 	directories[player] = directory
 	return directory

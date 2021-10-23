@@ -4,15 +4,18 @@ return {
 	Group = "DefaultDebug",
 	Args = {
 		{
-			Type = "instance",
+			Type = "pathname",
 			Name = "Instance",
 			Description = "The path of the target relative to the cd.",
 			Optional = true
 		}
 	},
-	ClientRun = function(context, instance)
-		local cmdr = context.Cmdr
-		local Directory = cmdr.Directory
+	ClientRun = function(context, pathname)
+		-- Get the local directory for the player
+		local Directory = context.Directory
+
+		-- Get the instance
+		local instance = pathname and Directory:GetInstance(pathname)
 
 		-- Get the instance at the current directory
 		if not instance then
@@ -23,6 +26,7 @@ return {
 			end
 		end
 
+		-- List all children
 		local results = {}
 		for _, child in ipairs(instance:GetChildren()) do
 			local success, name = pcall(tostring, child)

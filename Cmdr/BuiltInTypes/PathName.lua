@@ -48,20 +48,15 @@ local pathnamePathType = {
 		return paths, autocompleteSettings
 	end,
 	Default = function(player)
-		return Directory:GetCD()
+		return Directory.new(player):GetCD()
 	end,
 	Parse = function(value)
-		return Directory:ResolveAbsolutePathname(value)
+		-- Would need to know which player is parsing this type to properly handle things like home directories
+		-- return Directory:ResolveAbsolutePathname(value)
+		return value
 	end
 }
 
-local instancePathType = setmetatable({
-	Parse = function(value)
-		return Directory:GetInstance(value)
-	end
-}, {__index = pathnamePathType})
-
 return function(registry)
 	registry:RegisterType("pathname", pathnamePathType)
-	registry:RegisterType("instance", instancePathType)
 end
