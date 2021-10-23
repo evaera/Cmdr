@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
+local Directory = require(Shared:WaitForChild("Directory"))
 
 if RunService:IsClient() == false then
 	error("Server scripts cannot require the client library. Please require the server library to use Cmdr in your own code.")
@@ -21,6 +22,7 @@ local Cmdr do
 		HideOnLostFocus = true;
 		PlaceName = "Cmdr";
 		Util = Util;
+		Directory = Directory;
 		Events = {};
 	}, {
 		-- This sucks, and may be redone or removed

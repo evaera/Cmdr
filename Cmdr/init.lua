@@ -1,5 +1,6 @@
 local RunService = game:GetService("RunService")
 local Util = require(script.Shared:WaitForChild("Util"))
+local Directory = require(script.Shared:WaitForChild("Directory"))
 
 if RunService:IsServer() == false then
 	error("Cmdr server module is somehow running on a client!")
@@ -11,6 +12,7 @@ local Cmdr do
 		RemoteFunction = nil;
 		RemoteEvent = nil;
 		Util = Util;
+		Directory = Directory;
 		DefaultCommandsFolder = script.BuiltInCommands;
 	}, {
 		__index = function (self, k)
