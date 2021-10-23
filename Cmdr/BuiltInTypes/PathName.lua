@@ -59,7 +59,10 @@ local pathnameType = {
 local instanceType = setmetatable({
 	Parse = function(value)
 		return Directory:GetInstance(value)
-	end
+	end,
+	Default = function(player)
+		return Directory:GetInstance(Directory.new(player):GetCD())
+	end,
 }, {__index = pathnameType})
 
 return function(registry)
