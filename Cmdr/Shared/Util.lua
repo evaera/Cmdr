@@ -499,13 +499,25 @@ end
 
 --- Emulates tabstops with spaces
 function Util.EmulateTabstops(text, tabWidth)
-	local result = ""
-	for i = 1, #text do
-		local char = text:sub(i, i)
-
-		result = result .. (char == "\t" and string.rep(" ", tabWidth - #result % tabWidth) or char)
+	local column = 0
+	local textLength = #text
+	local result = table.create(textLength)
+	for i = 1, textLength do
+		local char = string.sub(text, i, i)
+		if char == "\t" then
+			local spaces = tabWidth - column % tabWidth
+			table.insert(result, string.rep(" ", spaces))
+			column += spaces
+		else
+			table.insert(result, char)
+			if char == "\n" then
+				column = 0 -- Reset column counter on newlines
+			elseif char ~= "\r" then
+				column += 1
+			end
+		end
 	end
-	return result
+	return table.concat(result)
 end
 
 function Util.Mutex()

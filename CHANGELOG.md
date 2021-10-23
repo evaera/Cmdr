@@ -1,4 +1,7 @@
 # Next
+- Significantly improved the performance of Util.EmulateTabstops for long strings by using a string builder table (~250-350x) (#190)
+  - Allows for long strings to be displayed in the output without a freeze
+  - Added column logic to properly align text containing newlines
 - Fix a new error caused by `var` & `varSet` in places with DataStore access disabled. (#188)
 
 # v1.8.4
