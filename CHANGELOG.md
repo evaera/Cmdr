@@ -1,3 +1,8 @@
+# Next
+- Significantly improved the performance of Util.EmulateTabstops for long strings by using a string builder table (~250-350x)
+  - Allows for long strings to be displayed in the output without a freeze
+  - Added column logic to properly align text containing newlines
+
 # v1.8.4
 - Fix an error when using function arguments.
 
