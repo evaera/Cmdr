@@ -3,6 +3,7 @@
   - Allows for long strings to be displayed in the output without a freeze
   - Added column logic to properly align text containing newlines
 - Fix a new error caused by `var` & `varSet` in places with DataStore access disabled. (#188)
+- Fix incorrect DataStore used by `var` and `varSet` commands.
 
 # v1.8.4
 - Fix an error when using function arguments.
