@@ -60,7 +60,7 @@ function Argument:GetDefaultAutocomplete()
 		return strings, options or {}
 	end
 
-	return {}
+	return {}, {}
 end
 
 --- Calls the transform function on this argument.
