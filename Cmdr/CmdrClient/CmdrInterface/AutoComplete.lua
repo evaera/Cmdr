@@ -89,6 +89,7 @@ return function (Cmdr)
 		self.Arg = options.arg
 		self.NumArgs = options.numArgs
 		self.IsPartial = options.isPartial
+		self.DisableTabAutoComplete = options.DisableTabAutoComplete
 
 		-- Generate the new option labels
 		local autocompleteWidth = 200
