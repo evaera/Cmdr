@@ -54,9 +54,7 @@ end
 
 function Argument:GetDefaultAutocomplete()
 	if self.Type.Autocomplete then
-		local transformedEmpty = self:TransformSegment("")
-		local strings, options = self.Type.Autocomplete(transformedEmpty)
-
+		local strings, options = self.Type.Autocomplete(self:TransformSegment(""))
 		return strings, options or {}
 	end
 
