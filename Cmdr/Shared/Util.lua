@@ -219,8 +219,10 @@ function Util.MashExcessArguments(arguments, max)
 end
 
 --- Trims whitespace from both sides of a string.
-function Util.TrimString(s)
-	return s:match "^%s*(.-)%s*$"
+function Util.TrimString(str)
+	local _, from = string.find(str, "^%s*")
+	-- trim the string in two steps to prevent quadratic backtracking when no "%S" match is found
+	return from == #str and "" or string.match(str, ".*%S", from + 1)
 end
 
 --- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
@@ -497,13 +499,25 @@ end
 
 --- Emulates tabstops with spaces
 function Util.EmulateTabstops(text, tabWidth)
-	local result = ""
-	for i = 1, #text do
-		local char = text:sub(i, i)
-
-		result = result .. (char == "\t" and string.rep(" ", tabWidth - #result % tabWidth) or char)
+	local column = 0
+	local textLength = #text
+	local result = table.create(textLength)
+	for i = 1, textLength do
+		local char = string.sub(text, i, i)
+		if char == "\t" then
+			local spaces = tabWidth - column % tabWidth
+			table.insert(result, string.rep(" ", spaces))
+			column += spaces
+		else
+			table.insert(result, char)
+			if char == "\n" then
+				column = 0 -- Reset column counter on newlines
+			elseif char ~= "\r" then
+				column += 1
+			end
+		end
 	end
-	return result
+	return table.concat(result)
 end
 
 function Util.Mutex()
