@@ -5,6 +5,7 @@
 - Fix a new error caused by `var` & `varSet` in places with DataStore access disabled. (#188)
 - Fix incorrect DataStore used by `var` and `varSet` commands.
 - Fix incorrect number of arguments passed to `AutoComplete`, `Validate` and `Parse` on using value operators like `**` and `.` (Types).
+- Fix `ValidateOnce` not working on types created with `Util.MakeListableType`.
 
 # v1.8.4
 - Fix an error when using function arguments.
