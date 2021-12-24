@@ -1,19 +1,4 @@
-local AssetService = game:GetService("AssetService")
 local TeleportService = game:GetService("TeleportService")
-
-local pages = AssetService:GetGamePlacesAsync()
-local places = {}
-
-while true do
-	for _, place in ipairs(pages:GetCurrentPage()) do
-		table.insert(places, place.PlaceId)
-	end
-
-	if pages.isFinished then
-		break
-	end
-	pages:AdvanceToNextpageAsync()
-end
 
 return function(context, players, placeId, jobId)
 	players = players or { context.Executor }
@@ -31,11 +16,7 @@ return function(context, players, placeId, jobId)
 			TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
 		end
 	else
-		if table.find(places, placeId) then
-			TeleportService:TeleportPartyAsync(placeId, players)
-		else
-			TeleportService:TeleportAsync(placeId, players)
-		end
+		TeleportService:TeleportAsync(placeId, players)
 	end
 
 	return "Teleported."
