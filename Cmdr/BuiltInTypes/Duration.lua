@@ -93,6 +93,7 @@ local durationType = {
             local endingUnit = rawText:match("^.*-?%d+(%a+)%s?$")
             -- Assume there is a singular match at this point
             local fuzzyUnits = unitFinder(endingUnit)
+			if fuzzyUnits == nil or endingUnit == nil then return end
             -- List all possible fuzzy matches. This is for the Minutes/Months ambiguity case.
             returnTable = mapUnits(fuzzyUnits, rawText, lastNumber, #endingUnit + 1)
             -- Sort alphabetically in the Minutes/Months case, so Minutes are displayed on top.
