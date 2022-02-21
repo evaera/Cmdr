@@ -71,6 +71,7 @@ function Util.MakeFuzzyFinder(setOrContainer)
 		local results = {}
 
 		for i, name in pairs(names) do
+			if name == nil or text == nil then continue end
 			local value = instances and instances[i] or name
 
 			-- Continue on checking for non-exact matches...
