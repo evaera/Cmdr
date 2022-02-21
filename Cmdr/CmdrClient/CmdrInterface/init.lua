@@ -66,8 +66,10 @@ return function (Cmdr)
 					options = options or {}
 					isPartial = options.IsPartial or false
 
-					for i, item in pairs(items) do
-						acItems[i] = {typedText, item}
+					if items ~= nil then
+						for i, item in pairs(items) do
+							acItems[i] = {typedText, item}
+						end
 					end
 				end
 
