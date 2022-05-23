@@ -14,7 +14,7 @@ The easiest way to get started with Cmdr is to install the [RoStrap Roblox Studi
 
 #### Manual
 
-You can download the latest model file release from the [releases section](https://github.com/evaera/Cmdr/releases/latest), but this may not always be the most up to date version of Cmdr. You'll want to put this is a server directory, like ServerScriptService.
+You can download the latest model file release from the [releases section](https://github.com/evaera/Cmdr/releases/latest), but this may not always be the most up to date version of Cmdr. You'll want to put this in a server directory, like ServerScriptService.
 
 #### Advanced
 
