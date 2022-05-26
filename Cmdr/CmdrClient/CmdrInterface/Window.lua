@@ -28,9 +28,15 @@ Line.Parent = nil
 
 --- Update the text entry label
 function Window:UpdateLabel()
+	local PlayerNameSize = TextService:GetTextSize(
+		Player.Name .. "@" .. self.Cmdr.PlaceName .. "$",
+		Entry.TextLabel.TextSize,
+		Entry.TextLabel.Font,
+		Vector2.new(math.huge, math.huge)
+	)
 	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
-	Entry.TextLabel.Size = UDim2.new(0, Entry.TextLabel.TextBounds.X, 0, 20)
-	Entry.TextBox.Position = UDim2.new(0, Entry.TextLabel.Size.X.Offset + 7, 0, 0)
+	Entry.TextLabel.Size = UDim2.new(0, PlayerNameSize.X, 0, 20)
+	Entry.TextBox.Position = UDim2.new(0, PlayerNameSize.X + 7, 0, 0)
 end
 
 --- Get the text entry label
