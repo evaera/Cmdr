@@ -99,7 +99,7 @@ function Registry:RegisterCommandObject (commandObject, fromCmdr)
 			if type(arg) == "table" then
 				for key in pairs(arg) do
 					if self.CommandArgProps[key] == nil then
-						error(('Unknown propery in command "%s" argument #%d: %s'):format(commandObject.Name or "unknown", i, key))
+						error(('Unknown property in command "%s" argument #%d: %s'):format(commandObject.Name or "unknown", i, key))
 					end
 				end
 			end
@@ -118,7 +118,7 @@ function Registry:RegisterCommandObject (commandObject, fromCmdr)
 			self.Commands[alias:lower()] = nil
 		end
 	elseif not oldCommand then
-		self.CommandsArray[#self.CommandsArray + 1] = commandObject
+		table.insert(self.CommandsArray, commandObject)
 	end
 
 	self.Commands[commandObject.Name:lower()] = commandObject
@@ -207,7 +207,7 @@ function Registry:GetCommandNames ()
 	local commands = {}
 
 	for _, command in pairs(self.CommandsArray) do
-		commands[#commands + 1] = command.Name
+		table.insert(commands, command.Name)
 	end
 
 	return commands
@@ -220,7 +220,7 @@ function Registry:GetTypeNames ()
 	local typeNames = {}
 
 	for typeName in pairs(self.Types) do
-		typeNames[#typeNames + 1] = typeName
+		table.insert(typeNames, typeName)
 	end
 
 	return typeNames
