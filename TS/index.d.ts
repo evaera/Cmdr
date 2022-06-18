@@ -130,9 +130,9 @@ interface Dispatcher {
 
 interface TypeDefinition {
   /** Optionally overrides the user-facing name of this type in the autocomplete menu. If omitted, the registered name of this type will be used. */
-  DisplayName: string;
+  DisplayName?: string;
   /** String containing default [Prefixed Union Types](https://eryn.io/Cmdr/guide/Commands.html#prefixed-union-types) for this type. This property should omit the initial type name, so this string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`. */
-  Prefixes: string;
+  Prefixes?: string;
   /** Transform is an optional function that is passed two values: the raw text, and the player running the command. Then, whatever values this function returns will be passed to all other functions in the type (`Validate`, `Autocomplete`, and `Parse`). */
   Transform?: (rawText: string, executor: Player) => unknown;
   /**
@@ -180,7 +180,7 @@ interface CommandDefinition {
   /** The name that's in auto complete and displayed to user. */
   Name: string;
   /** Aliases that are not in the autocomplete, but if matched will run this command just the same. For example, `m` might be an alias of `announce`. */
-  Aliases: Array<string>;
+  Aliases?: Array<string>;
   /** A description of the command which is displayed to the user. */
   Description: string;
   /** Optional, can be be any value you wish. This property is intended to be used in hooks, so that you can categorize commands and decide if you want a specific user to be able to run them or not. */
@@ -203,7 +203,7 @@ interface CommandDefinition {
     ...args: Array<unknown>
   ) => string | undefined;
   /** A list of commands to run automatically when this command is registered at the start of the game. This should primarily be used to register any aliases regarding this command with the built-in `alias` command, but can be used for initializing state as well. Command execution will be deferred until the end of the frame. */
-  AutoExec: Array<string>;
+  AutoExec?: Array<string>;
 }
 
 interface Registry {
