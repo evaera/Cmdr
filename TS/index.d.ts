@@ -75,7 +75,7 @@ interface CommandContext {
   /** The group this command is a part of. Defined in command definitions, typically a string. */
   Group: unknown;
   /** A blank table that can be used to store user-defined information about this command's current execution. This could potentially be used with hooks to add information to this table which your command or other hooks could consume. */
-  State: object;
+  State: {};
   /** Any aliases that can be used to also trigger this command in addition to its name. */
   Aliases: Array<string>;
   /** The description for this command from the command definition. */
@@ -93,7 +93,7 @@ interface CommandContext {
   /** Returns the command data that was sent along with the command. This is the return value of the Data function from the command definition. */
   GetData(): unknown;
   /** Returns a table of the given name. Always returns the same table on subsequent calls. Useful for storing things like ban information. Same as `Registry.GetStore`. */
-  GetStore(name: string): object;
+  GetStore(name: string): {};
   /** Sends a network event of the given name to the given player. See Network Event Handlers. */
   SendEvent(player: Player, event: string): void;
   /** Broadcasts a network event to all players. See Network Event Handlers. */
