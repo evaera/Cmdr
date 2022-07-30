@@ -16,7 +16,7 @@ return {
 		{
 			Type = "player @ vector3";
 			Name = "Destination";
-			Description = "The player to teleport to"
+			Description = "The player to teleport to";
 		}
 	};
 }
