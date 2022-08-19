@@ -33,7 +33,7 @@ return function ()
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Parent = Frame
 
-	local Line = Instance.new("TextBox")
+	local Line = Instance.new("TextLabel")
 	Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Line.BackgroundTransparency = 1
 	Line.Font = Enum.Font.Code
@@ -42,8 +42,7 @@ return function ()
 	Line.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Line.TextSize = 14
 	Line.TextXAlignment = Enum.TextXAlignment.Left
-	Line.ClearTextOnFocus = false
-	Line.TextEditable = false
+	Line.RichText = true
 	Line.Parent = Frame
 
 	local UIPadding = Instance.new("UIPadding")
