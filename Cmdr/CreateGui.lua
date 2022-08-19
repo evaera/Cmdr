@@ -33,7 +33,7 @@ return function ()
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Parent = Frame
 
-	local Line = Instance.new("TextBox")
+	local Line = Instance.new("TextLabel")
 	Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Line.BackgroundTransparency = 1
 	Line.Font = Enum.Font.Code
@@ -42,8 +42,6 @@ return function ()
 	Line.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Line.TextSize = 14
 	Line.TextXAlignment = Enum.TextXAlignment.Left
-	Line.ClearTextOnFocus = false
-	Line.TextEditable = false
 	Line.Parent = Frame
 
 	local UIPadding = Instance.new("UIPadding")
@@ -94,6 +92,12 @@ return function ()
 	TextButton.TextXAlignment = Enum.TextXAlignment.Left
 	TextButton.Parent = Autocomplete
 
+	local UIListLayout3 = Instance.new("UIListLayout")
+	UIListLayout3.FillDirection = Enum.FillDirection.Horizontal
+	UIListLayout3.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout3.Padding = UDim.new(0, 7)
+	UIListLayout3.Parent = Entry
+
 	local TextBox = Instance.new("TextBox")
 	TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TextBox.BackgroundTransparency = 1
@@ -113,7 +117,8 @@ return function ()
 	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TextLabel.BackgroundTransparency = 1
 	TextLabel.Font = Enum.Font.Code
-	TextLabel.Size = UDim2.new(0, 133, 0, 20)
+	TextLabel.Size = UDim2.new(0, 0, 0, 20)
+	TextLabel.AutomaticSize = Enum.AutomaticSize.X
 	TextLabel.Text = ""
 	TextLabel.TextColor3 = Color3.fromRGB(255, 223, 93)
 	TextLabel.TextSize = 14
