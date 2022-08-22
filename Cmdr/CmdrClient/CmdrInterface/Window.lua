@@ -60,6 +60,7 @@ end
 
 --- Add a line to the command bar
 function Window:AddLine(text, options)
+	options = options or {}
 	text = tostring(text)
 
 	if typeof(options) == "Color3" then
