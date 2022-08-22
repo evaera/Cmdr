@@ -59,8 +59,12 @@ function Window:UpdateWindowHeight()
 end
 
 --- Add a line to the command bar
-function Window:AddLine(text, color)
+function Window:AddLine(text, options)
 	text = tostring(text)
+
+	if typeof(options) == "Color3" then
+		options = { Color = options }
+	end
 
 	if #text == 0 then
 		Window:UpdateWindowHeight()
@@ -82,7 +86,8 @@ function Window:AddLine(text, color)
 		).Y + (LINE_HEIGHT - line.TextSize)
 	)
 	line.Text = str
-	line.TextColor3 = color or line.TextColor3
+	line.TextColor3 = options.Color or line.TextColor3
+	line.RichText = options.RichText or false
 	line.Parent = Gui
 end
 
