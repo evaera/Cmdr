@@ -1,4 +1,4 @@
-local version = "v1.8.4"
+local version = "v1.9.0"
 
 return {
 	Name = "version",
@@ -8,5 +8,5 @@ return {
 
 	Run = function()
 		return ("Cmdr Version %s"):format(version)
-	end
+	end,
 }
