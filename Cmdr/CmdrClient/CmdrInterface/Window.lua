@@ -341,6 +341,7 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(
 			return
 		end
 		if Window.OnTextChanged then
+			Gui.CanvasPosition = Vector2.new(0, math.clamp(Gui.CanvasSize.Height.Offset - 300, 0, math.huge))
 			return Window.OnTextChanged(Entry.TextBox.Text)
 		end
 	end
