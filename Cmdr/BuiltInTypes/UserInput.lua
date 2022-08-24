@@ -3,7 +3,8 @@ local Util = require(script.Parent.Parent.Shared.Util)
 local combinedInputEnums = Enum.UserInputType:GetEnumItems()
 
 for _, e in pairs(Enum.KeyCode:GetEnumItems()) do
-	combinedInputEnums[#combinedInputEnums + 1] = e
+	-- combinedInputEnums[#combinedInputEnums + 1] = e
+	table.insert(combinedInputEnums, e)
 end
 
 local userInputType = {
