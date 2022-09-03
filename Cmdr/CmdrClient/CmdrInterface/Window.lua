@@ -7,8 +7,9 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
 local LINE_HEIGHT = 20
-local WINDOW_MAX_HEIGHT = 300
 local MOUSE_TOUCH_ENUM = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch}
+
+local windowMaxHeight = 300
 
 --- Window handles the command bar GUI
 local Window = {
@@ -25,6 +26,11 @@ local Line = Gui:WaitForChild("Line")
 local Entry = Gui:WaitForChild("Entry")
 
 Line.Parent = nil
+
+function Window:UpdateMaxHeight(newMaxHeight)
+	windowMaxHeight = newMaxHeight
+	self:UpdateWindowHeight()
+end
 
 --- Update the text entry label
 function Window:UpdateLabel()
@@ -52,7 +58,7 @@ function Window:UpdateWindowHeight()
 		Gui.Size.X.Scale,
 		Gui.Size.X.Offset,
 		0,
-		windowHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or windowHeight
+		windowHeight > windowMaxHeight and windowMaxHeight or windowHeight
 	)
 
 	Gui.CanvasPosition = Vector2.new(0, math.clamp(windowHeight - 300, 0, math.huge))
