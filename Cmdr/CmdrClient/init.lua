@@ -45,6 +45,20 @@ end
 
 local Interface = require(script.CmdrInterface)(Cmdr)
 
+--- Sets the max window height of the interface
+function Cmdr:SetMaxWindowHeight (newMaxWindowHeight)
+	local camera = workspace:FindFirstChildWhichIsA("Camera")
+
+	if camera then
+		local ySize = camera.ViewportSize.Y
+		self.MaxWindowHeight = math.clamp(newMaxWindowHeight, 150, ySize - 25)
+	else
+		self.MaxWindowHeight = 300
+	end
+
+	Interface.Window:UpdateMaxHeight()
+end
+
 --- Sets a list of keyboard keys (Enum.KeyCode) that can be used to open the commands menu
 function Cmdr:SetActivationKeys (keysArray)
 	self.ActivationKeys = Util.MakeDictionary(keysArray)
