@@ -47,7 +47,7 @@ local Interface = require(script.CmdrInterface)(Cmdr)
 
 --- Sets the max window height of the interface
 function Cmdr:SetMaxWindowHeight (newMaxWindowHeight)
-	local camera = workspace:FindFirstChildWhichIsA("Camera")
+	local camera = workspace.CurrentCamera
 
 	if camera then
 		local ySize = camera.ViewportSize.Y
