@@ -27,6 +27,7 @@ local Entry = Gui:WaitForChild("Entry")
 
 Line.Parent = nil
 
+--- Sets the max window height value and updates the current window
 function Window:UpdateMaxHeight(newMaxHeight)
 	windowMaxHeight = newMaxHeight
 	self:UpdateWindowHeight()
