@@ -1,4 +1,4 @@
-# Next
+# v1.9.0
 - Significantly improved the performance of Util.EmulateTabstops for long strings by using a string builder table (~250-350x) (#190)
   - Allows for long strings to be displayed in the output without a freeze
   - Added column logic to properly align text containing newlines
@@ -6,6 +6,11 @@
 - Fix incorrect DataStore used by `var` and `varSet` commands.
 - Fix incorrect number of arguments passed to `AutoComplete`, `Validate` and `Parse` on using value operators like `**` and `.` (Types).
 - Fix `ValidateOnce` not working on types created with `Util.MakeListableType`.
+- Fix label positioning broke by roblox update
+- Update announce command to check if sender and recipient can chat
+- Added RichText option to Window:AddLine
+- Replace TeleportPartyAsync with TeleportAsync in teleport command
+- Scroll to bottom on typing began
 
 # v1.8.4
 - Fix an error when using function arguments.

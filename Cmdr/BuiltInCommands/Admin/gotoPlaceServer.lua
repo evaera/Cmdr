@@ -1,7 +1,7 @@
 local TeleportService = game:GetService("TeleportService")
 
 return function(context, players, placeId, jobId)
-	players = players or { context.Executor}
+	players = players or { context.Executor }
 
 	if placeId <= 0 then
 		return "Invalid place ID"
@@ -16,7 +16,7 @@ return function(context, players, placeId, jobId)
 			TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
 		end
 	else
-		TeleportService:TeleportPartyAsync(placeId, players)
+		TeleportService:TeleportAsync(placeId, players)
 	end
 
 	return "Teleported."

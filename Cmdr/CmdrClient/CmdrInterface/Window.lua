@@ -29,8 +29,6 @@ Line.Parent = nil
 --- Update the text entry label
 function Window:UpdateLabel()
 	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
-	Entry.TextLabel.Size = UDim2.new(0, Entry.TextLabel.TextBounds.X, 0, 20)
-	Entry.TextBox.Position = UDim2.new(0, Entry.TextLabel.Size.X.Offset + 7, 0, 0)
 end
 
 --- Get the text entry label
@@ -61,8 +59,13 @@ function Window:UpdateWindowHeight()
 end
 
 --- Add a line to the command bar
-function Window:AddLine(text, color)
+function Window:AddLine(text, options)
+	options = options or {}
 	text = tostring(text)
+
+	if typeof(options) == "Color3" then
+		options = { Color = options }
+	end
 
 	if #text == 0 then
 		Window:UpdateWindowHeight()
@@ -84,7 +87,8 @@ function Window:AddLine(text, color)
 		).Y + (LINE_HEIGHT - line.TextSize)
 	)
 	line.Text = str
-	line.TextColor3 = color or line.TextColor3
+	line.TextColor3 = options.Color or line.TextColor3
+	line.RichText = options.RichText or false
 	line.Parent = Gui
 end
 
@@ -338,6 +342,7 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(
 			return
 		end
 		if Window.OnTextChanged then
+			Gui.CanvasPosition = Vector2.new(0, math.clamp(Gui.CanvasSize.Height.Offset - 300, 0, math.huge))
 			return Window.OnTextChanged(Entry.TextBox.Text)
 		end
 	end
