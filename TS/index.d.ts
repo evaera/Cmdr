@@ -140,17 +140,17 @@ interface TypeDefinition {
    *
    * If this function isn't present, anything will be considered valid.
    */
-  Validate?: (value: unknown) => LuaTuple<[boolean, string?]>;
+  Validate?: (value: unknown) => boolean | LuaTuple<[boolean, string]>;
   /**
    * This function works exactly the same as the normal `Validate` function, except it only runs once (after the user presses Enter). This should only be used if the validation process is relatively expensive or needs to yield. For example, the PlayerId type uses this because it needs to call `GetUserIdFromNameAsync` in order to validate.
    *
    * For the vast majority of types, you should just use `Validate` instead.
    */
-  ValidateOnce?: (value: unknown) => LuaTuple<[boolean, string?]>;
+  ValidateOnce?: (value: unknown) => boolean | LuaTuple<[boolean, string]>;
   /** Should only be present for types that are possible to be auto completed. It should return an array of strings that will be displayed in the auto complete menu. It can also return a second value, which can be a dictionary with options such as `IsPartial` as described above. */
   Autocomplete?: (
     value: unknown
-  ) => LuaTuple<[Array<string>, { IsPartial?: boolean }?]>;
+  ) => Array<string> | LuaTuple<[Array<string>, { IsPartial?: boolean }]>;
   /** Parse is the only required function in a type definition. It is the final step before the value is considered finalized. This function should return the actual parsed value that will be sent to the command functions. */
   Parse: (value: unknown) => unknown;
   /** The `Default` function is optional and should return the "default" value for this type, as a string. For example, the default value of the `players` type is the name of the player who ran the command. */
