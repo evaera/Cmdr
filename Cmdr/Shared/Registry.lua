@@ -28,7 +28,7 @@ local Registry = {
 --- Registers a type in the system.
 -- name: The type Name. This must be unique.
 function Registry:RegisterType (name, typeObject)
-	if not name or not typeof(name) == "string" then
+	if not name or typeof(name) ~= "string" then
 		error("Invalid type name provided: nil")
 	end
 
