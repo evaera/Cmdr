@@ -20,6 +20,12 @@ You can download the latest model file release from the [releases section](https
 
 Cmdr has no dependencies, so it can also be easily included as a Git submodule and synced in with the rest of your project with [Rojo](https://github.com/LPGhatguy/rojo). If you don't know how to do this already, then please see method 1 :)
 
+Cmdr is also available on Wally [here](https://wally.run/package/evaera/cmdr). 
+```toml
+[server-dependencies]
+cmdr = "evaera/cmdr@1.9.0"
+```
+
 ### Warning
 
 ::: warning DO NOT MODIFY SOURCE CODE TO CHANGE BEHAVIOR
