@@ -23,7 +23,7 @@ Cmdr has no dependencies, so it can also be easily included as a Git submodule a
 Cmdr is also available on Wally [here](https://wally.run/package/evaera/cmdr). 
 ```toml
 [server-dependencies]
-cmdr = "evaera/cmdr@1.9.0"
+Cmdr = "evaera/cmdr@1.9.0"
 ```
 
 ### Warning
