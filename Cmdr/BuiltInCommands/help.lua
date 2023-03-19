@@ -24,33 +24,31 @@ return {
 	ClientRun = function (context, commandName)
 		if commandName then
 			local command = context.Cmdr.Registry:GetCommand(commandName)
-			context:Reply(("Command: %s"):format(command.Name), Color3.fromRGB(230, 126, 34))
+			context:Reply(`Command: {command.Name}`, Color3.fromRGB(230, 126, 34))
 			if command.Aliases and #command.Aliases > 0 then
-				context:Reply(("Aliases: %s"):format(table.concat(command.Aliases, ", ")), Color3.fromRGB(230, 230, 230))
+				context:Reply(`Aliases: {table.concat(command.Aliases, ", ")}`, Color3.fromRGB(230, 230, 230))
 			end
 			context:Reply(command.Description, Color3.fromRGB(230, 230, 230))
 			for i, arg in ipairs(command.Args) do
-				context:Reply(("#%d %s%s: %s - %s"):format(
-					i,
-					arg.Name,
-					arg.Optional == true and "?" or "",
-					arg.Type, arg.Description
-				))
+				context:Reply(
+					`#{i} {arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
+				)
 			end
 		else
 			context:Reply(ARGUMENT_SHORTHANDS)
 
 			local commands = context.Cmdr.Registry:GetCommands()
 			table.sort(commands, function(a, b)
-				return a.Group < b.Group
+				return if a.Group and b.Group then a.Group < b.Group else a.Group
 			end)
 			local lastGroup
 			for _, command in ipairs(commands) do
+				command.Group = command.Group or "No Group"
 				if lastGroup ~= command.Group then
-					context:Reply(("\n%s\n-------------------"):format(command.Group))
-					lastGroup = command.Group	
+					context:Reply(`\n{command.Group}\n-------------------`)
+					lastGroup = command.Group
 				end
-				context:Reply(("%s - %s"):format(command.Name, command.Description))
+				context:Reply(`{command.Name} - {command.Description}`)
 			end
 		end
 		return ""
