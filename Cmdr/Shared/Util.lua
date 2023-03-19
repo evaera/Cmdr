@@ -385,28 +385,29 @@ function Util.MakeAliasCommand(name, commandString)
 
 	commandString = Util.EncodeEscapedOperators(commandString)
 
-
 	local seenArgs = {}
 
 	for arg in commandString:gmatch("$(%d+)") do
 		if seenArgs[arg] == nil then
 			seenArgs[arg] = true
-			local options = commandString:match("$" .. arg .. "(%b{})")
+			local options = commandString:match(`${arg}(%b\{})`)
 
-			local argType, argName, argDescription
+			local argOptional, argType, argName, argDescription
 			if options then
-				options = options:sub(2, #options-1) -- remove braces
+				options = options:sub(2, #options - 1) -- remove braces
 				argType, argName, argDescription = unpack(options:split("|"))
 			end
 
-			argType = argType or "string"
-			argName = argName or ("Argument " .. arg)
+			argOptional = argType and not not argType:match("%?$")
+			argType = if argType then argType:match("^%w+") else "string"
+			argName = argName or `Argument {arg}`
 			argDescription = argDescription or ""
 
 			table.insert(args, {
-				Type = argType;
-				Name = argName;
-				Description = argDescription;
+				Type = argType,
+				Name = argName,
+				Description = argDescription,
+				Optional = argOptional,
 			})
 		end
 	end
@@ -414,12 +415,12 @@ function Util.MakeAliasCommand(name, commandString)
 	return {
 		Name = commandName,
 		Aliases = {},
-		Description = "<Alias> " .. (commandDescription or commandString),
+		Description = `<Alias> {commandDescription or commandString}`,
 		Group = "UserAlias",
 		Args = args,
 		Run = function(context)
 			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
-		end
+		end,
 	}
 end
 
