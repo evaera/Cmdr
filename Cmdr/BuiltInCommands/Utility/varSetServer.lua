@@ -1,5 +1,6 @@
 local DataStoreService = game:GetService("DataStoreService")
 
+local queue = {}
 local DataStoresActive, DataStore
 task.spawn(function()
 	DataStoresActive, DataStore = pcall(function()
@@ -7,9 +8,18 @@ task.spawn(function()
 		DataStore:GetAsync("test_key")
 		return DataStore
 	end)
+
+	while #queue > 0 do
+		coroutine.resume(table.remove(queue, 1))
+	end
 end)
 
 return function (context, key, value)
+	if DataStoresActive == nil then
+		table.insert(queue, coroutine.running())
+		coroutine.yield()
+	end
+
 	local gameWide = false
 	local saved = true
 
