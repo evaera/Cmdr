@@ -15,14 +15,7 @@ return function (cmdr)
 	end
 
 	ReplicatedRoot = script.Parent.CmdrClient
-
-	if ReplicatedStorage:FindFirstChild("Resources") and
-		ReplicatedStorage.Resources:FindFirstChild("Libraries") then -- If using RoStrap
-		-- ReplicatedRoot.Name = "Cmdr"
-		ReplicatedRoot.Parent = ReplicatedStorage.Resources.Libraries
-	else
-		ReplicatedRoot.Parent = ReplicatedStorage
-	end
+	ReplicatedRoot.Parent = ReplicatedStorage
 
 	RemoteFunction = Create("RemoteFunction", "CmdrFunction")
 	RemoteEvent = Create("RemoteEvent", "CmdrEvent")
