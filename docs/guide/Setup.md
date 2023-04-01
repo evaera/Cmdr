@@ -6,12 +6,6 @@ title: Setup
 ### Installation
 Pick one of the below methods to install Cmdr:
 
-<!-- #### Recommended
-
-The easiest way to get started with Cmdr is to install the [RoStrap Roblox Studio plugin](https://www.roblox.com/library/725884332/RoStrap), open the RoStrap interface in a place, and then install "Cmdr". This will instantly download and build the newest version of Cmdr right from GitHub.
-
-![Installation](https://user-images.githubusercontent.com/2489210/45920094-b27c3f80-be6d-11e8-9105-f358140b5a13.png) -->
-
 #### Manual
 
 You can download the latest model file release from the [releases section](https://github.com/evaera/Cmdr/releases/latest), but this may not always be the most up to date version of Cmdr. You'll want to put this in a server directory, like ServerScriptService.
