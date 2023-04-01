@@ -26,19 +26,6 @@ There should be **no reason** to modify the source code of Cmdr (unless you are 
 
 You should create a folder to keep your commands inside, and then register them on the server. However, you only need to register commands and types on the server. There should be no need to modify the actual Cmdr library itself.
 
-:::: tabs
-<!-- ::: tab "Using RoStrap"
-```lua
--- This is a script you would create in ServerScriptService, for example.
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
-local Cmdr = Resources:LoadLibrary("Cmdr")
-
-Cmdr:RegisterDefaultCommands() -- This loads the default set of commands that Cmdr comes with. (Optional)
--- Cmdr:RegisterCommandsIn(script.Parent.CmdrCommands) -- Register commands from your own folder. (Optional)
-```
-::: -->
-::: tab ""
 ```lua
 -- This is a script you would create in ServerScriptService, for example.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -47,8 +34,6 @@ local Cmdr = require(path.to.Cmdr)
 Cmdr:RegisterDefaultCommands() -- This loads the default set of commands that Cmdr comes with. (Optional)
 -- Cmdr:RegisterCommandsIn(script.Parent.CmdrCommands) -- Register commands from your own folder. (Optional)
 ```
-:::
-::::
 
 The Cmdr GUI will be inserted into StarterGui if it doesn't already exist. You can customize the GUI to your liking (changing colors, etc.) if you play the game, copy the GUI, stop the game, and then paste it in to StarterGui. Of course, this is completely optional.
 
@@ -60,21 +45,8 @@ You need to require Cmdr on the server *and* on the client for it to be fully lo
 
 From the client, you also need to require the CmdrClient module.
 
-<!--If not using RoStrap, then--> After the server code above runs, CmdrClient will be inserted into ReplicatedStorage automatically.
+After the server code above runs, CmdrClient will be inserted into ReplicatedStorage automatically.
 
-:::: tabs
-<!-- ::: tab "Using RoStrap"
-```lua
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
-local Cmdr = Resources:LoadLibrary("CmdrClient")
-
--- Configurable, and you can choose multiple keys
-Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
--- See below for the full API.
-```
-::: -->
-::: tab ""
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
@@ -83,8 +55,6 @@ local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
 -- See below for the full API.
 ```
-:::
-::::
 
 <script>
   export default {
