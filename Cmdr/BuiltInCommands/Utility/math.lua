@@ -8,7 +8,7 @@ return {
 		"alias \"-|Perform a subtraction.\" math $1{number|Number} - $2{number|Number}";
 		"alias \"*|Perform a multiplication.\" math $1{number|Number} * $2{number|Number}";
 		"alias \"/|Perform a division.\" math $1{number|Number} / $2{number|Number}";
-		"alias \"**|Perform an exponentiation.\" math *$1{number| * umber} $2{number|Number}";
+		"alias \"**|Perform an exponentiation.\" math $1{number|Number} ** $2{number|Number}";
 		"alias \"%|Perform a modulus.\" math $1{number|Number} % $2{number|Number}";
 	};
 	Args = {
