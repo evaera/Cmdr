@@ -48,11 +48,7 @@ return {
 					context:Reply(`\n{command.Group}\n{string.rep("-", #command.Group)}`)
 					lastGroup = command.Group
 				end
-				if command.Description ~= nil then
-					context:Reply(`{command.Name} - {command.Description}`)
-				else
-					context:Reply(`{command.Name}`)
-				end
+				context:Reply(if command.Description then `{command.Name} - {command.Description}` else command.Name)
 			end
 		end
 		return ""
