@@ -1,11 +1,11 @@
 local ARGUMENT_SHORTHANDS = [[
 Argument Shorthands
--------------------			
+-------------------
 .   Me/Self
-*   All/Everyone 
-**  Others 
+*   All/Everyone
+**  Others
 ?   Random
-?N  List of N random values			
+?N  List of N random values
 ]]
 
 return {
@@ -45,10 +45,14 @@ return {
 			for _, command in ipairs(commands) do
 				command.Group = command.Group or "No Group"
 				if lastGroup ~= command.Group then
-					context:Reply(`\n{command.Group}\n-------------------`)
+					context:Reply(`\n{command.Group}\n{string.rep("-", #command.Group)}`)
 					lastGroup = command.Group
 				end
-				context:Reply(`{command.Name} - {command.Description}`)
+				if command.Description ~= nil then
+					context:Reply(`{command.Name} - {command.Description}`)
+				else
+					context:Reply(`{command.Name}`)
+				end
 			end
 		end
 		return ""
