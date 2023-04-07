@@ -134,6 +134,11 @@ end
 -- Handles replicating the definition to the client.
 function Registry:RegisterCommand (commandScript, commandServerScript, filter)
 	local commandObject = require(commandScript)
+	if typeof(commandObject) ~= "table" then
+		error(
+			`Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
+		)
+	end
 
 	if commandServerScript then
 		commandObject.Run = require(commandServerScript)
