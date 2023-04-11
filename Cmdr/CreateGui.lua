@@ -39,11 +39,12 @@ return function ()
 	Line.Font = Enum.Font.Code
 	Line.Name = "Line"
 	Line.Size = UDim2.new(1, 0, 0, 20)
+	Line.AutomaticSize = Enum.AutomaticSize.Y
 	Line.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Line.TextSize = 14
 	Line.TextXAlignment = Enum.TextXAlignment.Left
-	Line.ClearTextOnFocus = false
 	Line.TextEditable = false
+	Line.ClearTextOnFocus = false
 	Line.Parent = Frame
 
 	local UIPadding = Instance.new("UIPadding")

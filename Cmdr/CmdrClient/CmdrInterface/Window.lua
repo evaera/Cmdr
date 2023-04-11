@@ -73,19 +73,8 @@ function Window:AddLine(text, options)
 	end
 
 	local str = self.Cmdr.Util.EmulateTabstops(text or "nil", 8)
+
 	local line = Line:Clone()
-	line.Size =
-		UDim2.new(
-		line.Size.X.Scale,
-		line.Size.X.Offset,
-		0,
-		TextService:GetTextSize(
-			str,
-			line.TextSize,
-			line.Font,
-			Vector2.new(Gui.UIListLayout.AbsoluteContentSize.X, math.huge)
-		).Y + (LINE_HEIGHT - line.TextSize)
-	)
 	line.Text = str
 	line.TextColor3 = options.Color or line.TextColor3
 	line.RichText = options.RichText or false
