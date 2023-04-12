@@ -1,4 +1,4 @@
-return function ()
+return function()
 	local Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
 	Cmdr.Name = "Cmdr"
@@ -9,7 +9,7 @@ return function ()
 	Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
 	Frame.BackgroundTransparency = 0.4
 	Frame.BorderSizePixel = 0
-	Frame.CanvasSize = UDim2.new(0, 0, 0, 100)
+	Frame.CanvasSize = UDim2.new(0, 0, 0, 20)
 	Frame.Name = "Frame"
 	Frame.Position = UDim2.new(0.025, 0, 0, 25)
 	Frame.ScrollBarThickness = 6
@@ -17,6 +17,7 @@ return function ()
 	Frame.Selectable = false
 	Frame.Size = UDim2.new(0.95, 0, 0, 50)
 	Frame.Visible = false
+	Frame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Frame.Parent = Cmdr
 
 	local Autocomplete = Instance.new("Frame")
