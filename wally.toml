@@ -1,7 +1,7 @@
 [package]
 name = "evaera/cmdr"
 description = "Extensible command console for Roblox developers"
-version = "1.9.0"
+version = "1.10.0"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
