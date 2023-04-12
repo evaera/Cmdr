@@ -9,13 +9,13 @@ return function()
 	Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
 	Frame.BackgroundTransparency = 0.4
 	Frame.BorderSizePixel = 0
-	Frame.CanvasSize = UDim2.new(0, 0, 0, 20)
+	Frame.CanvasSize = UDim2.new(0, 0, 0, 0)
 	Frame.Name = "Frame"
 	Frame.Position = UDim2.new(0.025, 0, 0, 25)
 	Frame.ScrollBarThickness = 6
 	Frame.ScrollingDirection = Enum.ScrollingDirection.Y
 	Frame.Selectable = false
-	Frame.Size = UDim2.new(0.95, 0, 0, 50)
+	Frame.Size = UDim2.new(0.95, 0, 0, 0)
 	Frame.Visible = false
 	Frame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Frame.Parent = Cmdr
