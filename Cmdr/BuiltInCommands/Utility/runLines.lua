@@ -12,7 +12,7 @@ return {
 		}
 	};
 
-	Run = function(context, text)
+	ClientRun = function(context, text)
 		if #text == 0 then
 			return ""
 		end
