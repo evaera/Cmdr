@@ -298,6 +298,17 @@ function Window:BeginInput(input, gameProcessed)
 			wait()
 			self:SetEntryText(self:GetEntryText())
 		end
+	elseif input.KeyCode == Enum.KeyCode.C and input:IsModifierKeyDown(Enum.ModifierKey.Ctrl) then
+		-- Shortcut to delete any entered text.
+		-- Common shortcut used in bash, command prompt, etc. to quickly restart typing a command.
+		-- I think techincally it kills whatever process is reading input, but...
+		if Entry.TextBox.SelectionStart == -1 then
+			-- Only delete if the user has no selected text.
+			-- Otherwise they'd CTRL+C to copy to clipboard and delete everything.
+			self:SetEntryText("")
+			-- I think that we want this.
+			self:ClearHistoryState()
+		end
 	else
 		self:ClearHistoryState()
 	end
