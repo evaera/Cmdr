@@ -70,6 +70,9 @@ function Argument:Transform()
 	end
 
 	local rawValue = self.RawValue
+	if self.Type.ArgumentOperatorAliases then
+		rawValue = self.Type.ArgumentOperatorAliases[rawValue] or rawValue
+	end
 
 	if rawValue == "." and self.Type.Default then
 		rawValue = self.Type.Default(self.Executor) or ""

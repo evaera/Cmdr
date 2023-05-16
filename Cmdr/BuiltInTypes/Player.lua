@@ -23,6 +23,13 @@ local playerType = {
 	Default = function(player)
 		return player.Name
 	end;
+
+	ArgumentOperatorAliases = {
+		me = ".";
+		all = "*";
+		others = "**";
+		random = "?";
+	};
 }
 
 return function (cmdr)

@@ -285,6 +285,7 @@ function Util.MakeListableType(type, override)
 		ValidateOnce = type.ValidateOnce,
 		Autocomplete = type.Autocomplete,
 		Default = type.Default,
+		ArgumentOperatorAliases = type.ArgumentOperatorAliases,
 		Parse = function(...)
 			return {type.Parse(...)}
 		end
