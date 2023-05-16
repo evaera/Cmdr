@@ -1,3 +1,8 @@
+# v1.11.0
+
+- Add support for new Roblox CoreGui Chat
+- Add ArgumentOperatorAliases option to types which allows specifying short hands like "me", "others", "all", etc for any type
+
 # v1.10.0
 - Improve help command
 - Alias command now supports optional arguments

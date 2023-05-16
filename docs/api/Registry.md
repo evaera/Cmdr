@@ -92,6 +92,9 @@ docs:
             If you set the optional key `Listable` to `true` in your table, this will tell Cmdr that comma-separated lists are allowed for this type. Cmdr will automatically split the list and parse each segment through your Transform, Validate, Autocomplete, and Parse functions individually, so you don't have to change the logic of your Type at all.
 
             The only limitation is that your Parse function **must return a table**. The tables from each individual segment's Parse will be merged into one table at the end of the parse step. The uniqueness of values is ensured upon merging, so even if the user lists the same value several times, it will only appear once in the final table.
+        ArgumentOperatorAliases:
+          desc: "Table containing a map from an alias to the equivalent argument value operator (., *, ?, etc.) This is used for aliases like \"all\", \"others\", \"me\" for specific types."
+          type: "{[string]: string}"
 
     - name: CommandArgument
       kind: interface
