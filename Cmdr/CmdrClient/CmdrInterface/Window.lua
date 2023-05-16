@@ -3,6 +3,7 @@
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local TextService = game:GetService("TextService")
+local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
@@ -82,6 +83,11 @@ function Window:SetVisible(visible)
 	Gui.Visible = visible
 
 	if visible then
+		self.PreviousChatWindowConfigurationEnabled = TextChatService.ChatWindowConfiguration.Enabled
+		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
+		TextChatService.ChatWindowConfiguration.Enabled = false
+		TextChatService.ChatInputBarConfiguration.Enabled = false
+		
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
 
@@ -90,6 +96,11 @@ function Window:SetVisible(visible)
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		end
 	else
+		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil then 
+			self.PreviousChatWindowConfigurationEnabled else true
+		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil then 
+			self.PreviousChatInputBarConfigurationEnabled else true
+		
 		Entry.TextBox:ReleaseFocus()
 		self.AutoComplete:Hide()
 
