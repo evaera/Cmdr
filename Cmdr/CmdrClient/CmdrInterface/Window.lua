@@ -323,6 +323,10 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+	if Window.Cmdr and Window.Cmdr.CanvasAutoScrollToBottom then
+		Gui.CanvasPosition = Vector2.new(0, Gui.AbsoluteCanvasSize.Y)
+	end
+
 	if Entry.TextBox.Text:match("\t") then -- Eat \t
 		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
 		return
