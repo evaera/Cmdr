@@ -2,7 +2,6 @@
 -- luacheck: ignore 212
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
-local TextService = game:GetService("TextService")
 local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
