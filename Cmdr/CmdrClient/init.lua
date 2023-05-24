@@ -18,7 +18,7 @@ local Cmdr do
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;
-		CanvasAutoScrollToBottom = false;
+		CanvasAutoScrollToBottom = true;
 		HideOnLostFocus = true;
 		PlaceName = "Cmdr";
 		Util = Util;
