@@ -2,7 +2,6 @@
 -- luacheck: ignore 212
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
-local TextService = game:GetService("TextService")
 local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -324,6 +323,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+	Gui.CanvasPosition = Vector2.new(0, Gui.AbsoluteCanvasSize.Y)
+
 	if Entry.TextBox.Text:match("\t") then -- Eat \t
 		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
 		return
