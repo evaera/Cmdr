@@ -18,7 +18,6 @@ local Cmdr do
 		Enabled = true;
 		MashToEnable = false;
 		ActivationUnlocksMouse = false;
-		CanvasAutoScrollToBottom = true;
 		HideOnLostFocus = true;
 		PlaceName = "Cmdr";
 		Util = Util;
@@ -107,11 +106,6 @@ end
 --- Sets the handler for a certain event type
 function Cmdr:HandleEvent(name, callback)
 	self.Events[name] = callback
-end
-
---- Sets the CanvasAutoScrollToBottom property to control automatic scrolling behavior
-function Cmdr:SetCanvasAutoScrollToBottom(isEnabled)
-	self.CanvasAutoScrollToBottom = isEnabled
 end
 
 -- Only register when we aren't in studio because don't want to overwrite what the server portion did
