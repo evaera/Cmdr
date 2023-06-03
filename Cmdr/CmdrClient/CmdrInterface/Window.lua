@@ -37,15 +37,10 @@ end
 
 --- Recalculate the window height
 function Window:UpdateWindowHeight()
-	local windowHeight = Gui.AbsoluteCanvasSize.Y
-
-	Gui.Size = UDim2.new(
-		Gui.Size.X.Scale,
-		Gui.Size.X.Offset,
-		0,
-		windowHeight > WINDOW_MAX_HEIGHT and WINDOW_MAX_HEIGHT or windowHeight
-	)
-
+	local windowHeight = Gui.UIListLayout.AbsoluteContentSize.Y
+		+ Gui.UIPadding.PaddingTop.Offset
+		+ Gui.UIPadding.PaddingBottom.Offset
+	Gui.Size = UDim2.new(Gui.Size.X.Scale, Gui.Size.X.Offset, 0, math.clamp(windowHeight, 0, WINDOW_MAX_HEIGHT))
 	Gui.CanvasPosition = Vector2.new(0, windowHeight)
 end
 
