@@ -20,14 +20,19 @@ return function()
 	Frame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Frame.Parent = Cmdr
 
-	local Autocomplete = Instance.new("Frame")
+	local Autocomplete = Instance.new("ScrollingFrame")
 	Autocomplete.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 	Autocomplete.BackgroundTransparency = 0.5
 	Autocomplete.BorderSizePixel = 0
+	Autocomplete.CanvasSize = UDim2.new(0, 0, 0, 0)
 	Autocomplete.Name = "Autocomplete"
 	Autocomplete.Position = UDim2.new(0, 167, 0, 75)
+	Autocomplete.ScrollBarThickness = 6
+	Autocomplete.ScrollingDirection = Enum.ScrollingDirection.Y
+	Autocomplete.Selectable = false
 	Autocomplete.Size = UDim2.new(0, 200, 0, 200)
 	Autocomplete.Visible = false
+	Autocomplete.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Autocomplete.Parent = Cmdr
 
 	local UIListLayout = Instance.new("UIListLayout")

@@ -64,7 +64,15 @@ return function(Cmdr)
 		-- Update container
 		wait()
 		Gui.UIListLayout:ApplyLayout()
-		Gui.Size = UDim2.new(0, guiWidth, 0, Gui.UIListLayout.AbsoluteContentSize.Y)
+		Gui.Size = UDim2.new(
+			0,
+			guiWidth,
+			0,
+			math.min(
+				Gui.UIListLayout.AbsoluteContentSize.Y,
+				workspace.CurrentCamera.ViewportSize.Y - Gui.AbsolutePosition.Y - 46
+			)
+		)
 	end
 
 	--- Shows the auto complete menu with the given list and possible options
@@ -178,6 +186,17 @@ return function(Cmdr)
 		for i, item in pairs(self.Items) do
 			item.gui.BackgroundTransparency = i == self.SelectedItem and 0.5 or 1
 		end
+
+		Gui.CanvasPosition = Vector2.new(
+			0,
+			math.max(
+				0,
+				Title.Size.Y.Offset
+					+ Description.Size.Y.Offset
+					+ self.SelectedItem * AutoItem.Size.Y.Offset
+					- Gui.Size.Y.Offset
+			)
+		)
 
 		if self.Items[self.SelectedItem] and self.Items[self.SelectedItem].options then
 			UpdateInfoDisplay(self.Items[self.SelectedItem].options or {})
