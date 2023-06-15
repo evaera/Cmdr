@@ -18,6 +18,8 @@ return function(Cmdr)
 	local Entry = Gui.Parent:WaitForChild("Frame"):WaitForChild("Entry")
 	AutoItem.Parent = nil
 
+	local defaultBarThickness = Gui.ScrollBarThickness
+
 	-- Helper function that sets text and resizes labels
 	local function SetText(obj, textObj, text, sizeFromContents)
 		obj.Visible = text ~= nil
@@ -73,6 +75,7 @@ return function(Cmdr)
 				workspace.CurrentCamera.ViewportSize.Y - Gui.AbsolutePosition.Y - 46
 			)
 		)
+		Gui.ScrollBarThickness = defaultBarThickness
 	end
 
 	--- Shows the auto complete menu with the given list and possible options
@@ -108,6 +111,8 @@ return function(Cmdr)
 
 		-- Generate the new option labels
 		local autocompleteWidth = 200
+
+		Gui.ScrollBarThickness = 0
 
 		for i, item in pairs(self.Items) do
 			local leftText = item[1]
