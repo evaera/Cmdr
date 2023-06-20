@@ -81,7 +81,7 @@ function Util.MakeFuzzyFinder(setOrContainer)
 				else
 					table.insert(results, 1, value)
 				end
-			elseif name:lower():sub(1, #text) == text:lower() then
+			elseif name:lower():find(text:lower(), 1, true) then
 				results[#results + 1] = value
 			end
 		end
