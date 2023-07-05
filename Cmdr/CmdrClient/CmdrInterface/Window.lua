@@ -81,7 +81,7 @@ function Window:SetVisible(visible)
 		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
 		TextChatService.ChatWindowConfiguration.Enabled = false
 		TextChatService.ChatInputBarConfiguration.Enabled = false
-		
+
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
 
@@ -94,7 +94,7 @@ function Window:SetVisible(visible)
 			self.PreviousChatWindowConfigurationEnabled else true
 		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil then 
 			self.PreviousChatInputBarConfigurationEnabled else true
-		
+
 		Entry.TextBox:ReleaseFocus()
 		self.AutoComplete:Hide()
 
@@ -329,6 +329,8 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
 	end
 end)
 
-Gui.ChildAdded:Connect(Window.UpdateWindowHeight)
+Gui.ChildAdded:Connect(function()
+	task.defer(Window.UpdateWindowHeight)
+end)
 
 return Window
