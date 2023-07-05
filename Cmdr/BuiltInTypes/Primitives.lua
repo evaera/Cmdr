@@ -38,6 +38,62 @@ local intType = {
 	end
 }
 
+local positiveIntType = {
+	Transform = function (text)
+		return tonumber(text)
+	end,
+
+	Validate = function (value)
+		return value ~= nil and value == math.floor(value) and value > 0, "Only positive whole numbers are valid."
+	end,
+
+	Parse = function (value)
+		return value
+	end,
+}
+
+local nonNegativeIntType = {
+	Transform = function (text)
+		return tonumber(text)
+	end,
+
+	Validate = function (value)
+		return value ~= nil and value == math.floor(value) and value >= 0, "Only non-negative whole numbers are valid."
+	end,
+
+	Parse = function (value)
+		return value
+	end,
+}
+
+local byteType = {
+	Transform = function (text)
+		return tonumber(text)
+	end,
+
+	Validate = function (value)
+		return value ~= nil and value == math.floor(value) and value >= 0 and value <= 255, "Only bytes are valid."
+	end,
+
+	Parse = function (value)
+		return value
+	end,
+}
+
+local digitType = {
+	Transform = function (text)
+		return tonumber(text)
+	end,
+
+	Validate = function (value)
+		return value ~= nil and value == math.floor(value) and value >= 0 and value <= 9, "Only digits are valid."
+	end,
+
+	Parse = function (value)
+		return value
+	end,
+}
+
 local boolType do
 	local truthy = Util.MakeDictionary({"true", "t", "yes", "y", "on", "enable", "enabled", "1", "+"});
 	local falsy = Util.MakeDictionary({"false"; "f"; "no"; "n"; "off"; "disable"; "disabled"; "0"; "-"});
@@ -67,10 +123,18 @@ return function (cmdr)
 	cmdr:RegisterType("string", stringType)
 	cmdr:RegisterType("number", numberType)
 	cmdr:RegisterType("integer", intType)
+	cmdr:RegisterType("positiveInteger", positiveIntType)
+	cmdr:RegisterType("nonNegativeInteger", nonNegativeIntType)
+	cmdr:RegisterType("byte", byteType)
+	cmdr:RegisterType("digit", digitType)
 	cmdr:RegisterType("boolean", boolType)
 
 	cmdr:RegisterType("strings", Util.MakeListableType(stringType))
 	cmdr:RegisterType("numbers", Util.MakeListableType(numberType))
 	cmdr:RegisterType("integers", Util.MakeListableType(intType))
+	cmdr:RegisterType("positiveIntegers", Util.MakeListableType(positiveIntType))
+	cmdr:RegisterType("nonNegativeIntegers", Util.MakeListableType(nonNegativeIntType))
+	cmdr:RegisterType("bytes", Util.MakeListableType(byteType))
+	cmdr:RegisterType("digits", Util.MakeListableType(digitType))
 	cmdr:RegisterType("booleans", Util.MakeListableType(boolType))
 end
