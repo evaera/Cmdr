@@ -117,8 +117,14 @@ return function(Cmdr)
 			local btn = AutoItem:Clone()
 			btn.Name = leftText .. rightText
 			btn.BackgroundTransparency = i == self.SelectedItem and 0.5 or 1
-			btn.Typed.Text = leftText
-			btn.Suggest.Text = string.rep(" ", #leftText) .. rightText:sub(#leftText + 1)
+
+			local start, stop = string.find(rightText:lower(), leftText:lower(), 1, true)
+			btn.Typed.Text = string.rep(" ", start - 1) .. leftText
+			btn.Suggest.Text = string.sub(rightText, 0, start - 1)
+				.. string.rep(" ", #leftText)
+				.. string.sub(rightText, stop + 1)
+
+
 			btn.Parent = Gui
 			btn.LayoutOrder = i
 
