@@ -35,6 +35,15 @@ return function(Cmdr)
 		end
 	end
 
+	local function UpdateContainerSize()
+		Gui.Size = UDim2.new(
+			0,
+			math.max(Title.Field.TextBounds.X + Title.Field.Type.TextBounds.X, Gui.Size.X.Offset),
+			0,
+			math.min(Gui.UIListLayout.AbsoluteContentSize.Y, Gui.Parent.AbsoluteSize.Y - Gui.AbsolutePosition.Y - 10)
+		)
+	end
+
 	-- Update the info display (Name, type, and description) based on given options.
 	local function UpdateInfoDisplay(options)
 		-- Update the objects' text and sizes
@@ -47,11 +56,6 @@ return function(Cmdr)
 		SetText(Description, Description.Label, options.description)
 
 		Description.Label.TextColor3 = options.invalid and Color3.fromRGB(255, 73, 73) or Color3.fromRGB(255, 255, 255)
-
-		-- Calculate needed width and height
-		local infoWidth = Title.Field.TextBounds.X + Title.Field.Type.TextBounds.X
-
-		local guiWidth = math.max(infoWidth, Gui.Size.X.Offset)
 		Description.Size = UDim2.new(1, 0, 0, 40)
 
 		-- Flow description text
@@ -64,17 +68,9 @@ return function(Cmdr)
 		end
 
 		-- Update container
-		wait()
+		task.wait()
 		Gui.UIListLayout:ApplyLayout()
-		Gui.Size = UDim2.new(
-			0,
-			guiWidth,
-			0,
-			math.min(
-				Gui.UIListLayout.AbsoluteContentSize.Y,
-				workspace.CurrentCamera.ViewportSize.Y - Gui.AbsolutePosition.Y - 46
-			)
-		)
+		UpdateContainerSize()
 		Gui.ScrollBarThickness = defaultBarThickness
 	end
 
@@ -207,6 +203,8 @@ return function(Cmdr)
 			UpdateInfoDisplay(self.Items[self.SelectedItem].options or {})
 		end
 	end
+
+	Gui.Parent:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateContainerSize)
 
 	return AutoComplete
 end
