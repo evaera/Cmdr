@@ -1,5 +1,3 @@
-local HttpService = game:GetService("HttpService")
-
 return {
 	Name = "json-array-decode";
 	Aliases = {};
@@ -7,15 +5,13 @@ return {
 	Group = "DefaultUtil";
 	Args = {
 		{
-			Type = "string";
+			Type = "json";
 			Name = "JSON";
 			Description = "The JSON array."
 		},
 	};
 
-	Run = function(_, text)
-		local value = HttpService:JSONDecode(text)
-
+	ClientRun = function(_, value)
 		if type(value) ~= "table" then
 			value = { value }
 		end
