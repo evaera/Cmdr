@@ -22,7 +22,7 @@ end
 
 local playerIdType = {
 	DisplayName = "Full Player Name";
-	Prefixes = "# integer";
+	Prefixes = "# positiveIntegers";
 
 	Transform = function (text)
 		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
