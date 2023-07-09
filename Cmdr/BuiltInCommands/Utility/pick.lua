@@ -5,7 +5,7 @@ return {
 	Group = "DefaultUtil";
 	Args = {
 		{
-			Type = "integer";
+			Type = "positiveInteger";
 			Name = "Index to pick";
 			Description = "The index of the item you want to pick";
 		},

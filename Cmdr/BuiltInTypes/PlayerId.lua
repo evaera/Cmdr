@@ -22,7 +22,7 @@ end
 
 local playerIdType = {
 	DisplayName = "Full Player Name";
-	Prefixes = "# integer";
+	Prefixes = "# positiveInteger";
 
 	Transform = function (text)
 		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
@@ -57,6 +57,6 @@ local playerIdType = {
 return function (cmdr)
 	cmdr:RegisterType("playerId", playerIdType)
 	cmdr:RegisterType("playerIds", Util.MakeListableType(playerIdType, {
-		Prefixes = "# integers"
+		Prefixes = "# positiveIntegers"
 	}))
 end

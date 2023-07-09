@@ -14,7 +14,7 @@ return {
 			Description = "The players you want to teleport";
 		},
 		{
-			Type = "integer";
+			Type = "positiveInteger";
 			Name = "Place ID";
 			Description = "The Place ID you want to teleport to";
 		},
