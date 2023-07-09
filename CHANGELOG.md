@@ -1,3 +1,16 @@
+# v1.12.0
+
+- Add `convertTimestamp` default command, outputs a human-readable timestamp from epoch seconds
+- Add `positiveInteger`, `nonNegativeInteger`, `byte` (0-255), `digit` (0-9) built-in types (including respective plural types)
+- Add `json` built-in type, takes in a Json string and provides a Luau table
+- Add internal IsServer assertions for `RegisterDefaultCommands` and `commandServerScript`
+- Add 'tips' to the help command output
+- Make window scroll to bottom on input
+- Make fuzzy finders search the entire string, rather than looking at the start
+- Make autocomplete menu scrollable
+- Fix window not resizing on clear
+- Remove global initialization scripts feature
+
 # v1.11.0
 
 - Add support for new Roblox CoreGui Chat
