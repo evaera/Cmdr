@@ -57,6 +57,6 @@ local playerIdType = {
 return function (cmdr)
 	cmdr:RegisterType("playerId", playerIdType)
 	cmdr:RegisterType("playerIds", Util.MakeListableType(playerIdType, {
-		Prefixes = "# integers"
+		Prefixes = "# positiveIntegers"
 	}))
 end
