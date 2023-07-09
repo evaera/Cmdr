@@ -140,6 +140,7 @@ function Registry:RegisterCommand (commandScript, commandServerScript, filter)
 	)
 
 	if commandServerScript then
+		assert(RunService:IsServer(), "The commandServerScript parameter is not valid for client usage.")
 		commandObject.Run = require(commandServerScript)
 	end
 
@@ -184,6 +185,8 @@ end
 
 --- Registers the default commands, with an optional filter function or array of groups.
 function Registry:RegisterDefaultCommands (arrayOrFunc)
+	assert(RunService:IsServer(), "RegisterDefaultCommands cannot be called from the client.")
+
 	local isArray = type(arrayOrFunc) == "table"
 
 	if isArray then
