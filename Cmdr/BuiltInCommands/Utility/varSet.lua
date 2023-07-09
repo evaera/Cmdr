@@ -2,7 +2,7 @@ return {
 	Name = "var=";
 	Aliases = {};
 	Description = "Sets a stored value.";
-	Group = "DefaultAdmin";
+	Group = "DefaultUtil";
 	Args = {
 		{
 			Type = "storedKey";

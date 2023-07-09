@@ -2,11 +2,10 @@ return {
 	Name = "var";
 	Aliases = {};
 	Description = "Gets a stored variable.";
-	Group = "DefaultAdmin";
+	Group = "DefaultUtil";
 	AutoExec = {
 		"alias \"init-edit|Edit your initialization script\" edit ${var init} \\\\\n && var= init ||",
-		"alias \"init-edit-global|Edit the initialization script for all users\" edit ${var $init} \\\\\n && var= $init ||",
-		"alias \"init-run|Re-runs the initialization script manually.\" run-lines ${var init} && run-lines ${var $init}",
+		"alias \"init-run|Re-runs the initialization script manually.\" run-lines ${var init}",
 		"init-run",
 	},
 	Args = {
