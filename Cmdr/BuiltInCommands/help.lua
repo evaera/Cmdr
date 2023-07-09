@@ -8,6 +8,13 @@ Argument Shorthands
 ?N  List of N random values
 ]]
 
+local TIPS = [[
+Tips
+----
+• Utilize the Tab key to automatically complete commands
+• Easily select and copy command output
+]]
+
 return {
 	Name = "help";
 	Description = "Displays a list of all commands, or inspects one command.";
@@ -36,6 +43,7 @@ return {
 			end
 		else
 			context:Reply(ARGUMENT_SHORTHANDS)
+			context:Reply(TIPS)
 
 			local commands = context.Cmdr.Registry:GetCommands()
 			table.sort(commands, function(a, b)
