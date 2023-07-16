@@ -23,7 +23,7 @@ return function (cmdr)
 	Create("Folder", "Commands")
 	Create("Folder", "Types")
 
-	script.Parent.Shared.Parent = ReplicatedRoot
+	script.Parent.Shared:Clone().Parent = ReplicatedRoot
 
 	cmdr.ReplicatedRoot = ReplicatedRoot
 	cmdr.RemoteFunction = RemoteFunction
