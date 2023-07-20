@@ -119,6 +119,11 @@ return function(Cmdr)
 			btn.BackgroundTransparency = i == self.SelectedItem and 0.5 or 1
 
 			local start, stop = string.find(rightText:lower(), leftText:lower(), 1, true)
+			if start == nil and stop == nil then
+				--start and stop are nil when the type returns an autocomplete result that is completely different (such as a custom alias hanlded within the type).
+				--One should never be nil without the other.
+				start, stop = 1, string.len(rightText)
+			end
 			btn.Typed.Text = string.rep(" ", start - 1) .. leftText
 			btn.Suggest.Text = string.sub(rightText, 0, start - 1)
 				.. string.rep(" ", #leftText)
