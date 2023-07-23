@@ -38,7 +38,9 @@ return {
 			context:Reply(command.Description, Color3.fromRGB(230, 230, 230))
 			for i, arg in ipairs(command.Args) do
 				context:Reply(
-					`#{i} {arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
+					`#{i} {if type(arg) == "table"
+						then `{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
+						else "Unknown (inline argument)"}`
 				)
 			end
 		else
