@@ -140,7 +140,7 @@ function Dispatcher:RunGuards(commandContext, ...)
 		local typeofGuardMethod = typeof(guardMethod)
 		assert(typeofGuardMethod == "function", `expected a function for a value in Command.Guards, got {typeofGuardMethod}`)
 
-		local guardResult = guardMethod(commandContext)
+		local guardResult = guardMethod(commandContext, ...)
 		if guardResult == nil then continue end
 
 		return tostring(guardResult)
