@@ -27,6 +27,7 @@ function Command.new (options)
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = options.Data; -- A special container for any additional data the command needs to collect from the client
 		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
+		Guards = options.Guards; -- A table of functions where the command will be interrupted if a string is returned
 	}
 
 	setmetatable(self, Command)
@@ -117,6 +118,11 @@ end
 function Command:Run ()
 	if self._Validated == nil then
 		error("Must validate a command before running.")
+	end
+
+	local guardMethods = self.Dispatcher:RunGuards(self)
+	if guardMethods then
+		return guardMethods
 	end
 
 	local beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
