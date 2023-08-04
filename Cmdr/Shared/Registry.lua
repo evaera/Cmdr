@@ -2,7 +2,7 @@ local RunService = game:GetService("RunService")
 
 local Util = require(script.Parent.Util)
 
---- The registry keeps track of all the commands and types that Cmdr knows about.
+-- The registry keeps track of all the commands and types that Cmdr knows about.
 local Registry = {
 	TypeMethods = Util.MakeDictionary({
 		"Transform",
@@ -47,7 +47,7 @@ local Registry = {
 	AutoExecBuffer = {},
 }
 
---- Registers a type in the system.
+-- Registers a type in the system.
 -- name: The type Name. This must be unique.
 function Registry:RegisterType(name, typeObject)
 	if not name or typeof(name) ~= "string" then
@@ -95,7 +95,7 @@ function Registry:RegisterTypeAlias(name, alias)
 	self.TypeAliases[name] = alias
 end
 
---- Helper method that registers types from all module scripts in a specific container.
+-- Helper method that registers types from all module scripts in a specific container.
 function Registry:RegisterTypesIn(container)
 	for _, object in pairs(container:GetChildren()) do
 		if object:IsA("ModuleScript") then
@@ -111,7 +111,7 @@ end
 -- These are exactly the same thing. No one will notice. Except for you, dear reader.
 Registry.RegisterHooksIn = Registry.RegisterTypesIn
 
---- Registers a command based purely on its definition.
+-- Registers a command based purely on its definition.
 -- Prefer using Registry:RegisterCommand for proper handling of server/client model.
 function Registry:RegisterCommandObject(commandObject, fromCmdr)
 	for key in pairs(commandObject) do
@@ -162,7 +162,7 @@ function Registry:RegisterCommandObject(commandObject, fromCmdr)
 	end
 end
 
---- Registers a command definition and its server equivalent.
+-- Registers a command definition and its server equivalent.
 -- Handles replicating the definition to the client.
 function Registry:RegisterCommand(commandScript, commandServerScript, filter)
 	local commandObject = require(commandScript)
@@ -185,7 +185,7 @@ function Registry:RegisterCommand(commandScript, commandServerScript, filter)
 	commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
 end
 
---- A helper method that registers all commands inside a specific container.
+-- A helper method that registers all commands inside a specific container.
 function Registry:RegisterCommandsIn(container, filter)
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
@@ -219,7 +219,7 @@ function Registry:RegisterCommandsIn(container, filter)
 	end
 end
 
---- Registers the default commands, with an optional filter function or array of groups.
+-- Registers the default commands, with an optional filter function or array of groups.
 function Registry:RegisterDefaultCommands(arrayOrFunc)
 	assert(RunService:IsServer(), "RegisterDefaultCommands cannot be called from the client.")
 
@@ -234,18 +234,18 @@ function Registry:RegisterDefaultCommands(arrayOrFunc)
 	end or arrayOrFunc)
 end
 
---- Gets a command definition by name. (Can be an alias)
+-- Gets a command definition by name. (Can be an alias)
 function Registry:GetCommand(name)
 	name = name or ""
 	return self.Commands[name:lower()]
 end
 
---- Returns a unique array of all registered commands (not including aliases)
+-- Returns a unique array of all registered commands (not including aliases)
 function Registry:GetCommands()
 	return self.CommandsArray
 end
 
---- Returns an array of the names of all registered commands (not including aliases)
+-- Returns an array of the names of all registered commands (not including aliases)
 function Registry:GetCommandNames()
 	local commands = {}
 
@@ -258,7 +258,7 @@ end
 
 Registry.GetCommandsAsStrings = Registry.GetCommandNames
 
---- Returns an array of the names of all registered types (not including aliases)
+-- Returns an array of the names of all registered types (not including aliases)
 function Registry:GetTypeNames()
 	local typeNames = {}
 
@@ -269,17 +269,17 @@ function Registry:GetTypeNames()
 	return typeNames
 end
 
---- Gets a type definition by name.
+-- Gets a type definition by name.
 function Registry:GetType(name)
 	return self.Types[name]
 end
 
---- Returns a type name, parsing aliases.
+-- Returns a type name, parsing aliases.
 function Registry:GetTypeName(name)
 	return self.TypeAliases[name] or name
 end
 
---- Adds a hook to be called when any command is run
+-- Adds a hook to be called when any command is run
 function Registry:RegisterHook(hookName, callback, priority)
 	if not self.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
@@ -294,13 +294,13 @@ end
 -- Backwards compatability (deprecated)
 Registry.AddHook = Registry.RegisterHook
 
---- Returns the store with the given name
+-- Returns the store with the given name
 -- Used for commands that require persistent state, like bind or ban
 function Registry:GetStore(name)
 	return self.Stores[name]
 end
 
---- Calls self:FlushAutoExecBuffer at the end of the frame
+-- Calls self:FlushAutoExecBuffer at the end of the frame
 function Registry:FlushAutoExecBufferDeferred()
 	if self.AutoExecFlushConnection then
 		return
@@ -313,7 +313,7 @@ function Registry:FlushAutoExecBufferDeferred()
 	end)
 end
 
---- Runs all pending auto exec commands in Registry.AutoExecBuffer
+-- Runs all pending auto exec commands in Registry.AutoExecBuffer
 function Registry:FlushAutoExecBuffer()
 	for _, commandGroup in ipairs(self.AutoExecBuffer) do
 		for _, command in ipairs(commandGroup) do

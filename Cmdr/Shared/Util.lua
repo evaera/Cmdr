@@ -2,7 +2,7 @@ local TextService = game:GetService("TextService")
 
 local Util = {}
 
---- Takes an array and flips its values into dictionary keys with value of true.
+-- Takes an array and flips its values into dictionary keys with value of true.
 function Util.MakeDictionary(array)
 	local dictionary = {}
 
@@ -13,7 +13,7 @@ function Util.MakeDictionary(array)
 	return dictionary
 end
 
---- Takes a dictionary and returns its keys.
+-- Takes a dictionary and returns its keys.
 function Util.DictionaryKeys(dict)
 	local keys = {}
 
@@ -35,7 +35,7 @@ local function transformInstanceSet(instances)
 	return names, instances
 end
 
---- Returns a function that is a fuzzy finder for the specified set or container.
+-- Returns a function that is a fuzzy finder for the specified set or container.
 -- Can pass an array of strings, array of instances, array of EnumItems,
 -- array of dictionaries with a Name key or an instance (in which case its children will be used)
 -- Exact matches will be inserted in the front of the resulting array
@@ -95,7 +95,7 @@ function Util.MakeFuzzyFinder(setOrContainer)
 	end
 end
 
---- Takes an array of instances and returns an array of those instances' names.
+-- Takes an array of instances and returns an array of those instances' names.
 function Util.GetNames(instances)
 	local names = {}
 
@@ -106,7 +106,7 @@ function Util.GetNames(instances)
 	return names
 end
 
---- Splits a string using a simple separator (no quote parsing)
+-- Splits a string using a simple separator (no quote parsing)
 function Util.SplitStringSimple(inputstr, sep)
 	if sep == nil then
 		sep = "%s"
@@ -124,7 +124,7 @@ local function charCode(n)
 	return utf8.char(tonumber(n, 16))
 end
 
---- Parses escape sequences into their fully qualified characters
+-- Parses escape sequences into their fully qualified characters
 function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
 		t = "\t",
@@ -168,7 +168,7 @@ local function decodeControlChars(text)
 	return (text:gsub("___!CMDR_ESCAPE!___", "\\"):gsub("___!CMDR_QUOTE!___", '"'):gsub("___!CMDR_NL!___", "\n"))
 end
 
---- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
+-- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
 function Util.SplitString(text, max)
 	text = encodeControlChars(text)
 	max = max or math.huge
@@ -199,7 +199,7 @@ function Util.SplitString(text, max)
 	return t
 end
 
---- Takes an array of arguments and a max value.
+-- Takes an array of arguments and a max value.
 -- Any indicies past the max value will be appended to the last valid argument.
 function Util.MashExcessArguments(arguments, max)
 	local t = {}
@@ -213,19 +213,19 @@ function Util.MashExcessArguments(arguments, max)
 	return t
 end
 
---- Trims whitespace from both sides of a string.
+-- Trims whitespace from both sides of a string.
 function Util.TrimString(str)
 	local _, from = string.find(str, "^%s*")
 	-- trim the string in two steps to prevent quadratic backtracking when no "%S" match is found
 	return from == #str and "" or string.match(str, ".*%S", from + 1)
 end
 
---- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
+-- Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
 function Util.GetTextSize(text, label, size)
 	return TextService:GetTextSize(text, label.TextSize, label.Font, size or Vector2.new(label.AbsoluteSize.X, 0))
 end
 
---- Makes an Enum type.
+-- Makes an Enum type.
 function Util.MakeEnumType(name, values)
 	local findValue = Util.MakeFuzzyFinder(values)
 	return {
@@ -242,7 +242,7 @@ function Util.MakeEnumType(name, values)
 	}
 end
 
---- Parses a prefixed union type argument (such as %Team)
+-- Parses a prefixed union type argument (such as %Team)
 function Util.ParsePrefixedUnionType(typeValue, rawValue)
 	local split = Util.SplitStringSimple(typeValue)
 
@@ -268,7 +268,7 @@ function Util.ParsePrefixedUnionType(typeValue, rawValue)
 	end
 end
 
---- Creates a listable type from a singlular type
+-- Creates a listable type from a singlular type
 function Util.MakeListableType(type, override)
 	local listableType = {
 		Listable = true,
@@ -319,7 +319,7 @@ function Util.RunCommandString(dispatcher, commandString)
 	end
 end
 
---- Runs embedded commands and replaces them
+-- Runs embedded commands and replaces them
 function Util.RunEmbeddedCommands(dispatcher, str)
 	str = encodeCommandEscape(str)
 
@@ -346,7 +346,7 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 	return decodeCommandEscape(str:gsub("$(%b{})", results))
 end
 
---- Replaces arguments in the format $1, $2, $something with whatever the
+-- Replaces arguments in the format $1, $2, $something with whatever the
 -- given function returns for it.
 function Util.SubstituteArgs(str, replace)
 	str = encodeCommandEscape(str)
@@ -364,7 +364,7 @@ function Util.SubstituteArgs(str, replace)
 	return decodeCommandEscape(str:gsub("($%d+)%b{}", "%1"):gsub("$(%w+)", replace))
 end
 
---- Creates an alias command
+-- Creates an alias command
 function Util.MakeAliasCommand(name, commandString)
 	local commandName, commandDescription = unpack(name:split("|"))
 	local args = {}
@@ -410,7 +410,7 @@ function Util.MakeAliasCommand(name, commandString)
 	}
 end
 
---- Makes a type that contains a sequence, e.g. Vector3 or Color3
+-- Makes a type that contains a sequence, e.g. Vector3 or Color3
 function Util.MakeSequenceType(options)
 	options = options or {}
 
@@ -458,7 +458,7 @@ function Util.MakeSequenceType(options)
 	}
 end
 
---- Splits a string by a single delimeter chosen from the given set.
+-- Splits a string by a single delimeter chosen from the given set.
 -- The first matching delimeter from the set becomes the split character.
 function Util.SplitPrioritizedDelimeter(text, delimeters)
 	for i, delimeter in ipairs(delimeters) do
@@ -468,7 +468,7 @@ function Util.SplitPrioritizedDelimeter(text, delimeters)
 	end
 end
 
---- Maps values of an array through a callback and returns an array of mapped values
+-- Maps values of an array through a callback and returns an array of mapped values
 function Util.Map(array, callback)
 	local results = {}
 
@@ -479,7 +479,7 @@ function Util.Map(array, callback)
 	return results
 end
 
---- Maps arguments #2-n through callback and returns values as tuple
+-- Maps arguments #2-n through callback and returns values as tuple
 function Util.Each(callback, ...)
 	local results = {}
 	for i, value in ipairs({ ... }) do
@@ -488,7 +488,7 @@ function Util.Each(callback, ...)
 	return unpack(results)
 end
 
---- Emulates tabstops with spaces
+-- Emulates tabstops with spaces
 function Util.EmulateTabstops(text, tabWidth)
 	local column = 0
 	local textLength = #text

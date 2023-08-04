@@ -7,13 +7,13 @@ local Command = require(script.Parent.Command)
 local HISTORY_SETTING_NAME = "CmdrCommandHistory"
 local displayedBeforeRunHookWarning = false
 
---- The dispatcher handles creating and running commands during the game.
+-- The dispatcher handles creating and running commands during the game.
 local Dispatcher = {
 	Cmdr = nil,
 	Registry = nil,
 }
 
---- Takes in raw command information and generates a command out of it.
+-- Takes in raw command information and generates a command out of it.
 -- text and executor are required arguments.
 -- allowIncompleteData, when true, will ignore errors about arguments missing so we can parse live as the user types.
 -- data is for special networked Data about the command gathered on the client. Purely Optional.
@@ -56,7 +56,7 @@ function Dispatcher:Evaluate(text, executor, allowIncompleteArguments, data)
 	end
 end
 
---- A helper that evaluates and runs the command in one go.
+-- A helper that evaluates and runs the command in one go.
 -- Either returns any validation errors as a string, or the output of the command as a string. Definitely a string, though.
 function Dispatcher:EvaluateAndRun(text, executor, options)
 	executor = executor or Players.LocalPlayer
@@ -91,7 +91,7 @@ function Dispatcher:EvaluateAndRun(text, executor, options)
 	return ok and out or "An error occurred while running this command. Check the console for more information."
 end
 
---- Send text as the local user to remote server to be evaluated there.
+-- Send text as the local user to remote server to be evaluated there.
 function Dispatcher:Send(text, data)
 	if RunService:IsClient() == false then
 		error("Dispatcher:Send can only be called from the client.")
@@ -102,7 +102,7 @@ function Dispatcher:Send(text, data)
 	})
 end
 
---- Invoke a command programmatically as the local user e.g. from a settings menu
+-- Invoke a command programmatically as the local user e.g. from a settings menu
 -- Command should be the first argument, all arguments afterwards should be the arguments to the command.
 function Dispatcher:Run(...)
 	if not Players.LocalPlayer then
@@ -131,7 +131,7 @@ function Dispatcher:Run(...)
 	return command:Run()
 end
 
---- Runs command-specific methods and returns nil for ok or a string for cancellation
+-- Runs command-specific methods and returns nil for ok or a string for cancellation
 function Dispatcher:RunGuards(commandContext, ...)
 	local guardMethods = commandContext.Object.Guards
 	if guardMethods == nil then
@@ -157,7 +157,7 @@ function Dispatcher:RunGuards(commandContext, ...)
 	end
 end
 
---- Runs hooks matching name and returns nil for ok or a string for cancellation
+-- Runs hooks matching name and returns nil for ok or a string for cancellation
 function Dispatcher:RunHooks(hookName, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)

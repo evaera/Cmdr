@@ -48,28 +48,28 @@ end
 
 local Interface = require(script.CmdrInterface)(Cmdr)
 
---- Sets a list of keyboard keys (Enum.KeyCode) that can be used to open the commands menu
+-- Sets a list of keyboard keys (Enum.KeyCode) that can be used to open the commands menu
 function Cmdr:SetActivationKeys(keysArray)
 	self.ActivationKeys = Util.MakeDictionary(keysArray)
 end
 
---- Sets the place name label on the interface
+-- Sets the place name label on the interface
 function Cmdr:SetPlaceName(name)
 	self.PlaceName = name
 	Interface.Window:UpdateLabel()
 end
 
---- Sets whether or not the console is enabled
+-- Sets whether or not the console is enabled
 function Cmdr:SetEnabled(enabled)
 	self.Enabled = enabled
 end
 
---- Sets if activation will free the mouse.
+-- Sets if activation will free the mouse.
 function Cmdr:SetActivationUnlocksMouse(enabled)
 	self.ActivationUnlocksMouse = enabled
 end
 
---- Shows Cmdr window
+-- Shows Cmdr window
 function Cmdr:Show()
 	if not self.Enabled then
 		return
@@ -78,12 +78,12 @@ function Cmdr:Show()
 	Interface.Window:Show()
 end
 
---- Hides Cmdr window
+-- Hides Cmdr window
 function Cmdr:Hide()
 	Interface.Window:Hide()
 end
 
---- Toggles Cmdr window
+-- Toggles Cmdr window
 function Cmdr:Toggle()
 	if not self.Enabled then
 		return self:Hide()
@@ -92,7 +92,7 @@ function Cmdr:Toggle()
 	Interface.Window:SetVisible(not Interface.Window:IsVisible())
 end
 
---- Enables the "Mash to open" feature
+-- Enables the "Mash to open" feature
 function Cmdr:SetMashToEnable(isEnabled)
 	self.MashToEnable = isEnabled
 
@@ -101,12 +101,12 @@ function Cmdr:SetMashToEnable(isEnabled)
 	end
 end
 
---- Sets the hide on 'lost focus' feature.
+-- Sets the hide on 'lost focus' feature.
 function Cmdr:SetHideOnLostFocus(enabled)
 	self.HideOnLostFocus = enabled
 end
 
---- Sets the handler for a certain event type
+-- Sets the handler for a certain event type
 function Cmdr:HandleEvent(name, callback)
 	self.Events[name] = callback
 end

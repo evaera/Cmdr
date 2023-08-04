@@ -74,7 +74,7 @@ return function(Cmdr)
 		Gui.ScrollBarThickness = defaultBarThickness
 	end
 
-	--- Shows the auto complete menu with the given list and possible options
+	-- Shows the auto complete menu with the given list and possible options
 	-- item = {typedText, suggestedText, options?=options}
 	-- The options table is optional. `at` should only be passed into AutoComplete::Show
 	-- name, type, and description may be passed in an options dictionary inside the items as well
@@ -161,7 +161,7 @@ return function(Cmdr)
 		UpdateInfoDisplay(self.Items[1] and self.Items[1].options or options)
 	end
 
-	--- Returns the selected item in the auto complete
+	-- Returns the selected item in the auto complete
 	function AutoComplete:GetSelectedItem()
 		if Gui.Visible == false then
 			return nil
@@ -170,17 +170,17 @@ return function(Cmdr)
 		return AutoComplete.Items[AutoComplete.SelectedItem]
 	end
 
-	--- Hides the auto complete
+	-- Hides the auto complete
 	function AutoComplete:Hide()
 		Gui.Visible = false
 	end
 
-	--- Returns if the menu is visible
+	-- Returns if the menu is visible
 	function AutoComplete:IsVisible()
 		return Gui.Visible
 	end
 
-	--- Changes the user's item selection by the given delta
+	-- Changes the user's item selection by the given delta
 	function AutoComplete:Select(delta)
 		if not Gui.Visible then
 			return
