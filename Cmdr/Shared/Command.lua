@@ -120,14 +120,14 @@ function Command:Run ()
 		error("Must validate a command before running.")
 	end
 
-	local guardMethods = self.Dispatcher:RunGuards(self)
-	if guardMethods then
-		return guardMethods
-	end
-
 	local beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
 	if beforeRunHook then
 		return beforeRunHook
+	end
+
+	local guardMethods = self.Dispatcher:RunGuards(self)
+	if guardMethods then
+		return guardMethods
 	end
 
 	if not IsServer and self.Object.Data and self.Data == nil then
