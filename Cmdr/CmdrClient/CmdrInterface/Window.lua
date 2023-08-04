@@ -90,10 +90,12 @@ function Window:SetVisible(visible)
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		end
 	else
-		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil then 
-			self.PreviousChatWindowConfigurationEnabled else true
-		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil then 
-			self.PreviousChatInputBarConfigurationEnabled else true
+		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil
+			then self.PreviousChatWindowConfigurationEnabled
+			else true
+		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil
+			then self.PreviousChatInputBarConfigurationEnabled
+			else true
 
 		Entry.TextBox:ReleaseFocus()
 		self.AutoComplete:Hide()

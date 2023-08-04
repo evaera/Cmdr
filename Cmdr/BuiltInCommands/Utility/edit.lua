@@ -23,24 +23,24 @@ local TEXT_BOX_PROPERTIES = {
 local lock
 
 return {
-	Name = "edit";
-	Aliases = {};
-	Description = "Edit text in a TextBox";
-	Group = "DefaultUtil";
+	Name = "edit",
+	Aliases = {},
+	Description = "Edit text in a TextBox",
+	Group = "DefaultUtil",
 	Args = {
 		{
-			Type = "string";
-			Name = "Input text";
-			Description = "The text you wish to edit";
-			Default = "";
+			Type = "string",
+			Name = "Input text",
+			Description = "The text you wish to edit",
+			Default = "",
 		},
 		{
-			Type = "string";
-			Name = "Delimiter";
-			Description = "The character that separates each line";
-			Default = ",";
-		}
-	};
+			Type = "string",
+			Name = "Delimiter",
+			Description = "The character that separates each line",
+			Default = ",",
+		},
+	},
 
 	ClientRun = function(context, text, delimeter)
 		lock = lock or context.Cmdr.Util.Mutex()
@@ -75,5 +75,5 @@ return {
 		end)
 
 		return coroutine.yield()
-	end
+	end,
 }

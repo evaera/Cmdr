@@ -1,113 +1,114 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local stringType = {
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil
-	end;
+	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return tostring(value)
-	end;
+	end,
 }
 
 local numberType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
-	end;
+	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil
-	end;
+	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
-	end;
+	end,
 }
 
 local intType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
-	end;
+	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil and value == math.floor(value), "Only whole numbers are valid."
-	end;
+	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
-	end
+	end,
 }
 
 local positiveIntType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
 	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil and value == math.floor(value) and value > 0, "Only positive whole numbers are valid."
 	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
 	end,
 }
 
 local nonNegativeIntType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
 	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil and value == math.floor(value) and value >= 0, "Only non-negative whole numbers are valid."
 	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
 	end,
 }
 
 local byteType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
 	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil and value == math.floor(value) and value >= 0 and value <= 255, "Only bytes are valid."
 	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
 	end,
 }
 
 local digitType = {
-	Transform = function (text)
+	Transform = function(text)
 		return tonumber(text)
 	end,
 
-	Validate = function (value)
+	Validate = function(value)
 		return value ~= nil and value == math.floor(value) and value >= 0 and value <= 9, "Only digits are valid."
 	end,
 
-	Parse = function (value)
+	Parse = function(value)
 		return value
 	end,
 }
 
-local boolType do
-	local truthy = Util.MakeDictionary({"true", "t", "yes", "y", "on", "enable", "enabled", "1", "+"});
-	local falsy = Util.MakeDictionary({"false"; "f"; "no"; "n"; "off"; "disable"; "disabled"; "0"; "-"});
+local boolType
+do
+	local truthy = Util.MakeDictionary({ "true", "t", "yes", "y", "on", "enable", "enabled", "1", "+" })
+	local falsy = Util.MakeDictionary({ "false", "f", "no", "n", "off", "disable", "disabled", "0", "-" })
 
 	boolType = {
-		Transform = function (text)
+		Transform = function(text)
 			return text:lower()
-		end;
+		end,
 
-		Validate = function (value)
+		Validate = function(value)
 			return truthy[value] ~= nil or falsy[value] ~= nil, "Please use true/yes/on or false/no/off."
-		end;
+		end,
 
-		Parse = function (value)
+		Parse = function(value)
 			if truthy[value] then
 				return true
 			elseif falsy[value] then
@@ -115,11 +116,11 @@ local boolType do
 			else
 				return nil
 			end
-		end;
+		end,
 	}
 end
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("string", stringType)
 	cmdr:RegisterType("number", numberType)
 	cmdr:RegisterType("integer", intType)

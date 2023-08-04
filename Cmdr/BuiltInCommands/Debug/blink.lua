@@ -1,9 +1,9 @@
 return {
-	Name = "blink";
-	Aliases = {"b"};
-	Description = "Teleports you to where your mouse is hovering.";
-	Group = "DefaultDebug";
-	Args = {};
+	Name = "blink",
+	Aliases = { "b" },
+	Description = "Teleports you to where your mouse is hovering.",
+	Group = "DefaultDebug",
+	Args = {},
 
 	ClientRun = function(context)
 		-- We implement this here because player position is owned by the client.
@@ -19,5 +19,5 @@ return {
 		character:MoveTo(mouse.Hit.p)
 
 		return "Blinked!"
-	end
+	end,
 }

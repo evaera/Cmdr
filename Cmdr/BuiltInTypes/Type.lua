@@ -1,24 +1,24 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
-return function (cmdr)
+return function(cmdr)
 	local typeType = {
-		Transform = function (text)
+		Transform = function(text)
 			local findCommand = Util.MakeFuzzyFinder(cmdr:GetTypeNames())
 
 			return findCommand(text)
-		end;
+		end,
 
-		Validate = function (commands)
+		Validate = function(commands)
 			return #commands > 0, "No type with that name could be found."
-		end;
+		end,
 
-		Autocomplete = function (commands)
+		Autocomplete = function(commands)
 			return commands
-		end;
+		end,
 
-		Parse = function (commands)
+		Parse = function(commands)
 			return commands[1]
-		end;
+		end,
 	}
 
 	cmdr:RegisterType("type", typeType)

@@ -2,39 +2,42 @@ local Util = require(script.Parent.Parent.Shared.Util)
 local Players = game:GetService("Players")
 
 local playerType = {
-	Transform = function (text)
+	Transform = function(text)
 		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
 
 		return findPlayer(text)
-	end;
+	end,
 
-	Validate = function (players)
+	Validate = function(players)
 		return #players > 0, "No player with that name could be found."
-	end;
+	end,
 
-	Autocomplete = function (players)
+	Autocomplete = function(players)
 		return Util.GetNames(players)
-	end;
+	end,
 
-	Parse = function (players)
+	Parse = function(players)
 		return players[1]
-	end;
+	end,
 
 	Default = function(player)
 		return player.Name
-	end;
+	end,
 
 	ArgumentOperatorAliases = {
-		me = ".";
-		all = "*";
-		others = "**";
-		random = "?";
-	};
+		me = ".",
+		all = "*",
+		others = "**",
+		random = "?",
+	},
 }
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("player", playerType)
-	cmdr:RegisterType("players", Util.MakeListableType(playerType, {
-		Prefixes = "% teamPlayers";
-	}))
+	cmdr:RegisterType(
+		"players",
+		Util.MakeListableType(playerType, {
+			Prefixes = "% teamPlayers",
+		})
+	)
 end

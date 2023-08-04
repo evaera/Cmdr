@@ -9,20 +9,20 @@ local function validateVector(value, i)
 end
 
 local vector3Type = Util.MakeSequenceType({
-	ValidateEach = validateVector;
-	TransformEach = tonumber;
-	Constructor = Vector3.new;
-	Length = 3;
+	ValidateEach = validateVector,
+	TransformEach = tonumber,
+	Constructor = Vector3.new,
+	Length = 3,
 })
 
 local vector2Type = Util.MakeSequenceType({
-	ValidateEach = validateVector;
-	TransformEach = tonumber;
-	Constructor = Vector2.new;
-	Length = 2;
+	ValidateEach = validateVector,
+	TransformEach = tonumber,
+	Constructor = Vector2.new,
+	Length = 2,
 })
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("vector3", vector3Type)
 	cmdr:RegisterType("vector3s", Util.MakeListableType(vector3Type))
 

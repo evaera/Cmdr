@@ -1,4 +1,4 @@
-return function (_, fromPlayers, destination)
+return function(_, fromPlayers, destination)
 	local cframe
 
 	if typeof(destination) == "Instance" then

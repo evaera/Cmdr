@@ -19,5 +19,5 @@ return {
 			end
 		end
 		return ""
-	end
+	end,
 }
