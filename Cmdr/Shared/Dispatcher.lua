@@ -128,6 +128,25 @@ function Dispatcher:Run (...)
 	return command:Run()
 end
 
+--- Runs command-specific methods and returns nil for ok or a string for cancellation
+function Dispatcher:RunGuards(commandContext, ...)
+	local guardMethods = commandContext.Object.Guards
+	if guardMethods == nil then return end
+
+	local typeofGuardMethods = typeof(guardMethods)
+	assert(typeofGuardMethods == "table", `expected a table for Command.Guards, got {typeofGuardMethods}`)
+
+	for _, guardMethod in pairs(guardMethods) do
+		local typeofGuardMethod = typeof(guardMethod)
+		assert(typeofGuardMethod == "function", `expected a function for a value in Command.Guards, got {typeofGuardMethod}`)
+
+		local guardResult = guardMethod(commandContext, ...)
+		if guardResult == nil then continue end
+
+		return tostring(guardResult)
+	end
+end
+
 --- Runs hooks matching name and returns nil for ok or a string for cancellation
 function Dispatcher:RunHooks(hookName, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then

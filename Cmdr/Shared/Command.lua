@@ -27,6 +27,7 @@ function Command.new (options)
 		Arguments = {}; -- A table which will hold ArgumentContexts for each argument
 		Data = options.Data; -- A special container for any additional data the command needs to collect from the client
 		Response = nil; -- Will be set at the very end when the command is run and a string is returned from the Run function.
+		Guards = options.Guards; -- A table of functions where the command will be interrupted if a string is returned
 	}
 
 	setmetatable(self, Command)
@@ -122,6 +123,11 @@ function Command:Run ()
 	local beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
 	if beforeRunHook then
 		return beforeRunHook
+	end
+
+	local guardMethods = self.Dispatcher:RunGuards(self)
+	if guardMethods then
+		return guardMethods
 	end
 
 	if not IsServer and self.Object.Data and self.Data == nil then
