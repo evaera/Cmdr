@@ -1,16 +1,16 @@
 return {
-	Name = "thru";
-	Aliases = {"t", "through"};
-	Description = "Teleports you through whatever your mouse is hovering over, placing you equidistantly from the wall.";
-	Group = "DefaultDebug";
+	Name = "thru",
+	Aliases = { "t", "through" },
+	Description = "Teleports you through whatever your mouse is hovering over, placing you equidistantly from the wall.",
+	Group = "DefaultDebug",
 	Args = {
 		{
-			Type = "number";
-			Name = "Extra distance";
-			Description = "Go through the wall an additional X studs.";
-			Default = 0;
-		}
-	};
+			Type = "number",
+			Name = "Extra distance",
+			Description = "Go through the wall an additional X studs.",
+			Default = 0,
+		},
+	},
 
 	ClientRun = function(context, extra)
 		-- We implement this here because player position is owned by the client.
@@ -29,5 +29,5 @@ return {
 		character:MoveTo((diff * 2) + (diff.unit * extra) + pos)
 
 		return "Blinked!"
-	end
+	end,
 }

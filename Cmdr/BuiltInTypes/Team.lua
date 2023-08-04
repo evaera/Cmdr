@@ -2,47 +2,47 @@ local Teams = game:GetService("Teams")
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local teamType = {
-	Transform = function (text)
+	Transform = function(text)
 		local findTeam = Util.MakeFuzzyFinder(Teams:GetTeams())
 
 		return findTeam(text)
-	end;
+	end,
 
-	Validate = function (teams)
+	Validate = function(teams)
 		return #teams > 0, "No team with that name could be found."
-	end;
+	end,
 
-	Autocomplete = function (teams)
+	Autocomplete = function(teams)
 		return Util.GetNames(teams)
-	end;
+	end,
 
-	Parse = function (teams)
-		return teams[1];
-	end;
+	Parse = function(teams)
+		return teams[1]
+	end,
 }
 
 local teamPlayersType = {
-	Listable = true;
-	Transform = teamType.Transform;
-	Validate = teamType.Validate;
-	Autocomplete = teamType.Autocomplete;
+	Listable = true,
+	Transform = teamType.Transform,
+	Validate = teamType.Validate,
+	Autocomplete = teamType.Autocomplete,
 
-	Parse = function (teams)
+	Parse = function(teams)
 		return teams[1]:GetPlayers()
-	end;
+	end,
 }
 
 local teamColorType = {
-	Transform = teamType.Transform;
-	Validate = teamType.Validate;
-	Autocomplete = teamType.Autocomplete;
+	Transform = teamType.Transform,
+	Validate = teamType.Validate,
+	Autocomplete = teamType.Autocomplete,
 
-	Parse = function (teams)
+	Parse = function(teams)
 		return teams[1].TeamColor
-	end;
+	end,
 }
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("team", teamType)
 	cmdr:RegisterType("teams", Util.MakeListableType(teamType))
 

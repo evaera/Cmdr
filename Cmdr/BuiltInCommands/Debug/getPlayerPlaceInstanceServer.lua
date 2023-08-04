@@ -1,6 +1,6 @@
 local TeleportService = game:GetService("TeleportService")
 
-return function (_, playerId, format)
+return function(_, playerId, format)
 	format = format or "PlaceIdJobId"
 
 	local ok, _, errorText, placeId, jobId = pcall(function()

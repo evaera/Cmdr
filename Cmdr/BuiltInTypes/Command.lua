@@ -1,24 +1,24 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
-return function (cmdr)
+return function(cmdr)
 	local commandType = {
-		Transform = function (text)
+		Transform = function(text)
 			local findCommand = Util.MakeFuzzyFinder(cmdr:GetCommandNames())
 
 			return findCommand(text)
-		end;
+		end,
 
-		Validate = function (commands)
+		Validate = function(commands)
 			return #commands > 0, "No command with that name could be found."
-		end;
+		end,
 
-		Autocomplete = function (commands)
+		Autocomplete = function(commands)
 			return commands
-		end;
+		end,
 
-		Parse = function (commands)
+		Parse = function(commands)
 			return commands[1]
-		end;
+		end,
 	}
 
 	cmdr:RegisterType("command", commandType)

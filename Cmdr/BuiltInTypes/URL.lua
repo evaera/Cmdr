@@ -7,14 +7,14 @@ local storedKeyType = {
 		end
 
 		return false, "URLs must begin with http:// or https://"
-	end;
+	end,
 
 	Parse = function(text)
 		return text
-	end;
+	end,
 }
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("url", storedKeyType)
 	cmdr:RegisterType("urls", Util.MakeListableType(storedKeyType))
 end

@@ -3,10 +3,10 @@ local StarterGui = game:GetService("StarterGui")
 local CreateGui = require(script.Parent.CreateGui)
 
 --- Handles initial preparation of the game server-side.
-return function (cmdr)
+return function(cmdr)
 	local ReplicatedRoot, RemoteFunction, RemoteEvent
 
-	local function Create (class, name, parent)
+	local function Create(class, name, parent)
 		local object = Instance.new(class)
 		object.Name = name
 		object.Parent = parent or ReplicatedRoot

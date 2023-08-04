@@ -129,7 +129,6 @@ return function(Cmdr)
 				.. string.rep(" ", #leftText)
 				.. string.sub(rightText, stop + 1)
 
-
 			btn.Parent = Gui
 			btn.LayoutOrder = i
 

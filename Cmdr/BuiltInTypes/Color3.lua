@@ -1,7 +1,7 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
 local color3Type = Util.MakeSequenceType({
-	Prefixes = "# hexColor3 ! brickColor3";
+	Prefixes = "# hexColor3 ! brickColor3",
 	ValidateEach = function(value, i)
 		if value == nil then
 			return false, ("Invalid or missing number at position %d in Color3 type."):format(i)
@@ -12,10 +12,10 @@ local color3Type = Util.MakeSequenceType({
 		end
 
 		return true
-	end;
-	TransformEach = tonumber;
-	Constructor = Color3.fromRGB;
-	Length = 3;
+	end,
+	TransformEach = tonumber,
+	Constructor = Color3.fromRGB,
+	Length = 3,
 })
 
 local function parseHexDigit(x)
@@ -30,22 +30,25 @@ local hexColor3Type = {
 	Transform = function(text)
 		local r, g, b = text:match("^#?(%x%x?)(%x%x?)(%x%x?)$")
 		return Util.Each(parseHexDigit, r, g, b)
-	end;
+	end,
 
 	Validate = function(r, g, b)
 		return r ~= nil and g ~= nil and b ~= nil, "Invalid hex color"
-	end;
+	end,
 
 	Parse = function(...)
 		return Color3.fromRGB(...)
-	end;
+	end,
 }
 
-return function (cmdr)
+return function(cmdr)
 	cmdr:RegisterType("color3", color3Type)
-	cmdr:RegisterType("color3s", Util.MakeListableType(color3Type, {
-		Prefixes = "# hexColor3s ! brickColor3s"
-	}))
+	cmdr:RegisterType(
+		"color3s",
+		Util.MakeListableType(color3Type, {
+			Prefixes = "# hexColor3s ! brickColor3s",
+		})
+	)
 
 	cmdr:RegisterType("hexColor3", hexColor3Type)
 	cmdr:RegisterType("hexColor3s", Util.MakeListableType(hexColor3Type))

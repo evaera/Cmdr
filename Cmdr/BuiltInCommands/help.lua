@@ -16,19 +16,19 @@ Tips
 ]]
 
 return {
-	Name = "help";
-	Description = "Displays a list of all commands, or inspects one command.";
-	Group = "Help";
+	Name = "help",
+	Description = "Displays a list of all commands, or inspects one command.",
+	Group = "Help",
 	Args = {
 		{
-			Type = "command";
-			Name = "Command";
-			Description = "The command to view information on";
-			Optional = true;
+			Type = "command",
+			Name = "Command",
+			Description = "The command to view information on",
+			Optional = true,
 		},
-	};
+	},
 
-	ClientRun = function (context, commandName)
+	ClientRun = function(context, commandName)
 		if commandName then
 			local command = context.Cmdr.Registry:GetCommand(commandName)
 			context:Reply(`Command: {command.Name}`, Color3.fromRGB(230, 126, 34))
@@ -62,5 +62,5 @@ return {
 			end
 		end
 		return ""
-	end;
+	end,
 }

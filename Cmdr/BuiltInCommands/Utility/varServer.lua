@@ -14,7 +14,7 @@ task.spawn(function()
 	end
 end)
 
-return function (context, key)
+return function(context, key)
 	if DataStoresActive == nil then
 		table.insert(queue, coroutine.running())
 		coroutine.yield()
