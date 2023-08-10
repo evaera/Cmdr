@@ -13,6 +13,7 @@ return function(_, fromPlayers, destination)
 
 	for _, player in ipairs(fromPlayers) do
 		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			if player.Character.Humanoid.Sit == true then player.Character.Humanoid.Jump = true end
 			player.Character.HumanoidRootPart.CFrame = cframe
 		end
 	end
