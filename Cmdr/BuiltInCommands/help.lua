@@ -35,7 +35,10 @@ return {
 			if command.Aliases and #command.Aliases > 0 then
 				context:Reply(`Aliases: {table.concat(command.Aliases, ", ")}`, Color3.fromRGB(230, 230, 230))
 			end
-			context:Reply(command.Description, Color3.fromRGB(230, 230, 230))
+			context:Reply(`Description: {command.Description}`, Color3.fromRGB(230, 230, 230))
+			if command.Group then
+				context:Reply(`Group: {command.Group}`, Color3.fromRGB(230, 230, 230))
+			end
 			for i, arg in ipairs(command.Args) do
 				context:Reply(
 					`#{i} {if type(arg) == "table"
