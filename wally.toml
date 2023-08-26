@@ -6,5 +6,6 @@ license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 exclude = ["assets", "docs"]
+include = ["CHANGELOG.md", "Cmdr", "default.project.json", "LICENSE"]
 
 [dependencies]

@@ -5,6 +5,8 @@
 	<p><a href="https://eryn.io/Cmdr/">View Docs</a></p>
 </div>
 
+<!--moonwave-hide-before-this-line-->
+
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 
 - Great for admin commands, but does much more.

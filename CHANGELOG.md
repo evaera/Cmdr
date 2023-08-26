@@ -1,3 +1,5 @@
+# Changelog
+
 ## v1.12.0
 
 - Add `convertTimestamp` default command, outputs a human-readable timestamp from epoch seconds

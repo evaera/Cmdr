@@ -5,6 +5,34 @@ if RunService:IsServer() == false then
 	error("Cmdr server module is somehow running on a client!")
 end
 
+--[=[
+	@class Cmdr
+	@server
+
+	The Cmdr server singleton.
+]=]
+
+--[=[
+	@within Cmdr
+	@prop Registry Registry
+	@readonly
+	Refers to the current command Registry.
+]=]
+
+--[=[
+	@within Cmdr
+	@prop Dispatcher Dispatcher
+	@readonly
+	Refers to the current command Dispatcher.
+]=]
+
+--[=[
+	@within Cmdr
+	@prop Util Util
+	@readonly
+	Refers to a table containing many useful utility functions.
+]=]
+
 local Cmdr
 do
 	Cmdr = setmetatable({

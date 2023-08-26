@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+:root {
+  --ifm-font-family-base: Inter, -apple-system, "Helvetica Neue", Roboto,
+    Helvetica, system-ui, "Nimbus Sans", "Arial Nova", Arial, Segoe UI;
+
+  --ifm-font-family-monospace: ui-monospace, "Cascadia Code", "Source Code Pro",
+    Menlo, Consolas, "DejaVu Sans Mono", monospace;
+
+  --ifm-navbar-link-hover-color: #9b59b6;
+  --ifm-link-color: #9b59b6;
+  --ifm-color-primary: #9b59b6;
+}
+
+.navbar__logo img {
+  transition: opacity var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+}
+
+.navbar__logo img:hover {
+  opacity: 75%;
+}
+
+.footer__copyright a {
+  color: var(--ifm-footer-color) !important;
+  text-decoration: underline;
+}
+
+.footer__copyright a:hover {
+  text-decoration: none !important;
+}

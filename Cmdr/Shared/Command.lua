@@ -4,6 +4,19 @@ local Argument = require(script.Parent.Argument)
 
 local IsServer = RunService:IsServer()
 
+--[=[
+	@class CommandContext
+	TODO: Description
+]=]
+
+--[=[
+	@interface CommandArgument
+	@within CommandContext
+	.Placeholder string
+
+	TODO:
+]=]
+
 local Command = {}
 Command.__index = Command
 
