@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local CreateGui = require(script.Parent.CreateGui)
 
---- Handles initial preparation of the game server-side.
+-- Handles initial preparation of the game server-side.
 return function(cmdr)
 	local ReplicatedRoot, RemoteFunction, RemoteEvent
 

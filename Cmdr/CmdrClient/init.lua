@@ -11,6 +11,55 @@ if RunService:IsClient() == false then
 	)
 end
 
+--[=[
+	@class CmdrClient
+	@client
+
+	The Cmdr client singleton.
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop Registry Registry
+	@readonly
+	Refers to the current command Registry.
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop Dispatcher Dispatcher
+	@readonly
+	Refers to the current command Dispatcher.
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop Util Util
+	@readonly
+	Refers to a table containing many useful utility functions.
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop Enabled boolean
+	@readonly
+	TODO: Add description
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop PlaceName string
+	@readonly
+	TODO: Add description
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop ActivationKeys { [Enum.KeyCode] = true }
+	@readonly
+	The list of key codes that will show or hide Cmdr. Use CmdrClient:SetActivationKeys to change.
+]=]
+
 local Cmdr
 do
 	Cmdr = setmetatable({
@@ -48,28 +97,48 @@ end
 
 local Interface = require(script.CmdrInterface)(Cmdr)
 
---- Sets a list of keyboard keys (Enum.KeyCode) that can be used to open the commands menu
-function Cmdr:SetActivationKeys(keysArray)
-	self.ActivationKeys = Util.MakeDictionary(keysArray)
+--[=[
+	Sets the key codes that will used to show or hide Cmdr.
+
+	@within CmdrClient
+]=]
+function Cmdr:SetActivationKeys(keys: { Enum.KeyCode })
+	self.ActivationKeys = Util.MakeDictionary(keys)
 end
 
---- Sets the place name label on the interface
-function Cmdr:SetPlaceName(name)
+--[=[
+	Sets the place name label on the interface. This is useful for a quick way to tell what game you're playing in a universe game.
+
+	@within CmdrClient
+]=]
+function Cmdr:SetPlaceName(name: string)
 	self.PlaceName = name
 	Interface.Window:UpdateLabel()
 end
 
---- Sets whether or not the console is enabled
-function Cmdr:SetEnabled(enabled)
+--[=[
+	Sets whether or not Cmdr can be shown via the defined activation keys. Useful for when you want users to opt-in to show the console, for instance in a settings menu.
+
+	@within CmdrClient
+]=]
+function Cmdr:SetEnabled(enabled: boolean)
 	self.Enabled = enabled
 end
 
---- Sets if activation will free the mouse.
-function Cmdr:SetActivationUnlocksMouse(enabled)
+--[=[
+	Sets if activation will free the mouse.
+
+	@within CmdrClient
+]=]
+function Cmdr:SetActivationUnlocksMouse(enabled: boolean)
 	self.ActivationUnlocksMouse = enabled
 end
 
---- Shows Cmdr window
+--[=[
+	Shows the Cmdr window. Does nothing if Cmdr isn't enabled.
+
+	@within CmdrClient
+]=]
 function Cmdr:Show()
 	if not self.Enabled then
 		return
@@ -78,36 +147,60 @@ function Cmdr:Show()
 	Interface.Window:Show()
 end
 
---- Hides Cmdr window
+--[=[
+	Hides the Cmdr window.
+
+	@within CmdrClient
+]=]
 function Cmdr:Hide()
 	Interface.Window:Hide()
 end
 
---- Toggles Cmdr window
+--[=[
+	Toggles the Cmdr window. Does nothing if Cmdr isn't enabled.
+
+	@within CmdrClient
+]=]
 function Cmdr:Toggle()
 	if not self.Enabled then
-		return self:Hide()
+		self:Hide()
+		return
 	end
 
 	Interface.Window:SetVisible(not Interface.Window:IsVisible())
 end
 
---- Enables the "Mash to open" feature
-function Cmdr:SetMashToEnable(isEnabled)
-	self.MashToEnable = isEnabled
+--[=[
+	Enables the "Mash to open" feature.
+	TODO: Better description
 
-	if isEnabled then
+	@within CmdrClient
+]=]
+function Cmdr:SetMashToEnable(enabled: boolean)
+	self.MashToEnable = enabled
+
+	if enabled then
 		self:SetEnabled(false)
 	end
 end
 
---- Sets the hide on 'lost focus' feature.
-function Cmdr:SetHideOnLostFocus(enabled)
+--[=[
+	Sets the hide on 'lost focus' feature.
+	TODO: Better description
+
+	@within CmdrClient
+]=]
+function Cmdr:SetHideOnLostFocus(enabled: boolean)
 	self.HideOnLostFocus = enabled
 end
 
---- Sets the handler for a certain event type
-function Cmdr:HandleEvent(name, callback)
+--[=[
+	Sets the handler for a certain event type
+	TODO: Better description
+
+	@within CmdrClient
+]=]
+function Cmdr:HandleEvent(name: string, callback: (...any) -> ())
 	self.Events[name] = callback
 end
 

@@ -1,0 +1,68 @@
+title = "Cmdr"
+gitRepoUrl = "https://github.com/evaera/cmdr"
+gitSourceBranch = "master"
+changelog = true
+
+classOrder = [
+  "Cmdr",
+  "CmdrClient",
+
+  "Registry",
+  "Dispatcher",
+  "Util",
+
+  "CommandContext",
+  "ArgumentContext",
+]
+# apiCategories (used to @tag API members together for the TOC)
+
+[docusaurus]
+organizationName = "evaera"
+projectName = "Cmdr"
+deploymentBranch = "gh-pages"
+tagline = "Extensible command console for Roblox developers" # TODO: Rewrite/tweak
+titleDelimiter = "•"
+
+url = "https://eryn.io"
+baseUrl = "/Cmdr/alpha/"
+
+# TODO: Remove when releasing new website
+noIndex = true
+
+[docusaurus.themeConfig.announcementBar]
+id = "alpha"
+content = "Bleh!"
+backgroundColor="#fafbfc"
+textColor="#091E42"
+isCloseable = true
+
+[home]
+enabled = true
+includeReadme = false
+
+[navbar]
+title = ""
+
+[navbar.logo]
+alt = "Cmdr"
+src = "/logo.png"
+
+[[navbar.items]]
+to = "/guide"
+label = "Guide"
+position = "left"
+
+[[navbar.items]]
+href = "https://github.com/evaera/cmdr/releases"
+label = "Releases"
+position = "right"
+
+[[navbar.items]]
+href = "https://discord.gg/g5PdMxh"
+label = "Discord"
+position = "right"
+
+[footer]
+copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"blank\">MIT License</a>."
+
+# footer links

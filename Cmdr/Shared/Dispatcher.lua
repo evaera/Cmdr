@@ -7,18 +7,42 @@ local Command = require(script.Parent.Command)
 local HISTORY_SETTING_NAME = "CmdrCommandHistory"
 local displayedBeforeRunHookWarning = false
 
---- The dispatcher handles creating and running commands during the game.
+--[=[
+	@class Dispatcher
+
+	The dispatcher handles parsing, validating, and evaluating commands.
+]=]
+
+--[=[
+	@prop Cmdr Cmdr | CmdrClient
+	@within Dispatcher
+	@readonly
+	A reference to Cmdr. This may either be the server or client version of Cmdr depending on where the code is running.
+]=]
+
+--[=[
+	@prop Registry Registry
+	@within Dispatcher
+	@readonly
+]=]
+
 local Dispatcher = {
 	Cmdr = nil,
 	Registry = nil,
 }
 
---- Takes in raw command information and generates a command out of it.
--- text and executor are required arguments.
--- allowIncompleteData, when true, will ignore errors about arguments missing so we can parse live as the user types.
--- data is for special networked Data about the command gathered on the client. Purely Optional.
--- returns the command if successful, or (false, errorText) if not
-function Dispatcher:Evaluate(text, executor, allowIncompleteArguments, data)
+--[=[
+	@within Dispatcher
+	@private
+
+	Takes in raw command information and generates a command out of it.
+
+	@param allowIncompleteArguments -- when true, will ignore errors about arguments missing so we can parse live as the user types
+	@param data -- is for special networked Data about the command gathered on the client, purely optional.
+
+	@return (command) | (false, string) -- if unsuccessful, returns false and the error text
+]=]
+function Dispatcher:Evaluate(text: string, executor: Player, allowIncompleteArguments: boolean?, data: any?)
 	if RunService:IsClient() == true and executor ~= Players.LocalPlayer then
 		error("Can't evaluate a command that isn't sent by the local player.")
 	end
@@ -56,17 +80,33 @@ function Dispatcher:Evaluate(text, executor, allowIncompleteArguments, data)
 	end
 end
 
---- A helper that evaluates and runs the command in one go.
--- Either returns any validation errors as a string, or the output of the command as a string. Definitely a string, though.
-function Dispatcher:EvaluateAndRun(text, executor, options)
+--[=[
+	@within Dispatcher
+
+	Runs a command as the given player. Executor is optional when running on the client.
+
+	If `options.Data` is given, it will be available on the server with CommandContext.GetData
+
+	If `options.IsHuman` is true and this function is called on the client, then the `text` will be inserted into the window history.
+
+	@return string -- Command output or error message
+]=]
+function Dispatcher:EvaluateAndRun(
+	text: string,
+	executor: Player?,
+	options: {
+		Data: any?,
+		IsHuman: boolean?,
+	}?
+)
 	executor = executor or Players.LocalPlayer
 	options = options or {}
 
-	if RunService:IsClient() and options.IsHuman then
+	if RunService:IsClient() and (options :: any).IsHuman then
 		self:PushHistory(text)
 	end
 
-	local command, errorText = self:Evaluate(text, executor, nil, options.Data)
+	local command, errorText = self:Evaluate(text, executor, nil, (options :: any).Data)
 
 	if not command then
 		return errorText
@@ -91,8 +131,17 @@ function Dispatcher:EvaluateAndRun(text, executor, options)
 	return ok and out or "An error occurred while running this command. Check the console for more information."
 end
 
---- Send text as the local user to remote server to be evaluated there.
-function Dispatcher:Send(text, data)
+--[=[
+	@within Dispatcher
+	@private
+	@client
+
+	Send text as the local user to remote server to be evaluated there.
+
+	@param data -- is for special networked Data about the command gathered on the client, purely optional.
+	@return string -- Command output or error message
+]=]
+function Dispatcher:Send(text: string, data: any?)
 	if RunService:IsClient() == false then
 		error("Dispatcher:Send can only be called from the client.")
 	end
@@ -102,9 +151,17 @@ function Dispatcher:Send(text, data)
 	})
 end
 
---- Invoke a command programmatically as the local user e.g. from a settings menu
--- Command should be the first argument, all arguments afterwards should be the arguments to the command.
-function Dispatcher:Run(...)
+--[=[
+	@within Dispatcher
+	@client
+	@param ... string...
+	@return string
+
+	Invokes a command programmatically as the local player.
+	Accepts a variable number of arguments, which are all joined with spaces before being run; the command should be the first argument.
+	This function will raise an error if any validations occur, since it's only for hard-coded (or generated) commands.
+]=]
+function Dispatcher:Run(...): string
 	if not Players.LocalPlayer then
 		error("Dispatcher:Run can only be called from the client.")
 	end
@@ -131,7 +188,15 @@ function Dispatcher:Run(...)
 	return command:Run()
 end
 
---- Runs command-specific methods and returns nil for ok or a string for cancellation
+--[=[
+	@within Dispatcher
+	@private
+	Runs command-specific guard methods
+	@param commandContext CommandContext
+	@param ... ArgumentContext...
+
+	@return nil | string -- nil for ok, string (errorText) for cancellation
+]=]
 function Dispatcher:RunGuards(commandContext, ...)
 	local guardMethods = commandContext.Object.Guards
 	if guardMethods == nil then
@@ -155,10 +220,20 @@ function Dispatcher:RunGuards(commandContext, ...)
 
 		return tostring(guardResult)
 	end
+	return
 end
 
---- Runs hooks matching name and returns nil for ok or a string for cancellation
-function Dispatcher:RunHooks(hookName, commandContext, ...)
+--[=[
+	@within Dispatcher
+	@private
+	Runs hooks matching the specified HookName
+	@param hookName HookType
+	@param commandContext CommandContext
+	@param ... ArgumentContext...
+
+	@return nil | string -- nil for ok, string (errorText) for cancellation
+]=]
+function Dispatcher:RunHooks(hookName: string, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then
 		error(("Invalid hook name: %q"):format(hookName), 2)
 	end
@@ -173,6 +248,7 @@ function Dispatcher:RunHooks(hookName, commandContext, ...)
 		if RunService:IsStudio() then
 			if displayedBeforeRunHookWarning == false then
 				commandContext:Reply(
+					-- FIXME: This link will need to be updated when new docs are deployed
 					(RunService:IsServer() and "<Server>" or "<Client>")
 						.. " Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/guide/Hooks.html",
 					Color3.fromRGB(255, 228, 26)
@@ -193,7 +269,13 @@ function Dispatcher:RunHooks(hookName, commandContext, ...)
 	end
 end
 
-function Dispatcher:PushHistory(text)
+--[=[
+	@within Dispatcher
+	@private
+	@client
+	Inserts the string into the window history
+]=]
+function Dispatcher:PushHistory(text: string)
 	assert(RunService:IsClient(), "PushHistory may only be used from the client.")
 
 	local history = self:GetHistory()
@@ -208,7 +290,13 @@ function Dispatcher:PushHistory(text)
 	TeleportService:SetTeleportSetting(HISTORY_SETTING_NAME, history)
 end
 
-function Dispatcher:GetHistory()
+--[=[
+	@within Dispatcher
+	@client
+
+	Returns an array of the user's command history. Most recent commands are inserted at the end of the array.
+]=]
+function Dispatcher:GetHistory(): { string }
 	assert(RunService:IsClient(), "GetHistory may only be used from the client.")
 
 	return TeleportService:GetTeleportSetting(HISTORY_SETTING_NAME) or {}

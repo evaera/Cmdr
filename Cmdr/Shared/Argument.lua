@@ -8,31 +8,137 @@ local function unescapeOperators(text)
 	return text
 end
 
+--[=[
+	@class ArgumentContext
+	TODO: Description
+]=]
+
+--[=[
+	@interface ArgumentDefinition
+	@within ArgumentContext
+	.Placeholder string
+
+	TODO:
+]=]
+
 local Argument = {}
 Argument.__index = Argument
 
---- Returns a new ArgumentContext, an object that handles parsing and validating arguments
-function Argument.new(command, argumentObject, value)
+--[=[
+	@prop Command CommandContext
+	The command that this argument belongs to.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Type TypeDefinition
+	The type definition for this argument.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Name string
+	The name of this argument.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Object ArgumentDefinition
+	The raw argument definition.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Required boolean
+	Whether or not this argument was required.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Executor Player
+	The player that ran the command that this argument belongs to.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop RawValue string
+	The raw, unparsed value for this argument.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop RawSegments {string}
+	An array of strings representing the values in a comma-separated list, if applicable.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop Prefix string
+	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See Prefixed Union Types for more details.
+	@readonly
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop TextSegmentInProgress any
+	The text of the raw segment the user is currently typing.
+	@private
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop RawSegmentsAreAutocomplete boolean
+	@private
+	@within ArgumentContext
+]=]
+
+--[=[
+	@prop TransformedValues {any}
+	The transformed value (generated later).
+	@private
+	@within ArgumentContext
+]=]
+
+--[=[
+	Returns a new ArgumentContext, an object that handles parsing and validating arguments
+	@private
+
+	@param command CommandContext -- The command that owns this argument
+	@param argumentDefinition ArgumentDefinition -- The raw argument definition
+	@param value any -- The raw, unparsed value
+	@return ArgumentContext
+
+	@within ArgumentContext
+]=]
+function Argument.new(command, argumentDefinition, value)
 	local self = {
-		Command = command, -- The command that owns this argument
-		Type = nil, -- The type definition
-		Name = argumentObject.Name, -- The name for this specific argument
-		Object = argumentObject, -- The raw ArgumentObject (definition)
-		Required = argumentObject.Default == nil and argumentObject.Optional ~= true, -- If the argument is required or not.
-		Executor = command.Executor, -- The player who is running the command
-		RawValue = value, -- The raw, unparsed value
-		RawSegments = {}, -- The raw, unparsed segments (if the raw value was comma-sep)
-		TransformedValues = {}, -- The transformed value (generated later)
-		Prefix = "", -- The prefix for this command (%Team)
-		TextSegmentInProgress = "", -- The text of the raw segment the user is currently typing.
+		Command = command,
+		Type = nil,
+		Name = argumentDefinition.Name,
+		Object = argumentDefinition,
+		Required = argumentDefinition.Default == nil and argumentDefinition.Optional ~= true,
+		Executor = command.Executor,
+		RawValue = value,
+		RawSegments = {},
+		TransformedValues = {},
+		Prefix = "",
+		TextSegmentInProgress = "",
 		RawSegmentsAreAutocomplete = false,
 	}
 
-	if type(argumentObject.Type) == "table" then
-		self.Type = argumentObject.Type
+	if type(argumentDefinition.Type) == "table" then
+		self.Type = argumentDefinition.Type
 	else
 		local parsedType, parsedRawValue, prefix =
-			Util.ParsePrefixedUnionType(command.Cmdr.Registry:GetTypeName(argumentObject.Type), value)
+			Util.ParsePrefixedUnionType(command.Cmdr.Registry:GetTypeName(argumentDefinition.Type), value)
 
 		self.Type = command.Dispatcher.Registry:GetType(parsedType)
 		self.RawValue = parsedRawValue
@@ -50,6 +156,11 @@ function Argument.new(command, argumentObject, value)
 	return self
 end
 
+--[=[
+	@private
+	@return any
+	@within ArgumentContext
+]=]
 function Argument:GetDefaultAutocomplete()
 	if self.Type.Autocomplete then
 		local strings, options = self.Type.Autocomplete(self:TransformSegment(""))
@@ -59,9 +170,14 @@ function Argument:GetDefaultAutocomplete()
 	return {}
 end
 
---- Calls the transform function on this argument.
--- The return value(s) from this function are passed to all of the other argument methods.
--- Called automatically at instantiation
+--[=[
+	Calls the transform function on this argument.
+	The return value(s) from this function are passed to all of the other argument methods.
+	Called automatically at instantiation.
+
+	@private
+	@within ArgumentContext
+]=]
 function Argument:Transform()
 	if #self.TransformedValues ~= 0 then
 		return
@@ -150,7 +266,12 @@ function Argument:Transform()
 	end
 end
 
-function Argument:TransformSegment(rawSegment)
+--[=[
+	@param rawSegment any
+	@private
+	@within ArgumentContext
+]=]
+function Argument:TransformSegment(rawSegment): any
 	if self.Type.Transform then
 		return self.Type.Transform(rawSegment, self.Executor)
 	else
@@ -158,13 +279,22 @@ function Argument:TransformSegment(rawSegment)
 	end
 end
 
---- Returns whatever the Transform method gave us.
-function Argument:GetTransformedValue(segment)
+--[=[
+	Returns the transformed value from this argument, see Types.
+	@within ArgumentContext
+]=]
+function Argument:GetTransformedValue(segment: number): ...any
 	return unpack(self.TransformedValues[segment])
 end
 
---- Validates that the argument will work without any type errors.
-function Argument:Validate(isFinal)
+--[=[
+	Validates that the argument will work without any type errors.
+
+	@param isFinal any
+	@private
+	@within ArgumentContext
+]=]
+function Argument:Validate(isFinal: boolean?): (boolean, string?)
 	if self.RawValue == nil or #self.RawValue == 0 and self.Required == false then
 		return true
 	end
@@ -198,7 +328,13 @@ function Argument:Validate(isFinal)
 	end
 end
 
---- Gets a list of all possible values that could match based on the current value.
+--[=[
+	Gets a list of all possible values that could match based on the current value.
+
+	@return any
+	@private
+	@within ArgumentContext
+]=]
 function Argument:GetAutocomplete()
 	if self.Type.Autocomplete then
 		return self.Type.Autocomplete(self:GetTransformedValue(#self.TransformedValues))
@@ -207,7 +343,12 @@ function Argument:GetAutocomplete()
 	end
 end
 
-function Argument:ParseValue(i)
+--[=[
+	@return any
+	@private
+	@within ArgumentContext
+]=]
+function Argument:ParseValue(i: number)
 	if self.Type.Parse then
 		return self.Type.Parse(self:GetTransformedValue(i))
 	else
@@ -215,8 +356,12 @@ function Argument:ParseValue(i)
 	end
 end
 
---- Returns the final value of the argument.
-function Argument:GetValue()
+--
+--[=[
+	Returns the parsed (final) value for this argument.
+	@within ArgumentContext
+]=]
+function Argument:GetValue(): any
 	if #self.RawValue == 0 and not self.Required and self.Object.Default ~= nil then
 		return self.Object.Default
 	end

@@ -1,0 +1,13 @@
+{
+  "name": "cmdr",
+  "private": true,
+  "version": "1.12.0",
+  "description": "Extensible command console for Roblox developers",
+  "license": "MIT",
+  "scripts": {
+    "docs:dev": "moonwave dev --code Cmdr"
+  },
+  "devDependencies": {
+    "moonwave": "^1.1.1"
+  }
+}

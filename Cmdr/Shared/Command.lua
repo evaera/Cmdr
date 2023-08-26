@@ -4,10 +4,23 @@ local Argument = require(script.Parent.Argument)
 
 local IsServer = RunService:IsServer()
 
+--[=[
+	@class CommandContext
+	TODO: Description
+]=]
+
+--[=[
+	@interface CommandArgument
+	@within CommandContext
+	.Placeholder string
+
+	TODO:
+]=]
+
 local Command = {}
 Command.__index = Command
 
---- Returns a new CommandContext, an object which is created for every command validation.
+-- Returns a new CommandContext, an object which is created for every command validation.
 -- This is also what's passed as the context to the "Run" functions in commands
 function Command.new(options)
 	local self = {
@@ -35,7 +48,7 @@ function Command.new(options)
 	return self
 end
 
---- Parses all of the command arguments into ArgumentContexts
+-- Parses all of the command arguments into ArgumentContexts
 -- Called by the command dispatcher automatically
 -- allowIncompleteArguments: if true, will not throw an error for missing arguments
 function Command:Parse(allowIncompleteArguments)
@@ -67,7 +80,7 @@ function Command:Parse(allowIncompleteArguments)
 	return true
 end
 
---- Validates that all of the arguments are in a valid state.
+-- Validates that all of the arguments are in a valid state.
 -- This must be called before :Run() is called.
 -- Returns boolean (true if ok), errorText
 function Command:Validate(isFinal)
@@ -87,7 +100,7 @@ function Command:Validate(isFinal)
 	return success, errorText:sub(3)
 end
 
---- Returns the last argument that has a value.
+-- Returns the last argument that has a value.
 -- Useful for getting the autocomplete for the argument the user is working on.
 function Command:GetLastArgument()
 	for i = #self.Arguments, 1, -1 do
@@ -97,7 +110,7 @@ function Command:GetLastArgument()
 	end
 end
 
---- Returns a table containing the parsed values for all of the arguments.
+-- Returns a table containing the parsed values for all of the arguments.
 function Command:GatherArgumentValues()
 	local values = {}
 
@@ -113,7 +126,7 @@ function Command:GatherArgumentValues()
 	return values, #self.ArgumentDefinitions
 end
 
---- Runs the command. Handles dispatching to the server if necessary.
+-- Runs the command. Handles dispatching to the server if necessary.
 -- Command:Validate() must be called before this is called or it will throw.
 function Command:Run()
 	if self._Validated == nil then
@@ -168,14 +181,14 @@ function Command:Run()
 	end
 end
 
---- Returns an ArgumentContext for the specific index
+-- Returns an ArgumentContext for the specific index
 function Command:GetArgument(index)
 	return self.Arguments[index]
 end
 
 -- Below are functions that are only meant to be used in command implementations --
 
---- Returns the extra data associated with this command.
+-- Returns the extra data associated with this command.
 -- This needs to be used instead of just context.Data for reliability when not using a remote command.
 function Command:GetData()
 	if self.Data then
@@ -189,7 +202,7 @@ function Command:GetData()
 	return self.Data
 end
 
---- Sends an event message to a player
+-- Sends an event message to a player
 function Command:SendEvent(player, event, ...)
 	assert(typeof(player) == "Instance", "Argument #1 must be a Player")
 	assert(player:IsA("Player"), "Argument #1 must be a Player")
@@ -203,7 +216,7 @@ function Command:SendEvent(player, event, ...)
 	end
 end
 
---- Sends an event message to all players
+-- Sends an event message to all players
 function Command:BroadcastEvent(...)
 	if not IsServer then
 		error("Can't broadcast event messages from the client.", 2)
@@ -212,17 +225,17 @@ function Command:BroadcastEvent(...)
 	self.Dispatcher.Cmdr.RemoteEvent:FireAllClients(...)
 end
 
---- Alias of self:SendEvent(self.Executor, "AddLine", text)
+-- Alias of self:SendEvent(self.Executor, "AddLine", text)
 function Command:Reply(...)
 	return self:SendEvent(self.Executor, "AddLine", ...)
 end
 
---- Alias of Registry:GetStore(...)
+-- Alias of Registry:GetStore(...)
 function Command:GetStore(...)
 	return self.Dispatcher.Cmdr.Registry:GetStore(...)
 end
 
---- Returns true if the command has an implementation on the caller's machine.
+-- Returns true if the command has an implementation on the caller's machine.
 function Command:HasImplementation()
 	return ((RunService:IsClient() and self.Object.ClientRun) or self.Object.Run) and true or false
 end
