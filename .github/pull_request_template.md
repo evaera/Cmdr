@@ -8,8 +8,9 @@ To help us process your pull request as quickly as possible, please make sure yo
 
 - [ ] Bug fix (non-breaking change which fixes a reported bug ticket)
 - [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature which would cause existing functionality to not work as expected)
+- [ ] Internal change (doesn't impact features or API contract)
 - [ ] Website or documentation change (either to our Moonwave comments or to the website itself)
+- [ ] Breaking change (fix or feature which would cause existing functionality to not work as expected)
 - [ ] Something else (none of the above options apply to this pull request)
 
 ## Describe your changes
