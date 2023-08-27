@@ -1,5 +1,4 @@
 -- Here be dragons
--- luacheck: ignore 212
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local TextChatService = game:GetService("TextChatService")
