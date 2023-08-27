@@ -2,6 +2,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext"
 import React from "react"
 
 import Layout from "@theme/Layout"
+import Admonition from "@theme/Admonition"
 import Link from "@docusaurus/Link"
 
 import styles from "./index.module.css"
@@ -53,6 +54,10 @@ export default function Home() {
         </p>
 
         <div className="container">
+          <Admonition type="danger" title="Still cooking">
+            This website is a work in progress. You should refer to <a href="https://eryn.io/Cmdr">eryn.io/Cmdr</a> for the current documentation.
+          </Admonition>
+
           <section className={styles.featuresOuter}>
             <div className={styles.featuresInner}>
               <Feature title="Integrates with your systems" description="Make commands that integrate and control your existing systems. Use commands to help debug your game during development by triggering events in your game or print out targeted debug information." />
