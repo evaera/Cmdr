@@ -192,7 +192,7 @@ Dynamic types are included within a command definition's `Args` array, they are 
 
 Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have a `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove).
 
-Alternatively, dynamic types can be paired with inline types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an argument definition can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
+Alternatively, dynamic types can be paired with inline types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/ArgumentContext#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
 
 ```lua title="allowlist.lua"
 return {
