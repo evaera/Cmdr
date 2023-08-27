@@ -17,7 +17,7 @@ return {
 		},
 	},
 
-	Run = function(_, min, max)
+	ClientRun = function(_, min, max)
 		return tostring(max and math.random(min, max) or math.random(min))
 	end,
 }

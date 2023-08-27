@@ -11,7 +11,7 @@ return {
 		},
 	},
 
-	Run = function(_, list)
+	ClientRun = function(_, list)
 		return #(list:split(","))
 	end,
 }

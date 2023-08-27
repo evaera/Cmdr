@@ -13,7 +13,7 @@ return {
 		},
 	},
 
-	Run = function(_, text)
+	ClientRun = function(_, text)
 		return HttpService:JSONEncode(text:split(","))
 	end,
 }

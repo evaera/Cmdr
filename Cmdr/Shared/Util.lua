@@ -423,7 +423,7 @@ function Util.SubstituteArgs(str, replace): string
 end
 
 --[=[
-	Creates an alias command
+	Creates an alias command, should only be used on the client.
 	@return CommandDefinition
 ]=]
 function Util.MakeAliasCommand(name: string, commandString: string)
@@ -465,7 +465,7 @@ function Util.MakeAliasCommand(name: string, commandString: string)
 		Description = `<Alias> {commandDescription or commandString}`,
 		Group = "UserAlias",
 		Args = args,
-		Run = function(context)
+		ClientRun = function(context)
 			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
 		end,
 	}
