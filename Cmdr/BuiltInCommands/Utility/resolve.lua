@@ -26,7 +26,7 @@ return {
 		end,
 	},
 
-	Run = function(context)
+	ClientRun = function(context)
 		return table.concat(context:GetArgument(2).RawSegments, ",")
 	end,
 }

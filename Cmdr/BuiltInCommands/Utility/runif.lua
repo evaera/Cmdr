@@ -35,7 +35,7 @@ return {
 		},
 	},
 
-	Run = function(context, condition, arg, testAgainst, command)
+	ClientRun = function(context, condition, arg, testAgainst, command)
 		local conditionFunc = conditions[condition]
 
 		if not conditionFunc then
