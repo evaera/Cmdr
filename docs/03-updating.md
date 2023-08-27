@@ -1,4 +1,4 @@
-# Contributing
+# Updating
 
 :::note Work in progress
 

@@ -1,12 +1,8 @@
----
-title: Hooks
----
-
 # Hooks
 
-Hooks are callback functions that you can register which *hook* into the command execution process. Hooks are extremely useful: they can be used for implementing a custom permission system, logging commands, or overriding command output.
+Hooks are callback functions that you can register which _hook_ into the command execution process. Hooks are extremely useful: they can be used for implementing a permission system, logging commands, or overriding command output.
 
-Hooks can be registered on both the server and the client. Server commands will run server and client hooks, and client commands will run only client hooks. Depending on your application, you may need to register hooks on one or both. For example, logging may only need to be registered on the server, but permissions might need to be registered on the client in addition to the server.
+Hooks can be registered on either or both the server and the client. Server commands will run server and client hooks, and client commands will run only client hooks. Depending on your application, you may need to register hooks on one or both. For example, logging may only need to be registered on the server, but permissions might need to be registered on the client in addition to the server.
 
 There can be many hooks of each type, and they are all run until one returns a string, which will replace the command response in the console.
 
@@ -16,14 +12,15 @@ The callback is passed the CommandContext for the relevant command. The hooks ar
 
 This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
 
-::: warning Security Warning
-Commands will be blocked from running in-game unless you configure at least one BeforeRun hook.
+:::caution Security Warning
+
+Commands will be blocked from running in a live game unless you configure at least one BeforeRun hook.
+
 :::
 
 As a quick way to register hooks on both the server and the client, you can make a folder for your hooks, with module scripts in them which return a function. Similar to Types, if you call `Cmdr:RegisterHooksIn(yourFolderHere)` from the server, Cmdr will load all ModuleScripts in the folder on the server and the client, so you only need to write your code once.
 
-```lua
--- A ModuleScript inside your hooks folder.
+```lua title="A ModuleScript inside your hooks folder."
 return function (registry)
 	registry:RegisterHook("BeforeRun", function(context)
 		if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
@@ -47,3 +44,17 @@ Cmdr.Registry:RegisterHook("AfterRun", function(context)
   return "Returning a string from this hook replaces the response message with this text"
 end)
 ```
+
+## Execution order
+
+1. `BeforeRun` hook on client.
+2. `Data` function on client.
+3. `ClientRun` function on client.
+4. `BeforeRun` hook on server. \*
+5. Server command implementation returned from Server module. \*
+6. `AfterRun` hook on server. \*
+7. `AfterRun` hook on client.
+
+\* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`.
+
+You should be aware that an exploiter can, in theory, manipulate or bypass any client parts of execution and design your server components (like your server-sided BeforeRun hook) accordingly. This isn't an issue for client-only commands though, as these can only do things that an exploiter would be able to do anyway.s

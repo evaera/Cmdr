@@ -60,4 +60,32 @@ position = "right"
 [footer]
 copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"_blank\">MIT License</a>."
 
-# footer links
+[[footer.links]]
+title = "Learn"
+[[footer.links.items]]
+label = "Getting started"
+href = "/docs/intro"
+[[footer.links.items]]
+label = "Best practice"
+href = "/docs/advanced/bestpractice"
+[[footer.links.items]]
+label = "API reference"
+href = "/api/Cmdr"
+[[footer.links.items]]
+label = "Changelog"
+href = "/changelog"
+
+[[footer.links]]
+title = "Community"
+[[footer.links.items]]
+label = "Contribute"
+href = "/docs/community/contribute"
+[[footer.links.items]]
+label = "Security"
+href = "/docs/community/securityreport"
+[[footer.links.items]]
+label = "Discord"
+href = "https://discord.gg/g5PdMxh"
+[[footer.links.items]]
+label = "Bug tracker"
+href = "https://github.com/evaera/Cmdr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"

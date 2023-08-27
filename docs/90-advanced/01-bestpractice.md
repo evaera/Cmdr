@@ -1,4 +1,4 @@
-# Contributing
+# Best practice
 
 :::note Work in progress
 
