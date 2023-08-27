@@ -48,11 +48,6 @@ alt = "Cmdr"
 src = "/logo.png"
 
 [[navbar.items]]
-to = "/guide"
-label = "Guide"
-position = "left"
-
-[[navbar.items]]
 href = "https://github.com/evaera/cmdr/releases"
 label = "Releases"
 position = "right"
@@ -63,6 +58,6 @@ label = "Discord"
 position = "right"
 
 [footer]
-copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"blank\">MIT License</a>."
+copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"_blank\">MIT License</a>."
 
 # footer links

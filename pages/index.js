@@ -17,7 +17,7 @@ function Header() {
         <div className={styles.buttons}>
           <Link
             className={`button button--success button--lg ${styles.button}`}
-            to="/guide"
+            to="/docs/intro"
           >
             Get Started →
           </Link>

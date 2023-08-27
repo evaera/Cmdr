@@ -5,7 +5,9 @@
   "description": "Extensible command console for Roblox developers",
   "license": "MIT",
   "scripts": {
-    "docs:dev": "moonwave dev --code Cmdr"
+    "docs:dev": "moonwave dev --code Cmdr",
+    "docs:build": "moonwave build --code Cmdr",
+    "docs:publish": "moonwave build --code Cmdr --publish"
   },
   "devDependencies": {
     "moonwave": "^1.1.1"

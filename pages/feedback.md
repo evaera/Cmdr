@@ -1,3 +1,0 @@
-# Website feedback
-
-Placeholder text
