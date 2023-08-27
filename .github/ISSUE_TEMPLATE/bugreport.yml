@@ -1,0 +1,42 @@
+name: Bug Report
+description: Please use this form to report a problem in Cmdr
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report. Firstly, please make sure that you're using the latest version of Cmdr and - if possible - double checked this is a problem with Cmdr and not your own code.
+  - type: textarea
+    id: bug
+    attributes:
+      label: "The bug: what happened? What did you expect to happen?"
+      description: Be descriptive. Why is this a bug?
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: What part of Cmdr does this bug report relate to?
+      options:
+        - Built-in command
+        - Built-in type
+        - Interface
+        - Core or internal (including the Util module and Cmdr server and client singletons)
+        - Website or documentation
+        - Something else
+        - I'm not sure
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Please tell us how we can trigger this bug to happen. If it's not possible on a fresh version of Cmdr, what do we need to do?
+      placeholder: Aim to write it in a list with step-by-step bullet points
+    validations:
+      required: true
+  - type: textarea
+    id: anything-else
+    attributes:
+      label: Anything else?
+      description: Please include any other details, if applicable, which you think are important.
