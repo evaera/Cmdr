@@ -4,6 +4,10 @@ local TextService = game:GetService("TextService")
 	@class Util
 
 	Cmdr utilities module.
+
+	:::info Beta
+	This page is incomplete and some functions are missing. You may find it helpful to refer to the old documentation.
+	:::
 ]=]
 local Util = {}
 

@@ -6,17 +6,14 @@ local IsServer = RunService:IsServer()
 
 --[=[
 	@class CommandContext
-	TODO: Description
+	Represents an individual command execution.
+
+	:::info Beta
+	This page is incomplete. You may find it helpful to refer to the old documentation.
+	:::
 ]=]
 
---[=[
-	@interface CommandArgument
-	@within CommandContext
-	.Placeholder string
-
-	TODO:
-]=]
-
+-- TODO: Add moonwave annotations
 local Command = {}
 Command.__index = Command
 

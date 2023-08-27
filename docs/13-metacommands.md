@@ -1,5 +1,11 @@
 # Meta-commands
 
+:::info Possibly outdated
+
+We've not reviewed this section for a while, it's possible that this information may be out of date.
+
+:::
+
 The `bind`, `alias`, and `run` commands make use of _command strings_. A command string is raw text made up of a command name and possibly predefined arguments that is run in the background as a command itself. Before these command strings are run, they are preprocessed, replacing arguments (in the format `$1`, `$2`, `$3`, etc.) and embedded commands with their textual values.
 
 ## Embedded commands
