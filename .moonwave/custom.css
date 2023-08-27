@@ -4,9 +4,6 @@
   --ifm-font-family-base: Inter, -apple-system, "Helvetica Neue", Roboto,
     Helvetica, system-ui, "Nimbus Sans", "Arial Nova", Arial, Segoe UI;
 
-  --ifm-font-family-monospace: ui-monospace, "Cascadia Code", "Source Code Pro",
-    Menlo, Consolas, "DejaVu Sans Mono", monospace;
-
   --ifm-navbar-link-hover-color: #9b59b6;
   --ifm-link-color: #9b59b6;
   --ifm-color-primary: #9b59b6;
@@ -26,6 +23,8 @@
   text-decoration: underline;
 }
 
-.footer__copyright a:hover {
-  text-decoration: none !important;
+.footer__copyright a:hover,
+.blue_node_modules-docusaurus-plugin-moonwave-src-components-styles-module
+  a:hover {
+  text-decoration-thickness: 2px !important;
 }
