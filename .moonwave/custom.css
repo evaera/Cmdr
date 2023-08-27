@@ -24,7 +24,6 @@
 }
 
 .footer__copyright a:hover,
-.blue_node_modules-docusaurus-plugin-moonwave-src-components-styles-module
-  a:hover {
+code > a:hover {
   text-decoration-thickness: 2px !important;
 }
