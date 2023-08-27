@@ -4,6 +4,7 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "$className": "ServerScriptService",
+      "$ignoreUnknownInstances": true,
 
       "Cmdr": {
         "$path": "./Cmdr"
