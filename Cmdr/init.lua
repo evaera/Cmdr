@@ -9,7 +9,7 @@ end
 	@class Cmdr
 	@server
 
-	The Cmdr server singleton.
+	The Cmdr server singleton and entry point.
 ]=]
 
 --[=[
