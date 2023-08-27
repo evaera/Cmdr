@@ -71,7 +71,7 @@ href = "/changelog"
 title = "Community"
 [[footer.links.items]]
 label = "Contribute"
-href = "/docs/community/contribute"
+href = "/docs/contribute"
 [[footer.links.items]]
 label = "Security"
 href = "/docs/community/securityreport"
