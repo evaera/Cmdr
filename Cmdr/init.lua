@@ -60,7 +60,7 @@ end
 
 -- Handle command invocations from the clients.
 Cmdr.RemoteFunction.OnServerInvoke = function(player, text, options)
-	if #text > 100_000 then
+	if #text > 10000 then
 		return "Input too long"
 	end
 
