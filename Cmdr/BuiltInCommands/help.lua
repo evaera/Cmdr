@@ -17,6 +17,7 @@ Tips
 
 return {
 	Name = "help",
+	Aliases = { "cmds", "commands" },
 	Description = "Displays a list of all commands, or inspects one command.",
 	Group = "Help",
 	Args = {
