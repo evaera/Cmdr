@@ -52,7 +52,7 @@ end
 
 	Exact matches will be inserted in the front of the resulting array.
 ]=]
-function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
+function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?) -> string
 	local names
 	local instances = {}
 
@@ -81,7 +81,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
 	end
 
 	-- Searches the set (checking exact matches first)
-	return function(text: string, returnFirst: boolean?)
+	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -94,6 +94,10 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
 					return value
 				else
 					table.insert(results, 1, value)
+				end
+			elseif matchStart then
+				if name:lower():find(text:lower(), 1, true) == 1 then
+					results[#results + 1] = value
 				end
 			elseif name:lower():find(text:lower(), 1, true) then
 				results[#results + 1] = value
