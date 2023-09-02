@@ -96,7 +96,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 					table.insert(results, 1, value)
 				end
 			elseif matchStart then
-				if name:lower():find(text:lower(), 1, true) == 1 then
+				if name:lower():sub(1, #text) == #text:lower() then
 					results[#results + 1] = value
 				end
 			elseif name:lower():find(text:lower(), 1, true) then
