@@ -2,7 +2,7 @@ local RunService = game:GetService("RunService")
 local Util = require(script.Shared:WaitForChild("Util"))
 
 if RunService:IsServer() == false then
-	error("Cmdr server module is somehow running on a client!")
+	error("[Cmdr] Cmdr server module is somehow running on a client!")
 end
 
 --[=[
