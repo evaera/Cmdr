@@ -208,7 +208,8 @@ return {
 			Description = "Add or remove",
 		},
 		-- This is an example of a dynamic argument
-		function(context, action)
+		function(context)
+		-- FIXME: FIX ME
 			return {
 				Type = if action == "add" then `playerId` else `allowlistPlayer`,
 				Name = "Player",
