@@ -44,7 +44,7 @@ local Dispatcher = {
 ]=]
 function Dispatcher:Evaluate(text: string, executor: Player, allowIncompleteArguments: boolean?, data: any?)
 	if RunService:IsClient() == true and executor ~= Players.LocalPlayer then
-		error("Can't evaluate a command that isn't sent by the local player.")
+		error("[Cmdr] Can't evaluate a command that isn't sent by the local player.")
 	end
 
 	local arguments = Util.SplitString(text)
@@ -125,7 +125,7 @@ function Dispatcher:EvaluateAndRun(
 	end)
 
 	if not ok then
-		warn(("Error occurred while evaluating command string %q\n%s"):format(text, tostring(out)))
+		warn((`[Cmdr] Error occurred while evaluating command string %q\n{tostring(out)}`):format(text))
 	end
 
 	return ok and out or "An error occurred while running this command. Check the console for more information."
@@ -143,7 +143,7 @@ end
 ]=]
 function Dispatcher:Send(text: string, data: any?)
 	if RunService:IsClient() == false then
-		error("Dispatcher:Send can only be called from the client.")
+		error("[Cmdr] Dispatcher:Send can only be called from the client.")
 	end
 
 	return self.Cmdr.RemoteFunction:InvokeServer(text, {
@@ -163,7 +163,7 @@ end
 ]=]
 function Dispatcher:Run(...): string
 	if not Players.LocalPlayer then
-		error("Dispatcher:Run can only be called from the client.")
+		error("[Cmdr] Dispatcher:Run can only be called from the client.")
 	end
 
 	local args = { ... }
@@ -235,7 +235,7 @@ end
 ]=]
 function Dispatcher:RunHooks(hookName: string, commandContext, ...)
 	if not self.Registry.Hooks[hookName] then
-		error(("Invalid hook name: %q"):format(hookName), 2)
+		error(("[Cmdr] Invalid hook name: %q"):format(hookName), 2)
 	end
 
 	if
@@ -276,7 +276,7 @@ end
 	Inserts the string into the window history
 ]=]
 function Dispatcher:PushHistory(text: string)
-	assert(RunService:IsClient(), "PushHistory may only be used from the client.")
+	assert(RunService:IsClient(), "[Cmdr] PushHistory may only be used from the client.")
 
 	local history = self:GetHistory()
 
@@ -297,7 +297,7 @@ end
 	Returns an array of the user's command history. Most recent commands are inserted at the end of the array.
 ]=]
 function Dispatcher:GetHistory(): { string }
-	assert(RunService:IsClient(), "GetHistory may only be used from the client.")
+	assert(RunService:IsClient(), "[Cmdr] GetHistory may only be used from the client.")
 
 	return TeleportService:GetTeleportSetting(HISTORY_SETTING_NAME) or {}
 end

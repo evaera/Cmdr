@@ -65,7 +65,7 @@ function Command:Parse(allowIncompleteArguments)
 		local required = (definition.Default == nil and definition.Optional ~= true)
 
 		if required and hadOptional then
-			error(("Command %q: Required arguments cannot occur after optional arguments."):format(self.Name))
+			error(("[Cmdr] Command %q: Required arguments cannot occur after optional arguments."):format(self.Name))
 		elseif not required then
 			hadOptional = true
 		end
@@ -130,7 +130,7 @@ end
 -- Command:Validate() must be called before this is called or it will throw.
 function Command:Run()
 	if self._Validated == nil then
-		error("Must validate a command before running.")
+		error("[Cmdr] Must validate a command before running.")
 	end
 
 	local beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
@@ -160,11 +160,10 @@ function Command:Run()
 		elseif IsServer then -- Uh oh, we're already on the server and there's no Run function.
 			if self.Object.ClientRun then
 				warn(
-					self.Name,
-					"command fell back to the server because ClientRun returned nil, but there is no server implementation! Either return a string from ClientRun, or create a server implementation for this command."
+					`[Cmdr] {self.Name} command fell back to the server because ClientRun returned nil, but there is no server implementation! Either return a string from ClientRun, or create a server implementation for this command.`
 				)
 			else
-				warn(self.Name, "command has no implementation!")
+				warn(`[Cmdr] {self.Name} command has no implementation!`)
 			end
 
 			self.Response = "No implementation."
@@ -204,14 +203,16 @@ end
 
 -- Sends an event message to a player
 function Command:SendEvent(player, event, ...)
-	assert(typeof(player) == "Instance", "Argument #1 must be a Player")
-	assert(player:IsA("Player"), "Argument #1 must be a Player")
-	assert(type(event) == "string", "Argument #2 must be a string")
+	assert(typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player")
+	assert(type(event) == "string", "[Cmdr] Argument #2 must be a string")
 
 	if IsServer then
 		self.Dispatcher.Cmdr.RemoteEvent:FireClient(player, event, ...)
 	elseif self.Dispatcher.Cmdr.Events[event] then
-		assert(player == Players.LocalPlayer, "Event messages can only be sent to the local player on the client.")
+		assert(
+			player == Players.LocalPlayer,
+			"[Cmdr] Event messages can only be sent to the local player on the client."
+		)
 		self.Dispatcher.Cmdr.Events[event](...)
 	end
 end
@@ -219,7 +220,7 @@ end
 -- Sends an event message to all players
 function Command:BroadcastEvent(...)
 	if not IsServer then
-		error("Can't broadcast event messages from the client.", 2)
+		error("[Cmdr] Can't broadcast event messages from the client.", 2)
 	end
 
 	self.Dispatcher.Cmdr.RemoteEvent:FireAllClients(...)
