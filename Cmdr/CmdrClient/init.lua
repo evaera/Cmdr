@@ -14,8 +14,7 @@ end
 --[=[
 	@class CmdrClient
 	@client
-
-	The Cmdr client singleton.
+	The Cmdr client singleton and entry point.
 ]=]
 
 --[=[
@@ -43,21 +42,21 @@ end
 	@within CmdrClient
 	@prop Enabled boolean
 	@readonly
-	TODO: Add description
+	Whether or not Cmdr is enabled (will show via the defined activation keys). Use [`CmdrClient:SetEnabled`](#SetEnabled) to change.
 ]=]
 
 --[=[
 	@within CmdrClient
 	@prop PlaceName string
 	@readonly
-	TODO: Add description
+	The current place name, displayed on the interface. Use [`CmdrClient:SetPlaceName`](#SetPlaceName) to change.
 ]=]
 
 --[=[
 	@within CmdrClient
 	@prop ActivationKeys { [Enum.KeyCode] = true }
 	@readonly
-	The list of key codes that will show or hide Cmdr. Use CmdrClient:SetActivationKeys to change.
+	The list of key codes that will show or hide Cmdr. Use [`CmdrClient:SetActivationKeys`](#SetActivationKeys) to change.
 ]=]
 
 local Cmdr
@@ -172,7 +171,8 @@ end
 
 --[=[
 	Enables the "Mash to open" feature.
-	TODO: Better description
+	This feature, when enabled, requires the activation key to be pressed 5 times within a second to [enable](#SetEnabled) Cmdr.
+	This may be helpful to guard against mispresses from opening the window, for example.
 
 	@within CmdrClient
 ]=]
@@ -186,7 +186,7 @@ end
 
 --[=[
 	Sets the hide on 'lost focus' feature.
-	TODO: Better description
+	This feature, which is enabled by default, will cause Cmdr to [hide](#Hide) when the user clicks off the window.
 
 	@within CmdrClient
 ]=]
@@ -195,8 +195,7 @@ function Cmdr:SetHideOnLostFocus(enabled: boolean)
 end
 
 --[=[
-	Sets the handler for a certain event type
-	TODO: Better description
+	Sets the [network event handler](/docs/networkeventhandlers) for a certain event type.
 
 	@within CmdrClient
 ]=]
@@ -204,7 +203,8 @@ function Cmdr:HandleEvent(name: string, callback: (...any) -> ())
 	self.Events[name] = callback
 end
 
--- Only register when we aren't in studio because don't want to overwrite what the server portion did
+-- "Only register when we aren't in studio because don't want to overwrite what the server portion did"
+-- This is legacy code which predates Accurate Play Solo (which is now the only way to test in studio), this code will never run.
 if RunService:IsServer() == false then
 	Cmdr.Registry:RegisterTypesIn(script:WaitForChild("Types"))
 	Cmdr.Registry:RegisterCommandsIn(script:WaitForChild("Commands"))

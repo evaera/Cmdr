@@ -10,15 +10,7 @@ end
 
 --[=[
 	@class ArgumentContext
-	TODO: Description
-]=]
-
---[=[
-	@interface ArgumentDefinition
-	@within ArgumentContext
-	.Placeholder string
-
-	TODO:
+	Represents an individual argument within an individual command execution.
 ]=]
 
 local Argument = {}
@@ -40,7 +32,7 @@ Argument.__index = Argument
 
 --[=[
 	@prop Name string
-	The name of this argument.
+	The name of this argument, shown on the autocomplete interface.
 	@readonly
 	@within ArgumentContext
 ]=]
@@ -82,7 +74,7 @@ Argument.__index = Argument
 
 --[=[
 	@prop Prefix string
-	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See Prefixed Union Types for more details.
+	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See [Prefixed Union Types](/docs/commands#prefixed-union-types) for more details.
 	@readonly
 	@within ArgumentContext
 ]=]

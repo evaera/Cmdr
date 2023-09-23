@@ -6,17 +6,14 @@ local IsServer = RunService:IsServer()
 
 --[=[
 	@class CommandContext
-	TODO: Description
+	Represents an individual command execution.
+
+	:::info Beta
+	This page is incomplete. You might want to refer to the [current documentation](https://eryn.io/Cmdr/api/CommandContext.html).
+	:::
 ]=]
 
---[=[
-	@interface CommandArgument
-	@within CommandContext
-	.Placeholder string
-
-	TODO:
-]=]
-
+-- TODO: Add moonwave annotations
 local Command = {}
 Command.__index = Command
 

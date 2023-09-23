@@ -36,16 +36,20 @@ return {
 			if command.Aliases and #command.Aliases > 0 then
 				context:Reply(`Aliases: {table.concat(command.Aliases, ", ")}`, Color3.fromRGB(230, 230, 230))
 			end
-			context:Reply(`Description: {command.Description}`, Color3.fromRGB(230, 230, 230))
+			if command.Description then
+				context:Reply(`Description: {command.Description}`, Color3.fromRGB(230, 230, 230))
+			end
 			if command.Group then
 				context:Reply(`Group: {command.Group}`, Color3.fromRGB(230, 230, 230))
 			end
-			for i, arg in ipairs(command.Args) do
-				context:Reply(
-					`#{i} {if type(arg) == "table"
-						then `{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
-						else "Unknown (inline argument)"}`
-				)
+			if command.Args then
+				for i, arg in ipairs(command.Args) do
+					context:Reply(
+						`#{i} {if type(arg) == "table"
+							then `{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
+							else "Unknown (inline argument)"}`
+					)
+				end
 			end
 		else
 			context:Reply(ARGUMENT_SHORTHANDS)
@@ -57,10 +61,10 @@ return {
 			end)
 			local lastGroup
 			for _, command in ipairs(commands) do
-				command.Group = command.Group or "No Group"
-				if lastGroup ~= command.Group then
-					context:Reply(`\n{command.Group}\n{string.rep("-", #command.Group)}`)
-					lastGroup = command.Group
+				local group = command.Group or "No Group"
+				if lastGroup ~= group then
+					context:Reply(`\n{group}\n{string.rep("-", #group)}`)
+					lastGroup = group
 				end
 				context:Reply(if command.Description then `{command.Name} - {command.Description}` else command.Name)
 			end

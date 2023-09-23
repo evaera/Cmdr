@@ -4,13 +4,18 @@
   --ifm-font-family-base: Inter, -apple-system, "Helvetica Neue", Roboto,
     Helvetica, system-ui, "Nimbus Sans", "Arial Nova", Arial, Segoe UI;
 
-  --ifm-font-family-monospace: ui-monospace, "Cascadia Code", "Source Code Pro",
-    Menlo, Consolas, "DejaVu Sans Mono", monospace;
-
   --ifm-navbar-link-hover-color: #9b59b6;
   --ifm-link-color: #9b59b6;
   --ifm-color-primary: #9b59b6;
 }
+
+.footer__copyright a:hover,
+code > a:hover {
+  text-decoration-thickness: 2px !important;
+  text-decoration: underline;
+}
+
+/* Navbar */
 
 .navbar__logo img {
   transition: opacity var(--ifm-transition-fast)
@@ -21,11 +26,20 @@
   opacity: 75%;
 }
 
-.footer__copyright a {
+/* Footer */
+
+.footer a {
   color: var(--ifm-footer-color) !important;
+}
+
+.footer a:hover {
   text-decoration: underline;
 }
 
-.footer__copyright a:hover {
-  text-decoration: none !important;
+.footer__copyright a {
+  text-decoration: underline;
+}
+
+.footer__links {
+  text-align: center;
 }

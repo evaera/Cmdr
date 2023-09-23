@@ -14,27 +14,19 @@ classOrder = [
   "CommandContext",
   "ArgumentContext",
 ]
-# apiCategories (used to @tag API members together for the TOC)
 
 [docusaurus]
 organizationName = "evaera"
 projectName = "Cmdr"
 deploymentBranch = "gh-pages"
-tagline = "Extensible command console for Roblox developers" # TODO: Rewrite/tweak
+tagline = "The extensible command console for Roblox developers"
 titleDelimiter = "•"
 
 url = "https://eryn.io"
-baseUrl = "/Cmdr/alpha/"
+baseUrl = "/Cmdr/beta/"
 
 # TODO: Remove when releasing new website
 noIndex = true
-
-[docusaurus.themeConfig.announcementBar]
-id = "alpha"
-content = "Bleh!"
-backgroundColor="#fafbfc"
-textColor="#091E42"
-isCloseable = true
 
 [home]
 enabled = true
@@ -48,11 +40,6 @@ alt = "Cmdr"
 src = "/logo.png"
 
 [[navbar.items]]
-to = "/guide"
-label = "Guide"
-position = "left"
-
-[[navbar.items]]
 href = "https://github.com/evaera/cmdr/releases"
 label = "Releases"
 position = "right"
@@ -63,6 +50,34 @@ label = "Discord"
 position = "right"
 
 [footer]
-copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"blank\">MIT License</a>."
+copyright = "Built using Docusaurus and Moonwave. Released under the <a href=\"https://github.com/evaera/Cmdr/blob/master/LICENSE\" target=\"_blank\">MIT License</a>."
 
-# footer links
+[[footer.links]]
+title = "Learn"
+[[footer.links.items]]
+label = "Introduction"
+href = "/docs/intro"
+[[footer.links.items]]
+label = "Best practice"
+href = "/docs/advanced/bestpractice"
+[[footer.links.items]]
+label = "API reference"
+href = "/api/Cmdr"
+[[footer.links.items]]
+label = "Changelog"
+href = "/changelog"
+
+[[footer.links]]
+title = "Community"
+[[footer.links.items]]
+label = "Contribute"
+href = "/docs/contribute"
+[[footer.links.items]]
+label = "Security"
+href = "/docs/community/securityreport"
+[[footer.links.items]]
+label = "Discord"
+href = "https://discord.gg/g5PdMxh"
+[[footer.links.items]]
+label = "Bug tracker"
+href = "https://github.com/evaera/Cmdr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
