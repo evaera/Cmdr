@@ -56,7 +56,7 @@ end
 
 	Exact matches will be inserted in the front of the resulting array.
 ]=]
-function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
+function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?) -> string
 	local names
 	local instances = {}
 
@@ -76,16 +76,16 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
 		elseif type(setOrContainer[1]) == "string" then
 			names = setOrContainer
 		elseif setOrContainer[1] ~= nil then
-			error("MakeFuzzyFinder only accepts tables of instances or strings.")
+			error("[Cmdr] MakeFuzzyFinder only accepts tables of instances or strings.")
 		else
 			names = {}
 		end
 	else
-		error("MakeFuzzyFinder only accepts a table, Enum, or Instance.")
+		error("[Cmdr] MakeFuzzyFinder only accepts a table, Enum, or Instance.")
 	end
 
 	-- Searches the set (checking exact matches first)
-	return function(text: string, returnFirst: boolean?)
+	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -98,6 +98,10 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?) -> string
 					return value
 				else
 					table.insert(results, 1, value)
+				end
+			elseif matchStart then
+				if name:lower():sub(1, #text) == text:lower() then
+					results[#results + 1] = value
 				end
 			elseif name:lower():find(text:lower(), 1, true) then
 				results[#results + 1] = value
@@ -427,7 +431,7 @@ function Util.SubstituteArgs(str, replace): string
 end
 
 --[=[
-	Creates an alias command
+	Creates an alias command, should only be used on the client.
 	@return CommandDefinition
 ]=]
 function Util.MakeAliasCommand(name: string, commandString: string)
@@ -469,7 +473,7 @@ function Util.MakeAliasCommand(name: string, commandString: string)
 		Description = `<Alias> {commandDescription or commandString}`,
 		Group = "UserAlias",
 		Args = args,
-		Run = function(context)
+		ClientRun = function(context)
 			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
 		end,
 	}
@@ -488,7 +492,7 @@ function Util.MakeSequenceType(options)
 
 	assert(
 		options.Parse ~= nil or options.Constructor ~= nil,
-		"MakeSequenceType: Must provide one of: Constructor, Parse"
+		"[Cmdr] MakeSequenceType: Must provide one of: Constructor, Parse"
 	)
 
 	options.TransformEach = options.TransformEach or function(...)

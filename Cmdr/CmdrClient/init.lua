@@ -7,7 +7,7 @@ local Util = require(Shared:WaitForChild("Util"))
 
 if RunService:IsClient() == false then
 	error(
-		"Server scripts cannot require the client library. Please require the server library to use Cmdr in your own code."
+		"[Cmdr] Server scripts cannot require the client library. Please require the server library from the server to use Cmdr in your own code."
 	)
 end
 

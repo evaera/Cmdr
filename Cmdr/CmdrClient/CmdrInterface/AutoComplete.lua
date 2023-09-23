@@ -1,4 +1,3 @@
--- luacheck: ignore 212
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 

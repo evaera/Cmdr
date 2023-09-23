@@ -183,25 +183,23 @@ local Registry = {
 ]=]
 function Registry:RegisterType(name: string, typeObject)
 	if not name or typeof(name) ~= "string" then
-		error("Invalid type name provided: nil")
+		error("[Cmdr] Invalid type name provided: nil")
 	end
 
 	if not name:find("^[%d%l]%w*$") then
 		error(
-			('Invalid type name provided: "%s", type names must be alphanumeric and start with a lower-case letter or a digit.'):format(
-				name
-			)
+			`[Cmdr] Invalid type name provided: "{name}", type names must be alphanumeric and start with a lower-case letter or a digit.`
 		)
 	end
 
 	for key in pairs(typeObject) do
 		if self.TypeMethods[key] == nil then
-			error('Unknown key/method in type "' .. name .. '": ' .. key)
+			error(`[Cmdr] Unknown key/method in type "{name}": {key}`)
 		end
 	end
 
 	if self.Types[name] ~= nil then
-		error(('Type "%s" has already been registered.'):format(name))
+		error(`[Cmdr] Type {name} has already been registered.`)
 	end
 
 	typeObject.Name = name
@@ -240,7 +238,7 @@ end
 	@within Registry
 ]=]
 function Registry:RegisterTypeAlias(name: string, alias: string)
-	assert(self.TypeAliases[name] == nil, ("Type alias %s already exists!"):format(alias))
+	assert(self.TypeAliases[name] == nil, `[Cmdr] Type alias {alias} already exists!`)
 	self.TypeAliases[name] = alias
 end
 
@@ -284,7 +282,7 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 function Registry:RegisterCommandObject(commandObject)
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
-			error("Unknown key/method in command " .. (commandObject.Name or "unknown command") .. ": " .. key)
+			error(`[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
 		end
 	end
 
@@ -294,11 +292,7 @@ function Registry:RegisterCommandObject(commandObject)
 				for key in pairs(arg) do
 					if self.CommandArgProps[key] == nil then
 						error(
-							('Unknown property in command "%s" argument #%d: %s'):format(
-								commandObject.Name or "unknown",
-								i,
-								key
-							)
+							`[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{i}: {key}`
 						)
 					end
 				end
@@ -346,11 +340,11 @@ function Registry:RegisterCommand(
 	local commandObject = require(commandScript)
 	assert(
 		typeof(commandObject) == "table",
-		`Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
+		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
 	)
 
 	if commandServerScript then
-		assert(RunService:IsServer(), "The commandServerScript parameter is not valid for client usage.")
+		assert(RunService:IsServer(), "[Cmdr] The commandServerScript parameter is not valid for client usage.")
 		commandObject.Run = require(commandServerScript)
 	end
 
@@ -398,9 +392,7 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 	for skippedScript in pairs(skippedServerScripts) do
 		if not usedServerScripts[skippedScript] then
 			warn(
-				"Command script "
-					.. skippedScript.Name
-					.. " was skipped because it has 'Server' in its name, and has no equivalent shared script."
+				`[Cmdr] Command script {skippedScript.Name} was skipped because it has 'Server' in its name, and has no equivalent shared script.`
 			)
 		end
 	end
@@ -420,7 +412,7 @@ end
 	@within Registry
 ]=]
 function Registry:RegisterDefaultCommands(arrayOrFunc: { string } | (any) -> boolean | nil)
-	assert(RunService:IsServer(), "RegisterDefaultCommands cannot be called from the client.")
+	assert(RunService:IsServer(), "[Cmdr] RegisterDefaultCommands cannot be called from the client.")
 
 	local dictionary = if type(arrayOrFunc) == "table" then Util.MakeDictionary(arrayOrFunc) else nil
 
@@ -513,7 +505,7 @@ end
 ]=]
 function Registry:RegisterHook(hookName: string, callback: (any) -> string?, priority: number)
 	if not self.Hooks[hookName] then
-		error(("Invalid hook name: %q"):format(hookName), 2)
+		error(("[Cmdr] Invalid hook name: %q"):format(hookName), 2)
 	end
 
 	table.insert(self.Hooks[hookName], { callback = callback, priority = priority or 0 })
