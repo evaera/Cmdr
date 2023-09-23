@@ -92,7 +92,8 @@ function Window:SetVisible(visible)
 		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil
 			then self.PreviousChatWindowConfigurationEnabled
 			else true
-		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil
+		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled
+				~= nil
 			then self.PreviousChatInputBarConfigurationEnabled
 			else true
 
