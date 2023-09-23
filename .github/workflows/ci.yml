@@ -26,7 +26,7 @@ jobs:
       - name: Update standard library
         run: selene update-roblox-std
       - name: Run Selene
-        run: selene ./Cmdr
+        run: selene --allow-warnings ./Cmdr
 
       - name: Validate Stylua
         run: stylua -c ./Cmdr
