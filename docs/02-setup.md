@@ -32,7 +32,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Cmdr = require(path.to.Cmdr) -- e.g. ServerScriptService.Packages.Cmdr
 
 Cmdr.Registry:RegisterDefaultCommands() -- Optional: This loads the default set of commands that Cmdr comes with.
--- Cmdr:RegisterCommandsIn(ServerScriptService.CmdrCommands) -- Optional: Register commands from your own folder.
+-- Cmdr.Registry:RegisterCommandsIn(ServerScriptService.CmdrCommands) -- Optional: Register commands from your own folder.
 -- You can also register types or hooks here: read on or check the API reference!
 ```
 
