@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Meta-Commands | Cmdr</title>
+		<meta name="generator" content="VuePress 1.5.2" />
+
+		<meta
+			name="description"
+			content="Fully extensible command console for Roblox developers."
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/css/0.styles.2ead6260.css"
+			as="style"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/app.af2239d2.js"
+			as="script"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/4.68a2b75a.js"
+			as="script"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/23.84f259da.js"
+			as="script"
+		/>
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/1.bed6c911.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/10.ba0a0e28.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/11.16f2dfb0.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/12.c6f0b2dc.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/13.e9c793e9.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/14.5962a394.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/15.8ac90f0d.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/16.fdb0d6aa.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/17.a97a422a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/18.1a1ab819.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/19.6772dc0c.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/2.3662bb70.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/20.9533ad11.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/21.2d4bad1a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/22.a05771ae.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/24.eda0ddc0.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/25.559d37fb.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/26.35a13794.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/27.f61aa865.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/5.44f0610a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/6.b2c84123.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/7.7f5c7a17.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/8.a3986720.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/9.79cfbc61.js" />
+		<link
+			rel="stylesheet"
+			href="/Cmdr/legacy/assets/css/0.styles.2ead6260.css"
+		/>
+	</head>
+	<body>
+		<div id="app" data-server-rendered="true">
+			<div class="theme-container">
+				<header class="navbar">
+					<div class="sidebar-button">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							aria-hidden="true"
+							role="img"
+							viewBox="0 0 448 512"
+							class="icon"
+						>
+							<path
+								fill="currentColor"
+								d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"
+							></path>
+						</svg>
+					</div>
+					<a href="/Cmdr/legacy/" class="home-link router-link-active"
+						><img src="/Cmdr/legacy/logo.png" alt="Cmdr" class="logo" />
+						<span class="site-name can-hide">Cmdr</span></a
+					>
+					<div class="links">
+						<div class="search-box">
+							<input
+								aria-label="Search"
+								autocomplete="off"
+								spellcheck="false"
+								value=""
+							/>
+							<!---->
+						</div>
+						<nav class="nav-links can-hide">
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/guide/Setup.html" class="nav-link">
+									Guide
+								</a>
+							</div>
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/api/Cmdr.html" class="nav-link">
+									API Reference
+								</a>
+							</div>
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/Changelog.html" class="nav-link">
+									Changelog
+								</a>
+							</div>
+							<div class="nav-item">
+								<a
+									href="https://discord.gg/g5PdMxh"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="nav-link external"
+								>
+									Discord
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										aria-hidden="true"
+										x="0px"
+										y="0px"
+										viewBox="0 0 100 100"
+										width="15"
+										height="15"
+										class="icon outbound"
+									>
+										<path
+											fill="currentColor"
+											d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+										></path>
+										<polygon
+											fill="currentColor"
+											points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+										></polygon></svg
+								></a>
+							</div>
+							<div class="nav-item">
+								<a
+									href="https://github.com/evaera/Cmdr"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="nav-link external"
+								>
+									GitHub
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										aria-hidden="true"
+										x="0px"
+										y="0px"
+										viewBox="0 0 100 100"
+										width="15"
+										height="15"
+										class="icon outbound"
+									>
+										<path
+											fill="currentColor"
+											d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+										></path>
+										<polygon
+											fill="currentColor"
+											points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+										></polygon></svg
+								></a>
+							</div>
+							<!---->
+						</nav>
+					</div>
+				</header>
+				<div
+					style="
+						width: 100%;
+						height: auto;
+						background-color: red !important;
+						position: fixed;
+						left: 0;
+						text-align: center;
+					"
+				>
+					<span
+						style="
+							color: white;
+							font-size: 16px;
+							text-align: center;
+							font-weight: bold;
+							font-family: Arial, sans-serif;
+						"
+						>This is the legacy version of the Cmdr website. We recommend
+						viewing the
+						<a
+							href="https://eryn.io/Cmdr/"
+							style="
+								color: white;
+								text-decoration: underline;
+								font-weight: bold;
+								text-decoration-thickness: 1px;
+							"
+							>latest documentation</a
+						>. If there's something in the new site that's missing in the old,
+						please
+						<a
+							href="https://github.com/evaera/Cmdr/issues/new"
+							style="
+								color: white;
+								text-decoration: underline;
+								font-weight: bold;
+								text-decoration-thickness: 1px;
+							"
+							target="_blank"
+							>let us know</a
+						>.</span
+					>
+				</div>
+				<div class="sidebar-mask"></div>
+				<aside class="sidebar">
+					<nav class="nav-links">
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/guide/Setup.html" class="nav-link">
+								Guide
+							</a>
+						</div>
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/api/Cmdr.html" class="nav-link">
+								API Reference
+							</a>
+						</div>
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/Changelog.html" class="nav-link">
+								Changelog
+							</a>
+						</div>
+						<div class="nav-item">
+							<a
+								href="https://discord.gg/g5PdMxh"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="nav-link external"
+							>
+								Discord
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									aria-hidden="true"
+									x="0px"
+									y="0px"
+									viewBox="0 0 100 100"
+									width="15"
+									height="15"
+									class="icon outbound"
+								>
+									<path
+										fill="currentColor"
+										d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+									></path>
+									<polygon
+										fill="currentColor"
+										points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+									></polygon></svg
+							></a>
+						</div>
+						<div class="nav-item">
+							<a
+								href="https://github.com/evaera/Cmdr"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="nav-link external"
+							>
+								GitHub
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									aria-hidden="true"
+									x="0px"
+									y="0px"
+									viewBox="0 0 100 100"
+									width="15"
+									height="15"
+									class="icon outbound"
+								>
+									<path
+										fill="currentColor"
+										d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+									></path>
+									<polygon
+										fill="currentColor"
+										points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+									></polygon></svg
+							></a>
+						</div>
+						<!---->
+					</nav>
+					<ul class="sidebar-links">
+						<li>
+							<section class="sidebar-group depth-0">
+								<p class="sidebar-heading open">
+									<span>Guide</span>
+									<!---->
+								</p>
+								<ul class="sidebar-links sidebar-group-items">
+									<li>
+										<a href="/Cmdr/legacy/guide/Setup.html" class="sidebar-link"
+											>Setup</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/Commands.html"
+											class="sidebar-link"
+											>Commands</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/guide/Types.html" class="sidebar-link"
+											>Types</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/guide/Hooks.html" class="sidebar-link"
+											>Hooks</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/NetworkEventHandlers.html"
+											class="sidebar-link"
+											>Network Event Handlers</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/MetaCommands.html"
+											aria-current="page"
+											class="active sidebar-link"
+											>Meta-Commands</a
+										>
+										<ul class="sidebar-sub-headers">
+											<li class="sidebar-sub-header">
+												<a
+													href="/Cmdr/legacy/guide/MetaCommands.html#embedded-commands"
+													class="sidebar-link"
+													>Embedded commands</a
+												>
+											</li>
+											<li class="sidebar-sub-header">
+												<a
+													href="/Cmdr/legacy/guide/MetaCommands.html#run"
+													class="sidebar-link"
+													>Run</a
+												>
+											</li>
+											<li class="sidebar-sub-header">
+												<a
+													href="/Cmdr/legacy/guide/MetaCommands.html#bind"
+													class="sidebar-link"
+													>Bind</a
+												>
+											</li>
+											<li class="sidebar-sub-header">
+												<a
+													href="/Cmdr/legacy/guide/MetaCommands.html#alias"
+													class="sidebar-link"
+													>Alias</a
+												>
+												<ul class="sidebar-sub-headers">
+													<li class="sidebar-sub-header">
+														<a
+															href="/Cmdr/legacy/guide/MetaCommands.html#types-and-descriptions"
+															class="sidebar-link"
+															>Types and Descriptions</a
+														>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</section>
+						</li>
+						<li>
+							<section class="sidebar-group depth-0">
+								<p class="sidebar-heading">
+									<span>API Reference</span>
+									<!---->
+								</p>
+								<ul class="sidebar-links sidebar-group-items">
+									<li>
+										<a
+											href="/Cmdr/legacy/api/ArgumentContext.html"
+											class="sidebar-link"
+											>ArgumentContext</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/api/Cmdr.html" class="sidebar-link"
+											>Cmdr</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/CmdrClient.html"
+											class="sidebar-link"
+											>CmdrClient</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/CommandContext.html"
+											class="sidebar-link"
+											>CommandContext</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/Dispatcher.html"
+											class="sidebar-link"
+											>Dispatcher</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/Registry.html"
+											class="sidebar-link"
+											>Registry</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/api/Util.html" class="sidebar-link"
+											>Util</a
+										>
+									</li>
+								</ul>
+							</section>
+						</li>
+					</ul>
+				</aside>
+				<main class="page">
+					<div class="theme-default-content content__default">
+						<h1 id="meta-commands">
+							<a href="#meta-commands" class="header-anchor">#</a> Meta-Commands
+						</h1>
+						<p>
+							The <code>bind</code>, <code>alias</code>, and
+							<code>run</code> commands make use of <em>command strings</em>. A
+							command string is raw text made up of a command name and possibly
+							predefined arguments that is run in the background as a command
+							itself. Before these command strings are run, they are
+							preprocessed, replacing arguments (in the format <code>$1</code>,
+							<code>$2</code>, <code>$3</code>, etc.) and embedded commands with
+							their textual values.
+						</p>
+						<h2 id="embedded-commands">
+							<a href="#embedded-commands" class="header-anchor">#</a> Embedded
+							commands
+						</h2>
+						<p>
+							Sub-commands may be embedded inside command strings, in the format
+							<code>${command arg1 arg2 arg3}</code>. These sub-commands are
+							evaluated just before the command string is run, and are run every
+							time the command string runs. They evaluate to whatever the
+							command returns as output.
+						</p>
+						<p>
+							Embedded commands are nestable:
+							<code>run echo ${run echo ${echo hello}!}</code> (displays
+							<code>&quot;hello!&quot;</code>). We use <code>run</code> here
+							instead of just running <code>echo</code> directly, because
+							embedded commands are only evaluated in the preprocess step of
+							commands that use <em>command strings</em> (which is only
+							<code>run</code>, <code>alias</code>, and <code>bind</code>).
+						</p>
+						<p>
+							By default, if the evaluated command output has a space in it, the
+							return value will be encapsulated in quote marks so that the
+							entire value is perceived as one argument to Cmdr. In cases where
+							it's desirable for Cmdr to parse each word as a separate argument,
+							you can use use a literal syntax:
+							<code>run teleport ${{&quot;echo first second&quot;}​}</code> (in
+							this example, &quot;first&quot; and &quot;second&quot; would then
+							become the first and second arguments to the
+							<code>teleport</code> command, instead of the first argument being
+							&quot;first second&quot;)
+						</p>
+						<h2 id="run"><a href="#run" class="header-anchor">#</a> Run</h2>
+						<p>
+							Run is the simplest of the bunch, and does right what it says on
+							the tin. It runs whatever text you give it immediately as a
+							command. This is useful, because it evaluates embedded commands
+							within the command string before running.
+						</p>
+						<div class="language- line-numbers-mode">
+							<pre class="language-text"><code>run ${{&quot;echo kill me&quot;}}
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br />
+							</div>
+						</div>
+						<p>
+							Commands can contain more than one distinct command, delimited by
+							<code>&amp;&amp;</code>. This can be escaped by adding an
+							additional ampersand, for example: <code>&amp;&amp;&amp;</code>.
+							You can escape an additional level by adding more.
+							<code>&amp;&amp;&amp;&amp;</code> is a two level deep escape.
+						</p>
+						<p>
+							When using <code>&amp;&amp;</code>, you can access the previous
+							command's output by using the <code>||</code> slot operator. For
+							example
+						</p>
+						<p><code>run echo evaera &amp;&amp; kill ||</code> (evaera dies)</p>
+						<p>
+							The <code>run</code> command has a single-character alias,
+							<code>&gt;</code>, which can also be used to invoke it.
+						</p>
+						<h2 id="bind"><a href="#bind" class="header-anchor">#</a> Bind</h2>
+						<p>
+							Bind is a command that allows you to run a certain command string
+							every time some event happens. The default bind type is by user
+							input (mouse or keyboard input), but you can also bind to other
+							events.
+						</p>
+						<p>
+							This is very powerful: You could define a command, like
+							<code>cast_ability</code>, which casts a certain move in your
+							game. Then, you could have a keybindings menu that allows the user
+							to rebind keys, and whenever they do, it runs
+							<code
+								>CmdrClient:Run(&quot;bind&quot;, keyCode.Name,
+								&quot;cast_ability&quot;, abilityId)</code
+							>
+							in the background. By separating the user input from our
+							hypothetical ability code, our code is made more robust as we can
+							now trigger abilities from a number of possible events, in
+							addition to the bound key.
+						</p>
+						<p>
+							If you prefix the first argument with <code>@</code>, you can
+							instead select a player to bind to, which will run this command
+							string every time that player chats. You can get the chat text by
+							using <code>$1</code> in your command string.
+						</p>
+						<p>
+							In the future, you will be able to bind to network events as
+							described in the previous section by prefixing the first argument
+							with <code>!</code>.
+						</p>
+						<p>
+							The <code>unbind</code> command can be used to unbind anything
+							that <code>bind</code> can bind.
+						</p>
+						<h2 id="alias">
+							<a href="#alias" class="header-anchor">#</a> Alias
+						</h2>
+						<p>
+							The alias command lets you create a new, single command out of a
+							command string. Alias commands can contain more than one distinct
+							command, delimited by <code>&amp;&amp;</code>. You can also accept
+							arguments from the command with <code>$1</code> through
+							<code>$5</code>.
+						</p>
+						<div class="language- line-numbers-mode">
+							<pre
+								class="language-text"
+							><code>alias farewell announce Farewell, $1! &amp;&amp; kill $1
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br />
+							</div>
+						</div>
+						<p>
+							Then, if we run <code>farewell evaera</code>, it would make an
+							announcement saying &quot;Farewell, evaera!&quot; and then kill
+							the player called &quot;evaera&quot;.
+						</p>
+						<p>
+							As another example, you could create a command that killed anyone
+							your mouse was currently hovering over like so:
+						</p>
+						<div class="language- line-numbers-mode">
+							<pre
+								class="language-text"
+							><code>alias pointer_of_death kill ${hover}
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br />
+							</div>
+						</div>
+						<h3 id="types-and-descriptions">
+							<a href="#types-and-descriptions" class="header-anchor">#</a>
+							Types and Descriptions
+						</h3>
+						<p>
+							You can optionally provide types, names, and descriptions to your
+							alias arguments, like so:
+							<code>$1{type|Name|Description here}</code>. For example:
+						</p>
+						<div class="language- line-numbers-mode">
+							<pre
+								class="language-text"
+							><code>alias goodbye kill $1{player|Player|The player you want to kill.}
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br />
+							</div>
+						</div>
+						<p>Name and Description are optional. These are all okay:</p>
+						<ul>
+							<li><code>alias goodbye kill $1{player}</code></li>
+							<li><code>alias goodbye kill $1{player|Player}</code></li>
+							<li>
+								<code
+									>alias goodbye kill $1{player|Player|The player you want to
+									kill.}</code
+								>
+							</li>
+						</ul>
+						<p>
+							Additionally, you can supply a description for the command itself:
+						</p>
+						<div class="language- line-numbers-mode">
+							<pre
+								class="language-text"
+							><code>alias &quot;goodbye|Kills a player.&quot; kill $1{player|Player|The player you want to kill.}
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br />
+							</div>
+						</div>
+					</div>
+					<footer class="page-edit">
+						<!---->
+						<div class="last-updated">
+							<span class="prefix">Last Updated:</span>
+							<span class="time">10/8/2020, 1:09:59 AM</span>
+						</div>
+					</footer>
+					<div class="page-nav">
+						<p class="inner">
+							<span class="prev">
+								←
+								<a
+									href="/Cmdr/legacy/guide/NetworkEventHandlers.html"
+									class="prev"
+								>
+									Network Event Handlers
+								</a></span
+							>
+							<span class="next"
+								><a href="/Cmdr/legacy/api/ArgumentContext.html">
+									ArgumentContext
+								</a>
+								→
+							</span>
+						</p>
+					</div>
+				</main>
+			</div>
+			<div class="global-ui"></div>
+		</div>
+		<script src="/Cmdr/legacy/assets/js/app.af2239d2.js" defer></script>
+		<script src="/Cmdr/legacy/assets/js/4.68a2b75a.js" defer></script>
+		<script src="/Cmdr/legacy/assets/js/23.84f259da.js" defer></script>
+	</body>
+</html>

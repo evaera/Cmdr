@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Network Event Handlers | Cmdr</title>
+		<meta name="generator" content="VuePress 1.5.2" />
+
+		<meta
+			name="description"
+			content="Fully extensible command console for Roblox developers."
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/css/0.styles.2ead6260.css"
+			as="style"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/app.af2239d2.js"
+			as="script"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/4.68a2b75a.js"
+			as="script"
+		/>
+		<link
+			rel="preload"
+			href="/Cmdr/legacy/assets/js/24.eda0ddc0.js"
+			as="script"
+		/>
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/1.bed6c911.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/10.ba0a0e28.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/11.16f2dfb0.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/12.c6f0b2dc.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/13.e9c793e9.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/14.5962a394.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/15.8ac90f0d.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/16.fdb0d6aa.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/17.a97a422a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/18.1a1ab819.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/19.6772dc0c.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/2.3662bb70.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/20.9533ad11.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/21.2d4bad1a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/22.a05771ae.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/23.84f259da.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/25.559d37fb.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/26.35a13794.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/27.f61aa865.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/5.44f0610a.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/6.b2c84123.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/7.7f5c7a17.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/8.a3986720.js" />
+		<link rel="prefetch" href="/Cmdr/legacy/assets/js/9.79cfbc61.js" />
+		<link
+			rel="stylesheet"
+			href="/Cmdr/legacy/assets/css/0.styles.2ead6260.css"
+		/>
+	</head>
+	<body>
+		<div id="app" data-server-rendered="true">
+			<div class="theme-container">
+				<header class="navbar">
+					<div class="sidebar-button">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							aria-hidden="true"
+							role="img"
+							viewBox="0 0 448 512"
+							class="icon"
+						>
+							<path
+								fill="currentColor"
+								d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"
+							></path>
+						</svg>
+					</div>
+					<a href="/Cmdr/legacy/" class="home-link router-link-active"
+						><img src="/Cmdr/legacy/logo.png" alt="Cmdr" class="logo" />
+						<span class="site-name can-hide">Cmdr</span></a
+					>
+					<div class="links">
+						<div class="search-box">
+							<input
+								aria-label="Search"
+								autocomplete="off"
+								spellcheck="false"
+								value=""
+							/>
+							<!---->
+						</div>
+						<nav class="nav-links can-hide">
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/guide/Setup.html" class="nav-link">
+									Guide
+								</a>
+							</div>
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/api/Cmdr.html" class="nav-link">
+									API Reference
+								</a>
+							</div>
+							<div class="nav-item">
+								<a href="/Cmdr/legacy/Changelog.html" class="nav-link">
+									Changelog
+								</a>
+							</div>
+							<div class="nav-item">
+								<a
+									href="https://discord.gg/g5PdMxh"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="nav-link external"
+								>
+									Discord
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										aria-hidden="true"
+										x="0px"
+										y="0px"
+										viewBox="0 0 100 100"
+										width="15"
+										height="15"
+										class="icon outbound"
+									>
+										<path
+											fill="currentColor"
+											d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+										></path>
+										<polygon
+											fill="currentColor"
+											points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+										></polygon></svg
+								></a>
+							</div>
+							<div class="nav-item">
+								<a
+									href="https://github.com/evaera/Cmdr"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="nav-link external"
+								>
+									GitHub
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										aria-hidden="true"
+										x="0px"
+										y="0px"
+										viewBox="0 0 100 100"
+										width="15"
+										height="15"
+										class="icon outbound"
+									>
+										<path
+											fill="currentColor"
+											d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+										></path>
+										<polygon
+											fill="currentColor"
+											points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+										></polygon></svg
+								></a>
+							</div>
+							<!---->
+						</nav>
+					</div>
+				</header>
+				<div
+					style="
+						width: 100%;
+						height: auto;
+						background-color: red !important;
+						position: fixed;
+						left: 0;
+						text-align: center;
+					"
+				>
+					<span
+						style="
+							color: white;
+							font-size: 16px;
+							text-align: center;
+							font-weight: bold;
+							font-family: Arial, sans-serif;
+						"
+						>This is the legacy version of the Cmdr website. We recommend
+						viewing the
+						<a
+							href="https://eryn.io/Cmdr/"
+							style="
+								color: white;
+								text-decoration: underline;
+								font-weight: bold;
+								text-decoration-thickness: 1px;
+							"
+							>latest documentation</a
+						>. If there's something in the new site that's missing in the old,
+						please
+						<a
+							href="https://github.com/evaera/Cmdr/issues/new"
+							style="
+								color: white;
+								text-decoration: underline;
+								font-weight: bold;
+								text-decoration-thickness: 1px;
+							"
+							target="_blank"
+							>let us know</a
+						>.</span
+					>
+				</div>
+				<div class="sidebar-mask"></div>
+				<aside class="sidebar">
+					<nav class="nav-links">
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/guide/Setup.html" class="nav-link">
+								Guide
+							</a>
+						</div>
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/api/Cmdr.html" class="nav-link">
+								API Reference
+							</a>
+						</div>
+						<div class="nav-item">
+							<a href="/Cmdr/legacy/Changelog.html" class="nav-link">
+								Changelog
+							</a>
+						</div>
+						<div class="nav-item">
+							<a
+								href="https://discord.gg/g5PdMxh"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="nav-link external"
+							>
+								Discord
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									aria-hidden="true"
+									x="0px"
+									y="0px"
+									viewBox="0 0 100 100"
+									width="15"
+									height="15"
+									class="icon outbound"
+								>
+									<path
+										fill="currentColor"
+										d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+									></path>
+									<polygon
+										fill="currentColor"
+										points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+									></polygon></svg
+							></a>
+						</div>
+						<div class="nav-item">
+							<a
+								href="https://github.com/evaera/Cmdr"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="nav-link external"
+							>
+								GitHub
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									aria-hidden="true"
+									x="0px"
+									y="0px"
+									viewBox="0 0 100 100"
+									width="15"
+									height="15"
+									class="icon outbound"
+								>
+									<path
+										fill="currentColor"
+										d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+									></path>
+									<polygon
+										fill="currentColor"
+										points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"
+									></polygon></svg
+							></a>
+						</div>
+						<!---->
+					</nav>
+					<ul class="sidebar-links">
+						<li>
+							<section class="sidebar-group depth-0">
+								<p class="sidebar-heading open">
+									<span>Guide</span>
+									<!---->
+								</p>
+								<ul class="sidebar-links sidebar-group-items">
+									<li>
+										<a href="/Cmdr/legacy/guide/Setup.html" class="sidebar-link"
+											>Setup</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/Commands.html"
+											class="sidebar-link"
+											>Commands</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/guide/Types.html" class="sidebar-link"
+											>Types</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/guide/Hooks.html" class="sidebar-link"
+											>Hooks</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/NetworkEventHandlers.html"
+											aria-current="page"
+											class="active sidebar-link"
+											>Network Event Handlers</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/guide/MetaCommands.html"
+											class="sidebar-link"
+											>Meta-Commands</a
+										>
+									</li>
+								</ul>
+							</section>
+						</li>
+						<li>
+							<section class="sidebar-group depth-0">
+								<p class="sidebar-heading">
+									<span>API Reference</span>
+									<!---->
+								</p>
+								<ul class="sidebar-links sidebar-group-items">
+									<li>
+										<a
+											href="/Cmdr/legacy/api/ArgumentContext.html"
+											class="sidebar-link"
+											>ArgumentContext</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/api/Cmdr.html" class="sidebar-link"
+											>Cmdr</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/CmdrClient.html"
+											class="sidebar-link"
+											>CmdrClient</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/CommandContext.html"
+											class="sidebar-link"
+											>CommandContext</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/Dispatcher.html"
+											class="sidebar-link"
+											>Dispatcher</a
+										>
+									</li>
+									<li>
+										<a
+											href="/Cmdr/legacy/api/Registry.html"
+											class="sidebar-link"
+											>Registry</a
+										>
+									</li>
+									<li>
+										<a href="/Cmdr/legacy/api/Util.html" class="sidebar-link"
+											>Util</a
+										>
+									</li>
+								</ul>
+							</section>
+						</li>
+					</ul>
+				</aside>
+				<main class="page">
+					<div class="theme-default-content content__default">
+						<h1 id="network-event-handlers">
+							<a href="#network-event-handlers" class="header-anchor">#</a>
+							Network Event Handlers
+						</h1>
+						<p>
+							Some commands that run on the server might need to also do
+							something on the client, or on every client. Network event
+							handlers are callback functions that you can set to run when a
+							server command sends a message back to the client. Only one
+							handler can be set to a certain event at a time, so it's possible
+							to change the handler for a specific event without needing to
+							re-implement the entire command yourself.
+						</p>
+						<p>
+							For example, consider the default <code>announce</code> command,
+							which creates a message on every player's screen. By default, this
+							creates a system chat message with the given text, because Cmdr
+							has a default event handler for the
+							<code>&quot;Message&quot;</code> event, which the
+							<code>announce</code> command broadcasts,
+						</p>
+						<p>
+							If you wanted to display announcements some other way, you could
+							just override the default event handler:
+						</p>
+						<div class="language-lua line-numbers-mode">
+							<pre
+								class="language-lua"
+							><code>CmdrClient<span class="token punctuation">:</span><span class="token function">HandleEvent</span><span class="token punctuation">(</span><span class="token string">&quot;Message&quot;</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>text<span class="token punctuation">,</span> player<span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">&quot;Announcement from&quot;</span><span class="token punctuation">,</span> player<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> text<span class="token punctuation">)</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+							<div class="line-numbers-wrapper">
+								<span class="line-number">1</span><br /><span
+									class="line-number"
+									>2</span
+								><br /><span class="line-number">3</span><br />
+							</div>
+						</div>
+						<p>
+							You can send events from your own commands on the server (or to
+							the local player if in a client-only command) by using
+							<code>context:SendEvent(player, ...)</code> and
+							<code>context:BroadcastEvent(...)</code>. The built-in
+							<code>context:Reply(text)</code> method actually uses
+							<code>SendEvent</code> under the hood, whose default handler on
+							the client is set to just add a new line to the console window
+							with the given text.
+						</p>
+					</div>
+					<footer class="page-edit">
+						<!---->
+						<div class="last-updated">
+							<span class="prefix">Last Updated:</span>
+							<span class="time">9/8/2019, 2:11:38 AM</span>
+						</div>
+					</footer>
+					<div class="page-nav">
+						<p class="inner">
+							<span class="prev">
+								←
+								<a href="/Cmdr/legacy/guide/Hooks.html" class="prev">
+									Hooks
+								</a></span
+							>
+							<span class="next"
+								><a href="/Cmdr/legacy/guide/MetaCommands.html">
+									Meta-Commands
+								</a>
+								→
+							</span>
+						</p>
+					</div>
+				</main>
+			</div>
+			<div class="global-ui"></div>
+		</div>
+		<script src="/Cmdr/legacy/assets/js/app.af2239d2.js" defer></script>
+		<script src="/Cmdr/legacy/assets/js/4.68a2b75a.js" defer></script>
+		<script src="/Cmdr/legacy/assets/js/24.eda0ddc0.js" defer></script>
+	</body>
+</html>
