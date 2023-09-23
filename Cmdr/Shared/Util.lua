@@ -6,7 +6,7 @@ local TextService = game:GetService("TextService")
 	Cmdr utilities module.
 
 	:::info Beta
-	This page is incomplete and some functions are missing. You may find it helpful to refer to the old documentation.
+	This page is incomplete and some functions are missing. You might want to refer to [the current documentation](https://eryn.io/Cmdr/api/Util.html).
 	:::
 ]=]
 local Util = {}

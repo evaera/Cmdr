@@ -56,18 +56,18 @@ export default function Home() {
 
           <section className={styles.featuresOuter}>
             <div className={styles.featuresInner}>
-              <Feature title="Integrates with your systems" description="Make commands that integrate and control your existing systems. Use commands to help debug your game during development by triggering events in your game or print out targeted debug information." />
-              <Feature title="Type-safety and intelligent autocomplete" description="Discover commands and possible values for arguments naturally with context-aware autocomplete. Arguments are strictly typed and validated for you." />
-              <Feature title="Powerful and extensible" description="Cmdr ships with optional built-in commands for debugging, but you can register your own commands and types. Meta-commands like bind and alias make it possible to extend Cmdr even further." />
+              <Feature title="Integrates with your systems" description="Cmdr stays out of the way, making it easy to write your own commands which plug-in to your systems. Help debug your game by triggering events or printing useful data." />
+              <Feature title="Type-safe with intelligent autocomplete" description="Discover commands and possible values for arguments naturally with context-aware autocomplete. Arguments are strictly typed and validated for you, keeping typos at bay." />
+              <Feature title="Powerful and extensible" description="Cmdr ships with optional built-in commands but you can register your own commands and types. Meta-commands like bind and alias make it possible to extend Cmdr even further." />
             </div>
           </section>
 
           <p className={styles.paragraphs}>
-            While Cmdr was originally designed to make it easier for developers to debug, Cmdr has been popularised as a general console and command system due to its powerful features and extensible nature. This means that it's great for whatever you need.
+            While Cmdr was originally designed to make debugging easier, Cmdr has been popularised as a general console and command system due to its powerful features and extensible nature. Of course, you don't need to use it for debugging; Cmdr can be used in whatever way works for you
           </p>
 
           <p className={styles.paragraphs}>
-            Cmdr provides a friendly API that lets the developer choose how they want Cmdr to work, to register their own commands, choose a different key bind for activating the console, or even disable Cmdr altogether.
+            Cmdr provides a friendly API that lets developers choose how they want Cmdr to work, to register their own commands, choose a different key bind for activating the console, or even disable Cmdr altogether.
           </p>
 
           <p className={styles.paragraphs}>

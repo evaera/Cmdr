@@ -8,17 +8,17 @@ There can be many hooks of each type, and they are all run until one returns a s
 
 ## BeforeRun
 
-The callback is passed the CommandContext for the relevant command. The hooks are the last thing to run before the command itself, so all properties are available.
+The callback is passed the [CommandContext](/api/CommandContext) for the relevant command. The hooks are the last thing to run before the command itself, so all properties are available.
 
-This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil`), then the command will run normally.
+This hook can be used to interrupt command execution (useful for permissions) by returning a string. The returned string will replace the command output on the executing user's screen. If the callback returns nothing (`nil` or no return), then the command will run normally.
 
 :::caution Security Warning
 
-Commands will be blocked from running in a live game unless you configure at least one BeforeRun hook.
+Commands will be blocked from running in a live game unless you register at least one BeforeRun hook.
 
 :::
 
-As a quick way to register hooks on both the server and the client, you can make a folder for your hooks, with module scripts in them which return a function. Similar to Types, if you call `Cmdr:RegisterHooksIn(yourFolderHere)` from the server, Cmdr will load all ModuleScripts in the folder on the server and the client, so you only need to write your code once.
+As a quick way to register hooks on both the server and the client, you can make a folder for your hooks, with module scripts in them which return a function. Similar to Types, if you call [`Cmdr.Registry:RegisterHooksIn(yourFolderHere)`](/api/Registry#RegisterHooksIn) from the server, Cmdr will load all ModuleScripts in the folder on the server and the client, so you only need to write your code once.
 
 ```lua title="A ModuleScript inside your hooks folder."
 return function (registry)
@@ -32,9 +32,9 @@ end
 
 ## AfterRun
 
-The AfterRun hook runs, as its name implies, directly after a command is run. The callback is also passed a CommandContext, but the `Response` property is now available, which is the response from the command implementation (what would normally be displayed after running the command).
+The AfterRun hook runs directly after a command is run. The callback is also passed a [CommandContext](/api/CommandContext), but the `Response` property is now available, which is the response from the command implementation (what would normally be displayed after running the command).
 
-If this callback returns a string, then it will replace the normal response on the user's screen. If the callback returns nothing (`nil`), then the response will be shown normally.
+If this callback returns a string, then it will replace the normal response on the user's screen. If the callback returns nothing (`nil` or no return), then the response will be shown normally.
 
 This hook is most useful for logging. Since we don't want to add this hook on the client in this example, we can just require the server version of Cmdr and add this hook directly right here (as opposed to what we did in the BeforeRun example, which adds the hook to the client as well):
 
@@ -57,4 +57,4 @@ end)
 
 \* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`.
 
-You should be aware that an exploiter can, in theory, manipulate or bypass any client parts of execution and design your server components (like your server-sided BeforeRun hook) accordingly. This isn't an issue for client-only commands though, as these can only do things that an exploiter would be able to do anyway.s
+You should be aware that an exploiter can, in theory, manipulate or bypass any client parts of execution. This isn't an issue though as exploiters can already do anything that's possible for a client component to do, but you should keep it in mind when designing your systems.

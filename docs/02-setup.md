@@ -40,7 +40,7 @@ The [`Cmdr` object](/api/Cmdr) is the main server singleton. The [Registry](/api
 
 Cmdr will automatically create and insert into StarterGui its console interface (called Window). If you'd like to (optionally) customise the look of the Window, we have [a guide on this in our Advanced section](/docs/advanced/customisinginterface).
 
-Cmdr will also insert into `ReplicatedStorage` the `CmdrClient` module. This module will also stuff for internal use, like replication (like any commands, types and hooks the client needs to know about) and networking.
+Cmdr will also insert into `ReplicatedStorage` the [`CmdrClient`](/api/CmdrClient) module. On top of being the client entry point (read on below!), this module also houses stuff for internal use, like replication (any commands, types and hooks the client needs to know about) and networking.
 
 :::note You're not done yet!
 
@@ -59,14 +59,16 @@ Cmdr will place CmdrClient into ReplicatedStorage automatically, no action is re
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
--- Configurable, and you can choose multiple keys
+-- Optional. Configurable, and you can choose multiple keys
 Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
+
+-- You can call any extra methods here, like SetPlaceName, or access the registry to register a hook on the client only (if you want to!)
 ```
 
 Activation keys are used to show or hide Cmdr. By default, this is just `F2` but you can have as many or as few keys as you'd like (even none).
 
 ## Next steps
 
-By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands) and to run commands in a live server, you must [create a BeforeRun hook](/docs/hooks).
+By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/hooks).
 
 If you ever need help, you can check [the support page](/docs/intro#how-do-i-get-help-with-cmdr).

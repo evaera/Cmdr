@@ -33,7 +33,7 @@ code > a:hover {
 }
 
 .footer a:hover {
-  text-decoration: underline !important;
+  text-decoration: underline;
 }
 
 .footer__copyright a {

@@ -25,5 +25,5 @@ You can mitigate this issue by refraining from requiring CmdrClient until after 
 Alternatively, you could:
 
 1. Delete `Cmdr` from `StarterGui` on the server, after you've required the Cmdr server
-2. On the client, load the standard or a modified copy of Cmdr ScreenGui into PlayerGui
+2. On the client, load your modified copy of Cmdr ScreenGui into PlayerGui (you can skip this step if you only want the default ScreenGui)
 3. And then, once you've inserted the gui, require CmdrClient

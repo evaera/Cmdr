@@ -1,8 +1,8 @@
 # Commands
 
-No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling `Cmdr:RegisterDefaultCommands()`. See [Default Commands](#default-commands) for a list.
+No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands). See [Default Commands](#default-commands) for a list.
 
-Custom commands are defined in ModuleScripts that return a single table.
+Commands are defined in ModuleScripts that return a single table.
 
 ```lua title="Teleport.lua"
 return {
@@ -27,9 +27,11 @@ return {
 
 Check out the [API reference](/api/Registry#CommandDefinition) for full details.
 
-The implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end.
+The server implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end (e.g. `Teleport.lua` and `TeleportServer.lua`).
 
-It is passed the CommandContext for this command, which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API section below for more details. After the context, any arguments you defined in the command definition will be passed in order.
+You can also include a client implementation, this is done by adding a function to your command definition (above) with the `ClientRun` key. You can also include both client and server implementations in one command but that's an advanced feature we'll discuss later on.
+
+The implementation — whether on the server or client — is passed the [CommandContext](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
 ```lua title="TeleportServer.lua"
 -- These arguments are guaranteed to exist and be correctly typed.
@@ -66,13 +68,10 @@ It is possible to have commands that run on the client exclusively or both.
 
 If you want your command to run on the client, you can add a [`ClientRun`](/api/Registry#CommandDefinition) function to the command definition itself. It works exactly like the function that you would return from the Server module.
 
-If using `ClientRun`, having a Server module associated with this command is optional.
-
-- If your `ClientRun` function returns a string, the command will run entirely on the client and won't touch the server at all (which means server-only hooks won't run).
-- If this function doesn't return anything, it will then execute the associated Server module implementation on the server.
+If using `ClientRun`, having a Server module associated with this command is optional. If your `ClientRun` function returns a string, the command will run entirely on the client and won't touch the server at all (which means server-only hooks won't run). If this function doesn't return anything, it will then execute the associated Server module implementation on the server (including any server-sided hooks).
 
 :::caution
-If this function is present and there isn't a Server module for this command, it is considered an error to not return a string from this function.
+If the `ClientRun` function is present and there isn't a Server module for this command then you must return a string from the `ClientRun` function.
 :::
 
 ## Execution order
@@ -89,6 +88,8 @@ Including [Hooks](/docs/hooks), the full execution order is:
 
 \* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`.
 
+You should be aware that an exploiter can, in theory, manipulate or bypass any client parts of execution. This isn't an issue though as exploiters can already do anything that's possible for a client component to do, but you should keep it in mind when designing your systems.
+
 ## Default commands
 
 :::info Possibly outdated
@@ -97,7 +98,7 @@ We've not reviewed this section for a while, it's possible that this information
 
 :::
 
-If you run `Cmdr:RegisterDefaultCommands()`, these commands will be available with the following `Group`s:
+If you run [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands), these commands will be available with the following `Group`s:
 
 Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
 
@@ -110,11 +111,11 @@ Group: `Help`: `help`
 
 If you only want some, but not all, of the default commands, you can restrict the commands that you register in two ways.
 
-1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr:RegisterDefaultCommands({"Help", "DefaultUtil"})`
+1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr.Registry:RegisterDefaultCommands({"Help", "DefaultUtil"})`
 2. Pass a filter function that accepts a CommandDefinition and either returns `true` or `false`:
 
 ```lua
-Cmdr:RegisterDefaultCommands(function(cmd)
+Cmdr.Registry:RegisterDefaultCommands(function(cmd)
 	return #cmd.Name < 6 -- This is absurd... but possible!
 end)
 ```
@@ -188,11 +189,11 @@ Here is a list of automatic prefixed union types:
 
 ## Dynamic arguments and inline types
 
-Dynamic types are included within a command definition's `Args` array, they are functions which take in a command context and preceding arguments, and then return an ArgumentDefinition. Despite being called inline types, they are not types themselves.
+Dynamic types are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/ArgumentContext#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
 
-Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have a `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove).
+Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have an `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove) depending on the first argument.
 
-Alternatively, dynamic types can be paired with inline types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/ArgumentContext#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
+Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/ArgumentContext#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
 
 ```lua title="allowlist.lua"
 return {
@@ -201,15 +202,17 @@ return {
 	Description = "Add or remove a player from the allow list.",
 	Group = "Admin",
 	Args = {
-		-- This is an example of an inline type
-		{
-			Type = context.Cmdr.Util.MakeEnumType("option", {"add", "remove"}),
-			Name = "Action",
-			Description = "Add or remove",
-		},
+		-- This is an example of a dynamic inline type
+		function(context)
+			return {
+				Type = context.Cmdr.Util.MakeEnumType("option", {"add", "remove"}),
+				Name = "Action",
+				Description = "Add or remove",
+			}
+		end,
 		-- This is an example of a dynamic argument
 		function(context)
-		-- FIXME: FIX ME
+			local action = context:GetArgument(1):GetValue()
 			return {
 				Type = if action == "add" then `playerId` else `allowlistPlayer`,
 				Name = "Player",

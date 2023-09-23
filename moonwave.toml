@@ -19,7 +19,7 @@ classOrder = [
 organizationName = "evaera"
 projectName = "Cmdr"
 deploymentBranch = "gh-pages"
-tagline = "Extensible command console for Roblox developers"
+tagline = "The extensible command console for Roblox developers"
 titleDelimiter = "•"
 
 url = "https://eryn.io"

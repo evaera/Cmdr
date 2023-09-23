@@ -9,7 +9,7 @@ local IsServer = RunService:IsServer()
 	Represents an individual command execution.
 
 	:::info Beta
-	This page is incomplete. You may find it helpful to refer to the old documentation.
+	This page is incomplete. You might want to refer to the [current documentation](https://eryn.io/Cmdr/api/CommandContext.html).
 	:::
 ]=]
 

@@ -2,7 +2,7 @@
 
 Cmdr has no dependencies which makes it incredibly portable and easy to include in your game.
 
-We recommend installing Cmdr in a place only visible on the server (such as `ServerScriptService` or `ServerStorage`); while there aren't any consequences or risks by installing it in a shared place (like `ReplicatedStorage`), installing to the server realm helps guard against mistakes and provides for better optimisation.
+We recommend installing Cmdr in a place only visible on the server (such as `ServerScriptService` or `ServerStorage`). By installing it in a shared place (like `ReplicatedStorage`), installing to the server realm helps guard against mistakes and provides for better optimisation. Plus, there have sometimes been reports of weird, random issues caused by installing Cmdr in a shared place.
 
 You can choose one of many installation methods. While there are other potential installation methods, we recommend sticking to one of the below, unless you're sure you know what you're doing.
 
@@ -29,8 +29,8 @@ There shouldn't be any reason why you need to modify the source code of Cmdr (un
 If you're using Roblox Studio:
 
 1. You can either:
-   1. drag or drop the `Cmdr.rbxm` file into the viewport (central window)
-   2. select the `Model` tab, then under the `Advanced` section click `Model`. Then, navigate to the `Cmdr.rbxm` file and click `Open`
+   - drag or drop the `Cmdr.rbxm` file into the viewport (central window)
+   - select the `Model` tab, then under the `Advanced` section click `Model`. Then, navigate to the `Cmdr.rbxm` file and click `Open`
 2. Make sure you move the `Cmdr` ModuleScript to wherever you want it (as above, we recommend you keep it on the server)
 3. Proceed to [Setup](/docs/setup)
 
