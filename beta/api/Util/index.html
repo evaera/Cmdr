@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v2.3.1">
+<title data-rh="true">Util • Cmdr</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="robots" content="noindex, nofollow"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://eryn.io/Cmdr/beta/api/Util"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Util • Cmdr"><meta data-rh="true" name="description" content="Cmdr utilities module.
+
+:::info Beta
+This page is incomplete and some functions are missing. You might want to refer to [the current documentation](https://eryn.io/Cmdr/api/Util.html).
+:::"><meta data-rh="true" property="og:description" content="Cmdr utilities module.
+
+:::info Beta
+This page is incomplete and some functions are missing. You might want to refer to [the current documentation](https://eryn.io/Cmdr/api/Util.html).
+:::"><link data-rh="true" rel="canonical" href="https://eryn.io/Cmdr/beta/api/Util"><link data-rh="true" rel="alternate" href="https://eryn.io/Cmdr/beta/api/Util" hreflang="en"><link data-rh="true" rel="alternate" href="https://eryn.io/Cmdr/beta/api/Util" hreflang="x-default"><link rel="stylesheet" href="/Cmdr/beta/assets/css/styles.228e16c7.css">
+<link rel="preload" href="/Cmdr/beta/assets/js/runtime~main.08c0056f.js" as="script">
+<link rel="preload" href="/Cmdr/beta/assets/js/main.7da4bfda.js" as="script">
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
+<div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Cmdr/beta/"><div class="navbar__logo"><img src="/Cmdr/beta/logo.png" alt="Cmdr" class="themedImage_ToTc themedImage--light_HNdA"><img src="/Cmdr/beta/logo.png" alt="Cmdr" class="themedImage_ToTc themedImage--dark_i4oU"></div><b class="navbar__title text--truncate"></b></a><a class="navbar__item navbar__link" href="/Cmdr/beta/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Cmdr/beta/api/">API</a><a class="navbar__item navbar__link" href="/Cmdr/beta/changelog">Changelog</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/evaera/cmdr/releases" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Releases<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://discord.gg/g5PdMxh" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://github.com/evaera/cmdr" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="searchBox_ZlJk"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input type="search" id="search_input_react" placeholder="Press S to Search..." aria-label="Search" class="navbar__search-input search-bar"></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/Cmdr">​Cmdr</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/CmdrClient">​Cmdr​Client</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/Registry">​Registry</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/Dispatcher">​Dispatcher</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Cmdr/beta/api/Util">​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/CommandContext">​Command​Context</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cmdr/beta/api/ArgumentContext">​Argument​Context</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Util</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>Cmdr utilities module.</p>
+<div class="admonition admonition-info alert alert--info">
+  <div class="admonition-heading">
+    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+          <path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path>
+        </svg></span>Beta</h5>
+  </div>
+  <div class="admonition-content">
+    <p>This page is incomplete and some functions are missing. You might want to refer to <a href="https://eryn.io/Cmdr/api/Util.html" target="_blank">the current documentation</a>.</p>
+  </div>
+</div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeDictionary"><code style="text-decoration:none">MakeDictionary</code><a href="#MakeDictionary" class="hash-link" aria-label="Direct link to MakeDictionary" title="Direct link to MakeDictionary">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L17"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeDictionary</code><code>(</code><code>array<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><code>) → </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">true</code><code class="purple_ieR2">}</code></div><div>
+<p>Takes an array and flips its values into dictionary keys with value of true.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="DictionaryKeys"><code style="text-decoration:none">DictionaryKeys</code><a href="#DictionaryKeys" class="hash-link" aria-label="Direct link to DictionaryKeys" title="Direct link to DictionaryKeys">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L30"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">DictionaryKeys</code><code>(</code><code>dict<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code></div><div>
+<p>Takes a dictionary and returns its keys.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeFuzzyFinder"><code style="text-decoration:none">MakeFuzzyFinder</code><a href="#MakeFuzzyFinder" class="hash-link" aria-label="Direct link to MakeFuzzyFinder" title="Direct link to MakeFuzzyFinder">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L59"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeFuzzyFinder</code><code>(</code><code>setOrContainer<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code class="blue_P4bS">string</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code class="blue_P4bS">boolean?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code class="blue_P4bS">boolean?</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">string</code></div><div>
+<p>Returns a function that is a fuzzy finder for the specified set or container.</p>
+<p>
+  Can pass an array of strings, array of instances, array of EnumItems,
+  array of dictionaries with a Name key or an instance (in which case its children will be used).
+</p>
+<p>Exact matches will be inserted in the front of the resulting array.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetNames"><code style="text-decoration:none">GetNames</code><a href="#GetNames" class="hash-link" aria-label="Direct link to GetNames" title="Direct link to GetNames">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L124"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">GetNames</code><code>(</code><code>instances<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div><div>
+<p>Takes an array of instances (or anything with a Name property) and maps them into an array of their names.</p>
+<p>If no Name property is present, then tostring will be called instead.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SplitStringSimple"><code style="text-decoration:none">SplitStringSimple</code><a href="#SplitStringSimple" class="hash-link" aria-label="Direct link to SplitStringSimple" title="Direct link to SplitStringSimple">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L137"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">SplitStringSimple</code><code>(</code><div class="inset_uKQm"><div><code>input<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>sep<!-- -->: </code><code class="blue_P4bS">string?</code></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div><div>
+<p>Splits a string using a simple separator (no quote parsing)</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ParseEscapeSequences"><code style="text-decoration:none">ParseEscapeSequences</code><a href="#ParseEscapeSequences" class="hash-link" aria-label="Direct link to ParseEscapeSequences" title="Direct link to ParseEscapeSequences">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L157"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">ParseEscapeSequences</code><code>(</code><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Parses escape sequences into their fully qualified characters</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="EncodeEscapedOperator"><code style="text-decoration:none">EncodeEscapedOperator</code><a href="#EncodeEscapedOperator" class="hash-link" aria-label="Direct link to EncodeEscapedOperator" title="Direct link to EncodeEscapedOperator">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L169"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">EncodeEscapedOperator</code><code>(</code><div class="inset_uKQm"><div><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>op<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>No description.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="EncodeEscapedOperators"><code style="text-decoration:none">EncodeEscapedOperators</code><a href="#EncodeEscapedOperators" class="hash-link" aria-label="Direct link to EncodeEscapedOperators" title="Direct link to EncodeEscapedOperators">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L185"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">EncodeEscapedOperators</code><code>(</code><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>No description.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SplitString"><code style="text-decoration:none">SplitString</code><a href="#SplitString" class="hash-link" aria-label="Direct link to SplitString" title="Direct link to SplitString">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L209"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">SplitString</code><code>(</code><div class="inset_uKQm"><div><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>max<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div><div>
+<p>Splits a string by space but taking into account quoted sequences which will be treated as a single argument.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MashExcessArguments"><code style="text-decoration:none">MashExcessArguments</code><a href="#MashExcessArguments" class="hash-link" aria-label="Direct link to MashExcessArguments" title="Direct link to MashExcessArguments">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L242"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MashExcessArguments</code><code>(</code><div class="inset_uKQm"><div><code>arguments<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code><code>,</code></div><div><code>max<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div><div>
+<p>Takes an array of arguments and a max value. Any indicies past the max value will be appended to the last valid argument.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="TrimString"><code style="text-decoration:none">TrimString</code><a href="#TrimString" class="hash-link" aria-label="Direct link to TrimString" title="Direct link to TrimString">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L257"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">TrimString</code><code>(</code><code>str<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Trims whitespace from both sides of a string.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetTextSize"><code style="text-decoration:none">GetTextSize</code><a href="#GetTextSize" class="hash-link" aria-label="Direct link to GetTextSize" title="Direct link to GetTextSize">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L266"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">GetTextSize</code><code>(</code><div class="inset_uKQm"><div><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>label<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/TextLabel" target="_blank" rel="noopener noreferrer">TextLabel<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code>size<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector2" target="_blank" rel="noopener noreferrer">Vector2?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector2" target="_blank" rel="noopener noreferrer">Vector2<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div><div>
+<p>Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeEnumType"><code style="text-decoration:none">MakeEnumType</code><a href="#MakeEnumType" class="hash-link" aria-label="Direct link to MakeEnumType" title="Direct link to MakeEnumType">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L274"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeEnumType</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>values<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Registry#TypeDefinition">TypeDefinition</a></code></div><div>
+<p>Makes an Enum type.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ParsePrefixedUnionType"><code style="text-decoration:none">ParsePrefixedUnionType</code><a href="#ParsePrefixedUnionType" class="hash-link" aria-label="Direct link to ParsePrefixedUnionType" title="Direct link to ParsePrefixedUnionType">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L293"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">ParsePrefixedUnionType</code><code>(</code><div class="inset_uKQm"><div><code>typeValue<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>rawValue<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code>(</code><div class="inset_uKQm"><div><code class="blue_P4bS">string?</code><code>,</code></div><div><code class="blue_P4bS">string?</code><code>,</code></div><div><code class="blue_P4bS">string?</code></div></div><code>)</code></div><div>
+<p>Parses a prefixed union type argument (such as %Team)</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeListableType"><code style="text-decoration:none">MakeListableType</code><a href="#MakeListableType" class="hash-link" aria-label="Direct link to MakeListableType" title="Direct link to MakeListableType">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L325"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeListableType</code><code>(</code><div class="inset_uKQm"><div><code>type<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Registry#TypeDefinition">TypeDefinition</a></code><code>,</code></div><div><code>override<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Registry#TypeDefinition">TypeDefinition</a></code></div><div>
+<p>Creates a listable type from a singular type</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="RunCommandString"><code style="text-decoration:none">RunCommandString</code><a href="#RunCommandString" class="hash-link" aria-label="Direct link to RunCommandString" title="Direct link to RunCommandString">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L361"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">RunCommandString</code><code>(</code><div class="inset_uKQm"><div><code>dispatcher<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Dispatcher">Dispatcher</a></code><code>,</code></div><div><code>commandString<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
+<p>output from Dispatcher:EvaluateAndRun as a string</p>
+</span></span></div><div>
+<p>Creates a listable type from a singular type</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="RunEmbeddedCommands"><code style="text-decoration:none">RunEmbeddedCommands</code><a href="#RunEmbeddedCommands" class="hash-link" aria-label="Direct link to RunEmbeddedCommands" title="Direct link to RunEmbeddedCommands">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L386"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">RunEmbeddedCommands</code><code>(</code><div class="inset_uKQm"><div><code>dispatcher<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Dispatcher">Dispatcher</a></code><code>,</code></div><div><code>str<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Runs embedded commands and replaces them</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SubstituteArgs"><code style="text-decoration:none">SubstituteArgs</code><a href="#SubstituteArgs" class="hash-link" aria-label="Direct link to SubstituteArgs" title="Direct link to SubstituteArgs">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L417"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">SubstituteArgs</code><code>(</code><div class="inset_uKQm"><div><code>str<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>replace<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Replaces arguments in the format $1, $2, $something with whatever the given function returns for it.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeAliasCommand"><code style="text-decoration:none">MakeAliasCommand</code><a href="#MakeAliasCommand" class="hash-link" aria-label="Direct link to MakeAliasCommand" title="Direct link to MakeAliasCommand">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L437"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeAliasCommand</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>commandString<!-- -->: </code><code class="blue_P4bS">string</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Registry#CommandDefinition">CommandDefinition</a></code></div><div>
+<p>Creates an alias command, should only be used on the client.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="MakeSequenceType"><code style="text-decoration:none">MakeSequenceType</code><a href="#MakeSequenceType" class="hash-link" aria-label="Direct link to MakeSequenceType" title="Direct link to MakeSequenceType">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L490"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">MakeSequenceType</code><code>(</code><code>options<!-- -->: </code><code class="purple_ieR2">{</code><div class="inset_uKQm"><code>Parse<!-- -->: </code><code class="blue_P4bS">function?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Constructor<!-- -->: </code><code class="blue_P4bS">function?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>TransformEach<!-- -->: </code><code class="blue_P4bS">function?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>ValidateEach<!-- -->: </code><code class="blue_P4bS">function?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Prefixes<!-- -->: </code><code class="green_DgR4">{</code><code class="blue_P4bS">string</code><code class="green_DgR4">}</code><code class="blue_P4bS">?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Length<!-- -->: </code><code class="blue_P4bS">number?</code></div><code class="purple_ieR2">}</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Cmdr/beta/api/Registry#ArgumentDefinition">ArgumentDefinition</a></code></div><div>
+<p>Makes a type that contains a sequence, e.g. Vector3 or Color3</p>
+<p>For options, one of Constructor or Parse is required</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SplitPrioritizedDelimeter"><code style="text-decoration:none">SplitPrioritizedDelimeter</code><a href="#SplitPrioritizedDelimeter" class="hash-link" aria-label="Direct link to SplitPrioritizedDelimeter" title="Direct link to SplitPrioritizedDelimeter">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/evaera/cmdr/blob/master/Cmdr/Shared/Util.lua#L540"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Util<!-- -->.</code><code class="green_DgR4">SplitPrioritizedDelimeter</code><code>(</code><div class="inset_uKQm"><div><code>text<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>delimiters<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code></div><div>
+<p>Splits a string by a single delimeter chosen from the given set. The first matching delimeter from the set becomes the split character.</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;MakeDictionary&quot;,
+            &quot;desc&quot;: &quot;Takes an array and flips its values into dictionary keys with value of true.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;array&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ any }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ [any]: true }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 17,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;DictionaryKeys&quot;,
+            &quot;desc&quot;: &quot;Takes a dictionary and returns its keys.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dict&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ [any]: any }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ any }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 30,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeFuzzyFinder&quot;,
+            &quot;desc&quot;: &quot;Returns a function that is a fuzzy finder for the specified set or container.\n\nCan pass an array of strings, array of instances, array of EnumItems,\narray of dictionaries with a Name key or an instance (in which case its children will be used).\n\nExact matches will be inserted in the front of the resulting array.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;setOrContainer&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;(string, boolean?, boolean?) -&gt; string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 59,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetNames&quot;,
+            &quot;desc&quot;: &quot;Takes an array of instances (or anything with a Name property) and maps them into an array of their names.\n\nIf no Name property is present, then tostring will be called instead.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;instances&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 124,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SplitStringSimple&quot;,
+            &quot;desc&quot;: &quot;Splits a string using a simple separator (no quote parsing)&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;input&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;sep&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 137,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ParseEscapeSequences&quot;,
+            &quot;desc&quot;: &quot;Parses escape sequences into their fully qualified characters&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 157,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;EncodeEscapedOperator&quot;,
+            &quot;desc&quot;: &quot;No description.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;op&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 169,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;EncodeEscapedOperators&quot;,
+            &quot;desc&quot;: &quot;No description.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 185,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SplitString&quot;,
+            &quot;desc&quot;: &quot;Splits a string by space but taking into account quoted sequences which will be treated as a single argument.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;max&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 209,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MashExcessArguments&quot;,
+            &quot;desc&quot;: &quot;Takes an array of arguments and a max value. Any indicies past the max value will be appended to the last valid argument.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;arguments&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;max&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 242,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;TrimString&quot;,
+            &quot;desc&quot;: &quot;Trims whitespace from both sides of a string.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 257,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetTextSize&quot;,
+            &quot;desc&quot;: &quot;Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;label&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;TextLabel&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;size&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector2?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector2\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 266,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeEnumType&quot;,
+            &quot;desc&quot;: &quot;Makes an Enum type.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;values&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;TypeDefinition&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 274,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ParsePrefixedUnionType&quot;,
+            &quot;desc&quot;: &quot;Parses a prefixed union type argument (such as %Team)&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;typeValue&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;rawValue&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                },
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                },
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 293,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeListableType&quot;,
+            &quot;desc&quot;: &quot;Creates a listable type from a singular type&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;type&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;TypeDefinition&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;override&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;table&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;TypeDefinition&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 325,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RunCommandString&quot;,
+            &quot;desc&quot;: &quot;Creates a listable type from a singular type&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dispatcher&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Dispatcher&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;commandString&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;output from Dispatcher:EvaluateAndRun as a string&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 361,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RunEmbeddedCommands&quot;,
+            &quot;desc&quot;: &quot;Runs embedded commands and replaces them&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dispatcher&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Dispatcher&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 386,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SubstituteArgs&quot;,
+            &quot;desc&quot;: &quot;Replaces arguments in the format $1, $2, $something with whatever the given function returns for it.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;replace&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 417,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeAliasCommand&quot;,
+            &quot;desc&quot;: &quot;Creates an alias command, should only be used on the client.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;commandString&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;CommandDefinition&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 437,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeSequenceType&quot;,
+            &quot;desc&quot;: &quot;Makes a type that contains a sequence, e.g. Vector3 or Color3\n\nFor options, one of Constructor or Parse is required&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;options&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ Parse: function?, Constructor: function?, TransformEach: function?, ValidateEach: function?, Prefixes: {string}?, Length: number? }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;ArgumentDefinition&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 490,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SplitPrioritizedDelimeter&quot;,
+            &quot;desc&quot;: &quot;Splits a string by a single delimeter chosen from the given set. The first matching delimeter from the set becomes the split character.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;text&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;delimiters&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }?\r\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 540,
+                &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;Util&quot;,
+    &quot;desc&quot;: &quot;Cmdr utilities module.\n\n:::info Beta\nThis page is incomplete and some functions are missing. You might want to refer to [the current documentation](https://eryn.io/Cmdr/api/Util.html).\n:::&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 12,
+        &quot;path&quot;: &quot;Cmdr/Shared/Util.lua&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#DictionaryKeys" class="table-of-contents__link toc-highlight">.DictionaryKeys</a></li><li><a href="#EncodeEscapedOperator" class="table-of-contents__link toc-highlight">.EncodeEscapedOperator</a></li><li><a href="#EncodeEscapedOperators" class="table-of-contents__link toc-highlight">.EncodeEscapedOperators</a></li><li><a href="#GetNames" class="table-of-contents__link toc-highlight">.GetNames</a></li><li><a href="#GetTextSize" class="table-of-contents__link toc-highlight">.GetTextSize</a></li><li><a href="#MakeAliasCommand" class="table-of-contents__link toc-highlight">.MakeAliasCommand</a></li><li><a href="#MakeDictionary" class="table-of-contents__link toc-highlight">.MakeDictionary</a></li><li><a href="#MakeEnumType" class="table-of-contents__link toc-highlight">.MakeEnumType</a></li><li><a href="#MakeFuzzyFinder" class="table-of-contents__link toc-highlight">.MakeFuzzyFinder</a></li><li><a href="#MakeListableType" class="table-of-contents__link toc-highlight">.MakeListableType</a></li><li><a href="#MakeSequenceType" class="table-of-contents__link toc-highlight">.MakeSequenceType</a></li><li><a href="#MashExcessArguments" class="table-of-contents__link toc-highlight">.MashExcessArguments</a></li><li><a href="#ParseEscapeSequences" class="table-of-contents__link toc-highlight">.ParseEscapeSequences</a></li><li><a href="#ParsePrefixedUnionType" class="table-of-contents__link toc-highlight">.ParsePrefixedUnionType</a></li><li><a href="#RunCommandString" class="table-of-contents__link toc-highlight">.RunCommandString</a></li><li><a href="#RunEmbeddedCommands" class="table-of-contents__link toc-highlight">.RunEmbeddedCommands</a></li><li><a href="#SplitPrioritizedDelimeter" class="table-of-contents__link toc-highlight">.SplitPrioritizedDelimeter</a></li><li><a href="#SplitString" class="table-of-contents__link toc-highlight">.SplitString</a></li><li><a href="#SplitStringSimple" class="table-of-contents__link toc-highlight">.SplitStringSimple</a></li><li><a href="#SubstituteArgs" class="table-of-contents__link toc-highlight">.SubstituteArgs</a></li><li><a href="#TrimString" class="table-of-contents__link toc-highlight">.TrimString</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Learn</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/docs/intro">Introduction</a></li><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/docs/advanced/bestpractice">Best practice</a></li><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/api/Cmdr">API reference</a></li><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/changelog">Changelog</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/docs/contribute">Contribute</a></li><li class="footer__item"><a class="footer__link-item" href="/Cmdr/beta/docs/community/securityreport">Security</a></li><li class="footer__item"><a href="https://discord.gg/g5PdMxh" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/evaera/Cmdr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bug tracker<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built using Docusaurus and Moonwave. Released under the <a href="https://github.com/evaera/Cmdr/blob/master/LICENSE" target="_blank">MIT License</a>.</div></div></div></footer></div>
+<script src="/Cmdr/beta/assets/js/runtime~main.08c0056f.js"></script>
+<script src="/Cmdr/beta/assets/js/main.7da4bfda.js"></script>
+</body>
+</html>
