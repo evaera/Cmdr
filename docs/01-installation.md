@@ -1,8 +1,8 @@
 # Installation
 
-Cmdr has no dependencies which makes it incredibly portable and easy to include in your game.
+Cmdr has no dependencies, which makes it incredibly portable and easy to include in your game.
 
-We recommend installing Cmdr in a place only visible on the server (such as `ServerScriptService` or `ServerStorage`). By installing it in a shared place (like `ReplicatedStorage`), installing to the server realm helps guard against mistakes and provides for better optimisation. Plus, there have sometimes been reports of weird, random issues caused by installing Cmdr in a shared place.
+We recommend installing Cmdr in a place only visible on the server (such as `ServerScriptService` or `ServerStorage`), as installing it to the server realm helps guard against mistakes and provides for better optimisation. Installing Cmdr in a shared place (like `ReplicatedStorage`), can sometimes result in unintended issues.
 
 You can choose one of many installation methods. While there are other potential installation methods, we recommend sticking to one of the below, unless you're sure you know what you're doing.
 
