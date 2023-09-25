@@ -55,7 +55,7 @@ We will notify you when we have identified a fix to the vulnerability. You may b
 
 We will publish a new release containing the fix and - unless exceptional circumstances apply - a security advisory alongside it. It is possible that this initial advisory is only a summary of the vulnerability and that a later advisory will come later.
 
-We recognise that recognition is important to researchers and contributors and will provide credit where due. We will advise you when it is appropriate for you to fully disclose and publicly discuss the vulnerability. Ordinarily, this will be when a full advisory has released. We'll then close the group-chat or email thread about your report.
+We recognise that recognition is important to researchers and contributors and will provide credit where due. We will advise you when it is appropriate for you to fully disclose and publicly discuss the vulnerability. Ordinarily, this will be when a full advisory has released. We'll then close the group chat or email thread related to your report.
 
 > **Warning**: To protect our users, we ask for you to be discreet. Prior to the publishing of a remediation release, you must **not** publicly discuss any information regarding the vulnerability, and we ask you to be mindful of who you discuss the vulnerability with.
 
@@ -87,4 +87,4 @@ If you've identified a potential vulnerability in a pull request which hasn't be
 
 This policy is designed to be compatible with common vulnerability disclosure good practice. It does not give you permission to act in any way that is inconsistent with the law, or which might cause us or our users to be in breach of any legal obligations.
 
-Since we don't own the games Cmdr runs in, we usually do not have the standing to attempt prosecution for computer intrusion or abuse offences. Accordingly, we can't provide any type of indemnity; you should refer to the policies of Roblox Corporation and any game you intend to conduct testing against (if not your own).
+Since we don't own the games Cmdr runs in, we usually do not have the standing to attempt prosecution for computer intrusion or abuse offences. As such, we are unable to provide any type of indemnity; you should refer to the policies of Roblox Corporation and any game you intend to conduct testing against (if not your own).
