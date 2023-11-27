@@ -266,6 +266,7 @@ end
 	Registers all hooks from within a container on both the server and client.
 	If you want to add a hook only on the server or client – e.g. for logging – then you should use the Register.RegisterHook method instead.
 
+	@param container Instance
 	@server
 	@within Registry
 ]=]
