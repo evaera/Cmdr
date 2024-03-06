@@ -55,14 +55,16 @@ return {
 		elseif bindType == "player" then
 			local function RunCommand(message)
 				local args = { message }
-				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteArgs(command, args))
-				context:Reply(("%s $ %s : %s"):format(
-					bind.Name,
-					chatCommand,
-					context.Dispatcher:EvaluateAndRun(chatCommand)
-					), Color3.fromRGB(244, 92, 66))
+				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
+					context.Dispatcher,
+					context.Cmdr.Util.SubstituteArgs(command, args)
+				)
+				context:Reply(
+					("%s $ %s : %s"):format(bind.Name, chatCommand, context.Dispatcher:EvaluateAndRun(chatCommand)),
+					Color3.fromRGB(244, 92, 66)
+				)
 			end
-			
+
 			if TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
 				binds[bind] = bind.Chatted:Connect(RunCommand)
 			else
