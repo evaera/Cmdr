@@ -44,11 +44,11 @@ return {
 			end
 			if command.Args then
 				for i, arg in ipairs(command.Args) do
-					context:Reply(
-						`#{i} {if type(arg) == "table"
-							then `{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
-							else "Unknown (inline argument)"}`
-					)
+					if type(arg) == "function" then
+						arg = arg(context)
+					end
+					
+					context:Reply(`{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`)
 				end
 			end
 		else
