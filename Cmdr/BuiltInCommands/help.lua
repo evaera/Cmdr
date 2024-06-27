@@ -47,8 +47,10 @@ return {
 					if type(arg) == "function" then
 						arg = arg(context)
 					end
-					
-					context:Reply(`{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`)
+
+					context:Reply(
+						`{arg.Name}{if arg.Optional == true then "?" else ""}: {arg.Type} - {arg.Description}`
+					)
 				end
 			end
 		else
