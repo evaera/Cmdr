@@ -1,4 +1,5 @@
 local UserInputService = game:GetService("UserInputService")
+local TextChatService = game:GetService("TextChatService")
 
 return {
 	Name = "bind",
@@ -52,7 +53,7 @@ return {
 		elseif bindType == "bindableResource" then
 			return "Unimplemented..."
 		elseif bindType == "player" then
-			binds[bind] = bind.Chatted:Connect(function(message)
+			local function RunCommand(message)
 				local args = { message }
 				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
 					context.Dispatcher,
@@ -62,7 +63,15 @@ return {
 					("%s $ %s : %s"):format(bind.Name, chatCommand, context.Dispatcher:EvaluateAndRun(chatCommand)),
 					Color3.fromRGB(244, 92, 66)
 				)
-			end)
+			end
+
+			if TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
+				binds[bind] = bind.Chatted:Connect(RunCommand)
+			else
+				binds[bind] = TextChatService.SendingMessage:Connect(function(message)
+					RunCommand(message.Text)
+				end)
+			end
 		end
 
 		return "Bound command to input."
