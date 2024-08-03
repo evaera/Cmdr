@@ -153,7 +153,9 @@ function Window:LoseFocus(submit)
 
 	if Gui.Visible and not GuiService.MenuIsOpen then
 		-- self:SetEntryText("")
-		Entry.TextBox:CaptureFocus()
+		if not UserInputService.TouchEnabled then
+			Entry.TextBox:CaptureFocus()
+		end
 	elseif GuiService.MenuIsOpen and Gui.Visible then
 		self:Hide()
 	end
