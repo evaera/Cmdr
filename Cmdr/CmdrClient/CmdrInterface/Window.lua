@@ -151,11 +151,9 @@ function Window:LoseFocus(submit)
 
 	self:ClearHistoryState()
 
-	if Gui.Visible and not GuiService.MenuIsOpen then
+	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 		-- self:SetEntryText("")
-		if not UserInputService.TouchEnabled then
-			Entry.TextBox:CaptureFocus()
-		end
+		Entry.TextBox:CaptureFocus()
 	elseif GuiService.MenuIsOpen and Gui.Visible then
 		self:Hide()
 	end
