@@ -10,7 +10,7 @@ return function (_, players, duration, reason)
 		Duration = duration,
 		DisplayReason = reason,
 		PrivateReason = reason,
-		ExcludeAltAccounts = true,
+		ExcludeAltAccounts = false,
 		ApplyToUniverse = true,
 	})
 
