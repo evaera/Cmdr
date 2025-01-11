@@ -67,6 +67,7 @@ do
 		RemoteEvent = script:WaitForChild("CmdrEvent"),
 		ActivationKeys = { [Enum.KeyCode.F2] = true },
 		Enabled = true,
+		Toggled = false,
 		MashToEnable = false,
 		ActivationUnlocksMouse = false,
 		HideOnLostFocus = true,
