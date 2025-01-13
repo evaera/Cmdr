@@ -20,7 +20,7 @@ jobs:
       - name: Run aftman
         uses: ok-nick/setup-aftman@main
 
-      # Run Linter
+      # Run linter
       - name: Update standard library
         run: selene update-roblox-std
       - name: Run Selene
