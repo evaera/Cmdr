@@ -74,7 +74,7 @@ end
 
 -- Sets the command bar visible or not
 function Window:SetVisible(visible)
-	self.Cmdr.Toggled = visible
+	self.Cmdr.IsVisible = visible
 	Gui.Visible = visible
 
 	if visible then
