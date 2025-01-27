@@ -10,6 +10,6 @@
     "docs:publish": "moonwave build --code Cmdr --publish"
   },
   "devDependencies": {
-    "moonwave": "^1.1.1"
+    "moonwave": "^1.2.0"
   }
 }
