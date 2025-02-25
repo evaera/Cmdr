@@ -79,8 +79,10 @@ function Window:SetVisible(visible)
 	if visible then
 		self.PreviousChatWindowConfigurationEnabled = TextChatService.ChatWindowConfiguration.Enabled
 		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
+		self.PreviousChannelTabsConfigurationEnabled = TextChatService.ChannelTabsConfiguration.Enabled
 		TextChatService.ChatWindowConfiguration.Enabled = false
 		TextChatService.ChatInputBarConfiguration.Enabled = false
+		TextChatService.ChannelTabsConfiguration.Enabled = false
 
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
@@ -96,6 +98,9 @@ function Window:SetVisible(visible)
 		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled
 				~= nil
 			then self.PreviousChatInputBarConfigurationEnabled
+			else true
+		TextChatService.ChannelTabsConfiguration.Enabled = if self.PreviousChannelTabsConfigurationEnabled ~= nil
+			then self.PreviousChannelTabsConfigurationEnabled
 			else true
 
 		Entry.TextBox:ReleaseFocus()
