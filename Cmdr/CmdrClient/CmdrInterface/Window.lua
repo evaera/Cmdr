@@ -248,6 +248,11 @@ function Window:BeginInput(input, gameProcessed)
 		return
 	end
 
+	if input.KeyCode == Enum.KeyCode.Escape then
+		self:Hide()
+		return
+	end
+
 	if self.Cmdr.HideOnLostFocus and table.find(MOUSE_TOUCH_ENUM, input.UserInputType) then
 		local ps = input.Position
 		local ap = Gui.AbsolutePosition
