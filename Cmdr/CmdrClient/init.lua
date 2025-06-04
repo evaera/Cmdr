@@ -90,6 +90,7 @@ do
 	Cmdr.Dispatcher = require(Shared.Dispatcher)(Cmdr)
 end
 
+repeat task.wait() until Player.Character -- We are waiting for the player to appear, and then we will check if the player has an interface.
 if StarterGui:WaitForChild("Cmdr") and wait() and Player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
 	StarterGui.Cmdr:Clone().Parent = Player.PlayerGui
 end
