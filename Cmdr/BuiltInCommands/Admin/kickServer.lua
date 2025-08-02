@@ -4,5 +4,5 @@ return function(_, players, reason)
 		player:Kick(reason)
 	end
 
-	return ("Kicked %d players."):format(#players)
+	return (`Kicked %d players for {reason}`):format(#players)
 end
