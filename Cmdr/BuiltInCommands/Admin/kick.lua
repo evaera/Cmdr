@@ -12,7 +12,8 @@ return {
 		{
 			Type = "string",
 			Name = "reason",
-			Description = "The reason for kicking the players."
+			Description = "The reason for kicking the players.",
+			Optional = true
 		}
 	},
 }
