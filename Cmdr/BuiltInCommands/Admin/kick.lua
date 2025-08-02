@@ -9,5 +9,10 @@ return {
 			Name = "players",
 			Description = "The players to kick.",
 		},
+		{
+			Type = "string",
+			Name = "reason",
+			Description = "The reason for kicking the players."
+		}
 	},
 }
