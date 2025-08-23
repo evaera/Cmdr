@@ -1,5 +1,4 @@
 -- Here be dragons
--- luacheck: ignore 212
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local TextChatService = game:GetService("TextChatService")
@@ -27,7 +26,8 @@ Line.Parent = nil
 
 -- Update the text entry label
 function Window:UpdateLabel()
-	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
+	Entry.TextLabel.Text =
+		`{Player.Name}{if self.Cmdr.PlaceName and self.Cmdr.PlaceName ~= "" then `@{self.Cmdr.PlaceName}` else ""}$`
 end
 
 -- Get the text entry label
@@ -79,8 +79,10 @@ function Window:SetVisible(visible)
 	if visible then
 		self.PreviousChatWindowConfigurationEnabled = TextChatService.ChatWindowConfiguration.Enabled
 		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
+		self.PreviousChannelTabsConfigurationEnabled = TextChatService.ChannelTabsConfiguration.Enabled
 		TextChatService.ChatWindowConfiguration.Enabled = false
 		TextChatService.ChatInputBarConfiguration.Enabled = false
+		TextChatService.ChannelTabsConfiguration.Enabled = false
 
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
@@ -93,8 +95,12 @@ function Window:SetVisible(visible)
 		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil
 			then self.PreviousChatWindowConfigurationEnabled
 			else true
-		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled ~= nil
+		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled
+				~= nil
 			then self.PreviousChatInputBarConfigurationEnabled
+			else true
+		TextChatService.ChannelTabsConfiguration.Enabled = if self.PreviousChannelTabsConfigurationEnabled ~= nil
+			then self.PreviousChannelTabsConfigurationEnabled
 			else true
 
 		Entry.TextBox:ReleaseFocus()
@@ -151,7 +157,7 @@ function Window:LoseFocus(submit)
 
 	self:ClearHistoryState()
 
-	if Gui.Visible and not GuiService.MenuIsOpen then
+	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 		-- self:SetEntryText("")
 		Entry.TextBox:CaptureFocus()
 	elseif GuiService.MenuIsOpen and Gui.Visible then

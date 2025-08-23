@@ -16,7 +16,7 @@ return {
 		},
 	},
 
-	Run = function(_, index, list)
+	ClientRun = function(_, index, list)
 		return list:split(",")[index] or ""
 	end,
 }

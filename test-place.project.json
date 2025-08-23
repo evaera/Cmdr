@@ -2,6 +2,7 @@
   "name": "Cmdr",
   "tree": {
     "$className": "DataModel",
+    "$ignoreUnknownInstances": true,
     "ServerScriptService": {
       "$className": "ServerScriptService",
 

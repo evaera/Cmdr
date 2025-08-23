@@ -1,3 +1,5 @@
+local generator = Random.new()
+
 return {
 	Name = "rand",
 	Aliases = {},
@@ -17,7 +19,11 @@ return {
 		},
 	},
 
-	Run = function(_, min, max)
-		return tostring(max and math.random(min, max) or math.random(min))
+	ClientRun = function(_, firstNumber, secondNumber)
+		return tostring(
+			if secondNumber
+				then generator:NextInteger(firstNumber, secondNumber)
+				else generator:NextInteger(1, firstNumber)
+		)
 	end,
 }

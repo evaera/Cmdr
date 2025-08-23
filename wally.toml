@@ -4,7 +4,7 @@ description = "Extensible command console for Roblox developers"
 version = "1.12.0"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"
+realm = "server"
 exclude = ["assets", "docs"]
 include = ["CHANGELOG.md", "Cmdr", "default.project.json", "LICENSE"]
 

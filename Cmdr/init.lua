@@ -2,7 +2,9 @@ local RunService = game:GetService("RunService")
 local Util = require(script.Shared:WaitForChild("Util"))
 
 if RunService:IsServer() == false then
-	error("Cmdr server module is somehow running on a client!")
+	error(
+		"[Cmdr] Client scripts cannot require the server library. Please require the client library from the client to use Cmdr in your own code."
+	)
 end
 
 --[=[
@@ -60,7 +62,7 @@ end
 
 -- Handle command invocations from the clients.
 Cmdr.RemoteFunction.OnServerInvoke = function(player, text, options)
-	if #text > 100_000 then
+	if #text > 10000 then
 		return "Input too long"
 	end
 

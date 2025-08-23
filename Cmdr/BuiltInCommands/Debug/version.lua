@@ -6,7 +6,7 @@ return {
 	Description = "Shows the current version of Cmdr",
 	Group = "DefaultDebug",
 
-	Run = function()
+	ClientRun = function()
 		return ("Cmdr Version %s"):format(version)
 	end,
 }

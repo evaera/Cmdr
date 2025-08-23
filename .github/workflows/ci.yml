@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches-ignore:
+      - gh-pages
+  pull_request:
+    branches-ignore:
+      - gh-pages
+
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup tools
+      - name: Run aftman
+        uses: ok-nick/setup-aftman@main
+
+      # Run linter
+      - name: Update standard library
+        run: selene update-roblox-std
+      - name: Run Selene
+        run: selene --allow-warnings ./Cmdr
+
+      - name: Validate Stylua
+        run: stylua -c ./Cmdr

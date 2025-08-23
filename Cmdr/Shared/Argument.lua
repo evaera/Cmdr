@@ -137,7 +137,7 @@ function Argument.new(command, argumentDefinition, value)
 		self.Prefix = prefix
 
 		if self.Type == nil then
-			error(string.format("%s has an unregistered type %q", self.Name or "<none>", parsedType or "<none>"))
+			error((`[Cmdr] {self.Name or "none"} has an unregistered type %q`):format(parsedType or "<none>"))
 		end
 	end
 
@@ -368,7 +368,7 @@ function Argument:GetValue(): any
 		local parsedValue = self:ParseValue(i)
 
 		if type(parsedValue) ~= "table" then
-			error(("Listable types must return a table from Parse (%s)"):format(self.Type.Name))
+			error(`[Cmdr] Listable types must return a table from Parse {self.Type.Name}`)
 		end
 
 		for _, value in pairs(parsedValue) do
