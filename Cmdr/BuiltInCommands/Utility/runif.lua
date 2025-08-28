@@ -4,6 +4,66 @@ local conditions = {
 			return text:sub(#arg + 1)
 		end
 	end,
+
+	contains = function(text, arg)
+		if text:find(arg, 1, true) then
+			return text
+		end
+	end,
+
+	endsWith = function(text, arg)
+		if text:sub(-#arg) == arg then
+			return text:sub(1, -#arg - 1)
+		end
+	end,
+
+	pattern = function(text, arg)
+		if text:match(arg) then
+			return text
+		end
+	end,
+
+	equals = function(text, arg)
+		if text == arg then
+			return text
+		end
+	end,
+
+	notEquals = function(text, arg)
+		if text ~= arg then
+			return text
+		end
+	end,
+
+	greaterThan = function(text, arg)
+		if tonumber(text) > tonumber(arg) then
+			return text
+		end
+	end,
+
+	lessThan = function(text, arg)
+		if tonumber(text) < tonumber(arg) then
+			return text
+		end
+	end,
+
+	greaterThanOrEqual = function(text, arg)
+		if tonumber(text) >= tonumber(arg) then
+			return text
+		end
+	end,
+
+	lessThanOrEqual = function(text, arg)
+		if tonumber(text) <= tonumber(arg) then
+			return text
+		end
+	end,
+
+	length = function(text, arg)
+		if #text == tonumber(arg) then
+			return text
+		end
+	end,
 }
 
 return {
@@ -42,9 +102,9 @@ return {
 			return ("Condition %q is not valid."):format(condition)
 		end
 
-		local text = conditionFunc(testAgainst, arg)
+		local success, text = pcall(conditionFunc, testAgainst, arg)
 
-		if text then
+		if success and text then
 			return context.Dispatcher:EvaluateAndRun(
 				context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text)
 			)
