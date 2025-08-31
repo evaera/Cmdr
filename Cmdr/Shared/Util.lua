@@ -274,6 +274,7 @@ end
 function Util.MakeEnumType(name: string, values: any)
 	local findValue = Util.MakeFuzzyFinder(values)
 	return {
+		DisplayName = name,
 		Validate = function(text)
 			return findValue(text, true) ~= nil, ("Value %q is not a valid %s."):format(text, name)
 		end,
