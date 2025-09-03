@@ -206,8 +206,18 @@ end
 -- "Only register when we aren't in studio because don't want to overwrite what the server portion did"
 -- This is legacy code which predates Accurate Play Solo (which is now the only way to test in studio), this code will never run.
 if RunService:IsServer() == false then
-	Cmdr.Registry:RegisterTypesIn(script:WaitForChild("Types"))
-	Cmdr.Registry:RegisterCommandsIn(script:WaitForChild("Commands"))
+	local TypesFolder = script:WaitForChild("Types") :: Folder
+	local CommandsFolder = script:WaitForChild("Commands") :: Folder
+
+	Cmdr.Registry:RegisterTypesIn(TypesFolder)
+	Cmdr.Registry:RegisterCommandsIn(CommandsFolder)
+	
+	TypesFolder.ChildAdded:Connect(function(child: Instance)
+		require(child)(Cmdr.Registry)
+	end)
+	CommandsFolder.ChildAdded:Connect(function(child: Instance)
+		Cmdr.Registry:RegisterCommand(child)
+	end)
 end
 
 -- Hook up event listener
