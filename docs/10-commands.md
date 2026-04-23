@@ -4,7 +4,7 @@ No commands are registered by default. Cmdr ships with a set of default commands
 
 Commands are defined in ModuleScripts that return a single table.
 
-```lua title="Teleport.lua"
+```lua title="Teleport.luau"
 return {
 	Name = "teleport",
 	Aliases = { "tp" },
@@ -27,13 +27,13 @@ return {
 
 Check out the [API reference](/api/Registry#CommandDefinition) for full details.
 
-The server implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end (e.g. `Teleport.lua` and `TeleportServer.lua`).
+The server implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end (e.g. `Teleport.luau` and `TeleportServer.luau`).
 
 You can also include a client implementation, this is done by adding a function to your command definition (above) with the `ClientRun` key. You can also include both client and server implementations in one command but that's an advanced feature we'll discuss later on.
 
 The implementation — whether on the server or client — is passed the [CommandContext](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
-```lua title="TeleportServer.lua"
+```lua title="TeleportServer.luau"
 -- These arguments are guaranteed to exist and be correctly typed.
 return function (context, fromPlayers, toPlayer)
   if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
@@ -196,7 +196,7 @@ Inline types allow developers to save time adding bespoke types for individual c
 
 Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/ArgumentContext#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
 
-```lua title="allowlist.lua"
+```lua title="allowlist.luau"
 return {
 	Name = "allowlist",
 	Aliases = {},
