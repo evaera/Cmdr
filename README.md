@@ -1,11 +1,11 @@
 <div align="center">
 	<img src="assets/logo.png" alt="Cmdr" height="150" />
 	<br/>
-	<a href="https://discord.gg/g5PdMxh"><img src="https://img.shields.io/discord/425800792679645204.svg?label=discord" /></a>
 	<p><a href="https://eryn.io/Cmdr/">View Docs</a></p>
 </div>
 
 <!--moonwave-hide-before-this-line-->
+<!-- TODO: Autonor wants to rewrite this based on the new website index -->
 
 **Cmdr** is a fully extensible and type safe command console for Roblox developers.
 

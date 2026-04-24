@@ -80,8 +80,10 @@ Our support channels exist to provide help with Cmdr-specific things, like our [
 
 :::
 
-There are plenty of resources available to help you with Cmdr, such as this website and our Discord server, but we've been made aware of a number of DevForum guides and YouTube videos which provide incorrect or outdated instructions.
+There are plenty of resources available to help you with Cmdr, like this website, but we've seen many DevForum guides and YouTube videos which provide incorrect or outdated instructions.
 
-**We recommend you stick to our official resources, especially if you're new to Cmdr.** If you decide to use unofficial resources, then the level of support we can provide (for instance in our Discord server) is limited.
+**We recommend you stick to our official resources, especially if you're new to Cmdr.**
 
-The [Cmdr Discord server](https://discord.gg/g5PdMxh) has a dedicated [`cmdr-help`](https://discord.com/channels/425800792679645204/564621492432666654) channel, which is where we recommend you go to get any support you need.
+There is no longer an official Discord server for Cmdr. Please do not use GitHub Issues to ask for help with Cmdr.
+
+As an open-source volunteer project, we can't guarantee any support, although we do try our best.

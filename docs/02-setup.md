@@ -4,9 +4,9 @@ Once you've installed Cmdr, you'll need to set it up **on both the server and cl
 
 :::info Heads up
 
-There are plenty of resources available to help you with Cmdr, such as this website and our Discord server, but we've been made aware of a number of DevForum guides and YouTube videos which provide incorrect or outdated instructions.
+There are plenty of resources available to help you with Cmdr, like this website, but we've seen many DevForum guides and YouTube videos which provide incorrect or outdated instructions.
 
-**We recommend you stick to our official resources, especially if you're new to Cmdr.** If you decide to use unofficial resources, then the level of support we can provide (for instance in our Discord server) is limited.
+**We recommend you stick to our official resources, especially if you're new to Cmdr.**
 
 :::
 
@@ -14,7 +14,7 @@ There are plenty of resources available to help you with Cmdr, such as this webs
 
 :::warning Do not modify the source code
 
-Please **do not** modify the source code of Cmdr for your game. Instead, use its API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
+Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
 There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
