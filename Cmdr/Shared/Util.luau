@@ -194,6 +194,7 @@ local function encodeControlChars(text)
 	return (
 		text:gsub("\\\\", "___!CMDR_ESCAPE!___")
 			:gsub('\\"', "___!CMDR_QUOTE!___")
+			:gsub("___!CMDR_SQUOTE!___", string.char(39))
 			:gsub("\\'", "___!CMDR_SQUOTE!___")
 			:gsub("\\\n", "___!CMDR_NL!___")
 	)
