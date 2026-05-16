@@ -192,7 +192,8 @@ function Command:GetData()
 	end
 
 	if self.Object.Data and not IsServer then
-		self.Data = self.Object.Data(self)
+		local values, length = self:GatherArgumentValues()
+		self.Data = self.Object.Data(self, unpack(values, 1, length))
 	end
 
 	return self.Data
