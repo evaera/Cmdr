@@ -86,6 +86,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 
 	-- Searches the set (checking exact matches first)
 	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
+		local resultsPriority = {}
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -97,16 +98,32 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 				if returnFirst then
 					return value
 				else
-					table.insert(results, 1, value)
+					results[#results + 1] = value
+					resultsPriority[value] = 0
 				end
 			elseif matchStart then
 				if name:lower():sub(1, #text) == text:lower() then
 					results[#results + 1] = value
+					resultsPriority[value] = 1
 				end
-			elseif name:lower():find(text:lower(), 1, true) then
-				results[#results + 1] = value
+			else
+				local startingIndex = name:lower():find(text:lower(), 1, true)
+				if startingIndex then
+					results[#results + 1] = value
+					resultsPriority[value] = startingIndex
+				end
 			end
 		end
+
+		table.sort(results, function(a, b)
+			local aPriority = resultsPriority[a]
+			local bPriority = resultsPriority[b]
+			if aPriority ~= bPriority then
+				return aPriority < bPriority
+			end
+
+			return #a < #b
+		end)
 
 		if returnFirst then
 			return results[1]
