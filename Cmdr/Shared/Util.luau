@@ -120,9 +120,11 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 			local bPriority = resultsPriority[b]
 			if aPriority ~= bPriority then
 				return aPriority < bPriority
+			elseif type(a) == "string" and type(b) == "string" then
+				return #a < #b
 			end
 
-			return #a < #b
+			return false
 		end)
 
 		if returnFirst then
