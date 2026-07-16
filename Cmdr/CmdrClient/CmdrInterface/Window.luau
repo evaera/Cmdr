@@ -152,9 +152,15 @@ function Window:HideInvalidState()
 end
 
 -- Event handler for text box focus lost
+local HasLostFocus = false -- Banaid fix for duplicate output on Linux
 function Window:LoseFocus(submit)
-	local text = Entry.TextBox.Text
+	if HasLostFocus then
+		return
+	end
 
+	HasLostFocus = true
+
+	local text = Entry.TextBox.Text
 	self:ClearHistoryState()
 
 	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
@@ -164,13 +170,16 @@ function Window:LoseFocus(submit)
 		self:Hide()
 	end
 
+	task.wait()
+
 	if submit and self.Valid then
-		wait()
 		self:SetEntryText("")
 		self.ProcessEntry(text)
 	elseif submit then
 		self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
 	end
+
+	HasLostFocus = false
 end
 
 function Window:TraverseHistory(delta)
@@ -229,7 +238,7 @@ function Window:BeginInput(input, gameProcessed)
 			lastPressTime = tick()
 		elseif self.Cmdr.Enabled then
 			self:SetVisible(not self:IsVisible())
-			wait()
+			task.wait()
 			self:SetEntryText("")
 
 			if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
@@ -260,7 +269,7 @@ function Window:BeginInput(input, gameProcessed)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self:SelectVertical(-1)
 	elseif input.KeyCode == Enum.KeyCode.Return then -- Eat new lines
-		wait()
+		task.wait()
 		self:SetEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
 	elseif input.KeyCode == Enum.KeyCode.Tab then -- Auto complete
 		local item = self.AutoComplete:GetSelectedItem()
@@ -303,12 +312,12 @@ function Window:BeginInput(input, gameProcessed)
 				newText = replace
 			end
 			-- need to wait a frame so we can eat the \t
-			wait()
+			task.wait()
 			-- Update the text box
 			self:SetEntryText(newText .. (insertSpace and " " or ""))
 		else
 			-- Still need to eat the \t even if there is no auto-complete to show
-			wait()
+			task.wait()
 			self:SetEntryText(self:GetEntryText())
 		end
 	else
@@ -332,6 +341,7 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
 		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
 		return
 	end
+
 	if Window.OnTextChanged then
 		return Window.OnTextChanged(Entry.TextBox.Text)
 	end
