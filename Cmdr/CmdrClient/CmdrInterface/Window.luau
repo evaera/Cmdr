@@ -152,7 +152,7 @@ function Window:HideInvalidState()
 end
 
 -- Event handler for text box focus lost
-local HasLostFocus = false -- Banaid fix for duplicate output on Linux
+local HasLostFocus = false -- Bandaid fix for duplicate output on Linux
 function Window:LoseFocus(submit)
 	if HasLostFocus then
 		return
