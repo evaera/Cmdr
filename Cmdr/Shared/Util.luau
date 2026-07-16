@@ -86,6 +86,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 
 	-- Searches the set (checking exact matches first)
 	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
+		local resultsPriority = {}
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -97,16 +98,44 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 				if returnFirst then
 					return value
 				else
-					table.insert(results, 1, value)
+					results[#results + 1] = value
+					resultsPriority[value] = 0
 				end
 			elseif matchStart then
 				if name:lower():sub(1, #text) == text:lower() then
 					results[#results + 1] = value
+					resultsPriority[value] = 1
 				end
-			elseif name:lower():find(text:lower(), 1, true) then
-				results[#results + 1] = value
+			else
+				local startingIndex = name:lower():find(text:lower(), 1, true)
+				if startingIndex then
+					results[#results + 1] = value
+					resultsPriority[value] = startingIndex
+				end
 			end
 		end
+
+		table.sort(results, function(a, b)
+			local aPriority = resultsPriority[a]
+			local bPriority = resultsPriority[b]
+			if aPriority ~= bPriority then
+				return aPriority < bPriority
+			else
+				local aStr = if typeof(a) == "string"
+					then a
+					elseif typeof(a) == "Instance" then a.Name
+					elseif typeof(a) == "table" and typeof(a.Name) == "string" then a.Name
+					else ""
+
+				local bStr = if typeof(b) == "string"
+					then b
+					elseif typeof(b) == "Instance" then b.Name
+					elseif typeof(b) == "table" and typeof(b.Name) == "string" then b.Name
+					else ""
+
+				return #aStr < #bStr
+			end
+		end)
 
 		if returnFirst then
 			return results[1]

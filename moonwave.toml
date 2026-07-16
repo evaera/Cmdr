@@ -45,7 +45,7 @@ label = "Releases"
 position = "right"
 
 [[navbar.items]]
-href = "https://discord.gg/g5PdMxh"
+href = "https://discord.gg/xFzPVg5WXm"
 label = "Discord"
 position = "right"
 
@@ -77,7 +77,7 @@ label = "Security"
 href = "/docs/community/securityreport"
 [[footer.links.items]]
 label = "Discord"
-href = "https://discord.gg/g5PdMxh"
+href = "https://discord.gg/xFzPVg5WXm"
 [[footer.links.items]]
 label = "Bug tracker"
 href = "https://github.com/evaera/Cmdr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
