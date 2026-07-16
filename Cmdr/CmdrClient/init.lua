@@ -211,12 +211,20 @@ if RunService:IsServer() == false then
 
 	Cmdr.Registry:RegisterTypesIn(TypesFolder)
 	Cmdr.Registry:RegisterCommandsIn(CommandsFolder)
-	
+
 	TypesFolder.ChildAdded:Connect(function(child: Instance)
-		require(child)(Cmdr.Registry)
+		if child:IsA("ModuleScript") then
+			require(child)(Cmdr.Registry)
+		else
+			warn(`[Cmdr] Ignored non-module child in Types: {child.Name}`)
+		end
 	end)
 	CommandsFolder.ChildAdded:Connect(function(child: Instance)
-		Cmdr.Registry:RegisterCommand(child)
+		if child:IsA("ModuleScript") then
+			Cmdr.Registry:RegisterCommand(child)
+		else
+			warn(`[Cmdr] Ignored non-module child in Commands: {child.Name}`)
+		end
 	end)
 end
 
