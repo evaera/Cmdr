@@ -120,11 +120,21 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 			local bPriority = resultsPriority[b]
 			if aPriority ~= bPriority then
 				return aPriority < bPriority
-			elseif type(a) == "string" and type(b) == "string" then
-				return #a < #b
-			end
+			else
+				local aStr = if typeof(a) == "string"
+					then a
+					elseif typeof(a) == "Instance" then a.Name
+					elseif typeof(a) == "table" and typeof(a.Name) == "string" then a.Name
+					else ""
 
-			return false
+				local bStr = if typeof(b) == "string"
+					then b
+					elseif typeof(b) == "Instance" then b.Name
+					elseif typeof(b) == "table" and typeof(b.Name) == "string" then b.Name
+					else ""
+
+				return #aStr < #bStr
+			end
 		end)
 
 		if returnFirst then
