@@ -158,13 +158,10 @@ function Window:LoseFocus(submit)
 		return
 	end
 
-	HasLostFocus = true
-
 	local text = Entry.TextBox.Text
 	self:ClearHistoryState()
 
 	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
-		-- self:SetEntryText("")
 		Entry.TextBox:CaptureFocus()
 	elseif GuiService.MenuIsOpen and Gui.Visible then
 		self:Hide()
@@ -172,14 +169,18 @@ function Window:LoseFocus(submit)
 
 	task.wait()
 
-	if submit and self.Valid then
-		self:SetEntryText("")
-		self.ProcessEntry(text)
-	elseif submit then
-		self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
-	end
+	if submit then
+		HasLostFocus = true
 
-	HasLostFocus = false
+		if self.Valid then
+			self:SetEntryText("")
+			self.ProcessEntry(text)
+		else
+			self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+		end
+
+		HasLostFocus = false
+	end
 end
 
 function Window:TraverseHistory(delta)
@@ -228,7 +229,8 @@ function Window:BeginInput(input, gameProcessed)
 		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
 			if tick() - lastPressTime < 1 then
 				if pressCount >= 5 then
-					return self.Cmdr:SetEnabled(true)
+					self.Cmdr:SetEnabled(true)
+					return
 				else
 					pressCount = pressCount + 1
 				end
@@ -343,7 +345,8 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
 	end
 
 	if Window.OnTextChanged then
-		return Window.OnTextChanged(Entry.TextBox.Text)
+		Window.OnTextChanged(Entry.TextBox.Text)
+		return
 	end
 end)
 
