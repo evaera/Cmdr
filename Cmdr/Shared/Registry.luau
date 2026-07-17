@@ -155,6 +155,7 @@ local Registry = {
 		"Data",
 		"Group",
 		"Guards",
+		"_scriptInstance",
 	}),
 	CommandArgProps = Util.MakeDictionary({ "Name", "Type", "Description", "Optional", "Default" }),
 	Types = {},
@@ -277,20 +278,22 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 	Prefer using Registry:RegisterCommand for proper handling of client/server model.
 
 	@param commandObject CommandDefinition
+	@param isDefault boolean? -- True if this is a built-in Cmdr command
+	@return boolean -- Returns true if registration succeeded or false if aborted due to a developer override
 	@private
 	@within Registry
 ]=]
-function Registry:RegisterCommandObject(commandObject)
-	for key in pairs(commandObject) do
+function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boolean
+	for key in commandObject do
 		if self.CommandMethods[key] == nil then
 			error(`[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
 		end
 	end
 
 	if commandObject.Args then
-		for i, arg in pairs(commandObject.Args) do
+		for i, arg in commandObject.Args do
 			if type(arg) == "table" then
-				for key in pairs(arg) do
+				for key in arg do
 					if self.CommandArgProps[key] == nil then
 						error(
 							`[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{i}: {key}`
@@ -306,29 +309,66 @@ function Registry:RegisterCommandObject(commandObject)
 		self:FlushAutoExecBufferDeferred()
 	end
 
-	-- Unregister the old command if it exists...
-	local oldCommand = self.Commands[commandObject.Name:lower()]
-	if oldCommand and oldCommand.Aliases then
-		for _, alias in pairs(oldCommand.Aliases) do
-			self.Commands[alias:lower()] = nil
+	-- Mark where this command came from
+	commandObject._isDefault = not not isDefault
+
+	local commandKey = commandObject.Name:lower()
+	local oldCommand = self.Commands[commandKey]
+
+	if oldCommand then
+		local oldIsDefault = not not oldCommand._isDefault
+
+		if isDefault and not oldIsDefault then
+			warn(
+				`[Cmdr] Ignored default command '{commandObject.Name}' because a custom developer command is already registered with this name.`
+			)
+			return false
 		end
-	elseif not oldCommand then
+
+		if not isDefault and oldIsDefault then
+			warn(`[Cmdr] Custom command '{commandObject.Name}' has replaced the default built-in command.`)
+		elseif not isDefault and not oldIsDefault then
+			warn(`[Cmdr] Custom command '{commandObject.Name}' was overwritten by a newer custom command.`)
+		else
+			warn(`[Cmdr] Default command '{commandObject.Name}' was overwritten by a newer default command.`)
+		end
+
+		if RunService:IsServer() and oldCommand._scriptInstance then
+			oldCommand._scriptInstance:Destroy()
+		end
+
+		local index = table.find(self.CommandsArray, oldCommand)
+		if index then
+			self.CommandsArray[index] = commandObject
+		else
+			table.insert(self.CommandsArray, commandObject)
+		end
+
+		if oldCommand.Aliases then
+			for _, alias in oldCommand.Aliases do
+				self.Commands[alias:lower()] = nil
+			end
+		end
+	else
 		table.insert(self.CommandsArray, commandObject)
 	end
 
-	self.Commands[commandObject.Name:lower()] = commandObject
+	self.Commands[commandKey] = commandObject
 
 	if commandObject.Aliases then
-		for _, alias in pairs(commandObject.Aliases) do
+		for _, alias in commandObject.Aliases do
 			self.Commands[alias:lower()] = commandObject
 		end
 	end
+
+	return true
 end
 
 --[=[
 	Registers a command definition and its server equivalent. Handles replicating the definition to the client.
 
 	@param filter (CommandDefinition -> boolean)? -- If present, will be passed a command definition which will then only be registered if the function returns `true`.
+	@param isDefault boolean? -- True if this is a built-in Cmdr command
 
 	@server
 	@within Registry
@@ -336,12 +376,15 @@ end
 function Registry:RegisterCommand(
 	commandScript: ModuleScript,
 	commandServerScript: ModuleScript?,
-	filter: ((any) -> boolean)?
+	filter: ((any) -> boolean)?,
+	isDefault: boolean?
 )
 	local commandObject = require(commandScript)
 	assert(
 		typeof(commandObject) == "table",
-		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
+		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(
+			commandObject
+		)})`
 	)
 
 	if commandServerScript then
@@ -353,9 +396,13 @@ function Registry:RegisterCommand(
 		return
 	end
 
-	self:RegisterCommandObject(commandObject)
+	commandObject._scriptInstance = commandScript
 
-	commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
+	local success = self:RegisterCommandObject(commandObject, isDefault)
+
+	if success then
+		commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
+	end
 end
 
 --[=[
@@ -364,15 +411,16 @@ end
 	Module scripts which include `Server` in their name will not be sent to the client.
 
 	@param filter ((CommandDefinition) -> boolean)? -- If present, will be passed a command definition which will then only be registered if the function returns `true`.
+	@param isDefault boolean? -- True if these are built-in Cmdr commands
 
 	@server
 	@within Registry
 ]=]
-function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> boolean)?)
+function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> boolean)?, isDefault: boolean?)
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
 
-	for _, commandScript in pairs(container:GetChildren()) do
+	for _, commandScript in container:GetChildren() do
 		if commandScript:IsA("ModuleScript") then
 			if not commandScript.Name:find("Server") then
 				local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
@@ -381,16 +429,16 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 					usedServerScripts[serverCommandScript] = true
 				end
 
-				self:RegisterCommand(commandScript, serverCommandScript, filter)
+				self:RegisterCommand(commandScript, serverCommandScript, filter, isDefault)
 			else
 				skippedServerScripts[commandScript] = true
 			end
 		else
-			self:RegisterCommandsIn(commandScript, filter)
+			self:RegisterCommandsIn(commandScript, filter, isDefault)
 		end
 	end
 
-	for skippedScript in pairs(skippedServerScripts) do
+	for skippedScript in skippedServerScripts do
 		if not usedServerScripts[skippedScript] then
 			warn(
 				`[Cmdr] Command script {skippedScript.Name} was skipped because it has 'Server' in its name, and has no equivalent shared script.`
@@ -417,9 +465,15 @@ function Registry:RegisterDefaultCommands(arrayOrFunc: { string } | (any) -> boo
 
 	local dictionary = if type(arrayOrFunc) == "table" then Util.MakeDictionary(arrayOrFunc) else nil
 
-	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, dictionary ~= nil and function(command)
-		return dictionary[command.Group] or false
-	end or arrayOrFunc)
+	self:RegisterCommandsIn(
+		self.Cmdr.DefaultCommandsFolder,
+		if dictionary ~= nil
+			then function(command)
+				return dictionary[command.Group] or false
+			end
+			else arrayOrFunc,
+		true
+	)
 end
 
 --[=[
