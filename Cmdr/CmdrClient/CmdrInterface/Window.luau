@@ -167,12 +167,11 @@ function Window:LoseFocus(submit)
 		self:Hide()
 	end
 
-	task.wait()
-
 	if submit then
 		HasLostFocus = true
 
 		if self.Valid then
+			task.wait()
 			self:SetEntryText("")
 			self.ProcessEntry(text)
 		else
