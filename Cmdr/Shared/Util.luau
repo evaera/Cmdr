@@ -45,9 +45,9 @@ local function transformInstanceSet(instances)
 		local object = instances[i]
 		if typeof(object) == "Instance" and object:IsA("Player") then
 			names[i] = if object.DisplayName == object.Name then object.Name else `{object.DisplayName} ({object.Name})`
-			continue
+		else
+			names[i] = object.Name or tostring(object)
 		end
-		names[i] = object.Name or tostring(object)
 	end
 
 	return names, instances
