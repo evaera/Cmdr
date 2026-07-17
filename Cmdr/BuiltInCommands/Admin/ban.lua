@@ -11,7 +11,7 @@ return {
 		{
 			Type = "duration",
 			Name = "Duration",
-			Description = "How long the ban lasts (-1 for permanent)",
+			Description = "How long the ban lasts (negative values indicate a permanent ban)",
 		},
 		{
 			Type = "string",
