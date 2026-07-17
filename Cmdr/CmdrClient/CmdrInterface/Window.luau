@@ -79,8 +79,10 @@ function Window:SetVisible(visible)
 	if visible then
 		self.PreviousChatWindowConfigurationEnabled = TextChatService.ChatWindowConfiguration.Enabled
 		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
+		self.PreviousChannelTabsConfigurationEnabled = TextChatService.ChannelTabsConfiguration.Enabled
 		TextChatService.ChatWindowConfiguration.Enabled = false
 		TextChatService.ChatInputBarConfiguration.Enabled = false
+		TextChatService.ChannelTabsConfiguration.Enabled = false
 
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
@@ -96,6 +98,9 @@ function Window:SetVisible(visible)
 		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled
 				~= nil
 			then self.PreviousChatInputBarConfigurationEnabled
+			else true
+		TextChatService.ChannelTabsConfiguration.Enabled = if self.PreviousChannelTabsConfigurationEnabled ~= nil
+			then self.PreviousChannelTabsConfigurationEnabled
 			else true
 
 		Entry.TextBox:ReleaseFocus()
@@ -147,24 +152,33 @@ function Window:HideInvalidState()
 end
 
 -- Event handler for text box focus lost
+local HasLostFocus = false -- Bandaid fix for duplicate output on Linux
 function Window:LoseFocus(submit)
-	local text = Entry.TextBox.Text
+	if HasLostFocus then
+		return
+	end
 
+	local text = Entry.TextBox.Text
 	self:ClearHistoryState()
 
 	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
-		-- self:SetEntryText("")
 		Entry.TextBox:CaptureFocus()
 	elseif GuiService.MenuIsOpen and Gui.Visible then
 		self:Hide()
 	end
 
-	if submit and self.Valid then
-		wait()
-		self:SetEntryText("")
-		self.ProcessEntry(text)
-	elseif submit then
-		self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+	if submit then
+		HasLostFocus = true
+
+		if self.Valid then
+			task.wait()
+			self:SetEntryText("")
+			self.ProcessEntry(text)
+		else
+			self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+		end
+
+		HasLostFocus = false
 	end
 end
 
@@ -214,7 +228,8 @@ function Window:BeginInput(input, gameProcessed)
 		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
 			if tick() - lastPressTime < 1 then
 				if pressCount >= 5 then
-					return self.Cmdr:SetEnabled(true)
+					self.Cmdr:SetEnabled(true)
+					return
 				else
 					pressCount = pressCount + 1
 				end
@@ -224,7 +239,7 @@ function Window:BeginInput(input, gameProcessed)
 			lastPressTime = tick()
 		elseif self.Cmdr.Enabled then
 			self:SetVisible(not self:IsVisible())
-			wait()
+			task.wait()
 			self:SetEntryText("")
 
 			if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
@@ -255,7 +270,7 @@ function Window:BeginInput(input, gameProcessed)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self:SelectVertical(-1)
 	elseif input.KeyCode == Enum.KeyCode.Return then -- Eat new lines
-		wait()
+		task.wait()
 		self:SetEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
 	elseif input.KeyCode == Enum.KeyCode.Tab then -- Auto complete
 		local item = self.AutoComplete:GetSelectedItem()
@@ -298,12 +313,12 @@ function Window:BeginInput(input, gameProcessed)
 				newText = replace
 			end
 			-- need to wait a frame so we can eat the \t
-			wait()
+			task.wait()
 			-- Update the text box
 			self:SetEntryText(newText .. (insertSpace and " " or ""))
 		else
 			-- Still need to eat the \t even if there is no auto-complete to show
-			wait()
+			task.wait()
 			self:SetEntryText(self:GetEntryText())
 		end
 	else
@@ -327,8 +342,10 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
 		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
 		return
 	end
+
 	if Window.OnTextChanged then
-		return Window.OnTextChanged(Entry.TextBox.Text)
+		Window.OnTextChanged(Entry.TextBox.Text)
+		return
 	end
 end)
 
