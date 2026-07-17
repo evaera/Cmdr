@@ -1,22 +1,46 @@
 return {
-	Name = "ban";
-	Description = "Bans a player or set of players.";
-	Group = "DefaultAdmin";
+	Name = "ban",
+	Description = "Bans a player or set of players.",
+	Group = "DefaultAdmin",
 	Args = {
 		{
-			Type = "playerIds";
-			Name = "players";
-			Description = "The players to ban.";
+			Type = "playerIds",
+			Name = "Players",
+			Description = "The players to ban (max 50)",
 		},
 		{
-			Type = "duration";
-			Name = "duration";
-			Description = "How long the ban should last. A negative value means a permanent ban.";
+			Type = "duration",
+			Name = "Duration",
+			Description = "How long the ban lasts (-1 for permanent)",
 		},
 		{
-			Type = "string";
-			Name = "reason";
-			Description = "The reason for the ban. This is shown to the player(s) and saved in history.";
+			Type = "string",
+			Name = "Display Reason",
+			Description = "Ban message shown to the player",
 		},
-	};
+		{
+			Type = "string",
+			Name = "Private Reason",
+			Description = "Internal staff notes for ban history",
+			Optional = true,
+		},
+		{
+			Type = "boolean",
+			Name = "Exclude Alt Accounts",
+			Description = "Skip banning their alternate accounts",
+			Default = false,
+		},
+		{
+			Type = "boolean",
+			Name = "Apply to Universe",
+			Description = "Ban from all places in this experience",
+			Default = true,
+		},
+		{
+			Type = "boolean",
+			Name = "Apply Device Block",
+			Description = "Block their device from rejoining for 24 hours",
+			Default = false,
+		},
+	},
 }

@@ -1,18 +1,40 @@
 local Players = game:GetService("Players")
 
-return function (_, players, duration, reason)
-	if duration <= 0 then
+return function(
+	_,
+	playerIds,
+	duration,
+	displayReason,
+	privateReason,
+	excludeAltAccounts,
+	applyToUniverse,
+	applyDeviceBlock
+)
+	if #playerIds > 50 then
+		return "Too many players specified. BanAsync limits batches to a maximum of 50 players."
+	end
+
+	if duration < 1 and duration ~= -1 then
 		duration = -1
 	end
 
-	Players:BanAsync({
-		UserIds = players,
+	if #displayReason > 400 then
+		return "Display reason exceeds the 400-character limit."
+	end
+
+	if privateReason and #privateReason > 1000 then
+		return "Private reason exceeds the 1000-character limit."
+	end
+
+	local success, errorMessage = pcall(Players.BanAsync, Players, {
+		UserIds = playerIds,
 		Duration = duration,
-		DisplayReason = reason,
-		PrivateReason = reason,
-		ExcludeAltAccounts = false,
-		ApplyToUniverse = true,
+		DisplayReason = displayReason,
+		PrivateReason = privateReason or displayReason,
+		ExcludeAltAccounts = excludeAltAccounts,
+		ApplyToUniverse = applyToUniverse,
+		ApplyDeviceBlock = applyDeviceBlock,
 	})
 
-	return ("Banned %d players."):format(#players)
+	return if success then `Banned {#playerIds} players.` else `BanAsync failed: {errorMessage}`
 end
