@@ -284,16 +284,16 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 	@within Registry
 ]=]
 function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boolean
-	for key in commandObject do
+	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
 			error(`[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
 		end
 	end
 
 	if commandObject.Args then
-		for i, arg in commandObject.Args do
+		for i, arg in pairs(commandObject.Args) do
 			if type(arg) == "table" then
-				for key in arg do
+				for key in pairs(arg) do
 					if self.CommandArgProps[key] == nil then
 						error(
 							`[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{i}: {key}`
@@ -345,7 +345,7 @@ function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boo
 		end
 
 		if oldCommand.Aliases then
-			for _, alias in oldCommand.Aliases do
+			for _, alias in pairs(oldCommand.Aliases) do
 				self.Commands[alias:lower()] = nil
 			end
 		end
@@ -356,7 +356,7 @@ function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boo
 	self.Commands[commandKey] = commandObject
 
 	if commandObject.Aliases then
-		for _, alias in commandObject.Aliases do
+		for _, alias in pairs(commandObject.Aliases) do
 			self.Commands[alias:lower()] = commandObject
 		end
 	end
@@ -418,7 +418,7 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
 
-	for _, commandScript in container:GetChildren() do
+	for _, commandScript in pairs(container:GetChildren()) do
 		if commandScript:IsA("ModuleScript") then
 			if not commandScript.Name:find("Server") then
 				local serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
@@ -436,7 +436,7 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 		end
 	end
 
-	for skippedScript in skippedServerScripts do
+	for skippedScript in pairs(skippedServerScripts) do
 		if not usedServerScripts[skippedScript] then
 			warn(
 				`[Cmdr] Command script {skippedScript.Name} was skipped because it has 'Server' in its name, and has no equivalent shared script.`
@@ -462,16 +462,17 @@ function Registry:RegisterDefaultCommands(arrayOrFunc: { string } | (any) -> boo
 	assert(RunService:IsServer(), "[Cmdr] RegisterDefaultCommands cannot be called from the client.")
 
 	local dictionary = if type(arrayOrFunc) == "table" then Util.MakeDictionary(arrayOrFunc) else nil
+	local filter
 
-	self:RegisterCommandsIn(
-		self.Cmdr.DefaultCommandsFolder,
-		if dictionary ~= nil
-			then function(command)
-				return dictionary[command.Group] or false
-			end
-			else arrayOrFunc,
-		true
-	)
+	if dictionary ~= nil then
+		function filter(command)
+			return dictionary[command.Group] or false
+		end
+	else
+		filter = arrayOrFunc
+	end
+
+	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, filter, true)
 end
 
 --[=[
