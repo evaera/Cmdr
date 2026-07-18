@@ -56,7 +56,7 @@ First and foremost, Cmdr is a keyboard experience and it has been designed with 
 
 :::warning Do not modify the source code
 
-Please **do not** modify the source code of Cmdr for your game. Instead, use its API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
+Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
 There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
@@ -84,4 +84,4 @@ There are plenty of resources available to help you with Cmdr, such as this webs
 
 **We recommend you stick to our official resources, especially if you're new to Cmdr.** If you decide to use unofficial resources, then the level of support we can provide (for instance in our Discord server) is limited.
 
-The [Cmdr Discord server](https://discord.gg/g5PdMxh) has a dedicated [`cmdr-help`](https://discord.com/channels/425800792679645204/564621492432666654) channel, which is where we recommend you go to get any support you need.
+The [Cmdr Discord server](https://discord.gg/xFzPVg5WXm) has a dedicated [`help`](https://discord.com/channels/1497725941974040731/1497730144260063334) channel, which is where we recommend you go to get any support you need.

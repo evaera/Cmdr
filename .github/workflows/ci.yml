@@ -14,13 +14,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Setup tools
       - name: Run aftman
-        uses: ok-nick/setup-aftman@v0.3.0
-        with:
-          version: v0.2.7
+        uses: ok-nick/setup-aftman@main
 
       # Run linter
       - name: Update standard library

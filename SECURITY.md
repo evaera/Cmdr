@@ -26,16 +26,16 @@ Please have ready to share with us, when we request, steps to reproduce and/or a
 
 You'll need to contact one of our maintainers:
 
-| GitHub | Discord Username | Discord ID |
-| ----- | ----------------- | ---------- |
-| [@autonordev](https://github.com/autonordev) | [@elenr](https://discord.com/users/340861504255557634) | `340861504255557634` |
-| [@wilyt1](https://github.com/wilyt1) | [@countyl1mits](https://discord.com/users/235542521894273024) | `235542521894273024` |
+| GitHub                                       | Discord Username                                              | Discord ID           |
+| -------------------------------------------- | ------------------------------------------------------------- | -------------------- |
+| [@autonordev](https://github.com/autonordev) | [@elenr](https://discord.com/users/340861504255557634)        | `340861504255557634` |
+| [@wilyt1](https://github.com/wilyt1)         | [@countyl1mits](https://discord.com/users/235542521894273024) | `235542521894273024` |
 
 > If one of the usernames above have changed and are no longer accurate, or you want to double check the usernames are correct, you can use the https://discord.id/ lookup service.
 
 Please approach a maintainer, ideally privately but if not then publicly, and inform them that you need to report a Cmdr security bug. We'll respond with further instructions so you can deliver your report to us.
 
-The [Imaginary Menagerie Discord server](https://discord.gg/g5PdMxh) is a good place to start, and has official channels for Cmdr. You could also try the [Roblox OSS Community](https://discord.gg/Qm3JNyEc32) or other Roblox development related servers.
+The [Imaginary Menagerie Discord server](https://discord.gg/xFzPVg5WXm) is a good place to start, and has official channels for Cmdr. You could also try the [Roblox OSS Community](https://discord.gg/Qm3JNyEc32) or other Roblox development related servers.
 
 If all else fails and you can't get in touch with any maintainer, please open a GitHub issue stating simply you have a security report and you're struggling to get in touch. We can help from there.
 
