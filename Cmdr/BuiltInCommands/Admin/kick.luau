@@ -7,7 +7,7 @@ return {
 		{
 			Type = "players",
 			Name = "Players",
-			Description = "The players to kick.",
+			Description = "The players to kick",
 		},
 		{
 			Type = "string",
