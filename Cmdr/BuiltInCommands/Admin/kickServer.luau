@@ -5,19 +5,24 @@ return function(context, players, reason)
 		reason = "No reason provided"
 	end
 
-	local success, filteredReason = pcall(function()
-		local filterResult =
-			TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
-		return filterResult:GetNonChatStringForBroadcastAsync()
-	end)
+	local filteredReason = reason
+	if reason ~= "No reason provided" then
+		local filterSuccess, filterResult = pcall(function()
+			local filterResult =
+				TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
+			return filterResult:GetNonChatStringForBroadcastAsync()
+		end)
 
-	if success then
-		for _, player in pairs(players) do
-			player:Kick(filteredReason)
+		if not filterSuccess then
+			return `Failed to filter reason: {filterResult}`
 		end
 
-		return `Kicked {#players} players.`
+		filteredReason = filterResult
 	end
 
-	return `Failed to filter reason: {filteredReason}`
+	for _, player in pairs(players) do
+		player:Kick(filteredReason)
+	end
+
+	return `Kicked {#players} players.`
 end
