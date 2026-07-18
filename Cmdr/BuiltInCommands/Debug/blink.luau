@@ -1,17 +1,3 @@
-local CollectionService = game:GetService("CollectionService")
-
-for _, instance in workspace:GetDescendants() do
-	if instance:IsA("BasePart") and not instance.CanCollide then
-		instance:AddTag("RayBlacklist")
-	end
-end
-
-workspace.DescendantAdded:Connect(function(descendant)
-	if descendant:IsA("BasePart") and not descendant.CanCollide then
-		descendant:AddTag("RayBlacklist")
-	end
-end)
-
 return {
 	Name = "blink",
 	Aliases = { "b" },
@@ -30,17 +16,16 @@ return {
 			return "You don't have a character."
 		end
 
-		character:AddTag("RayBlacklist")
-
 		local raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
-		raycastParams.FilterDescendantsInstances = CollectionService:GetTagged("RayBlacklist")
+		raycastParams.FilterDescendantsInstances = { character }
 		raycastParams.IgnoreWater = true
-		raycastParams.CollisionGroup = "Default"
+		raycastParams.RespectCanCollide = true
 
 		local raycastResult = workspace:Raycast(mouse.UnitRay.Origin, mouse.UnitRay.Direction * 1000, raycastParams)
+		local targetPosition = if raycastResult then raycastResult.Position else mouse.Hit.Position
 
-		character:MoveTo(if raycastResult then raycastResult.Position else mouse.Hit.Position)
+		character:MoveTo(targetPosition)
 
 		return "Blinked!"
 	end,
