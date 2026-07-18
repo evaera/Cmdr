@@ -16,7 +16,7 @@ return {
 		{
 			Type = "player @ positionVector3",
 			Name = "Destination",
-			Description = "The player to teleport to",
+			Description = "The target player or coordinates to teleport to",
 		},
 	},
 }
