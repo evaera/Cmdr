@@ -5,19 +5,17 @@ return function(context, players, reason)
 		reason = "No reason provided"
 	end
 
-	local filteredReason = reason
+	local filterSuccess, filteredReason = nil, reason
 	if reason ~= "No reason provided" then
-		local filterSuccess, filterResult = pcall(function()
+		filterSuccess, filteredReason = pcall(function()
 			local filterResult =
 				TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
 			return filterResult:GetNonChatStringForBroadcastAsync()
 		end)
 
 		if not filterSuccess then
-			return `Failed to filter reason: {filterResult}`
+			return `Failed to filter reason: {filteredReason}`
 		end
-
-		filteredReason = filterResult
 	end
 
 	for _, player in pairs(players) do
