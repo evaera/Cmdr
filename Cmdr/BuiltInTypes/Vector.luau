@@ -2,7 +2,7 @@ local Util = require(script.Parent.Parent.Shared.Util)
 
 local AXES = { "X", "Y", "Z" }
 
-local function validateVector(value: number?, i: number): boolean
+local function validateVector(value, i)
 	if value == nil then
 		return false, `Invalid or missing number at position {i} in Vector type.`
 	end
