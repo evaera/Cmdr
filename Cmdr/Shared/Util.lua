@@ -484,7 +484,7 @@ end
 
 	For options, one of Constructor or Parse is required
 
-	@param options { Parse: function?, Constructor: function?, TransformEach: function?, ValidateEach: function?, Prefixes: {string}?, Length: number? }
+	@param options { Transform: function?, Parse: function?, Constructor: function?, TransformEach: function?, ValidateEach: function?, Prefixes: {string}?, Length: number? }
 	@return ArgumentDefinition
 ]=]
 function Util.MakeSequenceType(options)
@@ -506,7 +506,7 @@ function Util.MakeSequenceType(options)
 	return {
 		Prefixes = options.Prefixes,
 
-		Transform = function(text)
+		Transform = options.Transform or function(text)
 			return Util.Map(Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value)
 				return options.TransformEach(value)
 			end)

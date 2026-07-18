@@ -24,7 +24,7 @@ local vector2Type = Util.MakeSequenceType({
 	Length = 2,
 })
 
-local positionVector3Type = {
+local positionVector3Type = Util.MakeSequenceType({
 	Transform = function(text, executor)
 		local character = executor.Character
 		local currentPosition = if character then character:GetPivot().Position else Vector3.zero
@@ -42,27 +42,10 @@ local positionVector3Type = {
 			return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
 		end)
 	end,
-
-	Validate = function(components)
-		if #components > 3 then
-			return false, "Maximum of 3 values allowed in sequence"
-		end
-
-		for i = 1, 3 do
-			local valid, reason = validateVector(components[i], i)
-
-			if not valid then
-				return false, reason
-			end
-		end
-
-		return true
-	end,
-
-	Parse = function(components)
-		return Vector3.new(unpack(components))
-	end,
-}
+	ValidateEach = validateVector,
+	Constructor = Vector3.new,
+	Length = 3,
+})
 
 return function(cmdr)
 	cmdr:RegisterType("vector3", vector3Type)
