@@ -1,6 +1,8 @@
 local Util = require(script.Parent.Parent.Shared.Util)
 
-local function validateVector(value, i)
+local AXES = { "X", "Y", "Z" }
+
+local function validateVector(value: number?, i: number): boolean
 	if value == nil then
 		return false, `Invalid or missing number at position {i} in Vector type.`
 	end
@@ -22,19 +24,22 @@ local vector2Type = Util.MakeSequenceType({
 	Length = 2,
 })
 
-local relativeVector3Type = {
+local positionVector3Type = {
 	Transform = function(text, executor)
-		local currentPosition = executor.Character:GetPivot().Position
+		local character = executor.Character
+		local currentPosition = if character then character:GetPivot().Position else Vector3.zero
 
 		return Util.Map(Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value, index)
 			if value:sub(1, 1) ~= "~" then
 				return tonumber(value)
 			end
 
-			local currentComponent =
-				currentPosition[if index == 1 then "X" elseif index == 2 then "Y" elseif index == 3 then "Z" else 0]
+			local axis = AXES[index]
+			local currentComponent = if axis then currentPosition[axis] else 0
 
-			return currentComponent + if value == "~" then 0 else tonumber(value:sub(2))
+			local offset = tonumber(value:sub(2))
+
+			return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
 		end)
 	end,
 
@@ -66,6 +71,6 @@ return function(cmdr)
 	cmdr:RegisterType("vector2", vector2Type)
 	cmdr:RegisterType("vector2s", Util.MakeListableType(vector2Type))
 
-	cmdr:RegisterType("relativeVector3", relativeVector3Type)
-	cmdr:RegisterType("relativeVector3s", Util.MakeListableType(relativeVector3Type))
+	cmdr:RegisterType("positionVector3", positionVector3Type)
+	cmdr:RegisterType("positionVector3s", Util.MakeListableType(positionVector3Type))
 end
