@@ -26,14 +26,16 @@ Please have ready to share with us, when we request, steps to reproduce and/or a
 
 You'll need to contact one of our maintainers:
 
-| GitHub | Discord Username | Discord ID |
-| ----- | ----------------- | ---------- |
-| [@autonordev](https://github.com/autonordev) | [@elenr](https://discord.com/users/340861504255557634) | `340861504255557634` |
-| [@wilyt1](https://github.com/wilyt1) | [@countyl1mits](https://discord.com/users/235542521894273024) | `235542521894273024` |
+| GitHub                                       | Discord Username                                              | Discord ID           |
+| -------------------------------------------- | ------------------------------------------------------------- | -------------------- |
+| [@autonordev](https://github.com/autonordev) | [@elenr](https://discord.com/users/340861504255557634)        | `340861504255557634` |
+| [@wilyt1](https://github.com/wilyt1)         | [@countyl1mits](https://discord.com/users/235542521894273024) | `235542521894273024` |
+
+> If one of the usernames above have changed and are no longer accurate, or you want to double check the usernames are correct, you can use the https://discord.id/ lookup service.
 
 Please approach a maintainer, ideally privately but if not then publicly, and inform them that you need to report a Cmdr security bug. We'll respond with further instructions so you can deliver your report to us.
 
-The [Imaginary Menagerie Discord server](https://discord.gg/g5PdMxh) is a good place to start, and has official channels for Cmdr. You could also try the [Roblox OSS Community](https://discord.gg/Qm3JNyEc32) or other Roblox development related servers.
+The [Imaginary Menagerie Discord server](https://discord.gg/xFzPVg5WXm) is a good place to start, and has official channels for Cmdr. You could also try the [Roblox OSS Community](https://discord.gg/Qm3JNyEc32) or other Roblox development related servers.
 
 If all else fails and you can't get in touch with any maintainer, please open a GitHub issue stating simply you have a security report and you're struggling to get in touch. We can help from there.
 
@@ -53,9 +55,9 @@ We will notify you when we have identified a fix to the vulnerability. You may b
 
 ## Disclosure
 
-We will publish a new release containing the fix and - unless exceptional circumstances apply - a security advisory alongside it. It is possible that this initial advisory is only a summary of the vulnerability and that a later advisory will come later.
+We will publish a new release containing the fix and - unless exceptional circumstances apply - a security advisory alongside it. It is possible that this initial advisory is only a summary of the vulnerability and that a more detailed advisory will come later; if we do this, it's to make it harder for opportunists to take advantage of the vulnerability while our users update to the patched version.
 
-We recognise that recognition is important to researchers and contributors and will provide credit where due. We will advise you when it is appropriate for you to fully disclose and publicly discuss the vulnerability. Ordinarily, this will be when a full advisory has released. We'll then close the group-chat or email thread about your report.
+We appreciate that recognition is important to researchers and contributors and will provide credit where due. We will advise you when it is appropriate for you to fully disclose and publicly discuss the vulnerability. Ordinarily, this will be when a full advisory has released. We'll then close the groupchat or email thread about your report.
 
 > **Warning**: To protect our users, we ask for you to be discreet. Prior to the publishing of a remediation release, you must **not** publicly discuss any information regarding the vulnerability, and we ask you to be mindful of who you discuss the vulnerability with.
 
@@ -87,4 +89,6 @@ If you've identified a potential vulnerability in a pull request which hasn't be
 
 This policy is designed to be compatible with common vulnerability disclosure good practice. It does not give you permission to act in any way that is inconsistent with the law, or which might cause us or our users to be in breach of any legal obligations.
 
-Since we don't own the games Cmdr runs in, we usually do not have the standing to attempt prosecution for computer intrusion or abuse offences. Accordingly, we can't provide any type of indemnity; you should refer to the policies of Roblox Corporation and any game you intend to conduct testing against (if not your own).
+Since we don't own the games Cmdr runs in, we usually do not have the standing to seek charges for computer intrusion or abuse offences. Accordingly, we can't provide any type of indemnity; you should refer to the policies of Roblox and any game you intend to conduct testing against (if not your own).
+
+**Nothing in this policy is legal advice. Nothing in this policy is legally binding (e.g. a contract).**

@@ -6,6 +6,6 @@ trim_trailing_whitespace = true
 charset = utf-8
 insert_final_newline = false
 
-[*.lua]
+[*.luau]
 indent_style = tab
 indent_size = unset
