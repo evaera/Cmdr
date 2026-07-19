@@ -39,9 +39,13 @@ luac.out
 *.x86_64
 *.hex
 
+# Node/Tooling
 node_modules/
 docs/CHANGELOG.md
 .vscode
 roblox.toml
 sourcemap.json
 build
+
+# Selene
+roblox.yml
