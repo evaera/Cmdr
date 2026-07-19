@@ -1,14 +1,31 @@
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
+
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
+local CreateGui = require(script.CreateGui)
+
+local Player = Players.LocalPlayer
 
 if RunService:IsClient() == false then
 	error(
 		"[Cmdr] Server scripts cannot require the client library. Please require the server library from the server to use Cmdr in your own code."
 	)
+end
+
+local function CreateSignal()
+	local event = Instance.new("BindableEvent")
+
+	return {
+		Fire = function(_, ...)
+			event:Fire(...)
+		end,
+
+		Connect = function(_, callback)
+			return event.Event:Connect(callback)
+		end,
+	}
 end
 
 --[=[
@@ -59,6 +76,20 @@ end
 	The list of key codes that will show or hide Cmdr. Use [`CmdrClient:SetActivationKeys`](#SetActivationKeys) to change.
 ]=]
 
+--[=[
+	@within CmdrClient
+	@prop Gui ScreenGui
+	@readonly
+	Refers to the current Cmdr GUI.
+]=]
+
+--[=[
+	@within CmdrClient
+	@prop Toggled { Connect: (self: ToggleSignal, callback: (visible: boolean) -> ()) -> RBXScriptConnection, Fire: (self: ToggleSignal, visible: boolean) -> () }
+	@readonly
+	A signal that fires when the Cmdr window is toggled.
+]=]
+
 local Cmdr
 do
 	Cmdr = setmetatable({
@@ -67,11 +98,13 @@ do
 		RemoteEvent = script:WaitForChild("CmdrEvent"),
 		ActivationKeys = { [Enum.KeyCode.F2] = true },
 		Enabled = true,
-		MashToEnable = false,
+		MashToOpen = false,
 		ActivationUnlocksMouse = false,
 		HideOnLostFocus = true,
 		PlaceName = "Cmdr",
 		Util = Util,
+		Gui = CreateGui(),
+		Toggled = CreateSignal(),
 		Events = {},
 	}, {
 		-- This sucks, and may be redone or removed
@@ -88,10 +121,6 @@ do
 
 	Cmdr.Registry = require(Shared.Registry)(Cmdr)
 	Cmdr.Dispatcher = require(Shared.Dispatcher)(Cmdr)
-end
-
-if StarterGui:WaitForChild("Cmdr") and wait() and Player:WaitForChild("PlayerGui"):FindFirstChild("Cmdr") == nil then
-	StarterGui.Cmdr:Clone().Parent = Player.PlayerGui
 end
 
 local Interface = require(script.CmdrInterface)(Cmdr)
@@ -173,16 +202,20 @@ end
 	Enables the "Mash to open" feature.
 	This feature, when enabled, requires the activation key to be pressed 5 times within a second to [enable](#SetEnabled) Cmdr.
 	This may be helpful to guard against mispresses from opening the window, for example.
+	Once opened, mashing will be disabled for 10 seconds since it was last opened for convenience.
 
 	@within CmdrClient
 ]=]
-function Cmdr:SetMashToEnable(enabled: boolean)
-	self.MashToEnable = enabled
-
-	if enabled then
-		self:SetEnabled(false)
-	end
+function Cmdr:SetMashToOpen(enabled: boolean)
+	self.MashToOpen = enabled
 end
+
+--[=[
+	@method SetMashToEnable
+	@deprecated v1.13.0 -- This method was renamed to SetMashToOpen in v1.13.0. The old name exists for backwards compatibility and should not be used for new work.
+	@within CmdrClient
+]=]
+Cmdr.SetMashToEnable = Cmdr.SetMashToOpen
 
 --[=[
 	Sets the hide on 'lost focus' feature.
@@ -203,30 +236,28 @@ function Cmdr:HandleEvent(name: string, callback: (...any) -> ())
 	self.Events[name] = callback
 end
 
--- "Only register when we aren't in studio because don't want to overwrite what the server portion did"
--- This is legacy code which predates Accurate Play Solo (which is now the only way to test in studio), this code will never run.
-if RunService:IsServer() == false then
-	local TypesFolder = script:WaitForChild("Types") :: Folder
-	local CommandsFolder = script:WaitForChild("Commands") :: Folder
+-- Register built-in types and commands
+local TypesFolder = script:WaitForChild("Types") :: Folder
+local CommandsFolder = script:WaitForChild("Commands") :: Folder
 
-	Cmdr.Registry:RegisterTypesIn(TypesFolder)
-	Cmdr.Registry:RegisterCommandsIn(CommandsFolder)
+Cmdr.Registry:RegisterTypesIn(TypesFolder)
+Cmdr.Registry:RegisterCommandsIn(CommandsFolder)
 
-	TypesFolder.ChildAdded:Connect(function(child: Instance)
-		if child:IsA("ModuleScript") then
-			require(child)(Cmdr.Registry)
-		else
-			warn(`[Cmdr] Ignored non-module child in Types: {child.Name}`)
-		end
-	end)
-	CommandsFolder.ChildAdded:Connect(function(child: Instance)
-		if child:IsA("ModuleScript") then
-			Cmdr.Registry:RegisterCommand(child)
-		else
-			warn(`[Cmdr] Ignored non-module child in Commands: {child.Name}`)
-		end
-	end)
-end
+TypesFolder.ChildAdded:Connect(function(child: Instance)
+	if child:IsA("ModuleScript") then
+		require(child)(Cmdr.Registry)
+	else
+		warn(`[Cmdr] Ignored non-module child in Types: {child.Name}`)
+	end
+end)
+
+CommandsFolder.ChildAdded:Connect(function(child: Instance)
+	if child:IsA("ModuleScript") then
+		Cmdr.Registry:RegisterCommand(child)
+	else
+		warn(`[Cmdr] Ignored non-module child in Commands: {child.Name}`)
+	end
+end)
 
 -- Hook up event listener
 Cmdr.RemoteEvent.OnClientEvent:Connect(function(name, ...)

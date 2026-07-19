@@ -1,3 +1,6 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
 return function()
 	local Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
@@ -212,6 +215,6 @@ return function()
 	Type.TextXAlignment = Enum.TextXAlignment.Left
 	Type.Parent = Field
 
-	Cmdr.Parent = game:GetService("StarterGui")
+	Cmdr.Parent = Player:WaitForChild("PlayerGui")
 	return Cmdr
 end

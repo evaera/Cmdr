@@ -1,6 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterGui = game:GetService("StarterGui")
-local CreateGui = require(script.Parent.CreateGui)
 
 -- Handles initial preparation of the game server-side.
 return function(cmdr)
@@ -33,8 +31,4 @@ return function(cmdr)
 
 	script.Parent.BuiltInTypes:Destroy()
 	script.Parent.BuiltInCommands.Name = "Server commands"
-
-	if StarterGui:FindFirstChild("Cmdr") == nil then
-		CreateGui()
-	end
 end

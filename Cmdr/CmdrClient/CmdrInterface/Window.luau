@@ -111,6 +111,8 @@ function Window:SetVisible(visible)
 			self.PreviousMouseBehavior = nil
 		end
 	end
+
+	self.Cmdr.Toggled:Fire(visible)
 end
 
 -- Hides the command bar
@@ -161,9 +163,9 @@ function Window:LoseFocus(submit)
 	local text = Entry.TextBox.Text
 	self:ClearHistoryState()
 
-	if Gui.Visible and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
+	if self:IsVisible() and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 		Entry.TextBox:CaptureFocus()
-	elseif GuiService.MenuIsOpen and Gui.Visible then
+	elseif self:IsVisible() and GuiService.MenuIsOpen then
 		self:Hide()
 	end
 
@@ -171,7 +173,7 @@ function Window:LoseFocus(submit)
 		HasLostFocus = true
 
 		if self.Valid then
-			task.wait()
+			--task.wait()
 			self:SetEntryText("")
 			self.ProcessEntry(text)
 		else
@@ -193,7 +195,6 @@ function Window:TraverseHistory(delta)
 	end
 
 	self.HistoryState.Position = math.clamp(self.HistoryState.Position + delta, 1, #history + 1)
-
 	self:SetEntryText(
 		self.HistoryState.Position == #history + 1 and self.HistoryState.InitialText
 			or history[self.HistoryState.Position]
@@ -212,8 +213,9 @@ function Window:SelectVertical(delta)
 	end
 end
 
-local lastPressTime = 0
 local pressCount = 0
+local lastPressTime = 0
+local lastOpenedTime = 0
 -- Handles user input when the box is focused
 function Window:BeginInput(input, gameProcessed)
 	if GuiService.MenuIsOpen then
@@ -225,25 +227,41 @@ function Window:BeginInput(input, gameProcessed)
 	end
 
 	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
-		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
-			if tick() - lastPressTime < 1 then
-				if pressCount >= 5 then
-					self.Cmdr:SetEnabled(true)
-					return
-				else
-					pressCount = pressCount + 1
-				end
-			else
-				pressCount = 1
-			end
-			lastPressTime = tick()
-		elseif self.Cmdr.Enabled then
-			self:SetVisible(not self:IsVisible())
-			task.wait()
-			self:SetEntryText("")
+		if not self.Cmdr.Enabled then
+			return
+		end
 
-			if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
-				self:Hide()
+		local currentTime = os.clock()
+		if self.Cmdr.MashToOpen then
+			if self:IsVisible() then
+				-- Prevent leftover mash presses from instantly closing Cmdr
+				if currentTime - lastPressTime > 1 then
+					self:SetVisible(false)
+				end
+
+				return
+			end
+
+			-- Allow reopening without mashing for 10 seconds after opening
+			if currentTime - lastOpenedTime < 10 then
+				self:SetVisible(true)
+				lastOpenedTime = currentTime
+				return
+			end
+
+			pressCount = if currentTime - lastPressTime < 1 then pressCount + 1 else 1
+			lastPressTime = currentTime
+
+			if pressCount >= 5 then
+				self:SetVisible(true)
+				lastOpenedTime = currentTime
+				pressCount = 0
+			end
+		else
+			self:SetVisible(not self:IsVisible())
+
+			if self:IsVisible() then
+				lastOpenedTime = currentTime
 			end
 		end
 
