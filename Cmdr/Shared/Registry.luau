@@ -455,6 +455,8 @@ end
 	1. an array of strings — this will limit registration to only commands which have their `Group` property set to this
 	2. a function which takes in a CommandDefinition and returns a `boolean` — only if `true` is returned will the command be registered
 
+	If a custom developer command is registered with the same name or alias as a default command, the developer command will take precedence and replace the default built-in command.
+
 	@param arrayOrFunc {string} | (CommandDefinition) -> boolean | nil
 
 	@server

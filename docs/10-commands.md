@@ -1,6 +1,6 @@
 # Commands
 
-No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands). See [Default Commands](#default-commands) for a list.
+No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands). See [Default Commands](#default-commands) for a list. If you register a custom command with the same name or alias as a default command, your developer command will override the default implementation entirely.
 
 Commands are defined in ModuleScripts that return a single table.
 
@@ -92,21 +92,14 @@ You should be aware that an exploiter can, in theory, manipulate or bypass any c
 
 ## Default commands
 
-:::info Possibly outdated
+If you run [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands), the standard suite of built-in commands becomes available grouped under these classifications:
 
-We've not reviewed this section for a while, it's possible that this information may be out of date.
-
-:::
-
-If you run [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands), these commands will be available with the following `Group`s:
-
-Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
-
-Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`, `get-player-place-instance`, `uptime`
-
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run` (`>`), `runif`, `echo`, `hover`, `replace` (`//`, `gsub`), `history`, `me`, `var`, `var=`, `json-array-encode`, `json-array-decode`, `resolve`, `len`, `pick`, `rand`, `edit`, `goto-place`
-
-Group: `Help`: `help`
+| Group            | Commands (Aliases in parentheses)                                                                                                                                                                                                                                                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **DefaultAdmin** | `announce` (`m`), `ban`, `goto-place`, `kick` (`boot`), `kill` (`slay`), `respawn`, `teleport` (`tp`), `unban`                                                                                                                                                                    |
+| **DefaultDebug** | `blink` (`b`), `fetch`, `get-player-place-instance`, `position` (`pos`), `thru` (`t`, `through`), `uptime`, `version`                                                                                                                                                             |
+| **DefaultUtil**  | `alias`, `bind`, `clear`, `convertTimestamp` (`date`), `echo` (`=`), `edit`, `exit`, `history`, `hover`, `json-array-decode`, `json-array-encode`, `len`, `math`, `pick`, `rand`, `replace` (`gsub`, `//`), `resolve`, `run-lines`, `run` (`>`), `runif`, `unbind`, `var=`, `var` |
+| **Help**         | `help` (`cmds`, `commands`)                                                                                                                                                                                                                                                       |
 
 ### Registering a subset of the default commands
 
@@ -190,7 +183,7 @@ Here is a list of automatic prefixed union types:
 
 ## Dynamic arguments and inline types
 
-Dynamic types are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/ArgumentContext#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
+Dynamic arguments are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/ArgumentContext#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
 
 Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have an `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove) depending on the first argument.
 
