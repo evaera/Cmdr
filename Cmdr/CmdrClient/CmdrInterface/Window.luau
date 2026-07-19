@@ -73,6 +73,7 @@ function Window:IsVisible()
 end
 
 -- Sets the command bar visible or not
+local lastClosedTime = nil
 function Window:SetVisible(visible)
 	Gui.Visible = visible
 
@@ -92,6 +93,7 @@ function Window:SetVisible(visible)
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		end
 	else
+		lastClosedTime = os.clock()
 		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil
 			then self.PreviousChatWindowConfigurationEnabled
 			else true
@@ -213,10 +215,10 @@ function Window:SelectVertical(delta)
 	end
 end
 
+-- Handles user input when the box is focused
 local pressCount = 0
 local lastPressTime = 0
-local lastOpenedTime = 0
--- Handles user input when the box is focused
+local openedByMash = false
 function Window:BeginInput(input, gameProcessed)
 	if GuiService.MenuIsOpen then
 		self:Hide()
@@ -235,17 +237,23 @@ function Window:BeginInput(input, gameProcessed)
 		if self.Cmdr.MashToOpen then
 			if self:IsVisible() then
 				-- Prevent leftover mash presses from instantly closing Cmdr
-				if currentTime - lastPressTime > 1 then
-					self:SetVisible(false)
+				if openedByMash and currentTime - lastPressTime <= 1 then
+					return
 				end
+
+				self:SetVisible(false)
+				lastClosedTime = currentTime
+				openedByMash = false
 
 				return
 			end
 
-			-- Allow reopening without mashing for 10 seconds after opening
-			if currentTime - lastOpenedTime < 10 then
+			-- Allow reopening without mashing for 10 seconds after closing
+			if lastClosedTime and currentTime - lastClosedTime < 10 then
 				self:SetVisible(true)
-				lastOpenedTime = currentTime
+				pressCount = 0
+				lastPressTime = currentTime
+				openedByMash = false
 				return
 			end
 
@@ -254,15 +262,12 @@ function Window:BeginInput(input, gameProcessed)
 
 			if pressCount >= 5 then
 				self:SetVisible(true)
-				lastOpenedTime = currentTime
 				pressCount = 0
+				openedByMash = true
 			end
 		else
 			self:SetVisible(not self:IsVisible())
-
-			if self:IsVisible() then
-				lastOpenedTime = currentTime
-			end
+			openedByMash = false
 		end
 
 		return

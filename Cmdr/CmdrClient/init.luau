@@ -202,7 +202,7 @@ end
 	Enables the "Mash to open" feature.
 	This feature, when enabled, requires the [activation key](#SetActivationKeys) to be pressed 5 times within a second to open Cmdr.
 	This may be helpful to guard against mispresses from opening the window, for example.
-	Once opened, mashing will be disabled for 10 seconds since it was last opened for convenience.
+	Once opened, mashing will be disabled for 10 seconds since it was last closed for convenience.
 
 	@within CmdrClient
 ]=]
