@@ -586,7 +586,7 @@ end
 ]=]
 function Registry:AddHook(...)
 	Util:_emitDeprecationWarning("AddHook")
-	Registry:RegisterHook(...)
+	self:RegisterHook(...)
 end
 
 Util:_registerDeprecationWarning(

@@ -216,7 +216,7 @@ end
 ]=]
 function Cmdr:SetMashToEnable(enabled: boolean)
 	Util:_emitDeprecationWarning("SetMashToEnable")
-	Cmdr:SetMashToOpen(enabled)
+	self:SetMashToOpen(enabled)
 end
 
 Util:_registerDeprecationWarning(
