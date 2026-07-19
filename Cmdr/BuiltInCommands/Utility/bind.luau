@@ -3,7 +3,7 @@ local TextChatService = game:GetService("TextChatService")
 local UserInputService = game:GetService("UserInputService")
 
 local hasHelperRan = false
-local function RunBindHelper(Cmdr)
+local function runBindHelper(Cmdr)
 	Players.PlayerRemoving:Connect(function(Player)
 		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
 		if binds[Player] then
@@ -53,7 +53,7 @@ return {
 
 	ClientRun = function(context, bind, command, arguments)
 		if not hasHelperRan then
-			RunBindHelper(context.Cmdr)
+			runBindHelper(context.Cmdr)
 		end
 
 		local binds = context:GetStore("CMDR_Binds")
