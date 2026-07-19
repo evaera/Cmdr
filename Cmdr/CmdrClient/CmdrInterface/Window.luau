@@ -237,7 +237,7 @@ function Window:BeginInput(input, gameProcessed)
 		if self.Cmdr.MashToOpen then
 			if self:IsVisible() then
 				-- Prevent leftover mash presses from instantly closing Cmdr
-				if openedByMash and currentTime - lastPressTime <= 1 then
+				if openedByMash and currentTime - lastPressTime <= 0.5 then
 					return
 				end
 
