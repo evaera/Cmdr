@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local UserInputService = game:GetService("UserInputService")
 
-local hasHelperRun = false
+local hasHelperRan = false
 local function RunBindHelper(Cmdr)
 	Players.PlayerRemoving:Connect(function(Player)
 		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
@@ -24,7 +24,7 @@ local function RunBindHelper(Cmdr)
 		end
 	end)
 
-	hasHelperRun = true
+	hasHelperRan = true
 end
 
 return {
@@ -52,7 +52,7 @@ return {
 	},
 
 	ClientRun = function(context, bind, command, arguments)
-		if not hasHelperRun then
+		if not hasHelperRan then
 			RunBindHelper(context.Cmdr)
 		end
 
