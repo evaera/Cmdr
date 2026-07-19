@@ -652,9 +652,11 @@ end
 	@private
 ]=]
 function Util:_registerDeprecationWarning(name: string, description: string)
-	assert(type(name) == "string", "[Cmdr] Deprecation warning name must be a string.")
-	assert(type(description) == "string", "[Cmdr] Deprecation warning description must be a string.")
-	assert(#name > 0, "[Cmdr] Deprecation warning name must not be empty.")
+	assert(type(name) == "string" and #name > 0, "[Cmdr] Deprecation warning name must be a string.")
+	assert(
+		type(description) == "string" and #description > 0,
+		"[Cmdr] Deprecation warning description must be a string."
+	)
 	assert(not self._deprecationWarnings[name], `[Cmdr] Deprecation warning {name} is already registered.`)
 
 	self._deprecationWarnings[name] = {
@@ -691,7 +693,7 @@ function Util:SuppressDeprecationWarning(warnings: string | { string })
 		type(warnings) == "string" or type(warnings) == "table",
 		"[Cmdr] Deprecation warning name(s) must be a string or an array of strings."
 	)
-	assert(type(warnings) == "string" or #warnings > 0, "[Cmdr] Deprecation warning name(s) must not be empty.")
+	assert(#warnings > 0, "[Cmdr] Deprecation warning name(s) must not be empty.")
 
 	if type(warnings) == "string" then
 		warnings = { warnings }
