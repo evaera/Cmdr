@@ -113,10 +113,10 @@ function Dispatcher:EvaluateAndRun(
 	end
 
 	local ok, out = xpcall(function()
-		local valid, errorText = command:Validate(true)
+		local valid, validationError = command:Validate(true)
 
 		if not valid then
-			return errorText
+			return validationError
 		end
 
 		return command:Run() or "Command executed."
@@ -179,10 +179,10 @@ function Dispatcher:Run(...): string
 		error(errorText) -- We do a full-on error here since this is code-invoked and they should know better.
 	end
 
-	local success, errorText = command:Validate(true)
+	local success, validationError = command:Validate(true)
 
 	if not success then
-		error(errorText)
+		error(validationError)
 	end
 
 	return command:Run()

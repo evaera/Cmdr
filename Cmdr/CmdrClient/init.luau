@@ -1,12 +1,8 @@
 local RunService = game:GetService("RunService")
-local StarterGui = game:GetService("StarterGui")
-local Players = game:GetService("Players")
 
 local Shared = script:WaitForChild("Shared")
 local Util = require(Shared:WaitForChild("Util"))
 local CreateGui = require(script.CreateGui)
-
-local Player = Players.LocalPlayer
 
 if RunService:IsClient() == false then
 	error(

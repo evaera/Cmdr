@@ -25,7 +25,7 @@ return function()
 	Frame.ScrollBarThickness = 6
 	Frame.ScrollingDirection = Enum.ScrollingDirection.Y
 	Frame.Selectable = false
-	Frame.Size = UDim2.new(0.95, 0, 0, 0)
+	Frame.Size = UDim2.fromScale(0.95, 0)
 	Frame.Visible = false
 	Frame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Frame.Parent = Cmdr
@@ -36,11 +36,11 @@ return function()
 	Autocomplete.BorderSizePixel = 0
 	Autocomplete.CanvasSize = UDim2.new(0, 0, 0, 0)
 	Autocomplete.Name = "Autocomplete"
-	Autocomplete.Position = UDim2.new(0, 167, 0, 75)
+	Autocomplete.Position = UDim2.fromOffset(167, 75)
 	Autocomplete.ScrollBarThickness = 6
 	Autocomplete.ScrollingDirection = Enum.ScrollingDirection.Y
 	Autocomplete.Selectable = false
-	Autocomplete.Size = UDim2.new(0, 200, 0, 200)
+	Autocomplete.Size = UDim2.fromOffset(200, 200)
 	Autocomplete.Visible = false
 	Autocomplete.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Autocomplete.Parent = Cmdr
@@ -123,7 +123,7 @@ return function()
 	TextBox.ClearTextOnFocus = false
 	TextBox.Font = Enum.Font.Code
 	TextBox.LayoutOrder = 999999999
-	TextBox.Position = UDim2.new(0, 140, 0, 0)
+	TextBox.Position = UDim2.fromOffset(140, 0)
 	TextBox.Size = UDim2.new(1, 0, 0, 20)
 	TextBox.Text = "x"
 	TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -136,7 +136,7 @@ return function()
 	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TextLabel.BackgroundTransparency = 1
 	TextLabel.Font = Enum.Font.Code
-	TextLabel.Size = UDim2.new(0, 0, 0, 20)
+	TextLabel.Size = UDim2.fromOffset(0, 20)
 	TextLabel.AutomaticSize = Enum.AutomaticSize.X
 	TextLabel.Text = ""
 	TextLabel.TextColor3 = Color3.fromRGB(255, 223, 93)
@@ -165,7 +165,7 @@ return function()
 	Label.BackgroundTransparency = 1
 	Label.Font = Enum.Font.SourceSansLight
 	Label.Name = "Label"
-	Label.Size = UDim2.new(1, 0, 1, 0)
+	Label.Size = UDim2.fromScale(1, 1)
 	Label.Text = "The players to teleport. The players to teleport. The players to teleport. The players to teleport. "
 	Label.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Label.TextSize = 16
@@ -185,7 +185,7 @@ return function()
 	Typed.BackgroundTransparency = 1
 	Typed.Font = Enum.Font.Code
 	Typed.Name = "Typed"
-	Typed.Size = UDim2.new(1, 0, 1, 0)
+	Typed.Size = UDim2.fromScale(1, 1)
 	Typed.Text = "Lab"
 	Typed.TextColor3 = Color3.fromRGB(131, 222, 255)
 	Typed.TextSize = 14
@@ -201,7 +201,7 @@ return function()
 	Suggest.BackgroundTransparency = 1
 	Suggest.Font = Enum.Font.Code
 	Suggest.Name = "Suggest"
-	Suggest.Size = UDim2.new(1, 0, 1, 0)
+	Suggest.Size = UDim2.fromScale(1, 1)
 	Suggest.Text = "   el"
 	Suggest.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Suggest.TextSize = 14
@@ -214,8 +214,8 @@ return function()
 	Type.BorderColor3 = Color3.fromRGB(255, 153, 153)
 	Type.Font = Enum.Font.SourceSans
 	Type.Name = "Type"
-	Type.Position = UDim2.new(1, 0, 0, 0)
-	Type.Size = UDim2.new(0, 0, 1, 0)
+	Type.Position = UDim2.fromScale(1, 0)
+	Type.Size = UDim2.fromScale(0, 1)
 	Type.Text = ": Players"
 	Type.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Type.TextSize = 15

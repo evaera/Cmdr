@@ -59,7 +59,7 @@ return function(Cmdr)
 
 		-- Flow description text
 		while not Description.Label.TextFits do
-			Description.Size = Description.Size + UDim2.new(0, 0, 0, 2)
+			Description.Size = Description.Size + UDim2.fromOffset(0, 2)
 
 			if Description.Size.Y.Offset > 500 then
 				break
@@ -152,8 +152,8 @@ return function(Cmdr)
 
 		-- Update the auto complete container
 		Gui.Position =
-			UDim2.new(0, Entry.TextBox.AbsolutePosition.X - 10 + extra, 0, Entry.TextBox.AbsolutePosition.Y + 30)
-		Gui.Size = UDim2.new(0, autocompleteWidth, 0, Gui.UIListLayout.AbsoluteContentSize.Y)
+			UDim2.fromOffset(Entry.TextBox.AbsolutePosition.X - 10 + extra, Entry.TextBox.AbsolutePosition.Y + 30)
+		Gui.Size = UDim2.fromOffset(autocompleteWidth, Gui.UIListLayout.AbsoluteContentSize.Y)
 		Gui.Visible = true
 
 		-- Finally, update thge info display
