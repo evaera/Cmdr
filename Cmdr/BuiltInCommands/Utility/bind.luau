@@ -58,7 +58,11 @@ return {
 
 		local binds = context:GetStore("CMDR_Binds")
 		if binds[bind] then
-			binds[bind]:Disconnect()
+			if typeof(binds[bind]) == "RBXScriptConnection" then
+				binds[bind]:Disconnect()
+			end
+
+			binds[bind] = nil
 		end
 
 		command = command .. " " .. arguments
