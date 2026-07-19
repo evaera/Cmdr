@@ -65,13 +65,9 @@ return {
 				)
 			end
 
-			if TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
-				binds[bind] = bind.Chatted:Connect(RunCommand)
-			else
-				binds[bind] = TextChatService.SendingMessage:Connect(function(message)
-					RunCommand(message.Text)
-				end)
-			end
+			binds[bind] = TextChatService.SendingMessage:Connect(function(message)
+				RunCommand(message.Text)
+			end)
 		end
 
 		return "Bound command to input."
