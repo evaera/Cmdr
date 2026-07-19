@@ -382,7 +382,9 @@ function Registry:RegisterCommand(
 	local commandObject = require(commandScript)
 	assert(
 		typeof(commandObject) == "table",
-		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
+		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(
+			commandObject
+		)})`
 	)
 
 	if commandServerScript then
