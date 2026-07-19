@@ -156,7 +156,7 @@ return function(Cmdr)
 		Gui.Size = UDim2.fromOffset(autocompleteWidth, Gui.UIListLayout.AbsoluteContentSize.Y)
 		Gui.Visible = true
 
-		-- Finally, update thge info display
+		-- Finally, update the info display
 		UpdateInfoDisplay(self.Items[1] and self.Items[1].options or options)
 	end
 
