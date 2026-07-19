@@ -11,12 +11,15 @@ return {
 		},
 	},
 
-	ClientRun = function(context, inputEnum)
+	ClientRun = function(context, bind)
 		local binds = context:GetStore("CMDR_Binds")
 
-		if binds[inputEnum] then
-			binds[inputEnum]:Disconnect()
-			binds[inputEnum] = nil
+		if binds[bind] then
+			if typeof(binds[bind]) == "RBXScriptConnection" then
+				binds[bind]:Disconnect()
+			end
+
+			binds[bind] = nil
 			return "Unbound command from input."
 		else
 			return "That input wasn't bound."
