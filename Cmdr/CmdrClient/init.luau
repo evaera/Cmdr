@@ -200,7 +200,7 @@ end
 
 --[=[
 	Enables the "Mash to open" feature.
-	This feature, when enabled, requires the activation key to be pressed 5 times within a second to [enable](#SetEnabled) Cmdr.
+	This feature, when enabled, requires the [activation key](#SetActivationKeys) to be pressed 5 times within a second to open Cmdr.
 	This may be helpful to guard against mispresses from opening the window, for example.
 	Once opened, mashing will be disabled for 10 seconds since it was last opened for convenience.
 
@@ -213,6 +213,7 @@ end
 --[=[
 	@method SetMashToEnable
 	@deprecated v1.13.0 -- This method was renamed to SetMashToOpen in v1.13.0. The old name exists for backwards compatibility and should not be used for new work.
+	@param enabled boolean
 	@within CmdrClient
 ]=]
 Cmdr.SetMashToEnable = Cmdr.SetMashToOpen
