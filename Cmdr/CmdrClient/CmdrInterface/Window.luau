@@ -242,7 +242,6 @@ function Window:BeginInput(input, gameProcessed)
 				end
 
 				self:SetVisible(false)
-				lastClosedTime = currentTime
 				openedByMash = false
 
 				return
