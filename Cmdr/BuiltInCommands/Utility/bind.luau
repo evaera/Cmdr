@@ -53,20 +53,17 @@ return {
 		elseif bindType == "bindableResource" then
 			return "Unimplemented..."
 		elseif bindType == "player" then
-			local function RunCommand(message)
-				local args = { message }
+			binds[bind] = TextChatService.SendingMessage:Connect(function(message)
+				local args = { message.Text }
 				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
 					context.Dispatcher,
 					context.Cmdr.Util.SubstituteArgs(command, args)
 				)
+
 				context:Reply(
 					("%s $ %s : %s"):format(bind.Name, chatCommand, context.Dispatcher:EvaluateAndRun(chatCommand)),
 					Color3.fromRGB(244, 92, 66)
 				)
-			end
-
-			binds[bind] = TextChatService.SendingMessage:Connect(function(message)
-				RunCommand(message.Text)
 			end)
 		end
 
