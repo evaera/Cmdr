@@ -10,6 +10,7 @@ local TextService = game:GetService("TextService")
 	:::
 ]=]
 local Util = {}
+Util._deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } }
 
 --[=[
 	Takes an array and flips its values into dictionary keys with value of true.
@@ -639,6 +640,67 @@ function Util.Mutex()
 				locked = false
 			end
 		end
+	end
+end
+
+--[=[
+	Registers a deprecation warning for a method.
+	@param name string -- The name of the method being deprecated.
+	@param description string -- A description of the deprecation warning.
+	@error InvalidArgument -- The provided name or description is not a string.
+	@error DuplicateDeprecationWarning -- The provided deprecation warning name has already been registered
+	@private
+]=]
+function Util:_registerDeprecationWarning(name: string, description: string)
+	assert(type(name) == "string", "[Cmdr] Deprecation warning name must be a string.")
+	assert(type(description) == "string", "[Cmdr] Deprecation warning description must be a string.")
+	assert(#name > 0, "[Cmdr] Deprecation warning name must not be empty.")
+	assert(not self._deprecationWarnings[name], `[Cmdr] Deprecation warning {name} is already registered.`)
+
+	self._deprecationWarnings[name] = {
+		Description = description,
+		Suppressed = false,
+		Emitted = false,
+	}
+end
+
+--[=[
+	Emits a deprecation warning for a method if it has been called. This should be called at the start of a deprecated method.
+	@param name string -- The name of the method being deprecated.
+	@error UnknownDeprecationWarning -- The provided deprecation warning name has not been registered.
+	@private
+]=]
+function Util:_emitDeprecationWarning(name: string)
+	local warningInfo = self._deprecationWarnings[name]
+	assert(warningInfo, `[Cmdr] Unknown deprecation warning {name}.`)
+
+	if not warningInfo.Suppressed and not warningInfo.Emitted then
+		warn(debug.traceback(`[Cmdr] [DeprecationWarning::{name}] {warningInfo.Description}`, 2))
+		warningInfo.Emitted = true
+	end
+end
+
+--[=[
+	Suppresses a deprecation warning for a method.
+	@param warnings string | { string } -- The name(s) of the method(s) to suppress warnings for.
+	@error InvalidArgument -- The provided warning name(s) must be a string or an array of strings.
+	@error UnknownDeprecationWarning -- One or more provided warning names have not been registered.
+]=]
+function Util:SuppressDeprecationWarning(warnings: string | { string })
+	assert(
+		type(warnings) == "string" or type(warnings) == "table",
+		"[Cmdr] Deprecation warning name(s) must be a string or an array of strings."
+	)
+	assert(type(warnings) == "string" or #warnings > 0, "[Cmdr] Deprecation warning name(s) must not be empty.")
+
+	if type(warnings) == "string" then
+		warnings = { warnings }
+	end
+
+	for _, name in pairs(warnings) do
+		assert(type(name) == "string", "[Cmdr] Deprecation warning names must be strings.")
+		assert(self._deprecationWarnings[name], `[Cmdr] Unknown deprecation warning {name}.`)
+		self._deprecationWarnings[name].Suppressed = true
 	end
 end
 

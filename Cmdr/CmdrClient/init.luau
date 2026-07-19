@@ -211,12 +211,18 @@ function Cmdr:SetMashToOpen(enabled: boolean)
 end
 
 --[=[
-	@method SetMashToEnable
 	@deprecated v1.13.0 -- This method was renamed to SetMashToOpen in v1.13.0. The old name exists for backwards compatibility and should not be used for new work.
-	@param enabled boolean
 	@within CmdrClient
 ]=]
-Cmdr.SetMashToEnable = Cmdr.SetMashToOpen
+function Cmdr:SetMashToEnable(enabled: boolean)
+	Util:_emitDeprecationWarning("SetMashToEnable")
+	Cmdr:SetMashToOpen(enabled)
+end
+
+Util:_registerDeprecationWarning(
+	"SetMashToEnable",
+	"This method was renamed to SetMashToOpen in v1.13.0. The old name exists for backwards compatibility and should not be used for new work."
+)
 
 --[=[
 	Sets the hide on 'lost focus' feature.
