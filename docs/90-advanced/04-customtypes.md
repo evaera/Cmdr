@@ -65,6 +65,8 @@ When a user executes a command, their argument inputs run sequentially through a
 
 ## Structure of a TypeDefinition
 
+> **Important:** Of all the lifecycle methods listed below, **`Parse` is the only strictly required method**. All other methods (`Transform`, `Validate`, `Autocomplete`, etc.) are entirely optional and can be omitted if your type doesn't need them.
+
 Your type definition dictionary can implement several unique lifecycle methods:
 
 ### Transform
@@ -105,7 +107,7 @@ Populates Cmdr's dropdown menu as users type. It must return an array of strings
 Parse = function(transformedValue: any) -> any
 ```
 
-**Required.** The final stage of the lifecycle pipeline before the value is marked complete. This transforms the processed text tokens into the final Luau type object (e.g., an Instance, a Color3, or a table) which will be fed directly into your final command implementation module.
+**[REQUIRED]** The final stage of the lifecycle pipeline before the value is marked complete. This transforms the processed text tokens into the final Luau type object (e.g., an Instance, a Color3, or a table) which will be fed directly into your final command implementation module.
 
 ---
 
