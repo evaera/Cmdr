@@ -18,7 +18,7 @@ There are plenty of resources available to help you with Cmdr, such as this webs
 
 Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
-There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
+There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute/index)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
 :::
 
@@ -32,7 +32,7 @@ If you're using Roblox Studio:
    - drag or drop the `Cmdr.rbxm` file into the viewport (central window)
    - select the `Model` tab, then under the `Advanced` section click `Model`. Then, navigate to the `Cmdr.rbxm` file and click `Open`
 2. Make sure you move the `Cmdr` ModuleScript to wherever you want it (as above, we recommend you keep it on the server)
-3. Proceed to [Setup](/docs/setup)
+3. Proceed to [Setup](/docs/getting-started/setup)
 
 If you're using Rojo, you can either add the `Cmdr.rbxm` file to your project file (usually called `default.project.json`), or put the `Cmdr.rbxm` file into a directory that you've got set up to sync already. [Rojo's documentation](https://rojo.space) can help you with this.
 

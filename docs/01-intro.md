@@ -22,7 +22,7 @@ Unlike other "admin commands" systems on Roblox, Cmdr quietly integrates with yo
 
 Cmdr provides a number of helpful commands and a range of powerful types out of the box, but of course you don't have to use them. We're also working on creating a [Cookbook](/docs/community/cookbook) which'll showcase even more helpful commands and cool things you can do with Cmdr.
 
-Cmdr also provides [meta-commands](/docs/metacommands), empowering users to:
+Cmdr also provides [meta-commands](/docs/commands-reference/metacommands), empowering users to:
 
 - create aliases and/or chain commands together
 - bind commands to inputs (like key presses)
@@ -38,7 +38,7 @@ While we think Cmdr is amazing, it may not be right for you if:
 
 While Cmdr isn't super complex, it may be difficult for beginners and those with limited programming experience.
 
-You'll need to write your own [command implementations](/docs/commands) and [permissions](/docs/hooks) yourself; take a look at the [How do I get help with Cmdr?](#how-do-i-get-help-with-cmdr) section below for more details. Similarly, any features which Cmdr doesn't provide (like bespoke types or logging) you'll also need to write yourself.
+You'll need to write your own [command implementations](/docs/commands-reference/commands) and [permissions](/docs/commands-reference/hooks) yourself; take a look at the [How do I get help with Cmdr?](#how-do-i-get-help-with-cmdr) section below for more details. Similarly, any features which Cmdr doesn't provide (like bespoke types or logging) you'll also need to write yourself.
 
 **You want a large set of pre-made ("plug and play") commands.**
 
@@ -58,11 +58,11 @@ First and foremost, Cmdr is a keyboard experience and it has been designed with 
 
 Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
-There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
+There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute/index)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
 :::
 
-Take a look at the [Installation guide](/docs/installation), you can then continue through our documentation from there.
+Take a look at the [Installation guide](/docs/getting-started/installation), you can then continue through our documentation from there.
 
 You can also read through the [API reference](/api/Cmdr). While we recommend reading the API reference to get a full understanding of Cmdr, it's not required.
 

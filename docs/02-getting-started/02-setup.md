@@ -16,7 +16,7 @@ There are plenty of resources available to help you with Cmdr, such as this webs
 
 Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
-There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
+There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute/index)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
 :::
 
@@ -69,6 +69,6 @@ Activation keys are used to show or hide Cmdr. By default, this is just `F2` but
 
 ## Next steps
 
-By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/hooks).
+By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands-reference/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/commands-reference/hooks).
 
 If you ever need help, you can check [the support page](/docs/intro#how-do-i-get-help-with-cmdr).

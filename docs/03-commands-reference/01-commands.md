@@ -76,7 +76,7 @@ If the `ClientRun` function is present and there isn't a Server module for this 
 
 ## Execution order
 
-Including [Hooks](/docs/hooks), the full execution order is:
+Including [Hooks](/docs/commands-reference/hooks), the full execution order is:
 
 1. `BeforeRun` hook on client.
 2. `Data` function on client.
@@ -187,7 +187,7 @@ Dynamic arguments are included within a command definition's `Args` array, they 
 
 Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have an `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove) depending on the first argument.
 
-Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
+Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/commands-reference/types#enum-types):
 
 ```lua title="allowlist.luau"
 return {
