@@ -4,7 +4,7 @@ Custom types give your arguments validation, autocompletion, and transformations
 
 ---
 
-## Writing Type Definition Files
+## Writing type definition files
 
 When a type is contained in a `ModuleScript`, it shouldn't return a plain table. Instead, it **must return a function** that accepts the `Registry` as its sole argument. From there, you register the custom type dictionary using `registry:RegisterType("typeName", typeTable)`.
 
@@ -42,7 +42,7 @@ end
 
 ---
 
-## The Type Execution Pipeline
+## The type execution pipeline
 
 When a user executes a command, their argument inputs run sequentially through a distinct execution pipeline. If any step fails or yields an error, the pipeline halts immediately.
 
@@ -111,11 +111,11 @@ Parse = function(transformedValue: any) -> any
 
 ---
 
-## Specialized Type Options
+## Specialized type options
 
 Beyond basic processing, `TypeDefinition` objects can include metadata fields that dramatically alter how Cmdr interacts with them.
 
-### Listable Types (`Listable`)
+### Listable types (`Listable`)
 
 Setting `Listable = true` instructs Cmdr that comma-separated values are allowed (e.g., `kill player1,player2,player3`).
 
@@ -123,7 +123,7 @@ When enabled, you do not need to update your parsing or validation architecture.
 
 - **Requirement:** Your `Parse` function **must return a table**. The values returned by each segment's `Parse` step are automatically flattened and merged into a single unique table before being passed to your command.
 
-### Default Overrides (`Default`)
+### Default overrides (`Default`)
 
 You can provide fallback string options if an argument is skipped or if a user passes a period (`.`) literal token.
 
@@ -135,11 +135,11 @@ The `Default` function must always return a **string**. This string value is ins
 
 ---
 
-## Type Helper Functions
+## Type helper functions
 
 Cmdr provides a few standard factory functions within `Util` to quickly spin up custom types without writing complex validation loops.
 
-### Enum Types (`Util.MakeEnumType`)
+### Enum types (`Util.MakeEnumType`)
 
 For basic collections of discrete string choices, use `Util.MakeEnumType(name, choices)`. This automatically provides full fuzzy-matching autocomplete suggestions and ensures the parsed output explicitly matches a key within your options array.
 
@@ -150,7 +150,7 @@ return function(registry)
 end
 ```
 
-### Sequence Types (`Util.MakeSequenceType`)
+### Sequence types (`Util.MakeSequenceType`)
 
 For multi-value structural types like positions, vectors, or colors, use `Util.MakeSequenceType`. It splits a space- or comma-delimited string sequence and runs validation logic on each piece.
 

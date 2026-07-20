@@ -10,7 +10,7 @@ Before updating, ensure your custom commands, types, and hooks are stored in the
 
 ---
 
-## Model File (.rbxm)
+## Model file (.rbxm)
 
 If you installed Cmdr manually using the Roblox model file, follow these steps to replace the old version:
 
@@ -39,11 +39,11 @@ If you manage your packages using Wally and sync via Rojo, updating involves a q
 
 ---
 
-## Git Submodule
+## Git submodule
 
 For advanced workflows using Rojo and Git submodules, updates can be handled either by consuming upstream releases or by keeping collaborators in sync.
 
-### Pulling Upstream Changes
+### Pulling upstream changes
 
 If you simply want to pull down the latest updates from the remote Cmdr repository into your project:
 
@@ -53,7 +53,7 @@ If you simply want to pull down the latest updates from the remote Cmdr reposito
    ```
    _Note: Git will default to checking out the remote's HEAD commit._
 
-### Synchronizing Collaborators
+### Synchronizing collaborators
 
 If another developer on your team updated the Cmdr submodule version and committed the reference pointer to the main repository, running a basic `git pull` will fetch the changes but leave your local submodule directory unmodified.
 
@@ -75,7 +75,7 @@ By default, running `git submodule update` places the sub-repository into a "det
 
 ---
 
-## Manual Repository Clone
+## Manual repository clone
 
 If you downloaded the source code directly via `git clone` or a ZIP download:
 

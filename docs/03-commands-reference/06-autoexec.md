@@ -2,7 +2,7 @@
 
 The `AutoExec` feature allows commands to automatically run a pre-defined list of command strings the exact moment a command is registered. This creates a clean lifecycle hook for setting up shortcuts, environments, or initial state configurations without requiring manual user intervention.
 
-## Why Use AutoExec?
+## Why use AutoExec?
 
 Before `AutoExec`, creating aliases or running initialization sequences required loose setup scripts scattered across your codebase. By leveraging `AutoExec` directly within your command definitions, you gain several benefits:
 
@@ -18,13 +18,13 @@ Before `AutoExec`, creating aliases or running initialization sequences required
 
 ---
 
-## Setting Up Persistent and Session States with Variables
+## Setting up persistent and session states with variables
 
 Because `AutoExec` runs entirely on the client, you can combine it with the default `var` and `var=` commands to read, write, and manage localized configuration environments.
 
 Cmdr supports a variety of scope prefixes for variable keys, allowing you to control whether your automated configurations stick around forever or clear out when you leave.
 
-### Understanding Key Scopes
+### Understanding key scopes
 
 When interacting with keys via `var` or `var=`, pay close attention to the prefix characters:
 
@@ -37,9 +37,9 @@ When interacting with keys via `var` or `var=`, pay close attention to the prefi
 
 ---
 
-## Best Practices for AutoExec Variables
+## Best practices for AutoExec variables
 
-### Pre-Fill Shorthand Alias Arguments
+### Pre-fill shorthand alias arguments
 
 You can use `AutoExec` to instantly register macro shortcuts that point to more complex underlying framework commands. This is ideal for abstracting long argument chains into distinct, readable commands by hardcoding specific arguments early while passing remaining arguments (like `$1`, `$2`, etc.) along to the base function.
 
@@ -55,7 +55,7 @@ AutoExec = {
 }
 ```
 
-### Chain Commands Sequentially Using Delimiters
+### Chain commands sequentially using delimiters
 
 You can run multiple distinct commands sequentially within a single `AutoExec` string by separating them with the `&&` delimiter. This is exceptionally powerful for evaluating or creating variables and immediately feeding them into structural macros.
 
@@ -66,7 +66,7 @@ AutoExec = {
 }
 ```
 
-### Leverage the Slot Operator (`||`) to Pass State
+### Leverage the slot operator (`||`) to pass state
 
 When chaining commands with `&&`, you can easily capture the output text of the previous command and inject it into the next one by using the `||` slot operator. If the captured text contains spaces, Cmdr will automatically wrap the injected value in quotes.
 
@@ -77,7 +77,7 @@ AutoExec = {
 }
 ```
 
-### Handle Script Editing Environments Gracefully
+### Handle script editing environments gracefully
 
 If you want to let users view, update, or manually execute persistent strings (like startup scripts), you can use `AutoExec` blocks to cleanly establish editing macros. Combined with sub-command embedding (`${}`) and the slot operator (`||`), you can create streamlined workflows:
 

@@ -8,7 +8,7 @@ Commands will be completely blocked from running in a live game unless you regis
 
 :::
 
-## The Golden Rule: Client vs. Server
+## The golden rule: client vs. server
 
 When writing permissions, keep this rule in mind: **Never trust the client.**
 
@@ -19,7 +19,7 @@ Registering hooks using `Cmdr.Registry:RegisterHooksIn()` clones your code to bo
 
 ---
 
-## Simple Group-Based Permissions
+## Simple group-based permissions
 
 The safest architectural pattern for permissions is to **deny all groups by default** and selectively allowlist specific ones.
 
@@ -87,7 +87,7 @@ end
 
 ---
 
-## Using Persistent Server Stores for Mod/Ban Systems
+## Using persistent server stores for mod/ban bystems
 
 If your command needs to dynamically change a player's permission status mid-game (like a session-based `ban` or `tempmod` command), you can use Cmdr's built-in memory storage via `registry:GetStore()`.
 
@@ -132,7 +132,7 @@ end
 
 ---
 
-## Gathering Sensitive Context via Client Data
+## Gathering sensitive context via client data
 
 Sometimes, verifying a permission requires information that only the client knows, such as what they are looking at or clicking on. However, because an exploiter can spoof client data, you must cross-verify the returned data on the server.
 

@@ -66,7 +66,7 @@ As another example, you could create a command that killed anyone your mouse was
 alias pointer_of_death kill ${hover}
 ```
 
-### Types and Descriptions
+### Types and descriptions
 
 You can optionally provide types, names, and descriptions to your alias arguments, like so: `$1{type|Name|Description here}`. For example:
 
