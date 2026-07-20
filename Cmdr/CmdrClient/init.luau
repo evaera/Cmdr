@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 
-local Shared = script:WaitForChild("Shared")
+local Shared = script:WaitForChild("Shared") :: Folder
 local Util = require(Shared:WaitForChild("Util"))
 local CreateGui = require(script.CreateGui)
 
@@ -10,7 +10,7 @@ if RunService:IsClient() == false then
 	)
 end
 
-local function CreateSignal()
+local function createSignal()
 	local event = Instance.new("BindableEvent")
 
 	return {
@@ -60,6 +60,14 @@ end
 
 --[=[
 	@within CmdrClient
+	@prop MashToOpen boolean
+	@readonly
+	@private
+	Whether or not MashToOpen is enabled. Use [`CmdrClient:SetMashToOpen`](#SetMashToOpen) to change.
+]=]
+
+--[=[
+	@within CmdrClient
 	@prop PlaceName string
 	@readonly
 	The current place name, displayed on the interface. Use [`CmdrClient:SetPlaceName`](#SetPlaceName) to change.
@@ -83,6 +91,7 @@ end
 	@within CmdrClient
 	@prop Toggled { Connect: (self: ToggleSignal, callback: (visible: boolean) -> ()) -> RBXScriptConnection, Fire: (self: ToggleSignal, visible: boolean) -> () }
 	@readonly
+	@private
 	A signal that fires when the Cmdr window is toggled.
 ]=]
 
@@ -100,7 +109,7 @@ do
 		PlaceName = "Cmdr",
 		Util = Util,
 		Gui = CreateGui(),
-		Toggled = CreateSignal(),
+		Toggled = createSignal(),
 		Events = {},
 	}, {
 		-- This sucks, and may be redone or removed

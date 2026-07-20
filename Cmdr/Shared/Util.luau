@@ -9,8 +9,17 @@ local TextService = game:GetService("TextService")
 	This page is incomplete and some functions are missing. You might want to refer to [the current documentation](https://eryn.io/Cmdr/api/Util.html).
 	:::
 ]=]
-local Util = {}
-Util._deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } }
+
+--[=[
+	@prop _deprecationWarnings { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } }
+	@within Registry
+	@readonly
+	@private
+]=]
+
+local Util = {
+	_deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } },
+}
 
 --[=[
 	Takes an array and flips its values into dictionary keys with value of true.
@@ -194,7 +203,7 @@ function Util.ParseEscapeSequences(text: string): string
 end
 
 --[=[
-	No description.
+	Encodes escaped operators in a string, replacing them with their unicode representations.
 ]=]
 function Util.EncodeEscapedOperator(text: string, op: string): string
 	local first = op:sub(1, 1)
@@ -210,7 +219,7 @@ end
 
 local OPERATORS = { "&&", "||", ";" }
 --[=[
-	No description.
+	Encodes all escaped operators in a string, replacing them with their unicode representations.
 ]=]
 function Util.EncodeEscapedOperators(text: string): string
 	for _, operator in ipairs(OPERATORS) do
@@ -343,6 +352,7 @@ function Util.ParsePrefixedUnionType(typeValue: string, rawValue: string): (stri
 			return t.type, rawValue:sub(#t.prefix + 1), t.prefix
 		end
 	end
+
 	return
 end
 
@@ -576,9 +586,12 @@ function Util.SplitPrioritizedDelimeter(text: string, delimiters: { string }): {
 	return
 end
 
--- TODO: Continue documentation from here down
-
---	Maps values of an array through a callback and returns an array of mapped values.
+--[=[
+	Maps values of an array through a callback and returns an array of mapped values.
+	@param array { any } -- The array to map through.
+	@param callback function -- The callback function to call for each value in the array.
+	@return { any } -- An array of mapped values.
+]=]
 function Util.Map(array, callback)
 	local results = {}
 
@@ -589,7 +602,12 @@ function Util.Map(array, callback)
 	return results
 end
 
--- Maps arguments #2-n through callback and returns values as tuple
+--[=[
+	Maps arguments #2-n through callback and returns values as tuple.
+	@param callback function -- The callback function to call for each value in the arguments.
+	@param ... any -- The values to map through the callback.
+	@return ... any -- The mapped values as a tuple.
+]=]
 function Util.Each(callback, ...)
 	local results = {}
 	for i, value in ipairs({ ... }) do
@@ -598,7 +616,12 @@ function Util.Each(callback, ...)
 	return unpack(results)
 end
 
--- Emulates tabstops with spaces
+--[=[
+	Emulates tabstops with spaces.
+	@param text string -- The text to emulate tabstops for.
+	@param tabWidth number -- The width of each tabstop.
+	@return string -- The text with tabstops replaced by spaces.
+]=]
 function Util.EmulateTabstops(text, tabWidth)
 	local column = 0
 	local textLength = #text
@@ -621,6 +644,10 @@ function Util.EmulateTabstops(text, tabWidth)
 	return table.concat(result)
 end
 
+--[=[
+	Creates a mutex for synchronizing coroutines.
+	@return function -- A function that locks the mutex and returns a function to unlock it.
+]=]
 function Util.Mutex()
 	local queue = {}
 	local locked = false
@@ -647,8 +674,6 @@ end
 	Registers a deprecation warning for a method.
 	@param name string -- The name of the method being deprecated.
 	@param description string -- A description of the deprecation warning.
-	@error InvalidArgument -- The provided name or description is not a string.
-	@error DuplicateDeprecationWarning -- The provided deprecation warning name has already been registered
 	@private
 ]=]
 function Util:_registerDeprecationWarning(name: string, description: string)
@@ -669,7 +694,6 @@ end
 --[=[
 	Emits a deprecation warning for a method if it has been called. This should be called at the start of a deprecated method.
 	@param name string -- The name of the method being deprecated.
-	@error UnknownDeprecationWarning -- The provided deprecation warning name has not been registered.
 	@private
 ]=]
 function Util:_emitDeprecationWarning(name: string)
@@ -685,8 +709,6 @@ end
 --[=[
 	Suppresses a deprecation warning for a method.
 	@param warnings string | { string } -- The name(s) of the method(s) to suppress warnings for.
-	@error InvalidArgument -- The provided warning name(s) must be a string or an array of strings.
-	@error UnknownDeprecationWarning -- One or more provided warning names have not been registered.
 ]=]
 function Util:SuppressDeprecationWarning(warnings: string | { string })
 	assert(
