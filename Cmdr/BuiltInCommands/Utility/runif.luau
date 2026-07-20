@@ -1,68 +1,46 @@
 local conditions = {
 	startsWith = function(text, arg)
-		if text:sub(1, #arg) == arg then
-			return text:sub(#arg + 1)
-		end
+		return text:sub(1, #arg) == arg and text:sub(#arg + 1)
 	end,
 
 	contains = function(text, arg)
-		if text:find(arg, 1, true) then
-			return text
-		end
+		return text:find(arg, 1, true) and text
 	end,
 
 	endsWith = function(text, arg)
-		if text:sub(-#arg) == arg then
-			return text:sub(1, -#arg - 1)
-		end
+		return text:sub(-#arg) == arg and text:sub(1, -#arg - 1)
 	end,
 
 	pattern = function(text, arg)
-		if text:match(arg) then
-			return text
-		end
+		return text:match(arg) and text
 	end,
 
 	equals = function(text, arg)
-		if text == arg then
-			return text
-		end
+		return text == arg and text
 	end,
 
 	notEquals = function(text, arg)
-		if text ~= arg then
-			return text
-		end
+		return text ~= arg and text
 	end,
 
 	greaterThan = function(text, arg)
-		if tonumber(text) > tonumber(arg) then
-			return text
-		end
+		return tonumber(arg) > tonumber(text) and text
 	end,
 
 	lessThan = function(text, arg)
-		if tonumber(text) < tonumber(arg) then
-			return text
-		end
+		return tonumber(arg) < tonumber(text) and text
 	end,
 
 	greaterThanOrEqual = function(text, arg)
-		if tonumber(text) >= tonumber(arg) then
-			return text
-		end
+		return tonumber(arg) >= tonumber(text) and text
 	end,
 
 	lessThanOrEqual = function(text, arg)
-		if tonumber(text) <= tonumber(arg) then
-			return text
-		end
+		return tonumber(arg) <= tonumber(text) and text
 	end,
 
 	length = function(text, arg)
-		if #text == tonumber(arg) then
-			return text
-		end
+		return #text == tonumber(arg) and text
 	end,
 }
 
