@@ -44,7 +44,7 @@ end
 
 ## The Type Execution Pipeline
 
-When a user runs a command, their argument inputs run sequentially through a distinct execution pipeline. If any step fails or yields an error, the pipeline halts immediately.
+When a user executes a command, their argument inputs run sequentially through a distinct execution pipeline. If any step fails or yields an error, the pipeline halts immediately.
 
 1. **`Transform()`**
    - **Input:** Raw user string, calling `Player`.
@@ -55,7 +55,7 @@ When a user runs a command, their argument inputs run sequentially through a dis
    - **Description:** Validates the transformed input before proceeding.
 3. **`Autocomplete()`** _(Client-side)_
    - **Input:** Output of `Transform()`.
-   - **Description:** Runs on the client to display dynamic dropdown menus.
+   - **Description:** Runs on the client to display dynamic dropdown suggestions.
 4. **`Parse()`**
    - **Input:** Output of `Transform()`.
    - **Returns:** Final Luau type.
@@ -89,7 +89,7 @@ Evaluates whether the value matches your requirements. It receives the output re
 ValidateOnce = function(transformedValue: any) -> (boolean, string?)
 ```
 
-Works identically to `Validate`, but **only executes after the user presses Enter**. Use this exclusively for asynchronous, heavy, or yielding network calls (such as checking `GetUserIdFromNameAsync` via `Players`). For normal operations, stick to standard `Validate` blocks.
+Works identically to `Validate`, but **only executes after the user presses Enter**. Use this exclusively for slow or yielding network calls (such as checking `GetUserIdFromNameAsync` via `Players`). For normal operations, stick to standard `Validate` blocks.
 
 ### Autocomplete
 
@@ -97,7 +97,7 @@ Works identically to `Validate`, but **only executes after the user presses Ente
 Autocomplete = function(transformedValue: any) -> ({ string }, { IsPartial: boolean? }?)
 ```
 
-Populates Cmdr's dropdown menu as users type. It must return an array of strings representing match options. You can optionally return a second dictionary parameter containing configuration options (e.g., set `{ IsPartial = true }` to prevent pressing Tab from immediately proceeding onto the next command argument).
+Populates Cmdr's dropdown menu as users type. It must return an array of strings representing match options. You can optionally return a second dictionary parameter containing configuration options (e.g., set `{ IsPartial = true }` to prevent pressing Tab from immediately proceeding to the next command argument).
 
 ### Parse
 
