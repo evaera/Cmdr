@@ -2,34 +2,38 @@
 
 By default, these types are available:
 
-:::info Possibly outdated
-
-We've not reviewed this section for a while, it's possible that this information may be out of date.
-
-:::
-
-| **Type name** | Luau type                                | **Type name**  | Luau type                                  |
-| ------------- | ---------------------------------------- | -------------- | ------------------------------------------ |
-| `string`      | `string`                                 | `strings`      | `{string}`                                 |
-| `number`      | `number`                                 | `numbers`      | `{number}`                                 |
-| `integer`     | `number`                                 | `integers`     | `{number}`                                 |
-| `boolean`     | `boolean`                                | `booleans`     | `{boolean}`                                |
-| `player`      | `Player`                                 | `players`      | `{Player}`                                 |
-| `playerId`    | `number`                                 | `playerIds`    | `{number}`                                 |
-| `team`        | `Team`                                   | `teams`        | `{Team}`                                   |
-|               |                                          | `teamPlayers`  | `{Player}`                                 |
-| `command`     | `string`                                 | `commands`     | `{string}`                                 |
-| `userInput`   | `Enum.UserInputType &#124; Enum.KeyCode` | `userInputs`   | `{Enum.UserInputType &#124; Enum.KeyCode}` |
-| `brickColor`  | `BrickColor`                             | `brickColors`  | `{BrickColor}`                             |
-| `teamColor`   | `BrickColor`                             | `teamColors`   | `{BrickColor}`                             |
-| `color3`      | `Color3`                                 | `color3s`      | `{Color3}`                                 |
-| `hexColor3`   | `Color3`                                 | `hexColor3s`   | `{Color3}`                                 |
-| `brickColor3` | `Color3`                                 | `brickColor3s` | `{Color3}`                                 |
-| `vector3`     | `Vector3`                                | `vector3s`     | `{Vector3}`                                |
-| `vector2`     | `Vector2`                                | `vector2s`     | `{Vector2}`                                |
-| `duration`    | `number`                                 | `durations`    | `{number}`                                 |
-| `storedKey`   | `string`                                 | `storedKeys`   | `{strings}`                                |
-| `url`         | `string`                                 | `urls`         | `{strings}`                                |
+| **Type name**        | Luau type                            | **Type name**         | Luau type                              |
+| -------------------- | ------------------------------------ | --------------------- | -------------------------------------- |
+| `string`             | `string`                             | `strings`             | `{string}`                             |
+| `number`             | `number`                             | `numbers`             | `{number}`                             |
+| `integer`            | `number`                             | `integers`            | `{number}`                             |
+| `digit`              | `number`                             | `digits`              | `{number}`                             |
+| `positiveInteger`    | `number`                             | `positiveIntegers`    | `{number}`                             |
+| `nonNegativeInteger` | `number`                             | `nonNegativeIntegers` | `{number}`                             |
+| `byte`               | `number`                             | `bytes`               | `{number}`                             |
+| `boolean`            | `boolean`                            | `booleans`            | `{boolean}`                            |
+| `player`             | `Player`                             | `players`             | `{Player}`                             |
+| `playerId`           | `number`                             | `playerIds`           | `{number}`                             |
+| `team`               | `Team`                               | `teams`               | `{Team}`                               |
+|                      |                                      | `teamPlayers`         | `{Player}`                             |
+| `brickColor`         | `BrickColor`                         | `brickColors`         | `{BrickColor}`                         |
+| `teamColor`          | `BrickColor`                         | `teamColors`          | `{BrickColor}`                         |
+| `color3`             | `Color3`                             | `color3s`             | `{Color3}`                             |
+| `hexColor3`          | `Color3`                             | `hexColor3s`          | `{Color3}`                             |
+| `brickColor3`        | `Color3`                             | `brickColor3s`        | `{Color3}`                             |
+| `vector3`            | `Vector3`                            | `vector3s`            | `{Vector3}`                            |
+| `vector2`            | `Vector2`                            | `vector2s`            | `{Vector2}`                            |
+| `positionVector3`    | `Vector3`                            | `positionVector3s`    | `{Vector3}`                            |
+| `duration`           | `number`                             | `durations`           | `{number}`                             |
+| `mathOperator`       | `string`                             |                       |                                        |
+| `command`            | `string`                             | `commands`            | `{string}`                             |
+| `type`               | `string`                             | `types`               | `{string}`                             |
+| `userInput`          | `Enum.UserInputType \| Enum.KeyCode` | `userInputs`          | `{Enum.UserInputType \| Enum.KeyCode}` |
+| `conditionFunction`  | `function`                           |                       |                                        |
+| `bindableResource`   | `Instance`                           |                       |                                        |
+| `storedKey`          | `string`                             | `storedKeys`          | `{string}`                             |
+| `url`                | `string`                             | `urls`                | `{string}`                             |
+| `json`               | `any`                                |                       |                                        |
 
 The `type name` is what you'd include in your command definition, while the `Luau type` is what your command implementation would get (this is also called the 'transformed value').
 

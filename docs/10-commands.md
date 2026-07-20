@@ -1,10 +1,10 @@
 # Commands
 
-No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands). See [Default Commands](#default-commands) for a list.
+No commands are registered by default. Cmdr ships with a set of default commands, which can be loaded if you so wish by calling [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands). See [Default Commands](#default-commands) for a list. If you register a custom command with the same name or alias as a default command, your developer command will override the default implementation entirely.
 
 Commands are defined in ModuleScripts that return a single table.
 
-```lua title="Teleport.lua"
+```lua title="Teleport.luau"
 return {
 	Name = "teleport",
 	Aliases = { "tp" },
@@ -27,13 +27,13 @@ return {
 
 Check out the [API reference](/api/Registry#CommandDefinition) for full details.
 
-The server implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end (e.g. `Teleport.lua` and `TeleportServer.lua`).
+The server implementation should be in a separate ModuleScript. Cmdr will never deliver the server implementation to the client. This module should only return one function. The module must be named the same thing as the definition module as described above, with the word "Server" appended to the end (e.g. `Teleport.luau` and `TeleportServer.luau`).
 
 You can also include a client implementation, this is done by adding a function to your command definition (above) with the `ClientRun` key. You can also include both client and server implementations in one command but that's an advanced feature we'll discuss later on.
 
 The implementation — whether on the server or client — is passed the [CommandContext](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
-```lua title="TeleportServer.lua"
+```lua title="TeleportServer.luau"
 -- These arguments are guaranteed to exist and be correctly typed.
 return function (context, fromPlayers, toPlayer)
   if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
@@ -92,21 +92,14 @@ You should be aware that an exploiter can, in theory, manipulate or bypass any c
 
 ## Default commands
 
-:::info Possibly outdated
+If you run [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands), the standard suite of built-in commands becomes available grouped under these classifications:
 
-We've not reviewed this section for a while, it's possible that this information may be out of date.
-
-:::
-
-If you run [`Cmdr.Registry:RegisterDefaultCommands()`](/api/Registry#RegisterDefaultCommands), these commands will be available with the following `Group`s:
-
-Group: `DefaultAdmin`: `announce` (`m`), `bring`, `kick`, `teleport` (`tp`), `kill`, `respawn`, `to`
-
-Group: `DefaultDebug`: `blink` (`b`), `thru` (`t`), `position`, `version`, `fetch`, `get-player-place-instance`, `uptime`
-
-Group: `DefaultUtil`: `alias`, `bind`, `unbind`, `run` (`>`), `runif`, `echo`, `hover`, `replace` (`//`, `gsub`), `history`, `me`, `var`, `var=`, `json-array-encode`, `json-array-decode`, `resolve`, `len`, `pick`, `rand`, `edit`, `goto-place`
-
-Group: `Help`: `help`
+| Group            | Commands (Aliases in parentheses)                                                                                                                                                                                                                                                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **DefaultAdmin** | `announce` (`m`), `ban`, `goto-place`, `kick` (`boot`), `kill` (`slay`), `respawn`, `teleport` (`tp`), `unban`                                                                                                                                                                    |
+| **DefaultDebug** | `blink` (`b`), `fetch`, `get-player-place-instance`, `position` (`pos`), `thru` (`t`, `through`), `uptime`, `version`                                                                                                                                                             |
+| **DefaultUtil**  | `alias`, `bind`, `clear`, `convertTimestamp` (`date`), `echo` (`=`), `edit`, `exit`, `history`, `hover`, `json-array-decode`, `json-array-encode`, `len`, `math`, `pick`, `rand`, `replace` (`gsub`, `//`), `resolve`, `run-lines`, `run` (`>`), `runif`, `unbind`, `var=`, `var` |
+| **Help**         | `help` (`cmds`, `commands`)                                                                                                                                                                                                                                                       |
 
 ### Registering a subset of the default commands
 
@@ -190,13 +183,13 @@ Here is a list of automatic prefixed union types:
 
 ## Dynamic arguments and inline types
 
-Dynamic types are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/ArgumentContext#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
+Dynamic arguments are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/Registry#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
 
 Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have an `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove) depending on the first argument.
 
-Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/ArgumentContext#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
+Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/types#enum-types):
 
-```lua title="allowlist.lua"
+```lua title="allowlist.luau"
 return {
 	Name = "allowlist",
 	Aliases = {},

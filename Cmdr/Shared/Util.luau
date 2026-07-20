@@ -10,6 +10,7 @@ local TextService = game:GetService("TextService")
 	:::
 ]=]
 local Util = {}
+Util._deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } }
 
 --[=[
 	Takes an array and flips its values into dictionary keys with value of true.
@@ -42,7 +43,12 @@ local function transformInstanceSet(instances)
 	local names = {}
 
 	for i = 1, #instances do
-		names[i] = instances[i].Name
+		local object = instances[i]
+		if typeof(object) == "Instance" and object:IsA("Player") then
+			names[i] = if object.DisplayName == object.Name then object.Name else `{object.DisplayName} ({object.Name})`
+		else
+			names[i] = object.Name or tostring(object)
+		end
 	end
 
 	return names, instances
@@ -86,6 +92,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 
 	-- Searches the set (checking exact matches first)
 	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
+		local resultsPriority = {}
 		local results = {}
 
 		for i, name in pairs(names) do
@@ -97,16 +104,44 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 				if returnFirst then
 					return value
 				else
-					table.insert(results, 1, value)
+					results[#results + 1] = value
+					resultsPriority[value] = 0
 				end
 			elseif matchStart then
 				if name:lower():sub(1, #text) == text:lower() then
 					results[#results + 1] = value
+					resultsPriority[value] = 1
 				end
-			elseif name:lower():find(text:lower(), 1, true) then
-				results[#results + 1] = value
+			else
+				local startingIndex = name:lower():find(text:lower(), 1, true)
+				if startingIndex then
+					results[#results + 1] = value
+					resultsPriority[value] = startingIndex
+				end
 			end
 		end
+
+		table.sort(results, function(a, b)
+			local aPriority = resultsPriority[a]
+			local bPriority = resultsPriority[b]
+			if aPriority ~= bPriority then
+				return aPriority < bPriority
+			else
+				local aStr = if typeof(a) == "string"
+					then a
+					elseif typeof(a) == "Instance" then a.Name
+					elseif typeof(a) == "table" and typeof(a.Name) == "string" then a.Name
+					else ""
+
+				local bStr = if typeof(b) == "string"
+					then b
+					elseif typeof(b) == "Instance" then b.Name
+					elseif typeof(b) == "table" and typeof(b.Name) == "string" then b.Name
+					else ""
+
+				return #aStr < #bStr
+			end
+		end)
 
 		if returnFirst then
 			return results[1]
@@ -122,12 +157,7 @@ end
 	If no Name property is present, then tostring will be called instead.
 ]=]
 function Util.GetNames(instances: any): { string }
-	local names = {}
-
-	for i = 1, #instances do
-		names[i] = instances[i].Name or tostring(instances[i])
-	end
-
+	local names, _ = transformInstanceSet(instances)
 	return names
 end
 
@@ -171,8 +201,8 @@ function Util.EncodeEscapedOperator(text: string, op: string): string
 	local escapedOp = op:gsub(".", "%%%1")
 	local escapedFirst = "%" .. first
 
-	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, op)
-		return (esc:sub(1, #esc - 1) .. op):gsub(".", function(char)
+	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, operator)
+		return (esc:sub(1, #esc - 1) .. operator):gsub(".", function(char)
 			return "\\u" .. string.format("%04x", string.byte(char), 16)
 		end)
 	end)
@@ -484,7 +514,7 @@ end
 
 	For options, one of Constructor or Parse is required
 
-	@param options { Parse: function?, Constructor: function?, TransformEach: function?, ValidateEach: function?, Prefixes: {string}?, Length: number? }
+	@param options { Transform: function?, Parse: function?, Constructor: function?, TransformEach: function?, ValidateEach: function?, Prefixes: {string}?, Length: number? }
 	@return ArgumentDefinition
 ]=]
 function Util.MakeSequenceType(options)
@@ -506,7 +536,7 @@ function Util.MakeSequenceType(options)
 	return {
 		Prefixes = options.Prefixes,
 
-		Transform = function(text)
+		Transform = options.Transform or function(text)
 			return Util.Map(Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value)
 				return options.TransformEach(value)
 			end)
@@ -610,6 +640,69 @@ function Util.Mutex()
 				locked = false
 			end
 		end
+	end
+end
+
+--[=[
+	Registers a deprecation warning for a method.
+	@param name string -- The name of the method being deprecated.
+	@param description string -- A description of the deprecation warning.
+	@error InvalidArgument -- The provided name or description is not a string.
+	@error DuplicateDeprecationWarning -- The provided deprecation warning name has already been registered
+	@private
+]=]
+function Util:_registerDeprecationWarning(name: string, description: string)
+	assert(type(name) == "string" and #name > 0, "[Cmdr] Deprecation warning name must be a string.")
+	assert(
+		type(description) == "string" and #description > 0,
+		"[Cmdr] Deprecation warning description must be a string."
+	)
+	assert(not self._deprecationWarnings[name], `[Cmdr] Deprecation warning {name} is already registered.`)
+
+	self._deprecationWarnings[name] = {
+		Description = description,
+		Suppressed = false,
+		Emitted = false,
+	}
+end
+
+--[=[
+	Emits a deprecation warning for a method if it has been called. This should be called at the start of a deprecated method.
+	@param name string -- The name of the method being deprecated.
+	@error UnknownDeprecationWarning -- The provided deprecation warning name has not been registered.
+	@private
+]=]
+function Util:_emitDeprecationWarning(name: string)
+	local warningInfo = self._deprecationWarnings[name]
+	assert(warningInfo, `[Cmdr] Unknown deprecation warning {name}.`)
+
+	if not warningInfo.Suppressed and not warningInfo.Emitted then
+		warn(debug.traceback(`[Cmdr] [DeprecationWarning::{name}] {warningInfo.Description}`, 2))
+		warningInfo.Emitted = true
+	end
+end
+
+--[=[
+	Suppresses a deprecation warning for a method.
+	@param warnings string | { string } -- The name(s) of the method(s) to suppress warnings for.
+	@error InvalidArgument -- The provided warning name(s) must be a string or an array of strings.
+	@error UnknownDeprecationWarning -- One or more provided warning names have not been registered.
+]=]
+function Util:SuppressDeprecationWarning(warnings: string | { string })
+	assert(
+		type(warnings) == "string" or type(warnings) == "table",
+		"[Cmdr] Deprecation warning name(s) must be a string or an array of strings."
+	)
+	assert(#warnings > 0, "[Cmdr] Deprecation warning name(s) must not be empty.")
+
+	if type(warnings) == "string" then
+		warnings = { warnings }
+	end
+
+	for _, name in pairs(warnings) do
+		assert(type(name) == "string", "[Cmdr] Deprecation warning names must be strings.")
+		assert(self._deprecationWarnings[name], `[Cmdr] Unknown deprecation warning {name}.`)
+		self._deprecationWarnings[name].Suppressed = true
 	end
 end
 

@@ -6,8 +6,8 @@ return {
 	Args = {
 		{
 			Type = "string",
-			Name = "text",
-			Description = "The announcement text.",
+			Name = "Text",
+			Description = "The announcement text",
 		},
 	},
 }

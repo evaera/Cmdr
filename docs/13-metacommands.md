@@ -1,11 +1,5 @@
 # Meta-commands
 
-:::info Possibly outdated
-
-We've not reviewed this section for a while, it's possible that this information may be out of date.
-
-:::
-
 The `bind`, `alias`, and `run` commands make use of _command strings_. A command string is raw text made up of a command name and possibly predefined arguments that is run in the background as a command itself. Before these command strings are run, they are preprocessed, replacing arguments (in the format `$1`, `$2`, `$3`, etc.) and embedded commands with their textual values.
 
 ## Embedded commands
@@ -26,9 +20,25 @@ run ${{"echo kill me"}}
 
 Commands can contain more than one distinct command, delimited by `&&`. This can be escaped by adding an additional ampersand, for example: `&&&`. You can escape an additional level by adding more. `&&&&` is a two level deep escape.
 
-When using `&&`, you can access the previous command's output by using the `||` slot operator. For example `run echo evaera && kill ||` would cause `evaera` to die.
+When using `&&`, you can access the previous command's output by using the `||` slot operator. For example `run echo evaera && kill ||` would cause `evaera` to die. If the captured value contains any spaces, it will automatically wrap inside quotes (`%q`) during execution.
 
 The `run` command has a single-character alias, `>`, which can also be used to invoke it.
+
+## Runif
+
+The `runif` command conditionally runs a command string if a specific evaluation criteria matches. It accepts a validation hook name, a comparison match value, the text string to test against, and the action to perform if the check passes.
+
+```
+bind @me runif startsWith ! $1 "echo You typed a command prefix!"
+```
+
+If the secondary execution action parameter is omitted, `runif` dynamically falls back to executing whatever remaining text string was extracted directly by the matching condition function block.
+
+## Run-lines
+
+The `run-lines` command takes a multi-line block of text, splits it by its newlines, and executes each line sequentially as an independent command string. This utility handles loading initial batch logic and is internally targeted by lifecycle routines like `init-run`.
+
+Lines that begin with a `#` token are treated as comments and will be skipped automatically during execution. If the environment variable `INIT_PRINT_OUTPUT` contains a non-empty string value, `run-lines` will print the execution responses back to the console panel buffer; otherwise, execution output remains silent.
 
 ## Bind
 
@@ -36,15 +46,13 @@ Bind is a command that allows you to run a certain command string every time som
 
 This is very powerful: you could define a command, like `cast_ability`, which casts a certain move in your game. Then, you could have a keybindings menu that allows the user to rebind keys, and whenever they do, it runs `CmdrClient:Run("bind", keyCode.Name, "cast_ability", abilityId)` in the background. By separating the user input from our hypothetical ability code, our code is made more robust as we can now trigger abilities from a number of possible events, in addition to the bound key.
 
-If you prefix the first argument with `@`, you can instead select a player to bind to, which will run this command string every time that player chats. You can get the chat text by using `$1` in your command string.
-
-In the future, you will be able to bind to network events as described in the previous section by prefixing the first argument with `!`.
+If you prefix the first argument with `@`, you can instead select a player to bind to, which will run this command string every time that player chats. The binding layer interfaces natively with Roblox's `TextChatService` engine by listening to `SendingMessage` lifecycles. You can get the chat text by using `$1` in your command string.
 
 The `unbind` command can be used to unbind anything that `bind` can bind.
 
 ## Alias
 
-The alias command lets you create a new, single command out of a command string. Alias commands can contain more than one distinct command, delimited by `&&`. You can also accept arguments from the command with `$1` through `$5`.
+The alias command lets you create a new, single command out of a command string. Alias commands can contain more than one distinct command, delimited by `&&`. You can accept an arbitrary amount of arguments matched sequentially from the incoming arguments array using `$1`, `$2`, `$3`, and so forth.
 
 ```
 alias farewell announce Farewell, $1! && kill $1

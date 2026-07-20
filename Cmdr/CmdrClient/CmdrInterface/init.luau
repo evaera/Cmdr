@@ -101,6 +101,7 @@ return function(Cmdr)
 			local exactCommand = Cmdr.Registry:GetCommand(commandText)
 			local exactMatch
 			if exactCommand then
+				-- selene: allow(mixed_table)
 				exactMatch = {
 					exactCommand.Name,
 					exactCommand.Name,
@@ -136,6 +137,7 @@ return function(Cmdr)
 					and (exactMatch == nil or exactMatch[1] ~= commandText)
 				then
 					local commandObject = Cmdr.Registry:GetCommand(cmd)
+					-- selene: allow(mixed_table)
 					acItems[#acItems + 1] = {
 						commandText,
 						cmd,

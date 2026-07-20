@@ -23,11 +23,24 @@ return {
 			return "You don't have a character."
 		end
 
-		local pos = character.HumanoidRootPart.Position
-		local diff = (mouse.Hit.p - pos)
+		local raycastParams = RaycastParams.new()
+		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+		raycastParams.FilterDescendantsInstances = { character }
+		raycastParams.IgnoreWater = true
+		raycastParams.RespectCanCollide = true
 
-		character:MoveTo((diff * 2) + (diff.unit * extra) + pos)
+		local raycastResult = workspace:Raycast(mouse.UnitRay.Origin, mouse.UnitRay.Direction * 1000, raycastParams)
 
-		return "Blinked!"
+		if raycastResult then
+			local pos = character.HumanoidRootPart.Position
+			local diff = (raycastResult.Position - pos)
+
+			local unitDirection = if diff.Magnitude > 0 then diff.Unit else Vector3.new()
+			character:MoveTo((diff * 2) + (unitDirection * extra) + pos)
+			return "Thru the wall!"
+		else
+			character:MoveTo(mouse.Hit.Position)
+			return "Blinked (No wall found)!"
+		end
 	end,
 }

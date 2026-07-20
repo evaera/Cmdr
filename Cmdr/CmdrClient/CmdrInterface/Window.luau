@@ -26,7 +26,8 @@ Line.Parent = nil
 
 -- Update the text entry label
 function Window:UpdateLabel()
-	Entry.TextLabel.Text = Player.Name .. "@" .. self.Cmdr.PlaceName .. "$"
+	Entry.TextLabel.Text =
+		`{Player.Name}{if self.Cmdr.PlaceName and self.Cmdr.PlaceName ~= "" then `@{self.Cmdr.PlaceName}` else ""}$`
 end
 
 -- Get the text entry label
@@ -72,14 +73,17 @@ function Window:IsVisible()
 end
 
 -- Sets the command bar visible or not
+local lastClosedTime = nil
 function Window:SetVisible(visible)
 	Gui.Visible = visible
 
 	if visible then
 		self.PreviousChatWindowConfigurationEnabled = TextChatService.ChatWindowConfiguration.Enabled
 		self.PreviousChatInputBarConfigurationEnabled = TextChatService.ChatInputBarConfiguration.Enabled
+		self.PreviousChannelTabsConfigurationEnabled = TextChatService.ChannelTabsConfiguration.Enabled
 		TextChatService.ChatWindowConfiguration.Enabled = false
 		TextChatService.ChatInputBarConfiguration.Enabled = false
+		TextChatService.ChannelTabsConfiguration.Enabled = false
 
 		Entry.TextBox:CaptureFocus()
 		self:SetEntryText("")
@@ -89,12 +93,16 @@ function Window:SetVisible(visible)
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		end
 	else
+		lastClosedTime = os.clock()
 		TextChatService.ChatWindowConfiguration.Enabled = if self.PreviousChatWindowConfigurationEnabled ~= nil
 			then self.PreviousChatWindowConfigurationEnabled
 			else true
 		TextChatService.ChatInputBarConfiguration.Enabled = if self.PreviousChatInputBarConfigurationEnabled
 				~= nil
 			then self.PreviousChatInputBarConfigurationEnabled
+			else true
+		TextChatService.ChannelTabsConfiguration.Enabled = if self.PreviousChannelTabsConfigurationEnabled ~= nil
+			then self.PreviousChannelTabsConfigurationEnabled
 			else true
 
 		Entry.TextBox:ReleaseFocus()
@@ -105,6 +113,8 @@ function Window:SetVisible(visible)
 			self.PreviousMouseBehavior = nil
 		end
 	end
+
+	self.Cmdr.Toggled:Fire(visible)
 end
 
 -- Hides the command bar
@@ -146,24 +156,33 @@ function Window:HideInvalidState()
 end
 
 -- Event handler for text box focus lost
+local hasLostFocus = false -- Bandaid fix for duplicate output on Linux
 function Window:LoseFocus(submit)
-	local text = Entry.TextBox.Text
+	if hasLostFocus then
+		return
+	end
 
+	local text = Entry.TextBox.Text
 	self:ClearHistoryState()
 
-	if Gui.Visible and not GuiService.MenuIsOpen then
-		-- self:SetEntryText("")
+	if self:IsVisible() and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 		Entry.TextBox:CaptureFocus()
-	elseif GuiService.MenuIsOpen and Gui.Visible then
+	elseif self:IsVisible() and GuiService.MenuIsOpen then
 		self:Hide()
 	end
 
-	if submit and self.Valid then
-		wait()
-		self:SetEntryText("")
-		self.ProcessEntry(text)
-	elseif submit then
-		self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+	if submit then
+		hasLostFocus = true
+
+		if self.Valid then
+			--task.wait()
+			self:SetEntryText("")
+			self.ProcessEntry(text)
+		else
+			self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+		end
+
+		hasLostFocus = false
 	end
 end
 
@@ -178,7 +197,6 @@ function Window:TraverseHistory(delta)
 	end
 
 	self.HistoryState.Position = math.clamp(self.HistoryState.Position + delta, 1, #history + 1)
-
 	self:SetEntryText(
 		self.HistoryState.Position == #history + 1 and self.HistoryState.InitialText
 			or history[self.HistoryState.Position]
@@ -197,9 +215,10 @@ function Window:SelectVertical(delta)
 	end
 end
 
-local lastPressTime = 0
-local pressCount = 0
 -- Handles user input when the box is focused
+local pressCount = 0
+local lastPressTime = 0
+local openedByMash = false
 function Window:BeginInput(input, gameProcessed)
 	if GuiService.MenuIsOpen then
 		self:Hide()
@@ -210,25 +229,44 @@ function Window:BeginInput(input, gameProcessed)
 	end
 
 	if self.Cmdr.ActivationKeys[input.KeyCode] then -- Activate the command bar
-		if self.Cmdr.MashToEnable and not self.Cmdr.Enabled then
-			if tick() - lastPressTime < 1 then
-				if pressCount >= 5 then
-					return self.Cmdr:SetEnabled(true)
-				else
-					pressCount = pressCount + 1
-				end
-			else
-				pressCount = 1
-			end
-			lastPressTime = tick()
-		elseif self.Cmdr.Enabled then
-			self:SetVisible(not self:IsVisible())
-			wait()
-			self:SetEntryText("")
+		if not self.Cmdr.Enabled then
+			return
+		end
 
-			if GuiService.MenuIsOpen then -- Special case for menu getting stuck open (roblox bug)
-				self:Hide()
+		local currentTime = os.clock()
+		if self.Cmdr.MashToOpen then
+			if self:IsVisible() then
+				-- Prevent leftover mash presses from instantly closing Cmdr
+				if openedByMash and currentTime - lastPressTime <= 0.5 then
+					return
+				end
+
+				self:SetVisible(false)
+				openedByMash = false
+
+				return
 			end
+
+			-- Allow reopening without mashing for 10 seconds after closing
+			if lastClosedTime and currentTime - lastClosedTime < 10 then
+				self:SetVisible(true)
+				pressCount = 0
+				lastPressTime = currentTime
+				openedByMash = false
+				return
+			end
+
+			pressCount = if currentTime - lastPressTime < 1 then pressCount + 1 else 1
+			lastPressTime = currentTime
+
+			if pressCount >= 5 then
+				self:SetVisible(true)
+				pressCount = 0
+				openedByMash = true
+			end
+		else
+			self:SetVisible(not self:IsVisible())
+			openedByMash = false
 		end
 
 		return
@@ -254,7 +292,7 @@ function Window:BeginInput(input, gameProcessed)
 	elseif input.KeyCode == Enum.KeyCode.Up then -- Auto Complete Up
 		self:SelectVertical(-1)
 	elseif input.KeyCode == Enum.KeyCode.Return then -- Eat new lines
-		wait()
+		task.wait()
 		self:SetEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
 	elseif input.KeyCode == Enum.KeyCode.Tab then -- Auto complete
 		local item = self.AutoComplete:GetSelectedItem()
@@ -297,12 +335,12 @@ function Window:BeginInput(input, gameProcessed)
 				newText = replace
 			end
 			-- need to wait a frame so we can eat the \t
-			wait()
+			task.wait()
 			-- Update the text box
 			self:SetEntryText(newText .. (insertSpace and " " or ""))
 		else
 			-- Still need to eat the \t even if there is no auto-complete to show
-			wait()
+			task.wait()
 			self:SetEntryText(self:GetEntryText())
 		end
 	else
@@ -326,8 +364,10 @@ Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
 		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
 		return
 	end
+
 	if Window.OnTextChanged then
-		return Window.OnTextChanged(Entry.TextBox.Text)
+		Window.OnTextChanged(Entry.TextBox.Text)
+		return
 	end
 end)
 

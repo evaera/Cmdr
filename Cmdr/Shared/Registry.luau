@@ -155,6 +155,7 @@ local Registry = {
 		"Data",
 		"Group",
 		"Guards",
+		"_scriptInstance",
 	}),
 	CommandArgProps = Util.MakeDictionary({ "Name", "Type", "Description", "Optional", "Default" }),
 	Types = {},
@@ -277,10 +278,12 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 	Prefer using Registry:RegisterCommand for proper handling of client/server model.
 
 	@param commandObject CommandDefinition
+	@param isDefault boolean? -- True if this is a built-in Cmdr command
+	@return boolean -- Returns true if registration succeeded or false if aborted due to a developer override
 	@private
 	@within Registry
 ]=]
-function Registry:RegisterCommandObject(commandObject)
+function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boolean
 	for key in pairs(commandObject) do
 		if self.CommandMethods[key] == nil then
 			error(`[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
@@ -306,29 +309,66 @@ function Registry:RegisterCommandObject(commandObject)
 		self:FlushAutoExecBufferDeferred()
 	end
 
-	-- Unregister the old command if it exists...
-	local oldCommand = self.Commands[commandObject.Name:lower()]
-	if oldCommand and oldCommand.Aliases then
-		for _, alias in pairs(oldCommand.Aliases) do
-			self.Commands[alias:lower()] = nil
+	-- Mark where this command came from
+	commandObject._isDefault = not not isDefault
+
+	local commandKey = commandObject.Name:lower()
+	local oldCommand = self.Commands[commandKey]
+
+	if oldCommand then
+		local oldIsDefault = not not oldCommand._isDefault
+
+		if isDefault and not oldIsDefault then
+			warn(
+				`[Cmdr] Ignored default command '{commandObject.Name}' because a custom developer command is already registered with this name.`
+			)
+			return false
 		end
-	elseif not oldCommand then
+
+		if not isDefault and oldIsDefault then
+			warn(`[Cmdr] Custom command '{commandObject.Name}' has replaced the default built-in command.`)
+		elseif not isDefault and not oldIsDefault then
+			warn(`[Cmdr] Custom command '{commandObject.Name}' was overwritten by a newer custom command.`)
+		else
+			warn(`[Cmdr] Default command '{commandObject.Name}' was overwritten by a newer default command.`)
+		end
+
+		if RunService:IsServer() and oldCommand._scriptInstance then
+			oldCommand._scriptInstance:Destroy()
+		end
+
+		local index = table.find(self.CommandsArray, oldCommand)
+		if index then
+			self.CommandsArray[index] = commandObject
+		else
+			table.insert(self.CommandsArray, commandObject)
+		end
+
+		if oldCommand.Aliases then
+			for _, alias in pairs(oldCommand.Aliases) do
+				self.Commands[alias:lower()] = nil
+			end
+		end
+	else
 		table.insert(self.CommandsArray, commandObject)
 	end
 
-	self.Commands[commandObject.Name:lower()] = commandObject
+	self.Commands[commandKey] = commandObject
 
 	if commandObject.Aliases then
 		for _, alias in pairs(commandObject.Aliases) do
 			self.Commands[alias:lower()] = commandObject
 		end
 	end
+
+	return true
 end
 
 --[=[
 	Registers a command definition and its server equivalent. Handles replicating the definition to the client.
 
 	@param filter (CommandDefinition -> boolean)? -- If present, will be passed a command definition which will then only be registered if the function returns `true`.
+	@param isDefault boolean? -- True if this is a built-in Cmdr command
 
 	@server
 	@within Registry
@@ -336,12 +376,15 @@ end
 function Registry:RegisterCommand(
 	commandScript: ModuleScript,
 	commandServerScript: ModuleScript?,
-	filter: ((any) -> boolean)?
+	filter: ((any) -> boolean)?,
+	isDefault: boolean?
 )
 	local commandObject = require(commandScript)
 	assert(
 		typeof(commandObject) == "table",
-		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`
+		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(
+			commandObject
+		)})`
 	)
 
 	if commandServerScript then
@@ -353,9 +396,13 @@ function Registry:RegisterCommand(
 		return
 	end
 
-	self:RegisterCommandObject(commandObject)
+	commandObject._scriptInstance = commandScript
 
-	commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
+	local success = self:RegisterCommandObject(commandObject, isDefault)
+
+	if success then
+		commandScript.Parent = self.Cmdr.ReplicatedRoot.Commands
+	end
 end
 
 --[=[
@@ -364,11 +411,12 @@ end
 	Module scripts which include `Server` in their name will not be sent to the client.
 
 	@param filter ((CommandDefinition) -> boolean)? -- If present, will be passed a command definition which will then only be registered if the function returns `true`.
+	@param isDefault boolean? -- True if these are built-in Cmdr commands
 
 	@server
 	@within Registry
 ]=]
-function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> boolean)?)
+function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> boolean)?, isDefault: boolean?)
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
 
@@ -381,12 +429,12 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 					usedServerScripts[serverCommandScript] = true
 				end
 
-				self:RegisterCommand(commandScript, serverCommandScript, filter)
+				self:RegisterCommand(commandScript, serverCommandScript, filter, isDefault)
 			else
 				skippedServerScripts[commandScript] = true
 			end
 		else
-			self:RegisterCommandsIn(commandScript, filter)
+			self:RegisterCommandsIn(commandScript, filter, isDefault)
 		end
 	end
 
@@ -407,6 +455,8 @@ end
 	1. an array of strings — this will limit registration to only commands which have their `Group` property set to this
 	2. a function which takes in a CommandDefinition and returns a `boolean` — only if `true` is returned will the command be registered
 
+	If a custom developer command is registered with the same name or alias as a default command, the developer command will take precedence and replace the default built-in command.
+
 	@param arrayOrFunc {string} | (CommandDefinition) -> boolean | nil
 
 	@server
@@ -416,10 +466,17 @@ function Registry:RegisterDefaultCommands(arrayOrFunc: { string } | (any) -> boo
 	assert(RunService:IsServer(), "[Cmdr] RegisterDefaultCommands cannot be called from the client.")
 
 	local dictionary = if type(arrayOrFunc) == "table" then Util.MakeDictionary(arrayOrFunc) else nil
+	local filter
 
-	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, dictionary ~= nil and function(command)
-		return dictionary[command.Group] or false
-	end or arrayOrFunc)
+	if dictionary ~= nil then
+		function filter(command)
+			return dictionary[command.Group] or false
+		end
+	else
+		filter = arrayOrFunc
+	end
+
+	self:RegisterCommandsIn(self.Cmdr.DefaultCommandsFolder, filter, true)
 end
 
 --[=[
@@ -460,7 +517,15 @@ end
 	@deprecated v1.8.0 -- This method was renamed to GetCommandNames in v1.8.0. The old name exists for backwards compatibility and should not be used for new work.
 	@within Registry
 ]=]
-Registry.GetCommandsAsStrings = Registry.GetCommandNames
+function Registry:GetCommandsAsStrings(): { string }
+	Util:_emitDeprecationWarning("GetCommandsAsStrings")
+	return self:GetCommandNames()
+end
+
+Util:_registerDeprecationWarning(
+	"GetCommandsAsStrings",
+	"This method was renamed to GetCommandNames in v1.8.0. The old name exists for backwards compatibility and should not be used for new work."
+)
 
 --[=[
 	Returns an array of containing the names of all registered types, not including aliases.
@@ -523,7 +588,15 @@ end
 	@param priority number -- If unspecified, the priority will default to `0`.
 	@within Registry
 ]=]
-Registry.AddHook = Registry.RegisterHook
+function Registry:AddHook(...)
+	Util:_emitDeprecationWarning("AddHook")
+	self:RegisterHook(...)
+end
+
+Util:_registerDeprecationWarning(
+	"AddHook",
+	"This method was renamed to RegisterHook in v1.1.2. The old name exists for backwards compatibility and should not be used for new work."
+)
 
 --[=[
 	Returns a table saved with the given name. Always returns the same table on subsequent calls. Useful for commands that require persistent state, like bind or ban.

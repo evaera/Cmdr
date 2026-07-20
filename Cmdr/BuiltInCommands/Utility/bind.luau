@@ -1,5 +1,31 @@
-local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
+local UserInputService = game:GetService("UserInputService")
+
+local hasHelperRan = false
+local function runBindHelper(Cmdr)
+	Players.PlayerRemoving:Connect(function(Player)
+		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		if binds[Player] then
+			binds[Player] = nil
+		end
+	end)
+
+	TextChatService.MessageReceived:Connect(function(message: TextChatMessage)
+		local senderId = message.TextSource and message.TextSource.UserId
+		local player = senderId and Players:GetPlayerByUserId(senderId)
+		if not player then
+			return
+		end
+
+		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		if binds[player] then
+			binds[player](message)
+		end
+	end)
+
+	hasHelperRan = true
+end
 
 return {
 	Name = "bind",
@@ -26,16 +52,22 @@ return {
 	},
 
 	ClientRun = function(context, bind, command, arguments)
+		if not hasHelperRan then
+			runBindHelper(context.Cmdr)
+		end
+
 		local binds = context:GetStore("CMDR_Binds")
+		if binds[bind] then
+			if typeof(binds[bind]) == "RBXScriptConnection" then
+				binds[bind]:Disconnect()
+			end
+
+			binds[bind] = nil
+		end
 
 		command = command .. " " .. arguments
 
-		if binds[bind] then
-			binds[bind]:Disconnect()
-		end
-
 		local bindType = context:GetArgument(1).Type.Name
-
 		if bindType == "userInput" then
 			binds[bind] = UserInputService.InputBegan:Connect(function(input, gameProcessed)
 				if gameProcessed then
@@ -53,24 +85,17 @@ return {
 		elseif bindType == "bindableResource" then
 			return "Unimplemented..."
 		elseif bindType == "player" then
-			local function RunCommand(message)
-				local args = { message }
+			binds[bind] = function(message: TextChatMessage)
+				local args = { message.Text }
 				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
 					context.Dispatcher,
 					context.Cmdr.Util.SubstituteArgs(command, args)
 				)
+
 				context:Reply(
 					("%s $ %s : %s"):format(bind.Name, chatCommand, context.Dispatcher:EvaluateAndRun(chatCommand)),
 					Color3.fromRGB(244, 92, 66)
 				)
-			end
-
-			if TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
-				binds[bind] = bind.Chatted:Connect(RunCommand)
-			else
-				binds[bind] = TextChatService.SendingMessage:Connect(function(message)
-					RunCommand(message.Text)
-				end)
 			end
 		end
 
