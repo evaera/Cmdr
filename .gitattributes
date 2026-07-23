@@ -1,5 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-# Exclude .moonwave documentation directory from repository stats
+# Exclude directories from repository stats
 .moonwave/** linguist-documentation
+pages/** linguist-documentation
