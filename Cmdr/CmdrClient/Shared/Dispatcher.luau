@@ -307,6 +307,7 @@ end
 ]=]
 function Dispatcher:RunBeforeCommandRegisterHooks(player: Player?)
 	assert(IS_CLIENT or IS_SERVER and typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player when called on the Server.")
+	assert(IS_CLIENT and player == nil, "[Cmdr] Argument #1 must be omitted when calling on the Client.")
 	if IS_SERVER and player then
 		self:SendEvent(player, "RunBeforeCommandRegisterHooks")
 		return
