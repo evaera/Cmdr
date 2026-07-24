@@ -1,5 +1,4 @@
 const RunService = game:GetService("RunService")
-const Players = game:GetService("Players")
 
 const Argument = require("./Argument")
 
@@ -333,7 +332,6 @@ function Command:Run(): string?
 	end
 
 	const afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)
-
 	if afterRunHook then
 		return afterRunHook
 	end
@@ -374,15 +372,7 @@ end
 	Sends an event to a player.
 ]=]
 function Command:SendEvent(player: Player, event: string, ...: any)
-	assert(typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player")
-	assert(type(event) == "string", "[Cmdr] Argument #2 must be a string")
-
-	if IS_SERVER then
-		self.Cmdr._remoteEvent:FireClient(player, event, ...)
-	elseif self.Cmdr._events[event] then
-		assert(player == Players.LocalPlayer, "[Cmdr] Event messages can only be sent to the local player on the client.")
-		self.Cmdr._events[event](...)
-	end
+	self.Dispatcher:SendEvent(player, event, ...)
 end
 
 --[=[
@@ -390,8 +380,7 @@ end
 	Broadcasts an event to all clients.
 ]=]
 function Command:BroadcastEvent(event: string, ...: any)
-	assert(IS_SERVER, "[Cmdr] Can't broadcast event messages from the client.")
-	self.Cmdr._remoteEvent:FireAllClients(event, ...)
+	self.Dispatcher:BroadcastEvent(event, ...)
 end
 
 --[=[

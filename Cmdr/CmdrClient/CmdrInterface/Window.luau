@@ -111,14 +111,10 @@ return function(CmdrClient, AutoComplete)
 	function Window:_setEntryText(text: string)
 		self._entry.TextBox.Text = text
 
-		if not self:IsVisible() then
-			return
+		if self:IsVisible() then
+			self._entry.TextBox.CursorPosition = #text + 1
+			self:UpdateWindowHeight()
 		end
-
-		self._entry.TextBox:CaptureFocus()
-		self._entry.TextBox.CursorPosition = #text + 1
-
-		self:UpdateWindowHeight()
 	end
 
 	--[=[
@@ -345,9 +341,13 @@ return function(CmdrClient, AutoComplete)
 		const text = self._entry.TextBox.Text
 		self:_clearHistoryState()
 
+		--[[ NOTE: I'm not sure why this behavior exists but it causes the menu to reopen when escape is pressed, I have removed it for now.
 		if self:IsVisible() and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 			self._entry.TextBox:CaptureFocus()
-		elseif self:IsVisible() and GuiService.MenuIsOpen then
+		else
+		]]
+
+		if self:IsVisible() and GuiService.MenuIsOpen then
 			self:Hide()
 		end
 
@@ -494,11 +494,16 @@ return function(CmdrClient, AutoComplete)
 			if isPositionOutsideGui(input.Position, entryFrame) then
 				self:Hide()
 			end
+
 			return
 		end
 
 		-- Key action mappings
-		if input.KeyCode == Enum.KeyCode.Down then
+		if input.KeyCode == Enum.KeyCode.Escape then
+			self:Hide()
+		elseif input.KeyCode == Enum.KeyCode.Backspace and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+			self:_setEntryText("")
+		elseif input.KeyCode == Enum.KeyCode.Down then
 			self:_selectVertical(1)
 		elseif input.KeyCode == Enum.KeyCode.Up then
 			self:_selectVertical(-1)
@@ -583,7 +588,7 @@ return function(CmdrClient, AutoComplete)
 		local exactCommand = CmdrClient.Registry:GetCommand(commandText)
 		local exactMatch
 
-		if exactCommand then
+		if exactCommand and not exactCommand._isHidden then
 			-- selene: allow(mixed_table)
 			exactMatch = {
 				exactCommand.Name,
@@ -608,22 +613,25 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		local autocompleteItems = { exactMatch }
+		-- selene: allow(mixed_table)
 		for _, commandName in ipairs(CmdrClient.Registry:GetCommandNames()) do
-			if commandText:lower() == commandName:lower():sub(1, #commandText) then
-				if not exactMatch or exactMatch[1] ~= commandName then
-					local commandObject = CmdrClient.Registry:GetCommand(commandName)
-
-					-- selene: allow(mixed_table)
-					autocompleteItems[#autocompleteItems + 1] = {
-						commandText,
-						commandName,
-						options = {
-							name = commandObject.Name,
-							description = commandObject.Description,
-						},
-					}
-				end
+			if commandText:lower() ~= commandName:lower():sub(1, #commandText) then
+				continue
 			end
+
+			if exactMatch and exactMatch[1] == commandName then
+				continue
+			end
+
+			local commandObject = CmdrClient.Registry:GetCommand(commandName)
+			autocompleteItems[#autocompleteItems + 1] = {
+				commandText,
+				commandName,
+				options = {
+					name = commandObject.Name,
+					description = commandObject.Description,
+				},
+			}
 		end
 
 		return AutoComplete:Show(autocompleteItems)
@@ -642,7 +650,6 @@ return function(CmdrClient, AutoComplete)
 
 		const hasTrailingSpace = text:sub(#text, #text):match("%s") ~= nil
 		local atEnd = false
-
 		if command then
 			arguments = CmdrClient.Util.MashExcessArguments(arguments, #command.Object.Args)
 			atEnd = #arguments == #command.Object.Args

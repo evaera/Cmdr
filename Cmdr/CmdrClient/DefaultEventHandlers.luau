@@ -11,4 +11,8 @@ return function(CmdrClient)
 	CmdrClient:HandleEvent("AddLine", function(...: any)
 		CmdrClient._interface.Window:AddLine(...)
 	end)
+
+	CmdrClient:HandleEvent("RunBeforeCommandRegisterHooks", function()
+		CmdrClient.Dispatcher:RunBeforeCommandRegisterHooks()
+	end)
 end

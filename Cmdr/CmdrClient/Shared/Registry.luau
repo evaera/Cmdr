@@ -42,6 +42,8 @@ const CommandArgProps = Util.MakeDictionary({ "Name", "Type", "Description", "Op
 	.Data (CommandContext, ...) -> any -- If your command needs to gather some extra data from the client that's only available on the client, then you can define this function. It should accept the command context and tuple of transformed arguments, and return a single value which will be available in the command with [CommandContext:GetData](/api/CommandContext#GetData).
 	.ClientRun (CommandContext, ...) -> string? -- If you want your command to run on the client, you can add this function to the command definition itself. It works exactly like the function that you would return from the Server module. If this function returns a string, the command will run entirely on the client and won't touch the server (which means server-only hooks won't run). If this function doesn't return anything, it will fall back to executing the Server module on the server.
 	.Run (CommandContext, ...) -> string? -- An older version of ClientRun. There are very few scenarios where this is preferred to ClientRun (so, in other words, don't use it!). These days, `Run` is only used for some dark magic involving server-sided command objects.
+	._isDefault boolean -- Whether this command is provided by Cmdr itself rather than registered by the developer.
+	._isHidden boolean -- Whether this command is hidden from the command list, help, and auto-complete.
 ]=]
 
 --[=[
@@ -158,6 +160,7 @@ const Registry = {
 	_hooks = {
 		BeforeRun = {},
 		AfterRun = {},
+		BeforeCommandRegister = {},
 	},
 
 	_autoExecBuffer = {},
@@ -179,7 +182,7 @@ const Registry = {
 
 	Registers a type on the current realm (server/client), this function should be called from within the type definition ModuleScript.
 ]=]
-function Registry:RegisterType(name: string, typeObject)
+function Registry:RegisterType(name: string, typeObject: any)
 	assert(typeof(name) == "string", `[Cmdr] Invalid type name provided: {tostring(name)}`)
 	assert(name:find("^[%d%l]%w*$") ~= nil, `[Cmdr] Invalid type name provided: "{name}", type names must be alphanumeric and start with a lowercase letter or digit.`)
 
@@ -271,7 +274,7 @@ Registry.RegisterHooksIn = Registry.RegisterTypesIn
 	Validates the arguments of a provided Command Object.
 	Errors if an invalid property exists.
 ]=]
-function Registry:_validateCommandArguments(commandObject)
+function Registry:_validateCommandArguments(commandObject: any)
 	for index, argument in pairs(commandObject.Args) do
 		if type(argument) ~= "table" then
 			continue
@@ -292,7 +295,7 @@ end
 	Validates the properties of a provided Command Object.
 	Errors if an invalid property exists.
 ]=]
-function Registry:_validateCommand(commandObject)
+function Registry:_validateCommand(commandObject: any)
 	for key in pairs(commandObject) do
 		assert(CommandMethods[key], `[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
 	end
@@ -312,15 +315,21 @@ end
 	Register a command purely based on its definition.
 	Prefer using Registry:RegisterCommand for proper handling of client/server model.
 ]=]
-function Registry:RegisterCommandObject(commandObject, isDefault: boolean?): boolean
+function Registry:RegisterCommandObject(commandObject: any, isDefault: boolean?): boolean
 	self:_validateCommand(commandObject) -- Error if the command object isn't valid
 
-	if commandObject.AutoExec and IS_CLIENT then
-		table.insert(self._autoExecBuffer, commandObject.AutoExec)
-		self:_flushAutoExecBufferDeferred()
-	end
-
 	commandObject._isDefault = isDefault == true
+	commandObject._isHidden = false
+
+	if IS_CLIENT then
+		const beforeCommandRegisterHook = self.Cmdr.Dispatcher:_runBeforeCommandRegisterHookForCommand(commandObject)
+		commandObject._isHidden = beforeCommandRegisterHook ~= nil and beforeCommandRegisterHook ~= true
+
+		if commandObject.AutoExec then
+			table.insert(self._autoExecBuffer, commandObject.AutoExec)
+			self:_flushAutoExecBufferDeferred()
+		end
+	end
 
 	const commandName = commandObject.Name:lower()
 	const existingCommand = self._commands[commandName]
@@ -497,6 +506,10 @@ function Registry:GetCommandNames(): { string }
 	local commands = {}
 
 	for _, command in pairs(self._commandsArray) do
+		if command._isHidden then
+			continue
+		end
+
 		table.insert(commands, command.Name)
 	end
 
@@ -550,12 +563,12 @@ end
 
 	@param hookName HookType
 	@param callback (CommandContext) -> string? -- returns nil for ok, string (errorText) for cancellation
-	@param priority -- If unspecified, the priority will default to `0`.
+	@param priority number? -- If unspecified, the priority will default to `0`.
 
 	Registers a hook on the current realm (server/client). This should probably be ran on the server or in a hook module script, but can also work on the client.
 	Hooks run in order of priority from lowest (running first) to highest.
 ]=]
-function Registry:RegisterHook(hookName: string, callback: (any) -> string?, priority: number)
+function Registry:RegisterHook(hookName: string, callback: (any) -> string?, priority: number?)
 	assert(self._hooks[hookName], `[Cmdr] Invalid hook name: {hookName}`)
 
 	table.insert(self._hooks[hookName], { callback = callback, priority = priority or 0 })

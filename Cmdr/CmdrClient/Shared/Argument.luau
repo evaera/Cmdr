@@ -123,7 +123,7 @@ Argument.__index = Argument
 
 	Returns a new ArgumentContext, an object that handles parsing and validating arguments.
 ]=]
-function Argument.new(command, argumentDefinition, value)
+function Argument.new(command: any, argumentDefinition: any, value: any)
 	local self = {
 		Command = command,
 		Type = nil,

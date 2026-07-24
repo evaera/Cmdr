@@ -12,6 +12,8 @@ const IS_STUDIO = RunService:IsStudio()
 const WARNING_COLOR = Color3.fromRGB(255, 228, 26)
 const HISTORY_SETTING_NAME = "CMDR_COMMAND_HISTORY"
 
+const Player = Players.LocalPlayer
+
 local hasDisplayedBeforeRunHookWarning = false
 
 --[=[
@@ -148,6 +150,32 @@ end
 
 --[=[
 	@within Dispatcher
+	Sends an event to a player.
+]=]
+function Dispatcher:SendEvent(player: Player, event: string, ...: any)
+	assert(typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player")
+	assert(typeof(event) == "string", "[Cmdr] Argument #2 must be a string")
+
+	if IS_SERVER then
+		self.Cmdr._remoteEvent:FireClient(player, event, ...)
+	elseif self.Cmdr._events[event] then
+		assert(player == Players.LocalPlayer, "[Cmdr] Event messages can only be sent to the local player on the client.")
+		self.Cmdr._events[event](...)
+	end
+end
+
+--[=[
+	@within Dispatcher
+	Broadcasts an event to all clients.
+]=]
+function Dispatcher:BroadcastEvent(event: string, ...: any)
+	assert(IS_SERVER, "[Cmdr] Can't broadcast event messages from the client.")
+	assert(typeof(event) == "string", "[Cmdr] Argument #1 must be a string")
+	self.Cmdr._remoteEvent:FireAllClients(event, ...)
+end
+
+--[=[
+	@within Dispatcher
 	@client
 
 	Invokes a command programmatically as the local player.
@@ -181,7 +209,7 @@ end
 
 	Runs command-specific guard methods.
 ]=]
-function Dispatcher:RunGuards(commandContext, ...): nil | string
+function Dispatcher:RunGuards(commandContext: any, ...: any): string?
 	const guardMethods = commandContext.Object.Guards
 	if not guardMethods then
 		return nil
@@ -207,17 +235,17 @@ end
 	@within Dispatcher
 	@private
 
-	Runs hooks matching the specified hook name.
-
 	@param hookName HookType
 	@param commandContext CommandContext
-	@param ... ArgumentContext...
 
-	@return nil | string -- nil for success, string for cancellation.
+	@return string? -- nil for success, string for cancellation.
+
+	Runs hooks matching the specified hook name.
 ]=]
-function Dispatcher:RunHooks(hookName: string, commandContext, ...): nil | string
+function Dispatcher:RunHooks(hookName: string, commandContext: any, passExactValue: boolean?): string?
 	const hooks = self.Registry._hooks[hookName]
 	assert(hooks, `[Cmdr] Invalid hook name: {hookName}`)
+	assert(not (IS_SERVER and hookName == "BeforeCommandRegister"), "[Cmdr] The BeforeCommandRegister hook can only be run by the client.")
 
 	if hookName == "BeforeRun" and #hooks == 0 and commandContext.Group ~= "DefaultUtil" and commandContext.Group ~= "UserAlias" and commandContext:HasImplementation() then
 		if not IS_STUDIO then
@@ -232,13 +260,61 @@ function Dispatcher:RunHooks(hookName: string, commandContext, ...): nil | strin
 	end
 
 	for _, hook in ipairs(hooks) do
-		const result = hook.callback(commandContext, ...)
+		const result = hook.callback(commandContext)
 		if result ~= nil then
-			return tostring(result)
+			return if passExactValue == true then result else tostring(result)
 		end
 	end
 
 	return nil
+end
+
+--[=[
+	@within Dispatcher
+	@private
+	@client
+
+	@param commandObject CommandDefinition
+
+	@return string? -- nil for success, string for cancellation.
+
+	Runs all BeforeCommandRegister Hooks on the specified CommandDefinition.
+]=]
+function Dispatcher:_runBeforeCommandRegisterHookForCommand(commandObject: any): string?
+	assert(IS_CLIENT, "[Cmdr] [Dispatcher::_runBeforeCommandRegisterHookForCommand] can only be called from the client.")
+
+	const commandName = commandObject.Name:lower()
+	const commandContext = Command.new({
+		Dispatcher = self,
+		Text = nil,
+		CommandObject = commandObject,
+		Alias = commandName,
+		Executor = Player,
+		Arguments = {},
+		Data = nil,
+	})
+
+	const result = self:RunHooks("BeforeCommandRegister", commandContext, true)
+	assert(not result, "[Cmdr] BeforeCommandRegister hook must return nil or false.")
+	return result
+end
+
+--[=[
+	@within Dispatcher
+	@param player Player? -- The player to run the hook for. This argument is required when the method is called from the server.
+
+	Runs all BeforeCommandRegister Hooks on the client.
+]=]
+function Dispatcher:RunBeforeCommandRegisterHooks(player: Player?)
+	assert(IS_CLIENT or IS_SERVER and typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player when called on the Server.")
+	if IS_SERVER and player then
+		self:SendEvent(player, "RunBeforeCommandRegisterHooks")
+	end
+
+	for _, commandObject: any in pairs(self.Registry:GetCommands()) do
+		const beforeCommandRegisterHook = self:_runBeforeCommandRegisterHookForCommand(commandObject)
+		commandObject._isHidden = beforeCommandRegisterHook ~= nil and beforeCommandRegisterHook ~= true
+	end
 end
 
 --[=[

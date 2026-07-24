@@ -77,6 +77,10 @@ return {
 
 			local lastGroup
 			for _, command in ipairs(commands) do
+				if command._isHidden then
+					continue
+				end
+
 				const group = command.Group or "No Group"
 				if lastGroup ~= group then
 					context:Reply(`\n{group}\n{string.rep("-", #group)}`)
