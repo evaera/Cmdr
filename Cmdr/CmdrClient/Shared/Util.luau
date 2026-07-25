@@ -359,15 +359,15 @@ function Util.GetTextSize(text: string, label: TextLabel, size: Vector2?): Vecto
 	size = size or Vector2.new(label.AbsoluteSize.X, 0)
 
 	if label.Font == Enum.Font.Unknown then
-		const textBoundParams = CACHED_LABELS[label] or Instance.new("GetTextBoundsParams")
-		textBoundParams.Text = text
-		textBoundParams.Font = label.FontFace
-		textBoundParams.Size = label.TextSize
-		textBoundParams.Width = (size :: Vector2).X
-		textBoundParams.RichText = label.RichText
-		CACHED_LABELS[label] = textBoundParams
+		const textBoundsParams = CACHED_LABELS[label] or Instance.new("GetTextBoundsParams")
+		textBoundsParams.Text = text
+		textBoundsParams.Font = label.FontFace
+		textBoundsParams.Size = label.TextSize
+		textBoundsParams.Width = (size :: Vector2).X
+		textBoundsParams.RichText = label.RichText
+		CACHED_LABELS[label] = textBoundsParams
 
-		const success, bounds = pcall(TextService.GetTextBoundsAsync, TextService, textBoundParams)
+		const success, bounds = pcall(TextService.GetTextBoundsAsync, TextService, textBoundsParams)
 		if not success or not bounds then
 			warn(`[Cmdr] Failed to get TextSize for Font Face {label.FontFace.Family}: {bounds}`)
 			return Vector2.new(0, 0)
