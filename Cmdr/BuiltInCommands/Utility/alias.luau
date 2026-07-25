@@ -1,12 +1,12 @@
 return {
 	Name = "alias",
-	Description = "Creates a new, single command out of a command and given arguments",
+	Description = "Creates a new, single command out of a command and given arguments.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "Alias name",
-			Description = "The key or input type you'd like to bind the command to",
+			Description = "The key or input type you'd like to bind the command to.",
 		},
 		{
 			Type = "string",

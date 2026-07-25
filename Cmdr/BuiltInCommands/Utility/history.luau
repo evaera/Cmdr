@@ -2,16 +2,16 @@ return {
 	Name = "history",
 	AutoExec = {
 		'alias "!|Displays previous command from history." run ${history $1{number|Line Number}}',
-		'alias "^|Runs the previous command, replacing all occurrences of A with B" run ${run replace ${history -1} $1{string|A} $2{string|B}}',
+		'alias "^|Runs the previous command, replacing all occurrences of A with B." run ${run replace ${history -1} $1{string|A} $2{string|B}}',
 		'alias "!!|Reruns the last command." ! -1',
 	},
-	Description = "Displays previous commands from history",
+	Description = "Displays previous commands from history.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "integer",
 			Name = "Line Number",
-			Description = "Command line number (can be negative to go from end)",
+			Description = "Command line number (can be negative to go from end.)",
 		},
 	},
 

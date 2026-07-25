@@ -1,13 +1,13 @@
 return {
 	Name = "echo",
 	Aliases = { "=" },
-	Description = "Echoes your text back to yo.",
+	Description = "Echoes your text back to you.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "Text",
-			Description = "The text to echo",
+			Description = "The text to echo.",
 		},
 	},
 

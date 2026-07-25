@@ -2,13 +2,13 @@ local HttpService = game:GetService("HttpService")
 
 return {
 	Name = "json-array-encode",
-	Description = "Encodes a comma-separated list into a JSON array",
+	Description = "Encodes a comma-separated list into a JSON array.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "CSV",
-			Description = "The comma-separated list",
+			Description = "The comma-separated list.",
 		},
 	},
 

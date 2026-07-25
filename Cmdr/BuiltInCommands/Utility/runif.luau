@@ -51,30 +51,30 @@ end
 
 return {
 	Name = "runif",
-	Description = "Runs a given command string if a certain condition is met",
+	Description = "Runs a given command string if a certain condition is met.",
 	Group = "DefaultUtil",
 	Args = {
 		function(context)
 			return {
 				Type = context.Cmdr.Util.MakeEnumType("ConditionFunction", conditionNames),
 				Name = "Condition",
-				Description = "The condition function",
+				Description = "The condition function.",
 			}
 		end,
 		{
 			Type = "string",
 			Name = "Argument",
-			Description = "The argument to the condition function",
+			Description = "The argument to the condition function.",
 		},
 		{
 			Type = "string",
 			Name = "Test against",
-			Description = "The text to test against",
+			Description = "The text to test against.",
 		},
 		{
 			Type = "string",
 			Name = "Command",
-			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used",
+			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used.",
 			Optional = true,
 		},
 	},

@@ -1,15 +1,15 @@
 return {
 	Name = "resolve",
-	Description = "Resolves Argument Value Operators into lists. E.g., resolve players * gives you a list of all players",
+	Description = "Resolves Argument Value Operators into lists. E.g., resolve players * gives you a list of all players.",
 	Group = "DefaultUtil",
 	AutoExec = {
-		'alias "me|Displays your username" resolve players .',
+		'alias "me|Displays your username." resolve players .',
 	},
 	Args = {
 		{
 			Type = "type",
 			Name = "Type",
-			Description = "The type for which to resolve",
+			Description = "The type for which to resolve.",
 		},
 		function(context)
 			if context:GetArgument(1):Validate() == false then

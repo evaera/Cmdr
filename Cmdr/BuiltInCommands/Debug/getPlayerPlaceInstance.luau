@@ -1,12 +1,12 @@
 return {
-	Name = "get-player-place-instance",
-	Description = "Returns the target player's Place ID and the JobId separated by a space, will return 0 if the player is offline or something else goes wrong",
+	Name = "get-player-place-instance.",
+	Description = "Returns the target player's Place ID and the JobId separated by a space. Returns 0 if the player is offline or something else goes wrong.",
 	Group = "DefaultDebug",
 	Args = {
 		{
 			Type = "playerId",
 			Name = "Player",
-			Description = "Get the place instance of this player",
+			Description = "Get the place instance of this player.",
 		},
 		function(context)
 			return {

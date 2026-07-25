@@ -24,19 +24,19 @@ local lock
 
 return {
 	Name = "edit",
-	Description = "Edit text in a TextBox",
+	Description = "Edit text in a TextBox.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "Input text",
-			Description = "The text you wish to edit",
+			Description = "The text you wish to edit.",
 			Default = "",
 		},
 		{
 			Type = "string",
 			Name = "Delimiter",
-			Description = "The character that separates each line",
+			Description = "The character that separates each line.",
 			Default = ",",
 		},
 	},

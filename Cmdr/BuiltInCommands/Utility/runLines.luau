@@ -1,12 +1,12 @@
 return {
 	Name = "run-lines",
-	Description = "Splits input by newlines and runs each line as its own command. This is used by the init-run command",
+	Description = "Splits input by newlines and runs each line as its own command. This is used by the init-run command.",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "Script",
-			Description = "The script to parse",
+			Description = "The script to parse.",
 			Default = "",
 		},
 	},

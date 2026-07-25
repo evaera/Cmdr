@@ -3,12 +3,12 @@ return {
 	Description = "Perform a math operation on 2 values",
 	Group = "DefaultUtil",
 	AutoExec = {
-		'alias "+|Perform an addition" math + $1{number|Number} $2{number|Number}',
-		'alias "-|Perform a subtraction" math - $1{number|Number} $2{number|Number}',
-		'alias "*|Perform a multiplication" math * $1{number|Number} $2{number|Number}',
-		'alias "/|Perform a division" math / $1{number|Number} $2{number|Number}',
-		'alias "**|Perform an exponentiation" math ** $1{number|Number} $2{number|Number}',
-		'alias "%|Perform a modulus" math % $1{number|Number} $2{number|Number}',
+		'alias "+|Perform an addition." math + $1{number|Number} $2{number|Number}',
+		'alias "-|Perform a subtraction." math - $1{number|Number} $2{number|Number}',
+		'alias "*|Perform a multiplication." math * $1{number|Number} $2{number|Number}',
+		'alias "/|Perform a division." math / $1{number|Number} $2{number|Number}',
+		'alias "**|Perform an exponentiation." math ** $1{number|Number} $2{number|Number}',
+		'alias "%|Perform a modulus." math % $1{number|Number} $2{number|Number}',
 	},
 	Args = {
 		{
