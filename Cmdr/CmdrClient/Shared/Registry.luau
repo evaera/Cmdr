@@ -16,7 +16,7 @@ const CommandArgProps = Util.MakeDictionary({ "Name", "Type", "Description", "Op
 
 --[=[
 	@within Registry
-	@type HookType "BeforeRun" | "AfterRun"
+	@type HookType "BeforeRun" | "AfterRun" | "BeforeCommandRegister"
 ]=]
 
 --[=[
