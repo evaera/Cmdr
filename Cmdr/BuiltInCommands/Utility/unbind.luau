@@ -11,7 +11,7 @@ return {
 	},
 
 	ClientRun = function(context: any, bind: InputObject | Player): string
-		local binds = context:GetStore("CMDR_Binds")
+		const binds = context:GetStore("CMDR_Binds")
 
 		if binds[bind] then
 			if typeof(binds[bind]) == "RBXScriptConnection" then

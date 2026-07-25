@@ -215,7 +215,7 @@ return function(registry: any)
 		Prefixes = "% teamColor",
 
 		Transform = function(text: string): { [number]: BrickColor }
-			local brickColors = {}
+			const brickColors = {}
 
 			for index: number, name: string in pairs(brickColorFinder(text)) do
 				brickColors[index] = BrickColor.new(name :: any) --< BrickColor.new gets overloaded

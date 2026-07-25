@@ -418,8 +418,6 @@ end
 	Module scripts which include `Server` in their name will not be sent to the client.
 ]=]
 function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> boolean)?, isDefault: boolean?)
-	--assert(IS_SERVER, "[Cmdr] RegisterCommandsIn cannot be called from the client.")
-
 	local skippedServerScripts = {}
 	local usedServerScripts = {}
 	for _, commandScript in pairs(container:GetChildren()) do

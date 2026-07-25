@@ -1,6 +1,6 @@
 const Players = game:GetService("Players")
 
-local nameCache: { [string]: number } = {}
+const nameCache: { [string]: number } = {}
 
 const function getUserId(username: string): number?
 	username = username:match("%(@([^%)]+)%)") or username

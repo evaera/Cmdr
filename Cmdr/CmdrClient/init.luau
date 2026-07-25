@@ -9,7 +9,7 @@ const CmdrInterface = require("@self/CmdrInterface")
 const DefaultEventHandlers = require("@self/DefaultEventHandlers")
 
 const TYPES_FOLDER = script:WaitForChild("Types") :: Folder
-local COMMANDS_FOLDER = script:WaitForChild("Commands") :: Folder
+const COMMANDS_FOLDER = script:WaitForChild("Commands") :: Folder
 
 type Signal = {
 	Fire: (self: Signal, ...any) -> (),
@@ -192,7 +192,7 @@ end
 	A collection of event callbacks used by Cmdr.
 ]=]
 
-local CmdrClient = {
+const CmdrClient = {
 	Registry = nil :: Registry.Registry?,
 	Dispatcher = nil :: any,
 	Util = Util,

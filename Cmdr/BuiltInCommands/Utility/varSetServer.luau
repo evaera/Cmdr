@@ -1,16 +1,16 @@
 const DataStoreService = game:GetService("DataStoreService")
 
-local queue = {}
+const queue = {}
 local DataStoresActive, DataStore
 task.spawn(function()
 	DataStoresActive, DataStore = pcall(function()
-		local targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
+		const targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
 		targetStore:GetAsync("test_key")
 		return targetStore
 	end)
 
 	while #queue > 0 do
-		local nextThread = table.remove(queue, 1)
+		const nextThread = table.remove(queue, 1)
 		coroutine.resume(nextThread)
 	end
 end)

@@ -139,7 +139,7 @@ return function(CmdrClient)
 			button.LayoutOrder = index
 			button.Parent = autoCompleteFrame
 
-			local maxBounds = math.max(button.Typed.TextBounds.X, button.Suggest.TextBounds.X) + 20
+			const maxBounds = math.max(button.Typed.TextBounds.X, button.Suggest.TextBounds.X) + 20
 			autocompleteWidth = math.max(autocompleteWidth, maxBounds)
 
 			item.gui = button
@@ -148,14 +148,14 @@ return function(CmdrClient)
 		autoCompleteFrame.UIListLayout:ApplyLayout()
 
 		const text = self._entry.TextBox.Text
-		local words = CmdrClient.Util.SplitString(text)
+		const words = CmdrClient.Util.SplitString(text)
 		if text:sub(#text, #text) == " " and not options.at then
 			words[#words + 1] = "e"
 		end
 
 		table.remove(words, #words)
 
-		local offset = (options.at or (#table.concat(words, " ") + 1)) * 7
+		const offset = (options.at or (#table.concat(words, " ") + 1)) * 7
 		self:_updateContainerPosition(offset)
 		autoCompleteFrame.Size = UDim2.fromOffset(autocompleteWidth, autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y)
 		autoCompleteFrame.Visible = true

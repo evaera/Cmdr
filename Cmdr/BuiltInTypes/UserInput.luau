@@ -1,4 +1,4 @@
-local combinedInputEnums: { EnumItem } = {}
+const combinedInputEnums: { EnumItem } = {}
 for _, enum: Enum.UserInputType in ipairs(Enum.UserInputType:GetEnumItems()) do
 	combinedInputEnums[#combinedInputEnums + 1] = enum
 end

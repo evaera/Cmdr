@@ -1,4 +1,4 @@
-local HttpService = game:GetService("HttpService")
+const HttpService = game:GetService("HttpService")
 
 return {
 	Name = "json-array-encode",

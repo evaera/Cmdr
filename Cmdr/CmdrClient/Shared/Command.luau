@@ -170,7 +170,7 @@ Command.__index = Command
 	Creates a new command context.
 ]=]
 function Command.new(options)
-	local self = {
+	const self = {
 		Dispatcher = options.Dispatcher,
 		Cmdr = options.Dispatcher.Cmdr,
 		Name = options.CommandObject.Name,
@@ -272,7 +272,7 @@ end
 	Gathers parsed argument values.
 ]=]
 function Command:GatherArgumentValues(): ({ any }, number)
-	local values = {}
+	const values = {}
 
 	for index = 1, #self.ArgumentDefinitions do
 		const argument = self.Arguments[index]

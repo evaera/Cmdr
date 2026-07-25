@@ -13,7 +13,7 @@ end
 	Represents an individual argument within an individual command execution.
 ]=]
 
-local Argument = {}
+const Argument = {}
 Argument.__index = Argument
 
 --[=[
@@ -124,7 +124,7 @@ Argument.__index = Argument
 	Returns a new ArgumentContext, an object that handles parsing and validating arguments.
 ]=]
 function Argument.new(command: any, argumentDefinition: any, value: any)
-	local self = {
+	const self = {
 		Command = command,
 		Type = nil,
 		Name = argumentDefinition.Name,
@@ -227,8 +227,7 @@ function Argument:Transform()
 
 			if maxSize and maxSize > 0 then
 				const remainingItems, options = self:GetDefaultAutocomplete()
-				local items = {}
-
+				const items = {}
 				if not options.IsPartial and #remainingItems > 0 then
 					for _ = 1, math.min(maxSize, #remainingItems) do
 						table.insert(items, table.remove(remainingItems, math.random(1, #remainingItems)))
@@ -239,8 +238,7 @@ function Argument:Transform()
 				end
 			end
 		elseif rawValue == "*" or rawValue == "**" then
-			local strings, options = self:GetDefaultAutocomplete()
-
+			const strings, options = self:GetDefaultAutocomplete()
 			if not options.IsPartial and #strings > 0 then
 				if rawValue == "**" and self.Type.Default then
 					const defaultString = self.Type.Default(self.Executor) or ""
@@ -372,7 +370,7 @@ function Argument:GetValue(): any
 		return self:_parseValue(1)
 	end
 
-	local values = {}
+	const values = {}
 	for index = 1, #self.TransformedValues do
 		const parsedValue = self:_parseValue(index)
 		assert(type(parsedValue) == "table", `[Cmdr] Listable types must return a table from Parse {self.Type.Name}`)
@@ -382,7 +380,7 @@ function Argument:GetValue(): any
 		end
 	end
 
-	local valueArray = {}
+	const valueArray = {}
 	for value in pairs(values) do
 		valueArray[#valueArray + 1] = value
 	end

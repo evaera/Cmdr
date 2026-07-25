@@ -15,7 +15,7 @@ return {
 			return ""
 		end
 
-		local targetPlayer = Players:GetPlayerFromCharacter(target:FindFirstAncestorOfClass("Model"))
+		const targetPlayer = Players:GetPlayerFromCharacter(target:FindFirstAncestorOfClass("Model"))
 		return targetPlayer and `{targetPlayer.DisplayName} @({targetPlayer.Name})` or ""
 	end,
 }

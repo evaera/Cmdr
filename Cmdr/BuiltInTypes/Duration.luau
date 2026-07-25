@@ -8,7 +8,7 @@ const UNIT_SECONDS: { [string]: number } = {
 	Seconds = 1,
 }
 
-local unitNames: { string } = {}
+const unitNames: { string } = {}
 for unitName: string in pairs(UNIT_SECONDS) do
 	unitNames[#unitNames + 1] = unitName
 end

@@ -340,7 +340,7 @@ end
 function Dispatcher:_pushHistory(text: string)
 	assert(IS_CLIENT, "[Cmdr] [Dispatcher::PushHistory] may only be used from the client.")
 
-	local history = self:GetHistory()
+	const history = self:GetHistory()
 	if Util.TrimString(text) == "" or text == history[#history] then
 		return
 	end

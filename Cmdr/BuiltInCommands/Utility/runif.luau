@@ -44,7 +44,7 @@ const CONDITIONS = {
 	end,
 }
 
-local conditionNames = {}
+const conditionNames = {}
 for name in pairs(CONDITIONS) do
 	conditionNames[#conditionNames + 1] = name
 end

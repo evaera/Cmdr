@@ -17,7 +17,7 @@ const CACHED_LABELS = {}
 
 -- Converts instances into display names and keeps the original values.
 const function transformInstanceSet(instances: { any }): ({ string }, { any })
-	local names: { string } = {}
+	const names: { string } = {}
 
 	for index = 1, #instances do
 		local object = instances[index]
@@ -81,7 +81,7 @@ const Util = {
 	Takes an array and flips its values into dictionary keys with value of true.
 ]=]
 function Util.MakeDictionary(array: { any }): { [any]: true }
-	local dictionary = {}
+	const dictionary = {}
 
 	for index = 1, #array do
 		dictionary[array[index]] = true
@@ -95,7 +95,7 @@ end
 	Takes a dictionary and returns its keys.
 ]=]
 function Util.DictionaryKeys(dict: { [any]: any }): { any }
-	local keys = {}
+	const keys = {}
 
 	for key in pairs(dict) do
 		table.insert(keys, key)
@@ -115,7 +115,7 @@ end
 	Exact matches will be inserted in the front of the resulting array.
 ]=]
 function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?) -> any
-	local containerType = typeof(setOrContainer)
+	const containerType = typeof(setOrContainer)
 	assert(containerType == "table" or containerType == "Enum" or containerType == "Instance", "[Cmdr] MakeFuzzyFinder only accepts a table, Enum, or Instance.")
 
 	if containerType == "Enum" then
@@ -143,8 +143,8 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 
 	-- Searches the set (checking exact matches first)
 	return function(text: string, returnFirst: boolean?, matchStart: boolean?)
-		local resultsPriority = {}
-		local results = {}
+		const resultsPriority = {}
+		const results = {}
 
 		for index, name in pairs(names) do
 			const value = instances and instances[index] or name
@@ -199,7 +199,7 @@ end
 	If no Name property is present, then tostring will be called instead.
 ]=]
 function Util.GetNames(instances: any): { string }
-	local names, _ = transformInstanceSet(instances)
+	const names, _ = transformInstanceSet(instances)
 	return names
 end
 
@@ -210,7 +210,7 @@ end
 function Util.SplitStringSimple(input: string, seperator: string?): { string }
 	seperator = seperator or "%s"
 
-	local segments = {}
+	const segments = {}
 	local index = 1
 	for string in string.gmatch(input, "([^" .. (seperator :: string) .. "]+)") do
 		segments[index] = string
@@ -281,7 +281,7 @@ function Util.SplitString(text: string, max: number?): { string }
 	text = encodeControlChars(text)
 	max = max or math.huge
 
-	local segments = {}
+	const segments = {}
 	local buffer = nil
 	local quoteChar = nil
 
@@ -329,7 +329,7 @@ end
 	Takes an array of arguments and a max value. Any indicies past the max value will be appended to the last valid argument.
 ]=]
 function Util.MashExcessArguments(arguments: { string }, max: number): { string }
-	local results = {}
+	const results = {}
 
 	for argumentIndex = 1, #arguments do
 		if argumentIndex > max then
@@ -347,7 +347,7 @@ end
 	Trims whitespace from both sides of a string.
 ]=]
 function Util.TrimString(str: string): string
-	local _, from = string.find(str, "^%s*")
+	const _, from = string.find(str, "^%s*")
 	return from == #str and "" or string.match(str, ".*%S", from + 1)
 end
 
@@ -408,10 +408,9 @@ end
 	Parses a prefixed union type argument (such as %Team)
 ]=]
 function Util.ParsePrefixedUnionType(typeValue: string, rawValue: string): (string?, string?, string?)
-	local split = Util.SplitStringSimple(typeValue)
+	const split = Util.SplitStringSimple(typeValue)
 
-	-- Check prefixes in order from longest to shortest
-	local types = {}
+	const types = {}
 	for splitIndex = 1, #split, 2 do
 		types[#types + 1] = {
 			prefix = split[splitIndex - 1] or "",
@@ -424,7 +423,7 @@ function Util.ParsePrefixedUnionType(typeValue: string, rawValue: string): (stri
 	end)
 
 	for typeIndex = 1, #types do
-		local typeInfo = types[typeIndex]
+		const typeInfo = types[typeIndex]
 
 		if rawValue:sub(1, #typeInfo.prefix) == typeInfo.prefix then
 			return typeInfo.type, rawValue:sub(#typeInfo.prefix + 1), typeInfo.prefix
@@ -444,7 +443,7 @@ end
 	Creates a listable type from a singular type
 ]=]
 function Util.MakeListableType(typeDefinition: any, override: { [string]: any }?): { [string]: any }
-	local listableType: { [string]: any } = {
+	const listableType: { [string]: any } = {
 		Listable = true,
 		Transform = typeDefinition.Transform,
 		Validate = typeDefinition.Validate,
@@ -479,7 +478,7 @@ function Util.RunCommandString(dispatcher: any, commandString: string): string?
 	const commands = commandString:split("&&")
 	local output = ""
 	for commandIndex, command in ipairs(commands) do
-		local outputEncoded = output:gsub("%$", "\\x24"):gsub("%%", "%%%%")
+		const outputEncoded = output:gsub("%$", "\\x24"):gsub("%%", "%%%%")
 		command = command:gsub("||", output:find("%s") and quoteString(outputEncoded) or outputEncoded)
 
 		output = tostring(dispatcher:EvaluateAndRun((Util.RunEmbeddedCommands(dispatcher, command))))
@@ -501,7 +500,7 @@ end
 function Util.RunEmbeddedCommands(dispatcher: any, str: string): string
 	str = encodeCommandEscape(str)
 
-	local results = {}
+	const results = {}
 	-- We need to do this because you can't yield in the gsub function
 	for text in str:gmatch("$(%b{})") do
 		local doQuotes = true
@@ -555,7 +554,7 @@ end
 ]=]
 function Util.MakeAliasCommand(name: string, commandString: string): { [string]: any }
 	const commandName, commandDescription = unpack(name:split("|"))
-	local args, seenArgs = {}, {}
+	const args, seenArgs = {}, {}
 
 	commandString = Util.EncodeEscapedOperators(commandString)
 	for arg in commandString:gmatch("$(%d+)") do
@@ -671,8 +670,7 @@ end
 	Maps values of an array through a callback and returns an array of mapped values.
 ]=]
 function Util.Map(array: { any }, callback: (any, number) -> any): { any }
-	local results: { any } = {}
-
+	const results: { any } = {}
 	for index, value in ipairs(array) do
 		results[index] = callback(value, index)
 	end
@@ -685,7 +683,7 @@ end
 	Maps arguments #2-n through callback and returns values as tuple.
 ]=]
 function Util.Each(callback: (any) -> any, ...: any): ...any
-	local results: { any } = {}
+	const results: { any } = {}
 	for index, value in ipairs({ ... }) do
 		results[index] = callback(value)
 	end
@@ -699,13 +697,12 @@ end
 ]=]
 function Util.EmulateTabstops(text: string, tabWidth: number): string
 	local currentColumn = 0
-	local result = table.create(#text)
-
+	const result = table.create(#text)
 	for index = 1, #text do
-		local character = text:sub(index, index)
+		const character = text:sub(index, index)
 
 		if character == "\t" then
-			local spaces = tabWidth - currentColumn % tabWidth
+			const spaces = tabWidth - currentColumn % tabWidth
 			result[index] = string.rep(" ", spaces)
 			currentColumn += spaces
 		else
@@ -729,7 +726,7 @@ end
 	Creates a mutex for synchronizing coroutines.
 ]=]
 function Util.Mutex(): () -> ()
-	local queue: { thread } = {}
+	const queue: { thread } = {}
 	local locked = false
 
 	return function()
@@ -742,7 +739,7 @@ function Util.Mutex(): () -> ()
 
 		return function()
 			if #queue > 0 then
-				local nextThread = table.remove(queue, 1)
+				const nextThread = table.remove(queue, 1)
 				coroutine.resume(nextThread)
 			else
 				locked = false
@@ -776,7 +773,7 @@ end
 	Emits a deprecation warning for a method if it has been called. This should be called at the start of a deprecated method.
 ]=]
 function Util:_emitDeprecationWarning(name: string)
-	local warningInfo = self._deprecationWarnings[name]
+	const warningInfo = self._deprecationWarnings[name]
 	assert(warningInfo, `[Cmdr] Unknown deprecation warning {name}.`)
 
 	if not warningInfo.Suppressed and not warningInfo.Emitted then

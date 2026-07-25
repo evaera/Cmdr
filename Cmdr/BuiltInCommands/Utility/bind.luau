@@ -6,20 +6,20 @@ local hasHelperRan = false
 
 const function runBindHelper(Cmdr)
 	Players.PlayerRemoving:Connect(function(Player)
-		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
 		if binds[Player] then
 			binds[Player] = nil
 		end
 	end)
 
 	TextChatService.MessageReceived:Connect(function(message: TextChatMessage)
-		local senderId = message.TextSource and message.TextSource.UserId
-		local player = senderId and Players:GetPlayerByUserId(senderId)
+		const senderId = message.TextSource and message.TextSource.UserId
+		const player = senderId and Players:GetPlayerByUserId(senderId)
 		if not player then
 			return
 		end
 
-		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
 		if binds[player] then
 			binds[player](message)
 		end

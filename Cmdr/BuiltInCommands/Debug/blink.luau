@@ -15,7 +15,7 @@ return {
 			return "You don't have a character."
 		end
 
-		local raycastParams = RaycastParams.new()
+		const raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 		raycastParams.FilterDescendantsInstances = { character }
 		raycastParams.IgnoreWater = true

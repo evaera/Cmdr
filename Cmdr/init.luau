@@ -11,7 +11,7 @@ const Dispatcher = require("@self/CmdrClient/Shared/Dispatcher")
 const Util = require("@self/CmdrClient/Shared/Util")
 
 const function createObject(className: string, name: string, parent: Instance): Instance
-	local object = Instance.new(className)
+	const object = Instance.new(className)
 	object.Name = name
 	object.Parent = parent
 
@@ -102,7 +102,7 @@ end
 	Refers to the BuiltInTypes folder containing all default types.
 ]=]
 
-local Cmdr = {
+const Cmdr = {
 	Registry = nil :: Registry.Registry?,
 	Dispatcher = nil :: any,
 	Util = Util,

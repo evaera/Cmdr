@@ -3,7 +3,7 @@ const TeleportService = game:GetService("TeleportService")
 return function(_, playerId: number, format: string): string
 	format = format or "PlaceIdJobId"
 
-	local success, _, errorText, placeId, jobId = pcall(TeleportService.GetPlayerPlaceInstanceAsync, TeleportService, playerId)
+	const success, _, errorText, placeId, jobId = pcall(TeleportService.GetPlayerPlaceInstanceAsync, TeleportService, playerId)
 	if not success or (errorText and #errorText > 0) then
 		if format == "PlaceIdJobId" then
 			return "0" .. " -"

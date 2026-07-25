@@ -377,7 +377,7 @@ return function(CmdrClient, AutoComplete)
 			return
 		end
 
-		local currentTime = os.clock()
+		const currentTime = os.clock()
 		if CmdrClient._mashToEnable then
 			-- Increment mash counter if pressed within 1 second window
 			self._pressCount = if currentTime - self._lastPressTime < 1 then self._pressCount + 1 else 1
@@ -399,8 +399,8 @@ return function(CmdrClient, AutoComplete)
 		Handles Tab key auto-completion logic.
 	]=]
 	function Window:_handleTabCompletion()
-		local item = AutoComplete:GetSelectedItem()
-		local text = self:GetEntryText()
+		const item = AutoComplete:GetSelectedItem()
+		const text = self:GetEntryText()
 
 		if not item or (text:sub(#text, #text):match("%s") and AutoComplete.LastItem) then
 			task.wait()
@@ -408,11 +408,11 @@ return function(CmdrClient, AutoComplete)
 			return
 		end
 
-		local replace = item[2]
+		const replace = item[2]
 		local newText
 		local insertSpace = true
-		local command = AutoComplete.Command
 
+		const command = AutoComplete.Command
 		if command then
 			insertSpace = AutoComplete.NumArgs ~= #command.ArgumentDefinitions and not AutoComplete.IsPartial
 			newText = buildAutoCompleteText(command, AutoComplete.Arg, replace)
@@ -501,7 +501,7 @@ return function(CmdrClient, AutoComplete)
 			return
 		end
 
-		local autocompleteItems = {}
+		const autocompleteItems = {}
 		const typedText = lastArgument.TextSegmentInProgress
 		local isPartial = false
 
@@ -554,7 +554,7 @@ return function(CmdrClient, AutoComplete)
 	function Window._handleCommandAutoComplete(commandText: string, command: any)
 		Window:_setIsValidInput(true)
 
-		local exactCommand = CmdrClient.Registry:GetCommand(commandText)
+		const exactCommand = CmdrClient.Registry:GetCommand(commandText)
 		local exactMatch
 
 		if exactCommand and not exactCommand._isHidden then
@@ -581,7 +581,7 @@ return function(CmdrClient, AutoComplete)
 			Window:_setIsValidInput(false, `{commandText} is not a valid command name. Use the help command to see all available commands.`)
 		end
 
-		local autocompleteItems = { exactMatch }
+		const autocompleteItems = { exactMatch }
 		-- selene: allow(mixed_table)
 		for _, commandName in ipairs(CmdrClient.Registry:GetCommandNames(true)) do
 			if commandText:lower() ~= commandName:lower():sub(1, #commandText) then
@@ -592,7 +592,7 @@ return function(CmdrClient, AutoComplete)
 				continue
 			end
 
-			local commandObject = CmdrClient.Registry:GetCommand(commandName)
+			const commandObject = CmdrClient.Registry:GetCommand(commandName)
 			autocompleteItems[#autocompleteItems + 1] = {
 				commandText,
 				commandName,
