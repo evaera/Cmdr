@@ -1,13 +1,12 @@
 return {
 	Name = "alias",
-	Aliases = {},
-	Description = "Creates a new, single command out of a command and given arguments.",
+	Description = "Creates a new, single command out of a command and given arguments",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "string",
 			Name = "Alias name",
-			Description = "The key or input type you'd like to bind the command to.",
+			Description = "The key or input type you'd like to bind the command to",
 		},
 		{
 			Type = "string",
@@ -17,7 +16,11 @@ return {
 	},
 
 	ClientRun = function(context: any, name: string, commandString: string): string
+		if context.Cmdr.Registry._commands[name] then
+			return `There is already a command registered with the name {name}.`
+		end
+
 		context.Cmdr.Registry:RegisterCommandObject(context.Cmdr.Util.MakeAliasCommand(name, commandString), true)
-		return `Created alias {name}`
+		return `Created alias {name}.`
 	end,
 }

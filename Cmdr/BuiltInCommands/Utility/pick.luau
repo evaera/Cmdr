@@ -1,7 +1,6 @@
 return {
 	Name = "pick",
-	Aliases = {},
-	Description = "Picks a value out of a comma-separated list.",
+	Description = "Picks a value out of a comma-separated list",
 	Group = "DefaultUtil",
 	Args = {
 		{

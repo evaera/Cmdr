@@ -30,11 +30,23 @@ return function(CmdrClient)
 		IsPartial = false,
 	}
 
+	-- Updates the size of the container.
 	const function updateContainerSize()
-		autoCompleteFrame.Size = UDim2.fromOffset(
-			math.max(AutoComplete._title.Field.TextBounds.X + AutoComplete._title.Field.Type.TextBounds.X, autoCompleteFrame.Size.X.Offset),
-			math.min(autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y, autoCompleteFrame.Parent.AbsoluteSize.Y - autoCompleteFrame.AbsolutePosition.Y - 10)
-		)
+		const xOffset = math.max(AutoComplete._title.Field.TextBounds.X + AutoComplete._title.Field.Type.TextBounds.X, autoCompleteFrame.Size.X.Offset)
+		const yOffset = math.min(autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y, autoCompleteFrame.Parent.AbsoluteSize.Y - autoCompleteFrame.AbsolutePosition.Y - 10)
+		autoCompleteFrame.Size = UDim2.fromOffset(xOffset, yOffset)
+	end
+
+	--[=[
+		@within AutoComplete
+		@private
+
+		Updates the position of the container.
+	]=]
+	function AutoComplete:_updateContainerPosition(offset: number?)
+		const xOffset = offset and self._entry.TextBox.AbsolutePosition.X - 10 + offset or self._entry.TextBox.AbsolutePosition.X
+		const yOffset = self._entry.TextBox.AbsolutePosition.Y + 30
+		autoCompleteFrame.Position = UDim2.fromOffset(xOffset, yOffset)
 	end
 
 	--[=[
@@ -76,8 +88,8 @@ return function(CmdrClient)
 		end
 
 		task.wait()
-		autoCompleteFrame.UIListLayout:ApplyLayout()
 		updateContainerSize()
+		autoCompleteFrame.UIListLayout:ApplyLayout()
 		autoCompleteFrame.ScrollBarThickness = defaultBarThickness
 	end
 
@@ -144,7 +156,7 @@ return function(CmdrClient)
 		table.remove(words, #words)
 
 		local offset = (options.at or (#table.concat(words, " ") + 1)) * 7
-		autoCompleteFrame.Position = UDim2.fromOffset(self._entry.TextBox.AbsolutePosition.X - 10 + offset, self._entry.TextBox.AbsolutePosition.Y + 30)
+		self:_updateContainerPosition(offset)
 		autoCompleteFrame.Size = UDim2.fromOffset(autocompleteWidth, autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y)
 		autoCompleteFrame.Visible = true
 

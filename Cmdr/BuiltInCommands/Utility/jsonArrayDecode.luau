@@ -1,6 +1,5 @@
 return {
 	Name = "json-array-decode",
-	Aliases = {},
 	Description = "Decodes a JSON Array into a comma-separated list",
 	Group = "DefaultUtil",
 	Args = {

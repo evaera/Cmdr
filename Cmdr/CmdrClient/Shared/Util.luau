@@ -585,7 +585,6 @@ function Util.MakeAliasCommand(name: string, commandString: string): { [string]:
 
 	return {
 		Name = commandName,
-		Aliases = {},
 		Description = `<Alias> {commandDescription or commandString}`,
 		Group = "UserAlias",
 		Args = args,

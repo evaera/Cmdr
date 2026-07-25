@@ -502,12 +502,18 @@ end
 	@within Registry
 	Returns an array of containing the names of all registered commands, not including aliases.
 ]=]
-function Registry:GetCommandNames(): { string }
+function Registry:GetCommandNames(includeAliases: boolean?): { string }
 	local commands = {}
 
 	for _, command in pairs(self._commandsArray) do
 		if command._isHidden then
 			continue
+		end
+
+		if includeAliases and typeof(command.Aliases) == "table" then
+			for _, alias in pairs(command.Aliases) do
+				table.insert(commands, alias)
+			end
 		end
 
 		table.insert(commands, command.Name)

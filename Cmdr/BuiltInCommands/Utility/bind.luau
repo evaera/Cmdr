@@ -30,14 +30,13 @@ end
 
 return {
 	Name = "bind",
-	Aliases = {},
-	Description = "Binds a command string to a key or mouse input.",
+	Description = "Binds a command string to a key or mouse input",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "userInput @ player",
 			Name = "Input",
-			Description = "The key or input type you'd like to bind the command to.",
+			Description = "The key or input type you'd like to bind the command to",
 		},
 		{
 			Type = "command",

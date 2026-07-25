@@ -1,7 +1,7 @@
 return {
 	Name = "clear",
 	Aliases = { "clr" },
-	Description = "Clear all lines above the entry line of the Cmdr window.",
+	Description = "Clear all lines above the entry line of the Cmdr window",
 	Group = "DefaultUtil",
 	Args = {},
 	ClientRun = function(context): string

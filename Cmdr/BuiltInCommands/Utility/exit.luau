@@ -1,7 +1,7 @@
 return {
 	Name = "exit",
-	Aliases = {},
-	Description = "Exit the Cmdr window.",
+	Aliases = { "escape" },
+	Description = "Exit the Cmdr window",
 	Group = "DefaultUtil",
 	Args = {},
 	ClientRun = function(context): string

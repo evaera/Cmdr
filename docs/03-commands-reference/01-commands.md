@@ -192,7 +192,6 @@ Inline types can be and usually are paired with dynamic types. Inline types are 
 ```lua title="allowlist.luau"
 return {
 	Name = "allowlist",
-	Aliases = {},
 	Description = "Add or remove a player from the allow list.",
 	Group = "Admin",
 	Args = {

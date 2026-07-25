@@ -4,7 +4,7 @@ const Player = Players.LocalPlayer
 
 return {
 	Name = "hover",
-	Description = "Returns the name of the player you are hovering over.",
+	Description = "Returns the name of the player you are hovering over",
 	Group = "DefaultUtil",
 	Args = {},
 

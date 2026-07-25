@@ -1,13 +1,12 @@
 return {
 	Name = "unbind",
-	Aliases = {},
 	Description = "Unbinds an input previously bound with Bind",
 	Group = "DefaultUtil",
 	Args = {
 		{
 			Type = "userInput @ player",
 			Name = "Input/Key",
-			Description = "The key or input type you'd like to unbind.",
+			Description = "The key or input type you'd like to unbind",
 		},
 	},
 

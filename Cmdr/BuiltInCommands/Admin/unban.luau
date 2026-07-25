@@ -1,6 +1,6 @@
 return {
 	Name = "unban",
-	Description = "Unbans a player or set of players.",
+	Description = "Unbans a player or set of players",
 	Group = "DefaultAdmin",
 	Args = {
 		{

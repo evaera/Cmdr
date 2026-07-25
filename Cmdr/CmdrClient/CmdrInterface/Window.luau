@@ -63,13 +63,10 @@ return function(CmdrClient, AutoComplete)
 
 		_valid = true,
 		_errorText = nil :: string?,
-
 		_historyState = nil :: { Position: number, InitialText: string }?,
 
-		--_lastClosedTime = nil :: number?,
 		_pressCount = 0,
 		_lastPressTime = 0,
-		--_openedByMash = false,
 	}
 
 	--[=[
@@ -100,6 +97,7 @@ return function(CmdrClient, AutoComplete)
 
 		entryFrame.Size = UDim2.new(entryFrame.Size.X.Scale, entryFrame.Size.X.Offset, 0, math.clamp(height, 0, WINDOW_MAX_HEIGHT))
 		entryFrame.CanvasPosition = Vector2.new(0, height)
+		AutoComplete:_updateContainerPosition()
 	end
 
 	--[=[
@@ -211,8 +209,6 @@ return function(CmdrClient, AutoComplete)
 			self:_setEntryText("")
 			self._entry.TextBox:CaptureFocus()
 		else
-			--self._lastClosedTime = os.clock()
-
 			self:_setChatEnabled(true)
 			self:_setMouseUnlocked(false)
 
@@ -341,11 +337,16 @@ return function(CmdrClient, AutoComplete)
 		const text = self._entry.TextBox.Text
 		self:_clearHistoryState()
 
-		--[[ NOTE: I'm not sure why this behavior exists but it causes the menu to reopen when escape is pressed, I have removed it for now.
+		--[[
+		NOTE: This behavior exists to recapture focus when pressing on anywhere within the UI.
+		While I understand the purpose for this, it prevents users from copying text of previous output,
+		and immediately recaptures the UI when closing it via escape. I have removed this for the time being.
+		This might be worth revisiting sometime in the future if enough complaints appear however.
+
 		if self:IsVisible() and not GuiService.MenuIsOpen and not UserInputService.TouchEnabled then
 			self._entry.TextBox:CaptureFocus()
 		else
-		]]
+		--]]
 
 		if self:IsVisible() and GuiService.MenuIsOpen then
 			self:Hide()
@@ -386,39 +387,8 @@ return function(CmdrClient, AutoComplete)
 				self._pressCount = 0
 				CmdrClient._mashToEnable = false
 			end
-
-			--[[if self:IsVisible() then
-				-- Prevent leftover mash presses from instantly closing Cmdr
-				if self._openedByMash and currentTime - self._lastPressTime <= 0.5 then
-					return
-				end
-
-				self:SetVisible(false)
-				self._openedByMash = false
-				return
-			end
-
-			-- Allow reopening without mashing for 10 seconds after closing
-			if self._lastClosedTime and currentTime - self._lastClosedTime < 10 then
-				self:SetVisible(true)
-				self._pressCount = 0
-				self._lastPressTime = currentTime
-				self._openedByMash = false
-				return
-			end
-
-			-- Increment mash counter if pressed within 1 second window
-			self._pressCount = if currentTime - self._lastPressTime < 1 then self._pressCount + 1 else 1
-			self._lastPressTime = currentTime
-
-			if self._pressCount >= 5 then
-				self:SetVisible(true)
-				self._pressCount = 0
-				self._openedByMash = true
-			end--]]
 		else
 			self:SetVisible(not self:IsVisible())
-			--self._openedByMash = false
 		end
 	end
 
@@ -470,7 +440,6 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		-- Check for activation shortcut keys
-		--if CmdrClient._activationKeys[input.KeyCode] then
 		if table.find(CmdrClient._activationKeys, input.KeyCode) then
 			self:_handleActivationKey()
 			return
@@ -614,7 +583,7 @@ return function(CmdrClient, AutoComplete)
 
 		local autocompleteItems = { exactMatch }
 		-- selene: allow(mixed_table)
-		for _, commandName in ipairs(CmdrClient.Registry:GetCommandNames()) do
+		for _, commandName in ipairs(CmdrClient.Registry:GetCommandNames(true)) do
 			if commandText:lower() ~= commandName:lower():sub(1, #commandText) then
 				continue
 			end

@@ -11,17 +11,17 @@ return {
 		{
 			Type = "string",
 			Name = "Haystack",
-			Description = "The source string upon which to perform replacement.",
+			Description = "The source string upon which to perform replacement",
 		},
 		{
 			Type = "string",
 			Name = "Needle",
-			Description = "The string pattern search for.",
+			Description = "The string pattern search for",
 		},
 		{
 			Type = "string",
 			Name = "Replacement",
-			Description = "The string to replace matches (%1 to insert matches).",
+			Description = "The string to replace matches (%1 to insert matches)",
 			Default = "",
 		},
 	},

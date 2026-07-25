@@ -1,7 +1,7 @@
 return {
 	Name = "teleport",
 	Aliases = { "tp" },
-	Description = "Teleports a player or set of players to one target.",
+	Description = "Teleports a player or set of players to one target",
 	Group = "DefaultAdmin",
 	AutoExec = {
 		'alias "bring|Brings a player or set of players to you." teleport $1{players|players|The players to bring} ${me}',

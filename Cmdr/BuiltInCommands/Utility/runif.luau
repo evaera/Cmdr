@@ -51,8 +51,7 @@ end
 
 return {
 	Name = "runif",
-	Aliases = {},
-	Description = "Runs a given command string if a certain condition is met.",
+	Description = "Runs a given command string if a certain condition is met",
 	Group = "DefaultUtil",
 	Args = {
 		function(context)
@@ -70,12 +69,12 @@ return {
 		{
 			Type = "string",
 			Name = "Test against",
-			Description = "The text to test against.",
+			Description = "The text to test against",
 		},
 		{
 			Type = "string",
 			Name = "Command",
-			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used.",
+			Description = "The command string to run if requirements are met. If omitted, return value from condition function is used",
 			Optional = true,
 		},
 	},

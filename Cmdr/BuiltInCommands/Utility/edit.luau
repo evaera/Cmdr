@@ -24,7 +24,6 @@ local lock
 
 return {
 	Name = "edit",
-	Aliases = {},
 	Description = "Edit text in a TextBox",
 	Group = "DefaultUtil",
 	Args = {
