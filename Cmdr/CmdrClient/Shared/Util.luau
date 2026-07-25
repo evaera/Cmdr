@@ -8,11 +8,12 @@ const CMDR_SQUOTE = "___!CMDR_SQUOTE!___"
 const CMDR_NEW_LINE = "___!CMDR_NL!___"
 const CMDR_DOLLAR = "___!CMDR_DOLLAR!___"
 
+const OPERATORS = { "&&", "||", ";" }
 const START_QUOTE_PATTERN = [=[^(['"])]=]
 const END_QUOTE_PATTERN = [=[(['"])$]=]
 const ESCAPED_QUOTE_PATTERN = [=[(\*)['"]$]=]
 
-const OPERATORS = { "&&", "||", ";" }
+const CACHED_LABELS = {}
 
 -- Converts instances into display names and keeps the original values.
 const function transformInstanceSet(instances: { any }): ({ string }, { any })
@@ -355,7 +356,27 @@ end
 	Returns the text bounds size based on given text, label (from which properties will be pulled), and optional Vector2 container size.
 ]=]
 function Util.GetTextSize(text: string, label: TextLabel, size: Vector2?): Vector2
-	return TextService:GetTextSize(text, label.TextSize, label.Font, size or Vector2.new(label.AbsoluteSize.X, 0))
+	size = size or Vector2.new(label.AbsoluteSize.X, 0)
+
+	if label.Font == Enum.Font.Unknown then
+		const textBoundParams = CACHED_LABELS[label] or Instance.new("GetTextBoundsParams")
+		textBoundParams.Text = text
+		textBoundParams.Font = label.FontFace
+		textBoundParams.Size = label.TextSize
+		textBoundParams.Width = (size :: Vector2).X
+		textBoundParams.RichText = label.RichText
+		CACHED_LABELS[label] = textBoundParams
+
+		const success, bounds = pcall(TextService.GetTextBoundsAsync, TextService, textBoundParams)
+		if not success or not bounds then
+			warn(`[Cmdr] Failed to get TextSize for Font Face {label.FontFace.Family}: {bounds}`)
+			return Vector2.new(0, 0)
+		end
+
+		return bounds
+	end
+
+	return TextService:GetTextSize(text, label.TextSize, label.Font, size)
 end
 
 --[=[

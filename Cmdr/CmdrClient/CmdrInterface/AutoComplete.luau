@@ -1,5 +1,6 @@
 const VALID_TEXT_COLOR = Color3.fromRGB(255, 255, 255)
 const INVALID_TEXT_COLOR = Color3.fromRGB(255, 73, 73)
+const TEXT_MEASUREMENT_SIZE = Vector2.new(1000, 1000)
 
 --[=[
 	@class AutoComplete
@@ -47,7 +48,8 @@ return function(CmdrClient)
 		textObject.Text = text or ""
 
 		if sizeFromContents then
-			textObject.Size = UDim2.new(0, CmdrClient.Util.GetTextSize(text or "", textObject, Vector2.new(1000, 1000), 1, 0).X, object.Size.Y.Scale, object.Size.Y.Offset)
+			const textSize = CmdrClient.Util.GetTextSize(text or "", textObject, TEXT_MEASUREMENT_SIZE)
+			textObject.Size = UDim2.new(0, textSize.X, object.Size.Y.Scale, object.Size.Y.Offset)
 		end
 	end
 
@@ -198,8 +200,10 @@ return function(CmdrClient)
 			item.gui.BackgroundTransparency = if index == self.SelectedItem then 0.5 else 1
 		end
 
-		autoCompleteFrame.CanvasPosition =
-			Vector2.new(0, math.max(0, self._title.Size.Y.Offset + self._description.Size.Y.Offset + self.SelectedItem * self._autoItem.Size.Y.Offset - autoCompleteFrame.Size.Y.Offset))
+		const headerHeight = self._title.Size.Y.Offset + self._description.Size.Y.Offset
+		const itemPosition = self.SelectedItem * self._autoItem.Size.Y.Offset
+		const ySize = headerHeight + itemPosition - autoCompleteFrame.Size.Y.Offset
+		autoCompleteFrame.CanvasPosition = Vector2.new(0, math.max(0, ySize))
 
 		const selectedItem = self.Items[self.SelectedItem]
 		if selectedItem and selectedItem.options then
