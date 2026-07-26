@@ -480,7 +480,11 @@ return function(CmdrClient, AutoComplete)
 			task.wait()
 			self:_setEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
 		elseif input.KeyCode == Enum.KeyCode.Tab then
-			self:_handleTabCompletion()
+			if self._entry.TextBox.IsFocused then
+				self:_handleTabCompletion()
+			else
+				self._entry.TextBox:CaptureFocus()
+			end
 		else
 			self:_clearHistoryState()
 		end

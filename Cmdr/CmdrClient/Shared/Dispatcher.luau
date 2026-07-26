@@ -351,6 +351,7 @@ end
 
 -- Export Dispatcher
 Dispatcher.__index = Dispatcher
+Dispatcher.__newindex = Dispatcher
 
 export type Dispatcher = typeof(setmetatable(Dispatcher, Dispatcher))
 
@@ -362,7 +363,12 @@ return function(Cmdr): Dispatcher
 				Util:_emitDeprecationWarning(key)
 			end
 
-			return Dispatcher[key]
+			const value = Dispatcher[key]
+			assert(value, `[Cmdr] Dispatcher has no method or property "{key}".`)
+			return value
+		end,
+		__newindex = function(_, key)
+			error(`[Cmdr] Dispatcher has no method or property "{key}".`)
 		end,
 	}) :: Dispatcher
 end

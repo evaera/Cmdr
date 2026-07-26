@@ -5,9 +5,11 @@ const Util = require("./Util")
 const IS_SERVER = RunService:IsServer()
 const IS_CLIENT = RunService:IsClient()
 
-const TypeMethods = Util.MakeDictionary({ "Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce", "Prefixes", "Default", "ArgumentOperatorAliases" })
-const CommandMethods = Util.MakeDictionary({ "Name", "Aliases", "AutoExec", "Description", "Args", "Run", "ClientRun", "Data", "Group", "Guards", "_scriptInstance" })
-const CommandArgProps = Util.MakeDictionary({ "Name", "Type", "Description", "Optional", "Default" })
+const TYPE_METHODS = Util.MakeDictionary({ "Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce", "Prefixes", "Default", "ArgumentOperatorAliases" })
+const COMMAND_METHODS = Util.MakeDictionary({ "Name", "Aliases", "AutoExec", "Description", "Args", "Run", "ClientRun", "Data", "Group", "Guards", "_scriptInstance" })
+const COMMAND_ARGUMENT_PROPERTIES = Util.MakeDictionary({ "Name", "Type", "Description", "Optional", "Default" })
+
+const NIL_PROPERTIES = { "_autoExecFlushConnection" }
 
 --[=[
 	@class Registry
@@ -187,7 +189,7 @@ function Registry:RegisterType(name: string, typeObject: any)
 	assert(name:find("^[%d%l]%w*$") ~= nil, `[Cmdr] Invalid type name provided: "{name}", type names must be alphanumeric and start with a lowercase letter or digit.`)
 
 	for key in pairs(typeObject) do
-		assert(TypeMethods[key] ~= nil, `[Cmdr] Unknown key/method in type "{name}": {key}`)
+		assert(TYPE_METHODS[key] ~= nil, `[Cmdr] Unknown key/method in type "{name}": {key}`)
 	end
 
 	assert(self._types[name] == nil, `[Cmdr] Type "{name}" has already been registered.`)
@@ -281,7 +283,7 @@ function Registry:_validateCommandArguments(commandObject: any)
 		end
 
 		for key in pairs(argument) do
-			assert(CommandArgProps[key], `[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{index}: {key}`)
+			assert(COMMAND_ARGUMENT_PROPERTIES[key], `[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{index}: {key}`)
 		end
 	end
 end
@@ -297,7 +299,7 @@ end
 ]=]
 function Registry:_validateCommand(commandObject: any)
 	for key in pairs(commandObject) do
-		assert(CommandMethods[key], `[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
+		assert(COMMAND_METHODS[key], `[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
 	end
 
 	if commandObject.Args then
@@ -636,6 +638,7 @@ end
 
 -- Export Registry
 Registry.__index = Registry
+Registry.__newindex = Registry
 
 export type Registry = typeof(setmetatable(Registry, Registry))
 
@@ -647,7 +650,13 @@ return function(Cmdr): Registry
 				Util:_emitDeprecationWarning(key)
 			end
 
-			return Registry[key]
+			const value = Registry[key]
+			assert(value or table.find(NIL_PROPERTIES, key), `[Cmdr] Registry has no method or property "{key}".`)
+			return value
+		end,
+		__newindex = function(_, key, value)
+			assert(table.find(NIL_PROPERTIES, key) or Registry[key], `[Cmdr] Registry has no method or property "{key}".`)
+			Registry[key] = value
 		end,
 	}) :: Registry
 end

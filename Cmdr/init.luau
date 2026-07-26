@@ -150,6 +150,7 @@ return setmetatable(Cmdr, {
 	__index = function(self, key)
 		const registry = rawget(self, "Registry")
 		const value = registry and registry[key]
+		assert(value, `[Cmdr] Registry has no method or property "{key}".`)
 
 		if type(value) == "function" then
 			if not self._replicatedRoot:GetAttribute("HasShownProxyCallWarning") then
@@ -163,5 +164,8 @@ return setmetatable(Cmdr, {
 		end
 
 		return nil
+	end,
+	__newindex = function(_, key)
+		error(`[Cmdr] Cmdr has no method or property "{key}".`)
 	end,
 })

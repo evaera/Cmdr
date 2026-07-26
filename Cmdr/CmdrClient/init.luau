@@ -354,6 +354,7 @@ return setmetatable(CmdrClient, {
 	__index = function(self, key)
 		const dispatcher = rawget(self, "Dispatcher")
 		const value = dispatcher and dispatcher[key]
+		assert(value, `[Cmdr] Dispatcher has no method or property "{key}".`)
 
 		if type(value) == "function" then
 			if not script:GetAttribute("HasShownProxyCallWarning") then
@@ -367,5 +368,8 @@ return setmetatable(CmdrClient, {
 		end
 
 		return nil
+	end,
+	__newindex = function(_, key)
+		error(`[Cmdr] CmdrClient has no method or property "{key}".`)
 	end,
 })
