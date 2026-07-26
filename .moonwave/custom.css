@@ -1,38 +1,140 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --ifm-font-family-base: Inter, -apple-system, "Helvetica Neue", Roboto,
-    Helvetica, system-ui, "Nimbus Sans", "Arial Nova", Arial, Segoe UI;
-
-  --ifm-navbar-link-hover-color: #9b59b6;
-  --ifm-link-color: #9b59b6;
-  --ifm-color-primary: #9b59b6;
+  --ifm-font-family-base:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Catppuccin Mocha */
+[data-theme="dark"]:root {
+  --ifm-color-scheme: dark;
+
+  --ifm-background-color: #1e1e2e;
+  --ifm-background-surface-color: #181825;
+  --ifm-card-background: #313244;
+  --ifm-color-black: #11111b;
+  --ifm-font-color-base: #cdd6f4;
+
+  --border-subtle: #45475a;
+
+  --ctp-rosewater: #f5e0dc;
+  --ctp-flamingo: #f2cdcd;
+  --ctp-pink: #f5c2e7;
+  --ctp-mauve: #cba6f7;
+  --ctp-red: #f38ba8;
+  --ctp-maroon: #eba0ac;
+  --ctp-peach: #fab387;
+  --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1;
+  --ctp-teal: #94e2d5;
+  --ctp-sky: #89dceb;
+  --ctp-sapphire: #74c7ec;
+  --ctp-blue: #89b4fa;
+  --ctp-lavender: #b4befe;
+
+  --ifm-color-primary: var(--ctp-mauve);
+  --ifm-color-primary-dark: #b580f4;
+  --ifm-color-primary-darker: #aa6df2;
+  --ifm-color-primary-darkest: #8934ed;
+  --ifm-color-primary-light: #e1ccfa;
+  --ifm-color-primary-lighter: #ecdffc;
+  --ifm-color-primary-lightest: #ffffff;
+
+  --hero-bg: linear-gradient(135deg, #181825, #1e1e2e);
+
+  --ifm-footer-color: #a6adc8;
+  --ifm-footer-background-color: #181825;
+
+  --button-primary-bg: var(--ctp-green);
+  --button-primary-text: #11111b;
+  --button-secondary-bg: #313244;
+  --button-secondary-text: var(--ctp-mauve);
+}
+
+/* Catppuccin Latte */
+[data-theme="light"]:root {
+  --ifm-color-scheme: light;
+
+  --ifm-background-color: #eff1f5;
+  --ifm-background-surface-color: #e6e9ef;
+  --ifm-card-background: #e6e9ef;
+  --ifm-color-white: #dce0e8;
+  --ifm-font-color-base: #4c4f69;
+
+  --border-subtle: #bcc0cc;
+
+  --ctp-rosewater: #dc8a78;
+  --ctp-flamingo: #dd7878;
+  --ctp-pink: #ea76cb;
+  --ctp-mauve: #8839ef;
+  --ctp-red: #d20f39;
+  --ctp-maroon: #e64553;
+  --ctp-peach: #fe640b;
+  --ctp-yellow: #df8e1d;
+  --ctp-green: #40a02b;
+  --ctp-teal: #179299;
+  --ctp-sky: #04a5e5;
+  --ctp-sapphire: #209fb5;
+  --ctp-blue: #1e66f5;
+  --ctp-lavender: #7287fd;
+
+  --ifm-color-primary: var(--ctp-mauve);
+  --ifm-color-primary-dark: #7a2de3;
+  --ifm-color-primary-darker: #7124dc;
+  --ifm-color-primary-darkest: #5b0fcc;
+  --ifm-color-primary-light: #964ff1;
+  --ifm-color-primary-lighter: #9e5bf2;
+  --ifm-color-primary-lightest: #b882f6;
+
+  --hero-bg: linear-gradient(135deg, #e6e9ef, #dce0e8);
+
+  --ifm-footer-color: #6c6f85;
+  --ifm-footer-background-color: #e6e9ef;
+
+  --button-primary-bg: var(--ctp-green);
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: #dce0e8;
+  --button-secondary-text: var(--ctp-mauve);
+}
+
+/* Links */
 .footer__copyright a:hover,
 code > a:hover {
-  text-decoration-thickness: 2px !important;
+  color: var(--ctp-sky) !important;
   text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 /* Navbar */
-
 .navbar__logo img {
-  transition: opacity var(--ifm-transition-fast)
-    var(--ifm-transition-timing-default);
+  transition:
+    opacity var(--ifm-transition-fast) var(--ifm-transition-timing-default),
+    transform var(--ifm-transition-fast) ease;
 }
 
 .navbar__logo img:hover {
-  opacity: 75%;
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
 /* Footer */
+[data-theme="dark"] .footer a {
+  color: #a6adc8 !important;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+}
 
-.footer a {
-  color: var(--ifm-footer-color) !important;
+[data-theme="light"] .footer a {
+  color: #6c6f85 !important;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 
 .footer a:hover {
+  opacity: 1;
+  color: var(--ifm-color-primary) !important;
   text-decoration: underline;
 }
 
@@ -42,4 +144,158 @@ code > a:hover {
 
 .footer__links {
   text-align: center;
+}
+
+[data-theme="dark"] .footer {
+  background-color: #181825 !important;
+}
+
+[data-theme="light"] .footer {
+  background-color: #e6e9ef !important;
+  color: #6c6f85 !important;
+}
+
+[data-theme="dark"] .footer__title {
+  color: #cdd6f4 !important;
+}
+
+[data-theme="light"] .footer__title {
+  color: #4c4f69 !important;
+}
+
+/* Admonitions */
+.theme-admonition,
+.admonition,
+.alert,
+[class*="admonition-"] {
+  border-radius: 8px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+.theme-admonition p,
+.admonition p,
+.alert p,
+[class*="admonition-"] p {
+  color: var(--ifm-font-color-base) !important;
+}
+
+.theme-admonition code,
+.admonition code,
+.alert code,
+[class*="admonition-"] code {
+  background: var(--ifm-card-background) !important;
+  color: var(--ifm-font-color-base) !important;
+  border: 1px solid var(--border-subtle) !important;
+  padding: 0.15rem 0.35rem !important;
+  border-radius: 4px;
+}
+
+/* Warning */
+.admonition-warning,
+.admonition-caution,
+.alert--warning,
+[class*="admonition-warning"],
+[class*="admonition-caution"] {
+  background: rgba(249, 226, 175, 0.08);
+  border-color: var(--ctp-yellow) !important;
+}
+
+/* Success */
+.admonition-tip,
+.admonition-success,
+.alert--success,
+[class*="admonition-tip"],
+[class*="admonition-success"] {
+  background: rgba(166, 227, 161, 0.08);
+  border-color: var(--ctp-green) !important;
+}
+
+/* Info */
+.admonition-info,
+.admonition-note,
+.alert--info,
+[class*="admonition-info"],
+[class*="admonition-note"] {
+  background: rgba(137, 220, 235, 0.08);
+  border-color: var(--ctp-sky) !important;
+}
+
+/* Danger */
+.admonition-danger,
+.admonition-error,
+.alert--danger,
+[class*="admonition-danger"],
+[class*="admonition-error"] {
+  background: rgba(243, 139, 168, 0.08);
+  border-color: var(--ctp-red) !important;
+}
+
+/* Admonition accent text */
+.admonition-warning .admonition-heading *,
+.admonition-caution .admonition-heading *,
+[class*="admonition-warning"] svg,
+[class*="admonition-caution"] svg {
+  color: var(--ctp-yellow) !important;
+  fill: var(--ctp-yellow) !important;
+}
+
+.admonition-tip .admonition-heading *,
+.admonition-success .admonition-heading *,
+[class*="admonition-tip"] svg,
+[class*="admonition-success"] svg {
+  color: var(--ctp-green) !important;
+  fill: var(--ctp-green) !important;
+}
+
+.admonition-info .admonition-heading *,
+.admonition-note .admonition-heading *,
+[class*="admonition-info"] svg,
+[class*="admonition-note"] svg {
+  color: var(--ctp-sky) !important;
+  fill: var(--ctp-sky) !important;
+}
+
+.admonition-danger .admonition-heading *,
+.admonition-error .admonition-heading *,
+[class*="admonition-danger"] svg,
+[class*="admonition-error"] svg {
+  color: var(--ctp-red) !important;
+  fill: var(--ctp-red) !important;
+}
+
+/* Admonition links */
+.admonition-warning a,
+.admonition-caution a,
+[class*="admonition-warning"] a,
+[class*="admonition-caution"] a {
+  color: var(--ctp-yellow) !important;
+}
+
+.admonition-tip a,
+.admonition-success a,
+[class*="admonition-tip"] a,
+[class*="admonition-success"] a {
+  color: var(--ctp-green) !important;
+}
+
+.admonition-info a,
+.admonition-note a,
+[class*="admonition-info"] a,
+[class*="admonition-note"] a {
+  color: var(--ctp-sky) !important;
+}
+
+.admonition-danger a,
+.admonition-error a,
+[class*="admonition-danger"] a,
+[class*="admonition-error"] a {
+  color: var(--ctp-red) !important;
+}
+
+.admonition-warning a,
+.admonition-tip a,
+.admonition-info a,
+.admonition-danger a {
+  text-decoration: underline !important;
 }
