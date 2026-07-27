@@ -5,6 +5,7 @@ return {
 	Aliases = { "v" },
 	Description = "Shows the current version of Cmdr.",
 	Group = "DefaultDebug",
+	Args = {},
 
 	ClientRun = function(): string
 		return `Cmdr Version {VERSION}`
