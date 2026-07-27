@@ -2,7 +2,7 @@ const VERSION = "v1.13.0-rc.2"
 
 return {
 	Name = "version",
-	Args = { "v" },
+	Aliases = { "v" },
 	Description = "Shows the current version of Cmdr.",
 	Group = "DefaultDebug",
 
