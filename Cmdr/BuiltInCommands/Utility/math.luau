@@ -1,6 +1,8 @@
+type MathOperation = { Name: string, Perform: (a: number, b: number) -> number }
+
 return {
 	Name = "math",
-	Description = "Perform a math operation on 2 values",
+	Description = "Perform a math operation on 2 values.",
 	Group = "DefaultUtil",
 	AutoExec = {
 		'alias "+|Perform an addition." math + $1{number|Number} $2{number|Number}',
@@ -28,7 +30,7 @@ return {
 		},
 	},
 
-	ClientRun = function(_, operation: { Name: string, Perform: (number, number) -> number }, a: number, b: number): number
-		return operation.Perform(a, b)
+	ClientRun = function(_, operation: MathOperation, a: number, b: number): string
+		return tostring(operation.Perform(a, b))
 	end,
 }

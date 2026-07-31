@@ -11,12 +11,12 @@ return {
 		{
 			Type = "string",
 			Name = "Value",
-			Description = "Value or values to set",
+			Description = "Value or values to set.",
 			Default = "",
 		},
 	},
 
-	ClientRun = function(context: any, key: any)
+	ClientRun = function(context: any, key: string)
 		context:GetStore("vars_used")[key] = true
 	end,
 }

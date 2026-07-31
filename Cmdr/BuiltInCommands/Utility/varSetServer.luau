@@ -15,7 +15,7 @@ task.spawn(function()
 	end
 end)
 
-return function(context: any, key: any, value: string): string
+return function(context: any, key: string, value: string): string
 	if DataStoresActive == nil then
 		table.insert(queue, coroutine.running())
 		coroutine.yield()
@@ -42,18 +42,10 @@ return function(context: any, key: any, value: string): string
 		const keyPath = namespace .. "_" .. key
 		DataStore:SetAsync(keyPath, value)
 
-		if type(value) == "table" then
-			return table.concat(value, ",") or ""
-		end
-
 		return value
 	else
 		const store = context:GetStore(namespace)
 		store[key] = value
-
-		if type(value) == "table" then
-			return table.concat(value, ",") or ""
-		end
 
 		return value
 	end

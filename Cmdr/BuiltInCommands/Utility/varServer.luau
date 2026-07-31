@@ -15,7 +15,7 @@ task.spawn(function()
 	end
 end)
 
-return function(context: any, key: any): string
+return function(context: any, key: string): string
 	if DataStoresActive == nil then
 		table.insert(queue, coroutine.running())
 		coroutine.yield()
@@ -46,7 +46,7 @@ return function(context: any, key: any): string
 			return table.concat(value, ",") or ""
 		end
 
-		return value
+		return tostring(value)
 	else
 		const store = context:GetStore(namespace)
 		const value = store[key] or ""
@@ -55,6 +55,6 @@ return function(context: any, key: any): string
 			return table.concat(value, ",") or ""
 		end
 
-		return value
+		return tostring(value)
 	end
 end

@@ -33,7 +33,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context: any, commandName: string): string
+	ClientRun = function(context: any, commandName: string?): string
 		const registry = context.Cmdr.Registry
 		if commandName then
 			const command = registry:GetCommand(commandName)

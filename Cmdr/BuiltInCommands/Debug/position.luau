@@ -3,7 +3,7 @@ const Players = game:GetService("Players")
 return {
 	Name = "position",
 	Aliases = { "pos" },
-	Description = "Returns Vector3 position of you or other players. An Empty string will be returned if the player has no character.",
+	Description = "Returns the Vector3 position of you or another player.",
 	Group = "DefaultDebug",
 	Args = {
 		{

@@ -12,17 +12,21 @@ return function(_, fromPlayers: { Player }, destination: Player | Vector3): stri
 
 	for _, player: Player in ipairs(fromPlayers) do
 		const character = player.Character
-		const humanoid = character:FindFirstChildWhichIsA("Humanoid")
-		if not character or not humanoid then
+		const humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
+		if not humanoid then
 			continue
 		end
 
-		if humanoid.SeatPart then
-			humanoid.Sit = false
-			humanoid:GetPropertyChangedSignal("SeatPart"):Wait()
-		end
+		task.spawn(function()
+			if humanoid.SeatPart then
+				humanoid.Sit = false
+				humanoid:GetPropertyChangedSignal("SeatPart"):Wait()
+			end
 
-		character:PivotTo(cFrame)
+			if character:IsDescendantOf(workspace) then
+				character:PivotTo(cFrame)
+			end
+		end)
 	end
 
 	return `Teleported {#fromPlayers} players.`

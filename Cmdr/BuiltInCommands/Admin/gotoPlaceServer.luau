@@ -1,6 +1,6 @@
 const TeleportService = game:GetService("TeleportService")
 
-return function(context: any, players: { Player }, placeId: number, jobId: string): string
+return function(context: any, players: { Player }, placeId: number, jobId: string?): string
 	if placeId <= 0 then
 		return "Invalid place ID"
 	elseif jobId == "-" then
@@ -9,13 +9,15 @@ return function(context: any, players: { Player }, placeId: number, jobId: strin
 
 	context:Reply("Commencing teleport...")
 
-	if jobId then
-		for _, player: Player in ipairs(players) do
-			TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
+	const success, errorMessage = pcall(function()
+		if jobId then
+			const options = Instance.new("TeleportOptions")
+			options.ServerInstanceId = jobId
+			TeleportService:TeleportAsync(placeId, players, options)
+		else
+			TeleportService:TeleportAsync(placeId, players)
 		end
-	else
-		TeleportService:TeleportAsync(placeId, players)
-	end
+	end)
 
-	return "Teleported."
+	return if success then "Teleported." else `Teleport failed: {errorMessage}`
 end

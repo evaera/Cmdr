@@ -10,7 +10,7 @@ return {
 		},
 	},
 
-	ClientRun = function(_, list: string): number
-		return #(list:split(","))
+	ClientRun = function(_, list: string): string
+		return if #list == 0 then "0" else tostring(#(list:split(",")))
 	end,
 }

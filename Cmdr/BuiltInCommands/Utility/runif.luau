@@ -1,4 +1,6 @@
-const CONDITIONS = {
+type ConditionFn = (text: string, arg: string) -> string?
+
+const CONDITIONS: { [string]: ConditionFn } = {
 	startsWith = function(text, arg)
 		return text:sub(1, #arg) == arg and text:sub(#arg + 1)
 	end,
@@ -79,7 +81,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context: any, condition: string, arg: string, testAgainst: string, command: string): string
+	ClientRun = function(context: any, condition: string, arg: string, testAgainst: string, command: string?): string
 		const conditionFunc = CONDITIONS[condition]
 		const success, text = pcall(conditionFunc, testAgainst, arg)
 		if success and text then

@@ -18,7 +18,10 @@ return {
 		},
 	},
 
-	ClientRun = function(_, firstNumber: number, secondNumber: number): string
-		return tostring(if secondNumber then GENERATOR:NextInteger(firstNumber, secondNumber) else GENERATOR:NextInteger(1, firstNumber))
+	ClientRun = function(_, firstNumber: number, secondNumber: number?): string
+		const min = if secondNumber then math.min(firstNumber, secondNumber) else math.min(1, firstNumber)
+		const max = if secondNumber then math.max(firstNumber, secondNumber) else math.max(1, firstNumber)
+
+		return tostring(GENERATOR:NextInteger(min, max))
 	end,
 }

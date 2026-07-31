@@ -51,7 +51,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context: any, bind: InputObject | Player, command: string, arguments: string): string
+	ClientRun = function(context: any, bind: Enum.UserInputType | Enum.KeyCode | Player, command: string, arguments: string): string
 		if not hasHelperRan then
 			runBindHelper(context.Cmdr)
 		end

@@ -26,6 +26,7 @@ return {
 	},
 
 	ClientRun = function(context): string
-		return table.concat(context:GetArgument(2).RawSegments, ",")
+		const arg = context:GetArgument(2)
+		return if arg then table.concat(arg.RawSegments, ",") else ""
 	end,
 }

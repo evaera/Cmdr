@@ -5,8 +5,10 @@ return {
 	Group = "DefaultUtil",
 	Args = {},
 	ClientRun = function(context): string
-		const entryFrame = context.Cmdr.Gui:WaitForChild("Frame")
-		assert(entryFrame, "[Cmdr] Something went seriously wrong if you're experiencing this error..")
+		const entryFrame = context.Cmdr.Gui:WaitForChild("Frame", 2)
+		if not entryFrame then
+			return "Failed to clear: Frame not found."
+		end
 
 		for _, child in pairs(entryFrame:GetChildren()) do
 			if child.Name == "Line" and child:IsA("TextBox") then

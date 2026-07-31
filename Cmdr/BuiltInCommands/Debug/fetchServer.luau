@@ -1,5 +1,7 @@
 const HttpService = game:GetService("HttpService")
 
 return function(_, url: string): string
-	return HttpService:GetAsync(url)
+	const success, response = pcall(HttpService.GetAsync, HttpService, url)
+
+	return if success then response else `Failed to fetch URL: {response}`
 end

@@ -10,7 +10,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context: any, bind: InputObject | Player): string
+	ClientRun = function(context: any, bind: Enum.UserInputType | Enum.KeyCode | Player): string
 		const binds = context:GetStore("CMDR_Binds")
 
 		if binds[bind] then

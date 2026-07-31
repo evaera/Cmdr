@@ -12,9 +12,14 @@ return {
 
 	ClientRun = function(_, value: any): string
 		if type(value) ~= "table" then
-			value = { value }
+			return tostring(value)
 		end
 
-		return table.concat(value, ",")
+		const stringValues = {}
+		for i, item in value do
+			stringValues[i] = tostring(item)
+		end
+
+		return table.concat(stringValues, ",")
 	end,
 }
