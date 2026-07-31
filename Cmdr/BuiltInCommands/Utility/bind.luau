@@ -65,7 +65,7 @@ return {
 			binds[bind] = nil
 		end
 
-		command = command .. " " .. arguments
+		command = `{command} {arguments}`
 
 		const bindType = context:GetArgument(1).Type.Name
 		if bindType == "userInput" then

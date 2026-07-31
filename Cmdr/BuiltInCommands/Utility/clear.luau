@@ -4,7 +4,7 @@ return {
 	Description = "Clear all lines above the entry line of the Cmdr window.",
 	Group = "DefaultUtil",
 	Args = {},
-	ClientRun = function(context): string
+	ClientRun = function(context: any): string
 		const entryFrame = context.Cmdr.Gui:WaitForChild("Frame", 2)
 		if not entryFrame then
 			return "Failed to clear: Frame not found."

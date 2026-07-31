@@ -8,7 +8,7 @@ return {
 			Name = "Player",
 			Description = "Get the place instance of this player.",
 		},
-		function(context)
+		function(context: any)
 			return {
 				Type = context.Cmdr.Util.MakeEnumType("PlaceInstance Format", { "PlaceIdJobId", "PlaceId", "JobId" }),
 				Name = "Format",

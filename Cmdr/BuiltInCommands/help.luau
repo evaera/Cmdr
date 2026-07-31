@@ -54,7 +54,7 @@ return {
 			if command.Args then
 				for index, argument in ipairs(command.Args) do
 					if type(argument) == "table" then
-						const optional = argument.Optional and "?" or ""
+						const optional = if argument.Optional then "?" else ""
 
 						context:Reply(`#{index} {argument.Name}{optional}: {argument.Type} - {argument.Description}`)
 					else
@@ -87,7 +87,7 @@ return {
 					lastGroup = group
 				end
 
-				context:Reply(command.Description and `{command.Name} - {command.Description}` or command.Name)
+				context:Reply(if command.Description then `{command.Name} - {command.Description}` else command.Name)
 			end
 		end
 

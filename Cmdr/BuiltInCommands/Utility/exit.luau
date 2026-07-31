@@ -4,7 +4,7 @@ return {
 	Description = "Exits the Cmdr window.",
 	Group = "DefaultUtil",
 	Args = {},
-	ClientRun = function(context): string
+	ClientRun = function(context: any): string
 		context.Cmdr:Hide()
 		return ""
 	end,

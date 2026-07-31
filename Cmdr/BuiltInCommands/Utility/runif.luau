@@ -56,7 +56,7 @@ return {
 	Description = "Runs a given command string if a certain condition is met.",
 	Group = "DefaultUtil",
 	Args = {
-		function(context)
+		function(context: any)
 			return {
 				Type = context.Cmdr.Util.MakeEnumType("ConditionFunction", conditionNames),
 				Name = "Condition",

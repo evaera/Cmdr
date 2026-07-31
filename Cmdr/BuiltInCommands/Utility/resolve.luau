@@ -11,7 +11,7 @@ return {
 			Name = "Type",
 			Description = "The type for which to resolve.",
 		},
-		function(context)
+		function(context: any)
 			if context:GetArgument(1):Validate() == false then
 				return
 			end
@@ -25,7 +25,7 @@ return {
 		end,
 	},
 
-	ClientRun = function(context): string
+	ClientRun = function(context: any): string
 		const arg = context:GetArgument(2)
 		return if arg then table.concat(arg.RawSegments, ",") else ""
 	end,

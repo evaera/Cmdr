@@ -16,8 +16,8 @@ return {
 		end
 
 		const stringValues = {}
-		for i, item in value do
-			stringValues[i] = tostring(item)
+		for index, item in ipairs(value) do
+			stringValues[index] = tostring(item)
 		end
 
 		return table.concat(stringValues, ",")

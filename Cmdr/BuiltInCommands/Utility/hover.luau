@@ -16,6 +16,6 @@ return {
 		end
 
 		const targetPlayer = Players:GetPlayerFromCharacter(target:FindFirstAncestorOfClass("Model"))
-		return targetPlayer and `{targetPlayer.DisplayName} @({targetPlayer.Name})` or ""
+		return if targetPlayer then `{targetPlayer.DisplayName} @({targetPlayer.Name})` else ""
 	end,
 }

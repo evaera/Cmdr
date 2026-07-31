@@ -37,9 +37,9 @@ return function(context: any, key: string): string
 		return "# You must publish this place to the web to use saved keys."
 	end
 
-	const namespace = "var_" .. (gameWide and "global" or tostring(context.Executor.UserId))
+	const namespace = `var_{if gameWide then "global" else tostring(context.Executor.UserId)}`
 	if saved then
-		const keyPath = namespace .. "_" .. key
+		const keyPath = `{namespace}_{key}`
 		const value = DataStore:GetAsync(keyPath) or ""
 
 		if type(value) == "table" then
