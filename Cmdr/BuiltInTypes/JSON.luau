@@ -6,7 +6,7 @@ return function(registry: any)
 			return pcall(HttpService.JSONDecode, HttpService, text)
 		end,
 
-		Parse = function(text: string): string
+		Parse = function(text: string): { [string]: any } | any
 			return HttpService:JSONDecode(text)
 		end,
 	})

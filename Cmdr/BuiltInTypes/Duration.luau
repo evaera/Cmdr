@@ -18,7 +18,7 @@ const function mapUnits(units: { string }, rawText: string, lastNumber: number?,
 	const results: { string } = {}
 
 	for index: number, unit: string in ipairs(units) do
-		results[index] = rawText .. (lastNumber == 1 and unit:sub(start, #unit - 1) or unit:sub(start))
+		results[index] = `{rawText}{if lastNumber == 1 then unit:sub(start, #unit - 1) else unit:sub(start)}`
 	end
 
 	return results
@@ -60,7 +60,7 @@ return function(registry: any)
 				return nil, lastNumber
 			end
 
-			const unit: number = rawUnit:lower() == "m" and 60 or UNIT_SECONDS[matches[1]]
+			const unit: number = if rawUnit:lower() == "m" then 60 else UNIT_SECONDS[matches[1]]
 			seconds += unit * (lastNumber :: number)
 		end
 
@@ -77,20 +77,14 @@ return function(registry: any)
 		end,
 
 		Validate = function(_, duration: number?): (boolean, string?)
-			return duration ~= nil
+			return duration ~= nil, "Invalid duration format. Example: 1d6h, 30m, 10s."
 		end,
 
-		Autocomplete = function(rawText: string, duration: number?, lastNumber: number?, missingUnit: boolean?, matchedUnits: { string }?): { string }
+		Autocomplete = function(rawText: string, duration: number?, lastNumber: number?, missingUnit: boolean?): { string }
 			local results: { string } = {}
-			if missingUnit or matchedUnits then
-				const units: { string } = missingUnit and unitFinder("", false, true) or matchedUnits
-
-				if missingUnit then
-					results = mapUnits(units, rawText, lastNumber)
-				else
-					const currentUnitLength = #(rawText:match("^.*(%a+)$") :: string)
-					results = mapUnits(units, rawText, lastNumber, currentUnitLength + 1)
-				end
+			if missingUnit then
+				const units: { string } = unitFinder("", false, true)
+				results = mapUnits(units, rawText, lastNumber)
 			elseif duration ~= nil then
 				const endingUnit = rawText:match("^.*-?%d+(%a+)%s?$")
 				const matches: { string } = unitFinder(endingUnit, false, true)
