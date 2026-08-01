@@ -4,7 +4,7 @@ const function parseHexDigit(x: string?): number?
 	end
 
 	if #x == 1 then
-		x = x .. x
+		x = `{x}{x}`
 	end
 
 	return tonumber(x, 16)
