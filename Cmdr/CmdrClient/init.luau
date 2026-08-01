@@ -1,8 +1,8 @@
 const RunService = game:GetService("RunService")
 assert(RunService:IsClient(), "[Cmdr] The Cmdr client library cannot be required by the server. Please require the server libary instead.")
 
-const Registry = require("@self/Shared/Registry")
 const Dispatcher = require("@self/Shared/Dispatcher")
+const Registry = require("@self/Shared/Registry")
 const Util = require("@self/Shared/Util")
 
 const CmdrInterface = require("@self/CmdrInterface")
@@ -370,6 +370,6 @@ return setmetatable(CmdrClient, {
 		return nil
 	end,
 	__newindex = function(_, key)
-		error(`[Cmdr] CmdrClient has no method or property "{key}".`)
+		error(`[Cmdr] Cannot assign key "{key}"; the CmdrClient singleton is read-only.`)
 	end,
 })

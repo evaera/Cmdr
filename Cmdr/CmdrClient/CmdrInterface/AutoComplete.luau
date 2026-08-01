@@ -44,7 +44,7 @@ return function(CmdrClient)
 		Updates the position of the container.
 	]=]
 	function AutoComplete:_updateContainerPosition(offset: number?)
-		const xOffset = offset and self._entry.TextBox.AbsolutePosition.X - 10 + offset or self._entry.TextBox.AbsolutePosition.X
+		const xOffset = if offset then self._entry.TextBox.AbsolutePosition.X - 10 + offset else self._entry.TextBox.AbsolutePosition.X
 		const yOffset = self._entry.TextBox.AbsolutePosition.Y + 30
 		autoCompleteFrame.Position = UDim2.fromOffset(xOffset, yOffset)
 	end
@@ -73,10 +73,10 @@ return function(CmdrClient)
 	]=]
 	function AutoComplete:_updateInfoDisplay(options: any)
 		self:_setText(self._title, self._title.Field, options.name, true)
-		self:_setText(self._title.Field.Type, self._title.Field.Type, options.type and ": " .. options.type:sub(1, 1):upper() .. options.type:sub(2))
+		self:_setText(self._title.Field.Type, self._title.Field.Type, options.type and `: {options.type:sub(1, 1):upper()}{options.type:sub(2)}`)
 		self:_setText(self._description, self._description.Label, options.description)
 
-		self._description.Label.TextColor3 = options.invalid and INVALID_TEXT_COLOR or VALID_TEXT_COLOR
+		self._description.Label.TextColor3 = if options.invalid then INVALID_TEXT_COLOR else VALID_TEXT_COLOR
 		self._description.Size = UDim2.new(1, 0, 0, 40)
 
 		while not self._description.Label.TextFits do
@@ -89,7 +89,6 @@ return function(CmdrClient)
 
 		task.wait()
 		updateContainerSize()
-		autoCompleteFrame.UIListLayout:ApplyLayout()
 		autoCompleteFrame.ScrollBarThickness = defaultBarThickness
 	end
 
@@ -124,7 +123,7 @@ return function(CmdrClient)
 			const typedText = item[1]
 			const suggestionText = item[2]
 			const button = self._autoItem:Clone()
-			button.Name = typedText .. suggestionText
+			button.Name = `{typedText}{suggestionText}`
 			button.BackgroundTransparency = if index == self.SelectedItem then 0.5 else 1
 
 			local start, stop = suggestionText:lower():find(typedText:lower(), 1, true)
@@ -133,8 +132,8 @@ return function(CmdrClient)
 				stop = #suggestionText
 			end
 
-			button.Typed.Text = string.rep(" ", start - 1) .. typedText
-			button.Suggest.Text = suggestionText:sub(1, start - 1) .. string.rep(" ", #typedText) .. suggestionText:sub(stop + 1)
+			button.Typed.Text = `{(" "):rep(start - 1)}{typedText}`
+			button.Suggest.Text = `{suggestionText:sub(1, start - 1)}{(" "):rep(#typedText)}{suggestionText:sub(stop + 1)}`
 
 			button.LayoutOrder = index
 			button.Parent = autoCompleteFrame
@@ -144,8 +143,6 @@ return function(CmdrClient)
 
 			item.gui = button
 		end
-
-		autoCompleteFrame.UIListLayout:ApplyLayout()
 
 		const text = self._entry.TextBox.Text
 		const words = CmdrClient.Util.SplitString(text)
@@ -160,7 +157,7 @@ return function(CmdrClient)
 		autoCompleteFrame.Size = UDim2.fromOffset(autocompleteWidth, autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y)
 		autoCompleteFrame.Visible = true
 
-		self:_updateInfoDisplay(self.Items[1] and self.Items[1].options or options)
+		self:_updateInfoDisplay(if self.Items[1] and self.Items[1].options then self.Items[1].options else options)
 	end
 
 	--[=[

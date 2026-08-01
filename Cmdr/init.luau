@@ -1,13 +1,13 @@
-const RunService = game:GetService("RunService")
 const ReplicatedStorage = game:GetService("ReplicatedStorage")
+const RunService = game:GetService("RunService")
 
 const IS_SERVER_CONTAINER = script:FindFirstAncestorWhichIsA("ServerScriptService") or script:FindFirstAncestorWhichIsA("ServerStorage")
 const IS_SERVER = RunService:IsServer()
 assert(IS_SERVER_CONTAINER, "[Cmdr] The Cmdr server library must be kept within a Server Container.")
 assert(IS_SERVER, "[Cmdr] The Cmdr server library cannot be required by the client. Please require the client libary instead.")
 
-const Registry = require("@self/CmdrClient/Shared/Registry")
 const Dispatcher = require("@self/CmdrClient/Shared/Dispatcher")
+const Registry = require("@self/CmdrClient/Shared/Registry")
 const Util = require("@self/CmdrClient/Shared/Util")
 
 const function createObject(className: string, name: string, parent: Instance): Instance
@@ -166,6 +166,6 @@ return setmetatable(Cmdr, {
 		return nil
 	end,
 	__newindex = function(_, key)
-		error(`[Cmdr] Cmdr has no method or property "{key}".`)
+		error(`[Cmdr] Cannot assign key "{key}"; the Cmdr singleton is read-only.`)
 	end,
 })

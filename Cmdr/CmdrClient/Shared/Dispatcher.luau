@@ -1,9 +1,9 @@
-const RunService = game:GetService("RunService")
 const Players = game:GetService("Players")
+const RunService = game:GetService("RunService")
 const TeleportService = game:GetService("TeleportService")
 
-const Util = require("./Util")
 const Command = require("./Command")
+const Util = require("./Util")
 
 const IS_SERVER = RunService:IsServer()
 const IS_CLIENT = RunService:IsClient()
@@ -129,7 +129,7 @@ function Dispatcher:EvaluateAndRun(
 	end)
 
 	if not success then
-		warn(`[Cmdr] Error occurred while evaluating command string {text:format("%q")}\n{result}`)
+		warn(`[Cmdr] Error occurred while evaluating command string {("%q"):format(text)}\n{result}`)
 		return "An error occurred while running this command. Check the console for more information."
 	end
 
@@ -253,8 +253,8 @@ function Dispatcher:RunHooks(hookName: string, commandContext: any, passExactVal
 		end
 
 		if not hasDisplayedBeforeRunHookWarning then
-			const environment = IS_SERVER and "<Server>" or "<Client>"
-			commandContext:Reply(environment .. " Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/docs/commands-reference/hooks", WARNING_COLOR)
+			const environment = if IS_SERVER then "<Server>" else "<Client>"
+			commandContext:Reply(`{environment} Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/docs/commands-reference/hooks`, WARNING_COLOR)
 			hasDisplayedBeforeRunHookWarning = true
 		end
 	end
@@ -368,7 +368,7 @@ return function(Cmdr): Dispatcher
 			return value
 		end,
 		__newindex = function(_, key)
-			error(`[Cmdr] Dispatcher has no method or property "{key}".`)
+			error(`[Cmdr] Cannot assign key "{key}"; the Dispatcher is read-only.`)
 		end,
 	}) :: Dispatcher
 end

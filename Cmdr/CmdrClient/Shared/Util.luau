@@ -13,7 +13,7 @@ const START_QUOTE_PATTERN = [=[^(['"])]=]
 const END_QUOTE_PATTERN = [=[(['"])$]=]
 const ESCAPED_QUOTE_PATTERN = [=[(\*)['"]$]=]
 
-const CACHED_LABELS = {}
+const CACHED_LABELS = setmetatable({}, { __mode = "k" })
 
 -- Converts instances into display names and keeps the original values.
 const function transformInstanceSet(instances: { any }): ({ string }, { any })
@@ -39,7 +39,7 @@ end
 
 -- Restores temporary placeholders back into control characters.
 const function decodeControlChars(text: string): string
-	return (text:gsub(CMDR_ESCAPE, "\\"):gsub(CMDR_QUOTE, '"'):gsub(CMDR_NEW_LINE, "\n"))
+	return (text:gsub(CMDR_ESCAPE, "\\"):gsub(CMDR_QUOTE, '"'):gsub(CMDR_SQUOTE, "'"):gsub(CMDR_NEW_LINE, "\n"))
 end
 
 -- Replaces escaped command variables with temporary placeholders.
@@ -54,7 +54,7 @@ end
 
 -- Wraps a string in quotes while escaping special characters.
 const function quoteString(value: string): string
-	return string.format("%q", value)
+	return ("%q"):format(value)
 end
 
 --[=[
@@ -125,7 +125,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 	end
 
 	local names: { string }
-	local instances: { any } = {}
+	local instances: { any }? = nil
 	if #setOrContainer == 0 then
 		names = {}
 	else
@@ -135,7 +135,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 		if firstType == "string" then
 			names = setOrContainer
 		else
-			const firstNameType = typeof(first.Name)
+			const firstNameType = if firstType == "table" or firstType == "Instance" then typeof(first.Name) else "nil"
 			assert(firstType == "Instance" or firstType == "EnumItem" or (firstType == "table" and firstNameType == "string"), "[Cmdr] MakeFuzzyFinder only accepts tables of instances or strings.")
 			names, instances = transformInstanceSet(setOrContainer)
 		end
@@ -147,7 +147,7 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 		const results = {}
 
 		for index, name in pairs(names) do
-			const value = instances and instances[index] or name
+			const value = if instances then instances[index] else name
 
 			if name:lower() == text:lower() then
 				if returnFirst then
@@ -207,12 +207,12 @@ end
 	@within Util
 	Splits a string using a simple separator (no quote parsing)
 ]=]
-function Util.SplitStringSimple(input: string, seperator: string?): { string }
-	seperator = seperator or "%s"
+function Util.SplitStringSimple(input: string, separator: string?): { string }
+	separator = separator or "%s"
 
 	const segments = {}
 	local index = 1
-	for string in string.gmatch(input, "([^" .. (seperator :: string) .. "]+)") do
+	for string in input:gmatch(`([^{separator :: string}]+)`) do
 		segments[index] = string
 		index = index + 1
 	end
@@ -240,11 +240,11 @@ end
 function Util.EncodeEscapedOperator(text: string, operator: string): string
 	const first = operator:sub(1, 1)
 	const escapedOp = operator:gsub("(.)", "%%%1")
-	const escapedFirst = "%" .. first
+	const escapedFirst = `%{first}`
 
-	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, op)
-		return (esc:sub(1, #esc - 1) .. op):gsub(".", function(char)
-			return "\\u" .. string.format("%04x", string.byte(char))
+	return text:gsub(`({escapedFirst}+)({escapedOp})`, function(esc, op)
+		return (`{esc:sub(1, #esc - 1)}{op}`):gsub(".", function(char)
+			return `\\u{("%04x"):format(char:byte())}`
 		end)
 	end)
 end
@@ -287,7 +287,7 @@ function Util.SplitString(text: string, max: number?): { string }
 
 	const function addSegment(segment: string)
 		if #segments > max then
-			segments[max] ..= " " .. segment
+			segments[max] ..= ` {segment}`
 		else
 			segments[#segments + 1] = segment
 		end
@@ -304,14 +304,14 @@ function Util.SplitString(text: string, max: number?): { string }
 			buffer = segment
 			quoteChar = startsWithQuote
 		elseif buffer and endsWithQuote == quoteChar and #escapedQuotes % 2 == 0 then
-			buffer = buffer .. " " .. segment
+			buffer ..= ` {segment}`
 
 			addSegment(decodeControlChars(buffer:gsub(START_QUOTE_PATTERN, ""):gsub(END_QUOTE_PATTERN, "")))
 
 			buffer = nil
 			quoteChar = nil
 		elseif buffer then
-			buffer ..= " " .. segment
+			buffer ..= ` {segment}`
 		else
 			addSegment(decodeControlChars(segment:gsub(START_QUOTE_PATTERN, ""):gsub(END_QUOTE_PATTERN, "")))
 		end
@@ -333,7 +333,7 @@ function Util.MashExcessArguments(arguments: { string }, max: number): { string 
 
 	for argumentIndex = 1, #arguments do
 		if argumentIndex > max then
-			results[max] = string.format("%s %s", results[max] or "", arguments[argumentIndex])
+			results[max] ..= ` {arguments[argumentIndex]}`
 		else
 			results[argumentIndex] = arguments[argumentIndex]
 		end
@@ -347,8 +347,8 @@ end
 	Trims whitespace from both sides of a string.
 ]=]
 function Util.TrimString(str: string): string
-	const _, from = string.find(str, "^%s*")
-	return from == #str and "" or string.match(str, ".*%S", from + 1)
+	const _, from = str:find("^%s*")
+	return if from == #str then "" else str:match(".*%S", from + 1) :: string
 end
 
 --[=[
@@ -389,7 +389,7 @@ function Util.MakeEnumType(name: string, values: any): { [string]: any }
 	const findValue = Util.MakeFuzzyFinder(values)
 	return {
 		Validate = function(text)
-			return findValue(text, true) ~= nil, `Value {text} is not a valid {name}.`
+			return findValue(text, true) ~= nil, `Value {("%q"):format(text)} is not a valid {name}.`
 		end,
 
 		Autocomplete = function(text)
@@ -587,7 +587,7 @@ function Util.MakeAliasCommand(name: string, commandString: string): { [string]:
 		Description = `<Alias> {commandDescription or commandString}`,
 		Group = "UserAlias",
 		Args = args,
-		ClientRun = function(context)
+		ClientRun = function(context: any)
 			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
 		end,
 	}
@@ -612,8 +612,8 @@ function Util.MakeSequenceType(options: {
 	Length: number?,
 }): { [string]: any }
 	assert(options.Parse ~= nil or options.Constructor ~= nil, "[Cmdr] MakeSequenceType: Must provide one of: Constructor, Parse")
-	options.TransformEach = options.TransformEach or function(...)
-		return ...
+	options.TransformEach = options.TransformEach or function(value: string): string
+		return value
 	end
 
 	options.ValidateEach = options.ValidateEach or function()
@@ -624,7 +624,7 @@ function Util.MakeSequenceType(options: {
 		Prefixes = options.Prefixes,
 
 		Transform = options.Transform or function(text: string)
-			const elements = Util.SplitPrioritizedDelimeter(text, { ",", "%s" })
+			const elements = Util.SplitPrioritizedDelimeter(text, { ",", "%s" }) or {}
 			return Util.Map(elements, function(value: string)
 				return (options :: any).TransformEach(value)
 			end)
@@ -703,10 +703,10 @@ function Util.EmulateTabstops(text: string, tabWidth: number): string
 
 		if character == "\t" then
 			const spaces = tabWidth - currentColumn % tabWidth
-			result[index] = string.rep(" ", spaces)
+			table.insert(result, (" "):rep(spaces))
 			currentColumn += spaces
 		else
-			result[index] = character
+			table.insert(result, character)
 
 			if character == "\n" then
 				currentColumn = 0

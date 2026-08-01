@@ -2,7 +2,7 @@ const Util = require("./Util")
 
 const function unescapeOperators(text: string): string
 	for _, operator in ipairs({ "%.", "%?", "%*", "%*%*" }) do
-		text = text:gsub("\\" .. operator, operator:gsub("%%", ""))
+		text = text:gsub(`\\{operator}`, operator:gsub("%%", ""))
 	end
 
 	return text

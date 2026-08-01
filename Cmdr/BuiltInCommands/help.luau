@@ -83,7 +83,7 @@ return {
 
 				const group = command.Group or "No Group"
 				if lastGroup ~= group then
-					context:Reply(`\n{group}\n{string.rep("-", #group)}`)
+					context:Reply(`\n{group}\n{("-"):rep(#group)}`)
 					lastGroup = group
 				end
 

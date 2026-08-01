@@ -425,7 +425,7 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 	for _, commandScript in pairs(container:GetChildren()) do
 		if commandScript:IsA("ModuleScript") then
 			if not commandScript.Name:find("Server") then
-				const serverCommandScript = container:FindFirstChild(commandScript.Name .. "Server")
+				const serverCommandScript = container:FindFirstChild(`{commandScript.Name}Server`)
 				if serverCommandScript then
 					usedServerScripts[serverCommandScript] = true
 				end
@@ -655,7 +655,7 @@ return function(Cmdr): Registry
 			return value
 		end,
 		__newindex = function(_, key, value)
-			assert(table.find(NIL_PROPERTIES, key) or Registry[key], `[Cmdr] Registry has no method or property "{key}".`)
+			assert(table.find(NIL_PROPERTIES, key) or Registry[key], `[Cmdr] Cannot assign key "{key}"; the Registry is read-only.`)
 			Registry[key] = value
 		end,
 	}) :: Registry

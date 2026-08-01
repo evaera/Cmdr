@@ -1,7 +1,7 @@
+const GuiService = game:GetService("GuiService")
 const Players = game:GetService("Players")
 const TextChatService = game:GetService("TextChatService")
 const UserInputService = game:GetService("UserInputService")
-const GuiService = game:GetService("GuiService")
 
 const WINDOW_MAX_HEIGHT = 300
 const MOUSE_TOUCH_INPUTS = { Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch }
@@ -28,7 +28,7 @@ local function buildAutoCompleteText(command, lastArg, replace: string): string
 			segments[#segments] = replace
 		end
 
-		local argumentText = argument.Prefix .. table.concat(segments, ",")
+		local argumentText = `{argument.Prefix}{table.concat(segments, ",")}`
 		if argumentText:find(" ") or argumentText == "" then
 			argumentText = ("%q"):format(argumentText)
 		end
@@ -57,7 +57,7 @@ return function(CmdrClient, AutoComplete)
 		_previousChatWindowEnabled = nil :: boolean?,
 		_previousChatInputBarEnabled = nil :: boolean?,
 		_previousChannelTabsEnabled = nil :: boolean?,
-		_previousMouseBehavior = nil :: boolean?,
+		_previousMouseBehavior = nil :: Enum.MouseBehavior?,
 
 		_hasLostFocus = false,
 
@@ -165,9 +165,9 @@ return function(CmdrClient, AutoComplete)
 			TextChatService.ChannelTabsConfiguration.Enabled = false
 		else
 			-- Restore previous state
-			TextChatService.ChatWindowConfiguration.Enabled = if not self._previousChatWindowEnabled then self._previousChatWindowEnabled else true
-			TextChatService.ChatInputBarConfiguration.Enabled = if not self._previousChatInputBarEnabled then self._previousChatInputBarEnabled else true
-			TextChatService.ChannelTabsConfiguration.Enabled = if not self._previousChannelTabsEnabled then self._previousChannelTabsEnabled else true
+			TextChatService.ChatWindowConfiguration.Enabled = if self._previousChatWindowEnabled ~= nil then self._previousChatWindowEnabled else true
+			TextChatService.ChatInputBarConfiguration.Enabled = if self._previousChatInputBarEnabled ~= nil then self._previousChatInputBarEnabled else true
+			TextChatService.ChannelTabsConfiguration.Enabled = if self._previousChannelTabsEnabled ~= nil then self._previousChannelTabsEnabled else true
 		end
 	end
 
@@ -251,7 +251,7 @@ return function(CmdrClient, AutoComplete)
 	]=]
 	function Window:_setIsValidInput(isValid: boolean, errorText: string?)
 		self._entry.TextBox.TextColor3 = if isValid then VALID_TEXT_COLOR else INVALID_TEXT_COLOR
-		self.Valid = isValid
+		self._valid = isValid
 		self._errorText = errorText
 	end
 
@@ -279,7 +279,7 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		self._historyState.Position = math.clamp(self._historyState.Position + delta, 1, #history + 1)
-		self:_setEntryText(self._historyState.Position == #history + 1 and self._historyState.InitialText or history[self._historyState.Position])
+		self:_setEntryText(if self._historyState.Position == #history + 1 then self._historyState.InitialText else history[self._historyState.Position])
 	end
 
 	--[=[
@@ -319,7 +319,7 @@ return function(CmdrClient, AutoComplete)
 			return
 		end
 
-		Window:AddLine(Window:GetLabelText() .. " " .. text, PROCESSING_TEXT_COLOR)
+		Window:AddLine(`{Window:GetLabelText()} {text}`, PROCESSING_TEXT_COLOR)
 		Window:AddLine(CmdrClient.Dispatcher:EvaluateAndRun(text, Player, { IsHuman = true }))
 	end
 
@@ -355,7 +355,7 @@ return function(CmdrClient, AutoComplete)
 		if submit then
 			self._hasLostFocus = true
 
-			if self.Valid then
+			if self._valid then
 				self:_setEntryText("")
 				self._processEntry(text)
 			else
@@ -386,6 +386,7 @@ return function(CmdrClient, AutoComplete)
 			if self._pressCount >= 5 then
 				self._pressCount = 0
 				CmdrClient._mashToEnable = false
+				self:SetVisible(true)
 			end
 		else
 			self:SetVisible(not self:IsVisible())
@@ -421,14 +422,14 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		task.wait()
-		self:_setEntryText(newText .. (insertSpace and " " or ""))
+		self:_setEntryText(`{newText}{if insertSpace then " " else ""}`)
 	end
 
 	--[=[
 		@within Window
 		@private
 
-		Event handler for text box focus lost.
+		Event handler for user input.
 	]=]
 	function Window:_beginInput(input: InputObject, gameProcessed: boolean)
 		if GuiService.MenuIsOpen then
@@ -535,15 +536,15 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		return AutoComplete:Show(autocompleteItems, {
-			at = atEnd and #text - #typedText + (hasTrailingSpace and -1 or 0),
-			prefix = #lastArgument.RawSegments == 1 and lastArgument.Prefix or "",
+			at = atEnd and #text - #typedText + (if hasTrailingSpace then -1 else 0),
+			prefix = if #lastArgument.RawSegments == 1 then lastArgument.Prefix else "",
 			isLast = #command.Arguments == #command.ArgumentDefinitions and #typedText > 0,
 			numArgs = #arguments,
 			command = command,
 			arg = lastArgument,
-			name = lastArgument.Name .. (lastArgument.Required and "" or "?"),
+			name = `{lastArgument.Name}{if lastArgument.Required then "" else "?"}`,
 			type = lastArgument.Type.DisplayName,
-			description = argumentValid and lastArgument.Object.Description or argumentError,
+			description = if argumentValid then lastArgument.Object.Description else argumentError,
 			invalid = not argumentValid,
 			isPartial = isPartial,
 		})
