@@ -10,7 +10,7 @@ return {
 		{
 			Type = "players",
 			Name = "Players",
-			Description = "The players you want to teleport.",
+			Description = "The players to teleport.",
 		},
 		{
 			Type = "positiveInteger",
