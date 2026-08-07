@@ -14,7 +14,7 @@ Argument Shorthands
 const TIPS = [[
 Tips
 ----
-• Utilize the Tab key to automatically complete commands
+• Use the Tab key to autocomplete commands and suggestions
 • Easily select and copy command output
 ]]
 
