@@ -3,7 +3,9 @@ const RunService = game:GetService("RunService")
 
 const IS_SERVER_CONTAINER = script:FindFirstAncestorWhichIsA("ServerScriptService") or script:FindFirstAncestorWhichIsA("ServerStorage")
 const IS_SERVER = RunService:IsServer()
-assert(IS_SERVER_CONTAINER, "[Cmdr] The Cmdr server library must be kept within a Server Container.")
+if not IS_SERVER_CONTAINER then
+	warn("[Cmdr] The package should be kept within a server-side location. Future versions of Cmdr will require the server library be kept within ServerScriptService or ServerStorage.")
+end
 assert(IS_SERVER, "[Cmdr] The Cmdr server library cannot be required by the client. Please require the client libary instead.")
 
 const Dispatcher = require("@self/CmdrClient/Shared/Dispatcher")
