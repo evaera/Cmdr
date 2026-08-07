@@ -11,7 +11,7 @@ return {
 		{
 			Type = "integer",
 			Name = "Line Number",
-			Description = "Command line number (can be negative to go from end.)",
+			Description = "Command line number (can be negative to go from end)",
 		},
 	},
 
