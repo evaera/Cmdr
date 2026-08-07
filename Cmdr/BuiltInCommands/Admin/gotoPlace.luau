@@ -15,7 +15,7 @@ return {
 		{
 			Type = "positiveInteger",
 			Name = "Place ID",
-			Description = "The Place ID you want to teleport to.",
+			Description = "The Place ID to teleport to.",
 		},
 		{
 			Type = "string",
