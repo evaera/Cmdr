@@ -32,7 +32,7 @@ return {
 		},
 		{
 			Type = "boolean",
-			Name = "Apply to Universe",
+			Name = "Apply to universe",
 			Description = "Ban from all places in this experience.",
 			Default = true,
 		},
