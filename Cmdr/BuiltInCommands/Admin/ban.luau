@@ -20,7 +20,7 @@ return {
 		},
 		{
 			Type = "string",
-			Name = "Private Reason",
+			Name = "Private reason",
 			Description = "Internal staff notes for ban history.",
 			Optional = true,
 		},
