@@ -26,7 +26,7 @@ return {
 		},
 		{
 			Type = "boolean",
-			Name = "Exclude Alt Accounts",
+			Name = "Exclude alt accounts",
 			Description = "Skip banning their alternate accounts.",
 			Default = false,
 		},
