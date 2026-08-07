@@ -20,7 +20,7 @@ return {
 		{
 			Type = "string",
 			Name = "JobId",
-			Description = "The specific JobId you want to teleport to.",
+			Description = "The JobId to teleport to.",
 			Optional = true,
 		},
 	},
