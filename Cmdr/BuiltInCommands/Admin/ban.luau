@@ -38,7 +38,7 @@ return {
 		},
 		{
 			Type = "boolean",
-			Name = "Apply Device Block",
+			Name = "Apply device block",
 			Description = "Block their device from rejoining for 24 hours.",
 			Default = false,
 		},
