@@ -12,7 +12,7 @@ return {
 		{
 			Type = "string",
 			Name = "Reason",
-			Description = "Kick message shown to the player.",
+			Description = "Kick message shown to the players.",
 			Default = "No reason provided",
 		},
 	},
