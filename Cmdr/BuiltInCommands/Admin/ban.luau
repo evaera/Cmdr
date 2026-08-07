@@ -15,7 +15,7 @@ return {
 		},
 		{
 			Type = "string",
-			Name = "Display Reason",
+			Name = "Public reason",
 			Description = "Ban message shown to the player.",
 		},
 		{
