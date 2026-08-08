@@ -5,12 +5,37 @@
   "description": "Extensible command console for Roblox developers",
   "license": "MIT",
   "scripts": {
-    "docs:dev": "moonwave dev --code Cmdr",
-    "docs:build": "moonwave build --code Cmdr",
-    "docs:publish": "moonwave build --code Cmdr --publish"
+    "predocs": "node scripts/sync-changelog.mjs",
+    "docs:dev": "npm run predocs && docusaurus start website",
+    "docs:build": "npm run predocs && docusaurus build website",
+    "docs:serve": "docusaurus serve website",
+    "docs:publish": "npm run predocs && docusaurus deploy website",
+    "docs:swizzle": "docusaurus swizzle",
+    "docs:clear": "docusaurus clear website"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
+    "@mdx-js/react": "^3.0.1",
+    "clsx": "^2.1.1",
+    "docusaurus-lunr-search": "^3.6.1",
+    "docusaurus-plugin-moonwave": "1.4.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "markdownlint": "^0.41.1",
-    "moonwave": "^1.4.2"
+    "markdownlint": "^0.41.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

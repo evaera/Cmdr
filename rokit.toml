@@ -8,3 +8,6 @@ rojo = "rojo-rbx/rojo@7.7.0"
 wally = "UpliftGames/wally@0.3.2"
 StyLua = "JohnnyMorganz/StyLua@2.5.2"
 selene = "Kampfkarren/selene@0.31.0"
+
+# Keep this version in sync with the docusaurus-plugin-moonwave version in package.json
+moonwave-extractor = "evaera/moonwave@1.4.2"
