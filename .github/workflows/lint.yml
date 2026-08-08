@@ -1,0 +1,26 @@
+name: Lint code
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+
+      - run: selene update-roblox-std
+      - name: Run Selene
+        run: selene ./Cmdr
+
+      - name: Validate Stylua
+        run: stylua -c ./Cmdr
+
+      - name: Run markdownlint
+        run: npx markdownlint-cli docs

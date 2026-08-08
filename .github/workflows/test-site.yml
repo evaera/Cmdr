@@ -1,0 +1,25 @@
+name: Build website
+
+on:
+  pull_request:
+    # We can't narrow this to website paths because Moonwave tags mean that any
+    # code change might break the website, if the tags are done incorrectly.
+    branches:
+      - master
+
+      # We don't yet automatically update the site on each push.
+  # This is because Cmdr often goes a long time between updates
+  # and I don't want users getting confused. We should probably have a
+  # preview sub-path site though (like how we have /legacy).
+  push:
+    branches:
+      - master
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Build documentation
+        run: npm run docs:build
