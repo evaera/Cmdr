@@ -12,30 +12,28 @@ return {
 		},
 	},
 
-	ClientRun = function(context, extra)
+	ClientRun = function(context: any, extra: number): string
 		-- We implement this here because player position is owned by the client.
 		-- No reason to bother the server for this!
 
-		local mouse = context.Executor:GetMouse()
-		local character = context.Executor.Character
-
+		const mouse = context.Executor:GetMouse() :: Mouse
+		const character = context.Executor.Character :: Model?
 		if not character or not character:FindFirstChild("HumanoidRootPart") then
 			return "You don't have a character."
 		end
 
-		local raycastParams = RaycastParams.new()
+		const raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 		raycastParams.FilterDescendantsInstances = { character }
 		raycastParams.IgnoreWater = true
 		raycastParams.RespectCanCollide = true
 
-		local raycastResult = workspace:Raycast(mouse.UnitRay.Origin, mouse.UnitRay.Direction * 1000, raycastParams)
-
+		const raycastResult = workspace:Raycast(mouse.UnitRay.Origin, mouse.UnitRay.Direction * 1000, raycastParams)
 		if raycastResult then
-			local pos = character.HumanoidRootPart.Position
-			local diff = (raycastResult.Position - pos)
+			const pos = character.HumanoidRootPart.Position
+			const diff = (raycastResult.Position - pos)
+			const unitDirection = if diff.Magnitude > 0 then diff.Unit else Vector3.new()
 
-			local unitDirection = if diff.Magnitude > 0 then diff.Unit else Vector3.new()
 			character:MoveTo((diff * 2) + (unitDirection * extra) + pos)
 			return "Thru the wall!"
 		else

@@ -1,6 +1,5 @@
 return {
 	Name = "alias",
-	Aliases = {},
 	Description = "Creates a new, single command out of a command and given arguments.",
 	Group = "DefaultUtil",
 	Args = {
@@ -16,9 +15,9 @@ return {
 		},
 	},
 
-	ClientRun = function(context, name, commandString)
-		context.Cmdr.Registry:RegisterCommandObject(context.Cmdr.Util.MakeAliasCommand(name, commandString), true)
+	ClientRun = function(context: any, name: string, commandString: string): string
 
-		return ("Created alias %q"):format(name)
+		context.Cmdr.Registry:RegisterCommandObject(context.Cmdr.Util.MakeAliasCommand(name, commandString), true)
+		return `Created alias {name}.`
 	end,
 }

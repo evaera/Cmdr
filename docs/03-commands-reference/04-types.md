@@ -29,8 +29,6 @@ By default, these types are available:
 | `command`            | `string`                             | `commands`            | `{string}`                             |
 | `type`               | `string`                             | `types`               | `{string}`                             |
 | `userInput`          | `Enum.UserInputType \| Enum.KeyCode` | `userInputs`          | `{Enum.UserInputType \| Enum.KeyCode}` |
-| `conditionFunction`  | `function`                           |                       |                                        |
-| `bindableResource`   | `Instance`                           |                       |                                        |
 | `storedKey`          | `string`                             | `storedKeys`          | `{string}`                             |
 | `url`                | `string`                             | `urls`                | `{string}`                             |
 | `json`               | `any`                                |                       |                                        |
@@ -45,20 +43,20 @@ Check out the [API reference](/api/Registry#TypeDefinition) for a full reference
 
 ```lua
 local intType = {
-	Transform = function(text)
+	Transform = function(text: string): number?
 		return tonumber(text)
 	end,
 
-	Validate = function(value)
+	Validate = function(value: number?): (boolean, string)
 		return value ~= nil and value == math.floor(value), "Only whole numbers are valid."
 	end,
 
-	Parse = function(value)
+	Parse = function(value: number): number
 		return value
 	end,
 }
 
-return function(registry)
+return function(registry: any)
 	registry:RegisterType("integer", intType)
 end
 ```
@@ -76,7 +74,7 @@ For any argument whose type has a default value, you can simply input `.` and th
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).
 
 ```lua
-return function (registry)
+return function(registry: any)
 	registry:RegisterType("place", registry.Cmdr.Util.MakeEnumType("Place", {"World 1", "World 2", "World 3", "Final World"}))
 end
 ```

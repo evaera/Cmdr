@@ -7,11 +7,11 @@ return {
 		{
 			Type = "string",
 			Name = "Text",
-			Description = "The text.",
+			Description = "The text to echo.",
 		},
 	},
 
-	ClientRun = function(_, text)
+	ClientRun = function(_, text: string): string
 		return text
 	end,
 }

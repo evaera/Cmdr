@@ -11,7 +11,7 @@ return {
 			Optional = true,
 		},
 	},
-	ClientRun = function(_, timestamp)
+	ClientRun = function(_, timestamp: number): string
 		timestamp = timestamp or os.time()
 		return `{os.date("%x", timestamp)} {os.date("%X", timestamp)}`
 	end,

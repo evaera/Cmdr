@@ -1,11 +1,11 @@
 return {
 	Name = "replace",
 	Aliases = { "gsub", "//" },
-	Description = "Replaces text A with text B",
+	Description = "Replaces text A with text B.",
 	Group = "DefaultUtil",
 	AutoExec = {
-		'alias "map|Maps a CSV into another CSV" replace $1{string|CSV} ([^,]+) "$2{string|mapped value|Use %1 to insert the element}"',
-		'alias "join|Joins a CSV with a specified delimiter" replace $1{string|CSV} , $2{string|Delimiter}',
+		'alias "map|Maps a CSV into another CSV." replace $1{string|CSV} ([^,]+) "$2{string|mapped value|Use %1 to insert the element.}"',
+		'alias "join|Joins a CSV with a specified delimiter." replace $1{string|CSV} , $2{string|Delimiter}',
 	},
 	Args = {
 		{
@@ -26,7 +26,7 @@ return {
 		},
 	},
 
-	ClientRun = function(_, haystack, needle, replacement)
+	ClientRun = function(_, haystack: string, needle: string, replacement: string): string
 		return haystack:gsub(needle, replacement)
 	end,
 }

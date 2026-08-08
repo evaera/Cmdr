@@ -1,12 +1,12 @@
-local version = "v1.12.0"
+const VERSION = "v1.13.0-rc.2"
 
 return {
 	Name = "version",
-	Args = {},
-	Description = "Shows the current version of Cmdr",
+	Description = "Shows the current version of Cmdr.",
 	Group = "DefaultDebug",
+	Args = {},
 
-	ClientRun = function()
-		return ("Cmdr Version %s"):format(version)
+	ClientRun = function(): string
+		return `Cmdr Version {VERSION}`
 	end,
 }

@@ -1,20 +1,21 @@
-local DataStoreService = game:GetService("DataStoreService")
+const DataStoreService = game:GetService("DataStoreService")
 
-local queue = {}
+const queue = {}
 local DataStoresActive, DataStore
 task.spawn(function()
 	DataStoresActive, DataStore = pcall(function()
-		local targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
+		const targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
 		targetStore:GetAsync("test_key")
 		return targetStore
 	end)
 
 	while #queue > 0 do
-		coroutine.resume(table.remove(queue, 1))
+		const nextThread = table.remove(queue, 1)
+		coroutine.resume(nextThread)
 	end
 end)
 
-return function(context, key)
+return function(context: any, key: string): string
 	if DataStoresActive == nil then
 		table.insert(queue, coroutine.running())
 		coroutine.yield()
@@ -22,7 +23,6 @@ return function(context, key)
 
 	local gameWide = false
 	local saved = true
-
 	if key:sub(1, 1) == "$" then
 		key = key:sub(2)
 		gameWide = true
@@ -37,24 +37,24 @@ return function(context, key)
 		return "# You must publish this place to the web to use saved keys."
 	end
 
-	local namespace = "var_" .. (gameWide and "global" or tostring(context.Executor.UserId))
-
+	const namespace = `var_{if gameWide then "global" else tostring(context.Executor.UserId)}`
 	if saved then
-		local keyPath = namespace .. "_" .. key
-		local value = DataStore:GetAsync(keyPath) or ""
+		const keyPath = `{namespace}_{key}`
+		const value = DataStore:GetAsync(keyPath) or ""
+
 		if type(value) == "table" then
 			return table.concat(value, ",") or ""
 		end
-		return value
+
+		return tostring(value)
 	else
-		local store = context:GetStore(namespace)
-
-		local value = store[key] or ""
+		const store = context:GetStore(namespace)
+		const value = store[key] or ""
 
 		if type(value) == "table" then
 			return table.concat(value, ",") or ""
 		end
 
-		return value
+		return tostring(value)
 	end
 end

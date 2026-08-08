@@ -1,6 +1,5 @@
 return {
 	Name = "history",
-	Aliases = {},
 	AutoExec = {
 		'alias "!|Displays previous command from history." run ${history $1{number|Line Number}}',
 		'alias "^|Runs the previous command, replacing all occurrences of A with B." run ${run replace ${history -1} $1{string|A} $2{string|B}}',
@@ -16,8 +15,8 @@ return {
 		},
 	},
 
-	ClientRun = function(context, line)
-		local history = context.Dispatcher:GetHistory()
+	ClientRun = function(context: any, line: number): string
+		const history = context.Dispatcher:GetHistory()
 
 		if line <= 0 then
 			line = #history + line

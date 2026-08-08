@@ -1,7 +1,6 @@
 return {
 	Name = "fetch",
-	Aliases = {},
-	Description = "Fetch a value from the Internet",
+	Description = "Fetch a value from the Internet.",
 	Group = "DefaultDebug",
 	Args = {
 		{

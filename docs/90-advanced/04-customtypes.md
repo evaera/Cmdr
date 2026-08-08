@@ -18,24 +18,24 @@ Here is the template for a custom type module:
 
 ```lua
 local myCustomType = {
-	Transform = function(text)
+	Transform = function(text: string): string
 		-- Step 1: Receive the raw input string
 		return string.lower(text)
 	end,
 
-	Validate = function(transformedValue)
+	Validate = function(transformedValue: string): (boolean, string)
 		-- Step 2: Validates the output from Transform
 		local isValid = #transformedValue > 3
 		return isValid, "The value must be longer than 3 characters."
 	end,
 
-	Parse = function(transformedValue)
+	Parse = function(transformedValue: string): { value: string }
 		-- Step 3: Returns the final value to the command implementation
 		return { value = transformedValue }
 	end,
 }
 
-return function(registry)
+return function(registry: any)
 	registry:RegisterType("myCustomType", myCustomType)
 end
 ```
@@ -72,7 +72,7 @@ Your type definition dictionary can implement several unique lifecycle methods:
 ### Transform
 
 ```lua
-Transform = function(text: string, player: Player) -> any
+Transform = function(text: string, player: Player): any
 ```
 
 An optional function that accepts the raw text argument input and the player who executed the command. Whatever value this returns will be automatically passed down to `Validate`, `Autocomplete`, and `Parse`. If omitted, the raw string text is passed along instead.
@@ -80,7 +80,7 @@ An optional function that accepts the raw text argument input and the player who
 ### Validate
 
 ```lua
-Validate = function(transformedValue: any) -> (boolean, string?)
+Validate = function(transformedValue: any): (boolean, string?)
 ```
 
 Evaluates whether the value matches your requirements. It receives the output returned from your `Transform` function. If valid, it must return `true`. If invalid, it should return `false` followed by a user-facing string explaining the validation failure. If omitted, all input is assumed valid.
@@ -88,7 +88,7 @@ Evaluates whether the value matches your requirements. It receives the output re
 ### ValidateOnce
 
 ```lua
-ValidateOnce = function(transformedValue: any) -> (boolean, string?)
+ValidateOnce = function(transformedValue: any): (boolean, string?)
 ```
 
 Works identically to `Validate`, but **only executes after the user presses Enter**. Use this exclusively for slow or yielding network calls (such as checking `GetUserIdFromNameAsync` via `Players`). For normal operations, stick to standard `Validate` blocks.
@@ -96,7 +96,7 @@ Works identically to `Validate`, but **only executes after the user presses Ente
 ### Autocomplete
 
 ```lua
-Autocomplete = function(transformedValue: any) -> ({ string }, { IsPartial: boolean? }?)
+Autocomplete = function(transformedValue: any): ({ string }, { IsPartial: boolean? }?)
 ```
 
 Populates Cmdr's dropdown menu as users type. It must return an array of strings representing match options. You can optionally return a second dictionary parameter containing configuration options (e.g., set `{ IsPartial = true }` to prevent pressing Tab from immediately proceeding to the next command argument).
@@ -104,7 +104,7 @@ Populates Cmdr's dropdown menu as users type. It must return an array of strings
 ### Parse
 
 ```lua
-Parse = function(transformedValue: any) -> any
+Parse = function(transformedValue: any): any
 ```
 
 **[REQUIRED]** The final stage of the lifecycle pipeline before the value is marked complete. This transforms the processed text tokens into the final Luau type object (e.g., an Instance, a Color3, or a table) which will be fed directly into your final command implementation module.
@@ -128,7 +128,7 @@ When enabled, you do not need to update your parsing or validation architecture.
 You can provide fallback string options if an argument is skipped or if a user passes a period (`.`) literal token.
 
 ```lua
-Default = function(player: Player) -> string
+Default = function(player: Player): string
 ```
 
 The `Default` function must always return a **string**. This string value is inserted and treated exactly as raw user text **before** any parsing or `Transform` operations are evaluated.
@@ -144,7 +144,7 @@ Cmdr provides a few standard factory functions within `Util` to quickly spin up 
 For basic collections of discrete string choices, use `Util.MakeEnumType(name, choices)`. This automatically provides full fuzzy-matching autocomplete suggestions and ensures the parsed output explicitly matches a key within your options array.
 
 ```lua
-return function(registry)
+return function(registry: any)
 	local customEnum = registry.Cmdr.Util.MakeEnumType("rarity", { "Common", "Rare", "Epic", "Legendary" })
 	registry:RegisterType("rarity", customEnum)
 end
@@ -158,9 +158,9 @@ For multi-value structural types like positions, vectors, or colors, use `Util.M
 local vector2Type = registry.Cmdr.Util.MakeSequenceType({
 	Length = 2,
 	TransformEach = tonumber,
-	ValidateEach = function(value, index)
+	ValidateEach = function(value: number?, index: number): (boolean, string)
 		return value ~= nil, `Component {index} must be a valid number.`
 	end,
-	Constructor = Vector2.new
+	Constructor = Vector2.new,
 })
 ```

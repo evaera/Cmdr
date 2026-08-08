@@ -1,8 +1,8 @@
-local Util = require(script.Parent.Util)
+const Util = require("./Util")
 
-local function unescapeOperators(text)
+const function unescapeOperators(text: string): string
 	for _, operator in ipairs({ "%.", "%?", "%*", "%*%*" }) do
-		text = text:gsub("\\" .. operator, operator:gsub("%%", ""))
+		text = text:gsub(`\\{operator}`, operator:gsub("%%", ""))
 	end
 
 	return text
@@ -13,94 +13,107 @@ end
 	Represents an individual argument within an individual command execution.
 ]=]
 
-local Argument = {}
+const Argument = {}
 Argument.__index = Argument
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Command CommandContext
+
 	The command that this argument belongs to.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Type TypeDefinition
+
 	The type definition for this argument.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Name string
+
 	The name of this argument, shown on the autocomplete interface.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Object ArgumentDefinition
+
 	The raw argument definition.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Required boolean
+
 	Whether or not this argument was required.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Executor Player
+
 	The player that ran the command that this argument belongs to.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop RawValue string
+
 	The raw, unparsed value for this argument.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop RawSegments {string}
+
 	An array of strings representing the values in a comma-separated list, if applicable.
-	@readonly
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@readonly
 	@prop Prefix string
-	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See [Prefixed Union Types](/docs/commands#prefixed-union-types) for more details.
-	@readonly
-	@within ArgumentContext
+
+	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See [Prefixed Union Types](/docs/commands-reference/commands#prefixed-union-types) for more details.
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@private
 	@prop TextSegmentInProgress any
+
 	The text of the raw segment the user is currently typing.
-	@private
-	@within ArgumentContext
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@private
 	@prop RawSegmentsAreAutocomplete boolean
-	@private
-	@within ArgumentContext
+
+	Whether the raw segments were generated from autocomplete.
 ]=]
 
 --[=[
+	@within ArgumentContext
+	@private
 	@prop TransformedValues {any}
+
 	The transformed value (generated later).
-	@private
-	@within ArgumentContext
 ]=]
 
 --[=[
-	Returns a new ArgumentContext, an object that handles parsing and validating arguments
+	@within ArgumentContext
 	@private
 
 	@param command CommandContext -- The command that owns this argument
@@ -108,10 +121,10 @@ Argument.__index = Argument
 	@param value any -- The raw, unparsed value
 	@return ArgumentContext
 
-	@within ArgumentContext
+	Returns a new ArgumentContext, an object that handles parsing and validating arguments.
 ]=]
-function Argument.new(command, argumentDefinition, value)
-	local self = {
+function Argument.new(command: any, argumentDefinition: any, value: any)
+	const self = {
 		Command = command,
 		Type = nil,
 		Name = argumentDefinition.Name,
@@ -129,16 +142,17 @@ function Argument.new(command, argumentDefinition, value)
 	if type(argumentDefinition.Type) == "table" then
 		self.Type = argumentDefinition.Type
 	else
-		local parsedType, parsedRawValue, prefix =
-			Util.ParsePrefixedUnionType(command.Cmdr.Registry:GetTypeName(argumentDefinition.Type), value)
+		const typeName = command.Cmdr.Registry:GetTypeName(argumentDefinition.Type)
+		const parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(typeName, value)
+		const existingType = command.Dispatcher.Registry:GetType(parsedType)
+		assert(
+			existingType,
+			`[Cmdr] Argument "{self.Name or "none"}" has an unregistered type {parsedType or "<none>"}`
+		)
 
-		self.Type = command.Dispatcher.Registry:GetType(parsedType)
+		self.Type = existingType
 		self.RawValue = parsedRawValue
 		self.Prefix = prefix
-
-		if self.Type == nil then
-			error((`[Cmdr] {self.Name or "none"} has an unregistered type %q`):format(parsedType or "<none>"))
-		end
 	end
 
 	setmetatable(self, Argument)
@@ -149,26 +163,41 @@ function Argument.new(command, argumentDefinition, value)
 end
 
 --[=[
-	@private
-	@return any
 	@within ArgumentContext
+	@private
+
+	Transforms a raw argument segment.
 ]=]
-function Argument:GetDefaultAutocomplete()
-	if self.Type.Autocomplete then
-		local strings, options = self.Type.Autocomplete(self:TransformSegment(""))
-		return strings, options or {}
+function Argument:TransformSegment(rawSegment: string): any
+	if self.Type.Transform then
+		return self.Type.Transform(rawSegment, self.Executor)
 	end
 
-	return {}
+	return rawSegment
 end
 
 --[=[
+	@within ArgumentContext
+	@private
+
+	Returns the default autocomplete results.
+]=]
+function Argument:GetDefaultAutocomplete()
+	if not self.Type.Autocomplete then
+		return {}
+	end
+
+	const strings, options = self.Type.Autocomplete(self:TransformSegment(""))
+	return strings, options or {}
+end
+
+--[=[
+	@within ArgumentContext
+	@private
+
 	Calls the transform function on this argument.
 	The return value(s) from this function are passed to all of the other argument methods.
 	Called automatically at instantiation.
-
-	@private
-	@within ArgumentContext
 ]=]
 function Argument:Transform()
 	if #self.TransformedValues ~= 0 then
@@ -186,7 +215,7 @@ function Argument:Transform()
 	end
 
 	if rawValue == "?" and self.Type.Autocomplete then
-		local strings, options = self:GetDefaultAutocomplete()
+		const strings, options = self:GetDefaultAutocomplete()
 
 		if not options.IsPartial and #strings > 0 then
 			rawValue = strings[math.random(1, #strings)]
@@ -195,14 +224,14 @@ function Argument:Transform()
 	end
 
 	if self.Type.Listable and #self.RawValue > 0 then
-		local randomMatch = rawValue:match("^%?(%d+)$")
+		const randomMatch = rawValue:match("^%?(%d+)$")
+
 		if randomMatch then
-			local maxSize = tonumber(randomMatch)
+			const maxSize = tonumber(randomMatch)
 
 			if maxSize and maxSize > 0 then
-				local items = {}
-				local remainingItems, options = self:GetDefaultAutocomplete()
-
+				const remainingItems, options = self:GetDefaultAutocomplete()
+				const items = {}
 				if not options.IsPartial and #remainingItems > 0 then
 					for _ = 1, math.min(maxSize, #remainingItems) do
 						table.insert(items, table.remove(remainingItems, math.random(1, #remainingItems)))
@@ -213,15 +242,14 @@ function Argument:Transform()
 				end
 			end
 		elseif rawValue == "*" or rawValue == "**" then
-			local strings, options = self:GetDefaultAutocomplete()
-
+			const strings, options = self:GetDefaultAutocomplete()
 			if not options.IsPartial and #strings > 0 then
 				if rawValue == "**" and self.Type.Default then
-					local defaultString = self.Type.Default(self.Executor) or ""
+					const defaultString = self.Type.Default(self.Executor) or ""
 
-					for i, string in ipairs(strings) do
+					for index, string in ipairs(strings) do
 						if string == defaultString then
-							table.remove(strings, i)
+							table.remove(strings, index)
 						end
 					end
 				end
@@ -234,7 +262,6 @@ function Argument:Transform()
 		rawValue = unescapeOperators(rawValue)
 
 		local rawSegments = Util.SplitStringSimple(rawValue, ",")
-
 		if #rawSegments == 0 then
 			rawSegments = { "" }
 		end
@@ -243,9 +270,9 @@ function Argument:Transform()
 			rawSegments[#rawSegments + 1] = "" -- makes auto complete tick over right after pressing ,
 		end
 
-		for i, rawSegment in ipairs(rawSegments) do
-			self.RawSegments[i] = rawSegment
-			self.TransformedValues[i] = { self:TransformSegment(rawSegment) }
+		for index, rawSegment in ipairs(rawSegments) do
+			self.RawSegments[index] = rawSegment
+			self.TransformedValues[index] = { self:TransformSegment(rawSegment) }
 		end
 
 		self.TextSegmentInProgress = rawSegments[#rawSegments]
@@ -259,55 +286,40 @@ function Argument:Transform()
 end
 
 --[=[
-	@param rawSegment any
-	@private
 	@within ArgumentContext
-]=]
-function Argument:TransformSegment(rawSegment): any
-	if self.Type.Transform then
-		return self.Type.Transform(rawSegment, self.Executor)
-	else
-		return rawSegment
-	end
-end
 
---[=[
 	Returns the transformed value from this argument, see Types.
-	@within ArgumentContext
 ]=]
 function Argument:GetTransformedValue(segment: number): ...any
 	return unpack(self.TransformedValues[segment])
 end
 
 --[=[
-	Validates that the argument will work without any type errors.
-
-	@param isFinal any
-	@private
 	@within ArgumentContext
+	@private
+
+	Validates that the argument will work without any type errors.
 ]=]
 function Argument:Validate(isFinal: boolean?): (boolean, string?)
-	if self.RawValue == nil or #self.RawValue == 0 and self.Required == false then
+	if not self.RawValue or #self.RawValue == 0 and self.Required == false then
 		return true
 	end
 
-	if self.Required and (self.RawSegments[1] == nil or #self.RawSegments[1] == 0) then
+	if self.Required and (not self.RawSegments[1] or #self.RawSegments[1] == 0) then
 		return false, "This argument is required."
 	end
 
 	if self.Type.Validate or self.Type.ValidateOnce then
-		for i = 1, #self.TransformedValues do
+		for index = 1, #self.TransformedValues do
 			if self.Type.Validate then
-				local valid, errorText = self.Type.Validate(self:GetTransformedValue(i))
-
+				const valid, errorText = self.Type.Validate(self:GetTransformedValue(index))
 				if not valid then
 					return valid, errorText or "Invalid value"
 				end
 			end
 
 			if isFinal and self.Type.ValidateOnce then
-				local validOnce, errorTextOnce = self.Type.ValidateOnce(self:GetTransformedValue(i))
-
+				const validOnce, errorTextOnce = self.Type.ValidateOnce(self:GetTransformedValue(index))
 				if not validOnce then
 					return validOnce, errorTextOnce
 				end
@@ -321,37 +333,37 @@ function Argument:Validate(isFinal: boolean?): (boolean, string?)
 end
 
 --[=[
-	Gets a list of all possible values that could match based on the current value.
-
-	@return any
-	@private
 	@within ArgumentContext
+	@private
+
+	Gets a list of all possible values that could match based on the current value.
 ]=]
 function Argument:GetAutocomplete()
-	if self.Type.Autocomplete then
-		return self.Type.Autocomplete(self:GetTransformedValue(#self.TransformedValues))
-	else
+	if not self.Type.Autocomplete then
 		return {}
 	end
+
+	return self.Type.Autocomplete(self:GetTransformedValue(#self.TransformedValues))
 end
 
 --[=[
-	@return any
-	@private
 	@within ArgumentContext
+	@private
+
+	Parses a transformed argument segment.
 ]=]
-function Argument:ParseValue(i: number)
+function Argument:_parseValue(segment: number)
 	if self.Type.Parse then
-		return self.Type.Parse(self:GetTransformedValue(i))
+		return self.Type.Parse(self:GetTransformedValue(segment))
 	else
-		return self:GetTransformedValue(i)
+		return self:GetTransformedValue(segment)
 	end
 end
 
---
 --[=[
-	Returns the parsed (final) value for this argument.
 	@within ArgumentContext
+
+	Returns the parsed (final) value for this argument.
 ]=]
 function Argument:GetValue(): any
 	if #self.RawValue == 0 and not self.Required and self.Object.Default ~= nil then
@@ -359,25 +371,20 @@ function Argument:GetValue(): any
 	end
 
 	if not self.Type.Listable then
-		return self:ParseValue(1)
+		return self:_parseValue(1)
 	end
 
-	local values = {}
-
-	for i = 1, #self.TransformedValues do
-		local parsedValue = self:ParseValue(i)
-
-		if type(parsedValue) ~= "table" then
-			error(`[Cmdr] Listable types must return a table from Parse {self.Type.Name}`)
-		end
+	const values = {}
+	for index = 1, #self.TransformedValues do
+		const parsedValue = self:_parseValue(index)
+		assert(type(parsedValue) == "table", `[Cmdr] Listable types must return a table from Parse {self.Type.Name}`)
 
 		for _, value in pairs(parsedValue) do
-			values[value] = true -- Put them into a dictionary to ensure uniqueness
+			values[value] = true
 		end
 	end
 
-	local valueArray = {}
-
+	const valueArray = {}
 	for value in pairs(values) do
 		valueArray[#valueArray + 1] = value
 	end

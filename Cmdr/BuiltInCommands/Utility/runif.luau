@@ -1,4 +1,6 @@
-local conditions = {
+type ConditionFn = (text: string, arg: string) -> string?
+
+const CONDITIONS: { [string]: ConditionFn } = {
 	startsWith = function(text, arg)
 		return text:sub(1, #arg) == arg and text:sub(#arg + 1)
 	end,
@@ -44,21 +46,27 @@ local conditions = {
 	end,
 }
 
+const conditionNames = {}
+for name in pairs(CONDITIONS) do
+	conditionNames[#conditionNames + 1] = name
+end
+
 return {
 	Name = "runif",
-	Aliases = {},
 	Description = "Runs a given command string if a certain condition is met.",
 	Group = "DefaultUtil",
 	Args = {
-		{
-			Type = "conditionFunction",
-			Name = "Condition",
-			Description = "The condition function",
-		},
+		function(context: any)
+			return {
+				Type = context.Cmdr.Util.MakeEnumType("ConditionFunction", conditionNames),
+				Name = "Condition",
+				Description = "The condition function.",
+			}
+		end,
 		{
 			Type = "string",
 			Name = "Argument",
-			Description = "The argument to the condition function",
+			Description = "The argument to the condition function.",
 		},
 		{
 			Type = "string",
@@ -73,15 +81,9 @@ return {
 		},
 	},
 
-	ClientRun = function(context, condition, arg, testAgainst, command)
-		local conditionFunc = conditions[condition]
-
-		if not conditionFunc then
-			return ("Condition %q is not valid."):format(condition)
-		end
-
-		local success, text = pcall(conditionFunc, testAgainst, arg)
-
+	ClientRun = function(context: any, condition: string, arg: string, testAgainst: string, command: string?): string
+		const conditionFunc = CONDITIONS[condition]
+		const success, text = pcall(conditionFunc, testAgainst, arg)
 		if success and text then
 			return context.Dispatcher:EvaluateAndRun(
 				context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text)

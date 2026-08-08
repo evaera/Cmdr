@@ -1,8 +1,6 @@
-local Util = require(script.Parent.Parent.Shared.Util)
+const AXES: { string } = { "X", "Y", "Z" }
 
-local AXES = { "X", "Y", "Z" }
-
-local function validateVector(value, index)
+const function validateVector(value: number?, index: number): (boolean, string?)
 	if value == nil then
 		return false, `Invalid or missing number at position {index} in Vector type.`
 	end
@@ -10,50 +8,51 @@ local function validateVector(value, index)
 	return true
 end
 
-local vector3Type = Util.MakeSequenceType({
-	ValidateEach = validateVector,
-	TransformEach = tonumber,
-	Constructor = Vector3.new,
-	Length = 3,
-})
+return function(registry: any)
+	const vector3Type = registry.Cmdr.Util.MakeSequenceType({
+		ValidateEach = validateVector,
+		TransformEach = tonumber,
+		Constructor = Vector3.new,
+		Length = 3,
+	})
 
-local vector2Type = Util.MakeSequenceType({
-	ValidateEach = validateVector,
-	TransformEach = tonumber,
-	Constructor = Vector2.new,
-	Length = 2,
-})
+	const vector2Type = registry.Cmdr.Util.MakeSequenceType({
+		ValidateEach = validateVector,
+		TransformEach = tonumber,
+		Constructor = Vector2.new,
+		Length = 2,
+	})
 
-local positionVector3Type = Util.MakeSequenceType({
-	Transform = function(text, executor)
-		local character = executor.Character
-		local currentPosition = if character then character:GetPivot().Position else Vector3.zero
+	const positionVector3Type = registry.Cmdr.Util.MakeSequenceType({
+		Transform = function(text: string, executor: Player): { number? }
+			const character = executor.Character
+			const currentPosition = if character then character:GetPivot().Position else Vector3.zero
 
-		return Util.Map(Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value, index)
-			if value:sub(1, 1) ~= "~" then
-				return tonumber(value)
-			end
+			return registry.Cmdr.Util.Map(
+				registry.Cmdr.Util.SplitPrioritizedDelimeter(text, { ",", "%s" }),
+				function(value: string, index: number): number?
+					if value:sub(1, 1) ~= "~" then
+						return tonumber(value)
+					end
 
-			local axis = AXES[index]
-			local currentComponent = if axis then currentPosition[axis] else 0
+					const axis = AXES[index]
+					const currentComponent = if axis then currentPosition[axis] else 0
+					const offset = tonumber(value:sub(2))
+					return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
+				end
+			)
+		end,
+		ValidateEach = validateVector,
+		Constructor = Vector3.new,
+		Length = 3,
+	})
 
-			local offset = tonumber(value:sub(2))
+	registry:RegisterType("vector3", vector3Type)
+	registry:RegisterType("vector3s", registry.Cmdr.Util.MakeListableType(vector3Type))
 
-			return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
-		end)
-	end,
-	ValidateEach = validateVector,
-	Constructor = Vector3.new,
-	Length = 3,
-})
+	registry:RegisterType("vector2", vector2Type)
+	registry:RegisterType("vector2s", registry.Cmdr.Util.MakeListableType(vector2Type))
 
-return function(cmdr)
-	cmdr:RegisterType("vector3", vector3Type)
-	cmdr:RegisterType("vector3s", Util.MakeListableType(vector3Type))
-
-	cmdr:RegisterType("vector2", vector2Type)
-	cmdr:RegisterType("vector2s", Util.MakeListableType(vector2Type))
-
-	cmdr:RegisterType("positionVector3", positionVector3Type)
-	cmdr:RegisterType("positionVector3s", Util.MakeListableType(positionVector3Type))
+	registry:RegisterType("positionVector3", positionVector3Type)
+	registry:RegisterType("positionVector3s", registry.Cmdr.Util.MakeListableType(positionVector3Type))
 end

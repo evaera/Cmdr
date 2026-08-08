@@ -1,6 +1,5 @@
 return {
 	Name = "var=",
-	Aliases = {},
 	Description = "Sets a stored value.",
 	Group = "DefaultUtil",
 	Args = {
@@ -17,7 +16,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context, key)
+	ClientRun = function(context: any, key: string)
 		context:GetStore("vars_used")[key] = true
 	end,
 }

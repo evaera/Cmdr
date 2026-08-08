@@ -35,20 +35,20 @@ The implementation — whether on the server or client — is passed the [Comman
 
 ```lua title="TeleportServer.luau"
 -- These arguments are guaranteed to exist and be correctly typed.
-return function (context, fromPlayers, toPlayer)
-  if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
-    local position = toPlayer.Character.HumanoidRootPart.CFrame
+return function(context: any, fromPlayers: { Player }, toPlayer: Player): string
+	if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
+		local position = toPlayer.Character.HumanoidRootPart.CFrame
 
-    for _, player in ipairs(fromPlayers) do
-      if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character.HumanoidRootPart.CFrame = position
-      end
-    end
+		for _, player in ipairs(fromPlayers) do
+			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				player.Character.HumanoidRootPart.CFrame = position
+			end
+		end
 
-    return "Teleported players."
-  end
+		return "Teleported players."
+	end
 
-  return "Target player has no character."
+	return "Target player has no character."
 end
 ```
 
@@ -109,7 +109,7 @@ If you only want some, but not all, of the default commands, you can restrict th
 2. Pass a filter function that accepts a CommandDefinition and either returns `true` or `false`:
 
 ```lua
-Cmdr.Registry:RegisterDefaultCommands(function(cmd)
+Cmdr.Registry:RegisterDefaultCommands(function(cmd: any): boolean
 	return #cmd.Name < 6 -- This is absurd... but possible!
 end)
 ```
@@ -192,20 +192,20 @@ Inline types can be and usually are paired with dynamic types. Inline types are 
 ```lua title="allowlist.luau"
 return {
 	Name = "allowlist",
-	Aliases = {},
 	Description = "Add or remove a player from the allow list.",
 	Group = "Admin",
 	Args = {
 		-- This is an example of a dynamic inline type
-		function(context)
+		function(context: any)
 			return {
 				Type = context.Cmdr.Util.MakeEnumType("option", {"add", "remove"}),
 				Name = "Action",
 				Description = "Add or remove",
 			}
 		end,
+
 		-- This is an example of a dynamic argument
-		function(context)
+		function(context: any)
 			local action = context:GetArgument(1):GetValue()
 			return {
 				Type = if action == "add" then `playerId` else `allowlistPlayer`,

@@ -1,15 +1,14 @@
-local TeleportService = game:GetService("TeleportService")
+const TeleportService = game:GetService("TeleportService")
 
-return function(_, playerId, format)
+return function(_, playerId: number, format: string): string
 	format = format or "PlaceIdJobId"
 
-	local ok, _, errorText, placeId, jobId = pcall(function()
-		return TeleportService:GetPlayerPlaceInstanceAsync(playerId)
-	end)
+	const success, _, errorText, placeId, jobId =
+		pcall(TeleportService.GetPlayerPlaceInstanceAsync, TeleportService, playerId)
 
-	if not ok or (errorText and #errorText > 0) then
+	if not success or not placeId or not jobId or (errorText and #errorText > 0) then
 		if format == "PlaceIdJobId" then
-			return "0" .. " -"
+			return "0 -"
 		elseif format == "PlaceId" then
 			return "0"
 		elseif format == "JobId" then
@@ -18,10 +17,12 @@ return function(_, playerId, format)
 	end
 
 	if format == "PlaceIdJobId" then
-		return placeId .. " " .. jobId
+		return `{placeId} {jobId}`
 	elseif format == "PlaceId" then
 		return tostring(placeId)
 	elseif format == "JobId" then
 		return tostring(jobId)
 	end
+
+	return "Something went very wrong!"
 end

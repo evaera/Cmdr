@@ -1,9 +1,8 @@
-local generator = Random.new()
+const GENERATOR = Random.new()
 
 return {
 	Name = "rand",
-	Aliases = {},
-	Description = "Returns a random number between min and max",
+	Description = "Returns a random number between min and max.",
 	Group = "DefaultUtil",
 	Args = {
 		{
@@ -19,11 +18,10 @@ return {
 		},
 	},
 
-	ClientRun = function(_, firstNumber, secondNumber)
-		return tostring(
-			if secondNumber
-				then generator:NextInteger(firstNumber, secondNumber)
-				else generator:NextInteger(1, firstNumber)
-		)
+	ClientRun = function(_, firstNumber: number, secondNumber: number?): string
+		const min = if secondNumber then math.min(firstNumber, secondNumber) else math.min(1, firstNumber)
+		const max = if secondNumber then math.max(firstNumber, secondNumber) else math.max(1, firstNumber)
+
+		return tostring(GENERATOR:NextInteger(min, max))
 	end,
 }

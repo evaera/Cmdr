@@ -31,9 +31,11 @@ If you manage your packages using Wally and sync via Rojo, updating involves a q
 1. Open your `wally.toml` file.
 2. Check your `Cmdr` entry. Wally treats version requirements as caret (`^`) matching by default. Writing `"evaera/cmdr@1.13.0"` behaves exactly like `"evaera/cmdr@^1.13.0"`, automatically permitting upgrades to the latest compatible minor or patch release.
 3. Open your terminal in the project directory and pull the newest compatible versions by running:
+
    ```bash
    wally update
    ```
+
 4. If you want to force an upgrade to a brand-new major version that falls outside your current range, manually change the version number string in your `wally.toml` to match the [latest release](https://github.com/evaera/Cmdr/releases/latest) version, then run `wally install`.
 5. Run your Rojo sync command to push the updated `ServerPackages` into Roblox Studio.
 
@@ -48,24 +50,30 @@ For advanced workflows using Rojo and Git submodules, updates can be handled eit
 If you simply want to pull down the latest updates from the remote Cmdr repository into your project:
 
 1. Run the remote update command from your main repository root to fetch and check out the latest tracking commit:
+
    ```bash
    git submodule update --remote Cmdr
    ```
-   _Note: Git will default to checking out the remote's HEAD commit._
+
+_Note: Git will default to checking out the remote's HEAD commit._
 
 ### Synchronizing collaborators
 
 If another developer on your team updated the Cmdr submodule version and committed the reference pointer to the main repository, running a basic `git pull` will fetch the changes but leave your local submodule directory unmodified.
 
 1. Pull the new parent configuration and automatically update the submodule in one step:
+
    ```bash
     git pull --recurse-submodules
    ```
+
 2. Alternatively, if you did a standard pull, finalize the sync to match the target commit by running:
+
    ```bash
    git submodule update --init
    ```
-   _Note: Using the `--init` flag ensures that the submodule is properly initialized and fetched if it was recently added to the repository layout._
+
+_Note: Using the `--init` flag ensures that the submodule is properly initialized and fetched if it was recently added to the repository layout._
 
 :::tip Avoid Detached HEAD State
 

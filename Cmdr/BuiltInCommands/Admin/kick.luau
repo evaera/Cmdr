@@ -7,12 +7,12 @@ return {
 		{
 			Type = "players",
 			Name = "Players",
-			Description = "The players to kick",
+			Description = "The players to kick.",
 		},
 		{
 			Type = "string",
 			Name = "Reason",
-			Description = "Kick message shown to the player",
+			Description = "Kick message shown to the players.",
 			Default = "No reason provided",
 		},
 	},

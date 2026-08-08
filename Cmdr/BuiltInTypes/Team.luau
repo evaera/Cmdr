@@ -1,53 +1,49 @@
-local Teams = game:GetService("Teams")
-local Util = require(script.Parent.Parent.Shared.Util)
+const Teams = game:GetService("Teams")
 
-local teamType = {
-	Transform = function(text)
-		local findTeam = Util.MakeFuzzyFinder(Teams:GetTeams())
+return function(registry: any)
+	const teamType = {
+		Transform = function(text: string): { Team }
+			const findTeam = registry.Cmdr.Util.MakeFuzzyFinder(Teams:GetTeams())
+			return findTeam(text)
+		end,
 
-		return findTeam(text)
-	end,
+		Validate = function(teams: { Team }): (boolean, string?)
+			return #teams > 0, "No team with that name could be found."
+		end,
 
-	Validate = function(teams)
-		return #teams > 0, "No team with that name could be found."
-	end,
+		Autocomplete = function(teams: { Team }): { string }
+			return registry.Cmdr.Util.GetNames(teams)
+		end,
 
-	Autocomplete = function(teams)
-		return Util.GetNames(teams)
-	end,
+		Parse = function(teams: { Team }): Team?
+			return teams[1]
+		end,
+	}
 
-	Parse = function(teams)
-		return teams[1]
-	end,
-}
+	const teamPlayersType = {
+		Listable = true,
+		Transform = teamType.Transform,
+		Validate = teamType.Validate,
+		Autocomplete = teamType.Autocomplete,
+		Parse = function(teams: { Team }): { Player }
+			return teams[1]:GetPlayers()
+		end,
+	}
 
-local teamPlayersType = {
-	Listable = true,
-	Transform = teamType.Transform,
-	Validate = teamType.Validate,
-	Autocomplete = teamType.Autocomplete,
+	const teamColorType = {
+		Transform = teamType.Transform,
+		Validate = teamType.Validate,
+		Autocomplete = teamType.Autocomplete,
+		Parse = function(teams: { Team }): BrickColor?
+			return teams[1].TeamColor
+		end,
+	}
 
-	Parse = function(teams)
-		return teams[1]:GetPlayers()
-	end,
-}
+	registry:RegisterType("team", teamType)
+	registry:RegisterType("teams", registry.Cmdr.Util.MakeListableType(teamType))
 
-local teamColorType = {
-	Transform = teamType.Transform,
-	Validate = teamType.Validate,
-	Autocomplete = teamType.Autocomplete,
+	registry:RegisterType("teamPlayers", teamPlayersType)
 
-	Parse = function(teams)
-		return teams[1].TeamColor
-	end,
-}
-
-return function(cmdr)
-	cmdr:RegisterType("team", teamType)
-	cmdr:RegisterType("teams", Util.MakeListableType(teamType))
-
-	cmdr:RegisterType("teamPlayers", teamPlayersType)
-
-	cmdr:RegisterType("teamColor", teamColorType)
-	cmdr:RegisterType("teamColors", Util.MakeListableType(teamColorType))
+	registry:RegisterType("teamColor", teamColorType)
+	registry:RegisterType("teamColors", registry.Cmdr.Util.MakeListableType(teamColorType))
 end

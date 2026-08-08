@@ -6,12 +6,12 @@ return {
 		{
 			Type = "playerIds",
 			Name = "Players",
-			Description = "The players to unban (max 50)",
+			Description = "The players to unban (max 50).",
 		},
 		{
 			Type = "boolean",
-			Name = "Apply to Universe",
-			Description = "Remove the ban across all places in this experience",
+			Name = "Apply to universe",
+			Description = "Remove the ban across all places in this experience.",
 			Default = true,
 		},
 	},

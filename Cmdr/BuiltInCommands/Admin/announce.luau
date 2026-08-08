@@ -7,7 +7,7 @@ return {
 		{
 			Type = "string",
 			Name = "Text",
-			Description = "The announcement text",
+			Description = "The announcement text.",
 		},
 	},
 }

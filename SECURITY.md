@@ -31,8 +31,8 @@ You'll need to contact one of our maintainers:
 | [@autonordev](https://github.com/autonordev) | [@elenr](https://discord.com/users/340861504255557634)        | `340861504255557634` |
 | [@wilyt1](https://github.com/wilyt1)         | [@countyl1mits](https://discord.com/users/235542521894273024) | `235542521894273024` |
 
-> If one of the usernames above have changed and are no longer accurate, or you want to double check the usernames are correct, you can use the https://discord.id/ lookup service.
-
+> If one of the usernames above have changed and are no longer accurate, or you want to double check the usernames are correct, you can use the <https://discord.id/> lookup service.
+>
 Please approach a maintainer, ideally privately but if not then publicly, and inform them that you need to report a Cmdr security bug. We'll respond with further instructions so you can deliver your report to us.
 
 The [Cmdr Discord server](https://discord.gg/xFzPVg5WXm) is a good place to start, and has official channels for Cmdr. You could also try the [Roblox OSS Community](https://discord.gg/Qm3JNyEc32) or other Roblox development related servers.

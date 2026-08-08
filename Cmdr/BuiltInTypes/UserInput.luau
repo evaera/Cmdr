@@ -1,32 +1,32 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-
-local combinedInputEnums = Enum.UserInputType:GetEnumItems()
-
-for _, e in pairs(Enum.KeyCode:GetEnumItems()) do
-	combinedInputEnums[#combinedInputEnums + 1] = e
+const combinedInputEnums: { EnumItem } = {}
+for _, enum: Enum.UserInputType in ipairs(Enum.UserInputType:GetEnumItems()) do
+	combinedInputEnums[#combinedInputEnums + 1] = enum
 end
 
-local userInputType = {
-	Transform = function(text)
-		local findEnum = Util.MakeFuzzyFinder(combinedInputEnums)
+for _, enum: Enum.KeyCode in ipairs(Enum.KeyCode:GetEnumItems()) do
+	combinedInputEnums[#combinedInputEnums + 1] = enum
+end
 
-		return findEnum(text)
-	end,
+return function(registry: any)
+	const userInputType = {
+		Transform = function(text: string): { EnumItem }
+			const findEnum = registry.Cmdr.Util.MakeFuzzyFinder(combinedInputEnums)
+			return findEnum(text)
+		end,
 
-	Validate = function(enums)
-		return #enums > 0
-	end,
+		Validate = function(enums: { EnumItem }): (boolean, string?)
+			return #enums > 0
+		end,
 
-	Autocomplete = function(enums)
-		return Util.GetNames(enums)
-	end,
+		Autocomplete = function(enums: { EnumItem }): { string }
+			return registry.Cmdr.Util.GetNames(enums)
+		end,
 
-	Parse = function(enums)
-		return enums[1]
-	end,
-}
+		Parse = function(enums: { EnumItem }): EnumItem?
+			return enums[1]
+		end,
+	}
 
-return function(cmdr)
-	cmdr:RegisterType("userInput", userInputType)
-	cmdr:RegisterType("userInputs", Util.MakeListableType(userInputType))
+	registry:RegisterType("userInput", userInputType)
+	registry:RegisterType("userInputs", registry.Cmdr.Util.MakeListableType(userInputType))
 end

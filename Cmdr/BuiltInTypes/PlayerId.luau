@@ -1,65 +1,66 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-local Players = game:GetService("Players")
+const Players = game:GetService("Players")
 
-local nameCache = {}
-local function getUserId(name)
-	if nameCache[name] then
-		return nameCache[name]
-	elseif Players:FindFirstChild(name) then
-		nameCache[name] = Players[name].UserId
-		return Players[name].UserId
+const nameCache: { [string]: number } = {}
+
+const function getUserId(username: string): number?
+	username = username:match("%(@([^%)]+)%)") or username
+
+	if nameCache[username] then
+		return nameCache[username]
+	elseif Players:FindFirstChild(username) then
+		const player = Players[username] :: Player
+
+		nameCache[username] = player.UserId
+		return player.UserId
 	else
-		local ok, userid = pcall(Players.GetUserIdFromNameAsync, Players, name)
+		const success, userid = pcall(Players.GetUserIdFromNameAsync, Players, username)
 
-		if not ok then
+		if not success then
 			return nil
 		end
 
-		nameCache[name] = userid
+		nameCache[username] = userid
 		return userid
 	end
 end
 
-local playerIdType = {
-	DisplayName = "Full Player Name",
-	Prefixes = "# positiveInteger",
+return function(registry: any)
+	const playerIdType = {
+		DisplayName = "Full Player Name",
+		Prefixes = "# positiveInteger",
 
-	Transform = function(text)
-		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
+		Transform = function(text: string): (string, { Player })
+			const findPlayer = registry.Cmdr.Util.MakeFuzzyFinder(Players:GetPlayers())
+			return text, findPlayer(text)
+		end,
 
-		return text, findPlayer(text)
-	end,
+		ValidateOnce = function(text: string): (boolean, string?)
+			return getUserId(text) ~= nil, "No player with that name could be found."
+		end,
 
-	ValidateOnce = function(text)
-		return getUserId(text) ~= nil, "No player with that name could be found."
-	end,
+		Autocomplete = function(_, players: { Player }): { string }
+			return registry.Cmdr.Util.GetNames(players)
+		end,
 
-	Autocomplete = function(_, players)
-		return Util.GetNames(players)
-	end,
+		Parse = function(text: string): number?
+			return getUserId(text)
+		end,
 
-	Parse = function(text)
-		return getUserId(text)
-	end,
+		Default = function(player: Player): string
+			return player.Name
+		end,
 
-	Default = function(player)
-		return player.Name
-	end,
+		ArgumentOperatorAliases = {
+			me = ".",
+			all = "*",
+			others = "**",
+			random = "?",
+		},
+	}
 
-	ArgumentOperatorAliases = {
-		me = ".",
-		all = "*",
-		others = "**",
-		random = "?",
-	},
-}
-
-return function(cmdr)
-	cmdr:RegisterType("playerId", playerIdType)
-	cmdr:RegisterType(
+	registry:RegisterType("playerId", playerIdType)
+	registry:RegisterType(
 		"playerIds",
-		Util.MakeListableType(playerIdType, {
-			Prefixes = "# positiveIntegers",
-		})
+		registry.Cmdr.Util.MakeListableType(playerIdType, { Prefixes = "# positiveIntegers" })
 	)
 end

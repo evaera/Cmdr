@@ -1,6 +1,6 @@
-local TextService = game:GetService("TextService")
+const TextService = game:GetService("TextService")
 
-return function(context, players, reason)
+return function(context: any, players: { Player }, reason: string): string
 	if reason:match("^%s*$") then
 		reason = "No reason provided"
 	end
@@ -8,7 +8,7 @@ return function(context, players, reason)
 	local filterSuccess, filteredReason = nil, reason
 	if reason ~= "No reason provided" then
 		filterSuccess, filteredReason = pcall(function()
-			local filterResult =
+			const filterResult =
 				TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
 			return filterResult:GetNonChatStringForBroadcastAsync()
 		end)
@@ -18,7 +18,7 @@ return function(context, players, reason)
 		end
 	end
 
-	for _, player in pairs(players) do
+	for _, player in ipairs(players) do
 		player:Kick(filteredReason)
 	end
 

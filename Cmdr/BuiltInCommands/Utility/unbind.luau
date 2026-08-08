@@ -1,18 +1,17 @@
 return {
 	Name = "unbind",
-	Aliases = {},
-	Description = "Unbinds an input previously bound with Bind",
+	Description = "Unbinds an input previously bound with Bind.",
 	Group = "DefaultUtil",
 	Args = {
 		{
-			Type = "userInput ! bindableResource @ player",
+			Type = "userInput @ player",
 			Name = "Input/Key",
 			Description = "The key or input type you'd like to unbind.",
 		},
 	},
 
-	ClientRun = function(context, bind)
-		local binds = context:GetStore("CMDR_Binds")
+	ClientRun = function(context: any, bind: Enum.UserInputType | Enum.KeyCode | Player): string
+		const binds = context:GetStore("CMDR_Binds")
 
 		if binds[bind] then
 			if typeof(binds[bind]) == "RBXScriptConnection" then

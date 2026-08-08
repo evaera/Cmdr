@@ -1,20 +1,18 @@
-local Util = require(script.Parent.Parent.Shared.Util)
+return function(registry: any)
+	const urlType = {
+		Validate = function(text: string): (boolean, string?)
+			if text:match("^https?://.+$") then
+				return true
+			end
 
-local storedKeyType = {
-	Validate = function(text)
-		if text:match("^https?://.+$") then
-			return true
-		end
+			return false, "URLs must begin with http:// or https://"
+		end,
 
-		return false, "URLs must begin with http:// or https://"
-	end,
+		Parse = function(text: string): string
+			return text
+		end,
+	}
 
-	Parse = function(text)
-		return text
-	end,
-}
-
-return function(cmdr)
-	cmdr:RegisterType("url", storedKeyType)
-	cmdr:RegisterType("urls", Util.MakeListableType(storedKeyType))
+	registry:RegisterType("url", urlType)
+	registry:RegisterType("urls", registry.Cmdr.Util.MakeListableType(urlType))
 end

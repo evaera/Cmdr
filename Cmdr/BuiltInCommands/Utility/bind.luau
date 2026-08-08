@@ -1,24 +1,25 @@
-local Players = game:GetService("Players")
-local TextChatService = game:GetService("TextChatService")
-local UserInputService = game:GetService("UserInputService")
+const Players = game:GetService("Players")
+const TextChatService = game:GetService("TextChatService")
+const UserInputService = game:GetService("UserInputService")
 
 local hasHelperRan = false
-local function runBindHelper(Cmdr)
+
+const function runBindHelper(Cmdr)
 	Players.PlayerRemoving:Connect(function(Player)
-		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
 		if binds[Player] then
 			binds[Player] = nil
 		end
 	end)
 
 	TextChatService.MessageReceived:Connect(function(message: TextChatMessage)
-		local senderId = message.TextSource and message.TextSource.UserId
-		local player = senderId and Players:GetPlayerByUserId(senderId)
+		const senderId = message.TextSource and message.TextSource.UserId
+		const player = senderId and Players:GetPlayerByUserId(senderId)
 		if not player then
 			return
 		end
 
-		local binds = Cmdr.Registry:GetStore("CMDR_Binds")
+		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
 		if binds[player] then
 			binds[player](message)
 		end
@@ -29,34 +30,38 @@ end
 
 return {
 	Name = "bind",
-	Aliases = {},
 	Description = "Binds a command string to a key or mouse input.",
 	Group = "DefaultUtil",
 	Args = {
 		{
-			Type = "userInput ! bindableResource @ player",
+			Type = "userInput @ player",
 			Name = "Input",
 			Description = "The key or input type you'd like to bind the command to.",
 		},
 		{
 			Type = "command",
 			Name = "Command",
-			Description = "The command you want to run on this input",
+			Description = "The command you want to run on this input.",
 		},
 		{
 			Type = "string",
 			Name = "Arguments",
-			Description = "The arguments for the command",
+			Description = "The arguments for the command.",
 			Default = "",
 		},
 	},
 
-	ClientRun = function(context, bind, command, arguments)
+	ClientRun = function(
+		context: any,
+		bind: Enum.UserInputType | Enum.KeyCode | Player,
+		command: string,
+		arguments: string
+	): string
 		if not hasHelperRan then
 			runBindHelper(context.Cmdr)
 		end
 
-		local binds = context:GetStore("CMDR_Binds")
+		const binds = context:GetStore("CMDR_Binds")
 		if binds[bind] then
 			if typeof(binds[bind]) == "RBXScriptConnection" then
 				binds[bind]:Disconnect()
@@ -65,9 +70,9 @@ return {
 			binds[bind] = nil
 		end
 
-		command = command .. " " .. arguments
+		command = `{command} {arguments}`
 
-		local bindType = context:GetArgument(1).Type.Name
+		const bindType = context:GetArgument(1).Type.Name
 		if bindType == "userInput" then
 			binds[bind] = UserInputService.InputBegan:Connect(function(input, gameProcessed)
 				if gameProcessed then
@@ -82,20 +87,15 @@ return {
 					)
 				end
 			end)
-		elseif bindType == "bindableResource" then
-			return "Unimplemented..."
 		elseif bindType == "player" then
 			binds[bind] = function(message: TextChatMessage)
-				local args = { message.Text }
-				local chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
+				const args = { message.Text }
+				const chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
 					context.Dispatcher,
 					context.Cmdr.Util.SubstituteArgs(command, args)
 				)
-
-				context:Reply(
-					("%s $ %s : %s"):format(bind.Name, chatCommand, context.Dispatcher:EvaluateAndRun(chatCommand)),
-					Color3.fromRGB(244, 92, 66)
-				)
+				const result = context.Dispatcher:EvaluateAndRun(chatCommand)
+				context:Reply(`{bind.Name} $ {chatCommand} : {result}`, Color3.fromRGB(244, 92, 66))
 			end
 		end
 

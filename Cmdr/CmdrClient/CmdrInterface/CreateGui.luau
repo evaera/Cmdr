@@ -1,21 +1,21 @@
-local Players = game:GetService("Players")
-local StarterGui = game:GetService("StarterGui")
+const Players = game:GetService("Players")
+const StarterGui = game:GetService("StarterGui")
 
-local Player = Players.LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
+const Player = Players.LocalPlayer
+const PlayerGui = Player:WaitForChild("PlayerGui")
 
-return function()
+return function(): ScreenGui
 	if StarterGui:FindFirstChild("Cmdr") then
 		return PlayerGui:WaitForChild("Cmdr")
 	end
 
-	local Cmdr = Instance.new("ScreenGui")
+	const Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
 	Cmdr.Name = "Cmdr"
 	Cmdr.ResetOnSpawn = false
 	Cmdr.AutoLocalize = false
 
-	local Frame = Instance.new("ScrollingFrame")
+	const Frame = Instance.new("ScrollingFrame")
 	Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
 	Frame.BackgroundTransparency = 0.4
 	Frame.BorderSizePixel = 0
@@ -30,7 +30,7 @@ return function()
 	Frame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Frame.Parent = Cmdr
 
-	local Autocomplete = Instance.new("ScrollingFrame")
+	const Autocomplete = Instance.new("ScrollingFrame")
 	Autocomplete.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 	Autocomplete.BackgroundTransparency = 0.5
 	Autocomplete.BorderSizePixel = 0
@@ -45,11 +45,11 @@ return function()
 	Autocomplete.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	Autocomplete.Parent = Cmdr
 
-	local UIListLayout = Instance.new("UIListLayout")
+	const UIListLayout = Instance.new("UIListLayout")
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Parent = Frame
 
-	local Line = Instance.new("TextBox")
+	const Line = Instance.new("TextBox")
 	Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Line.BackgroundTransparency = 1
 	Line.Font = Enum.Font.Code
@@ -63,25 +63,25 @@ return function()
 	Line.ClearTextOnFocus = false
 	Line.Parent = Frame
 
-	local UIPadding = Instance.new("UIPadding")
+	const UIPadding = Instance.new("UIPadding")
 	UIPadding.PaddingBottom = UDim.new(0, 10)
 	UIPadding.PaddingLeft = UDim.new(0, 10)
 	UIPadding.PaddingRight = UDim.new(0, 10)
 	UIPadding.PaddingTop = UDim.new(0, 10)
 	UIPadding.Parent = Frame
 
-	local Entry = Instance.new("Frame")
+	const Entry = Instance.new("Frame")
 	Entry.BackgroundTransparency = 1
 	Entry.LayoutOrder = 999999999
 	Entry.Name = "Entry"
 	Entry.Size = UDim2.new(1, 0, 0, 20)
 	Entry.Parent = Frame
 
-	local UIListLayout2 = Instance.new("UIListLayout")
+	const UIListLayout2 = Instance.new("UIListLayout")
 	UIListLayout2.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout2.Parent = Autocomplete
 
-	local Title = Instance.new("Frame")
+	const Title = Instance.new("Frame")
 	Title.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 	Title.BackgroundTransparency = 0.2
 	Title.BorderSizePixel = 0
@@ -90,7 +90,7 @@ return function()
 	Title.Size = UDim2.new(1, 0, 0, 40)
 	Title.Parent = Autocomplete
 
-	local Description = Instance.new("Frame")
+	const Description = Instance.new("Frame")
 	Description.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 	Description.BackgroundTransparency = 0.2
 	Description.BorderSizePixel = 0
@@ -99,7 +99,7 @@ return function()
 	Description.Size = UDim2.new(1, 0, 0, 20)
 	Description.Parent = Autocomplete
 
-	local TextButton = Instance.new("TextButton")
+	const TextButton = Instance.new("TextButton")
 	TextButton.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 	TextButton.BackgroundTransparency = 0.5
 	TextButton.BorderSizePixel = 0
@@ -111,13 +111,13 @@ return function()
 	TextButton.TextXAlignment = Enum.TextXAlignment.Left
 	TextButton.Parent = Autocomplete
 
-	local UIListLayout3 = Instance.new("UIListLayout")
+	const UIListLayout3 = Instance.new("UIListLayout")
 	UIListLayout3.FillDirection = Enum.FillDirection.Horizontal
 	UIListLayout3.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout3.Padding = UDim.new(0, 7)
 	UIListLayout3.Parent = Entry
 
-	local TextBox = Instance.new("TextBox")
+	const TextBox = Instance.new("TextBox")
 	TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TextBox.BackgroundTransparency = 1
 	TextBox.ClearTextOnFocus = false
@@ -132,7 +132,7 @@ return function()
 	TextBox.Selectable = false
 	TextBox.Parent = Entry
 
-	local TextLabel = Instance.new("TextLabel")
+	const TextLabel = Instance.new("TextLabel")
 	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TextLabel.BackgroundTransparency = 1
 	TextLabel.Font = Enum.Font.Code
@@ -144,7 +144,7 @@ return function()
 	TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 	TextLabel.Parent = Entry
 
-	local Field = Instance.new("TextLabel")
+	const Field = Instance.new("TextLabel")
 	Field.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Field.BackgroundTransparency = 1
 	Field.Font = Enum.Font.SourceSansBold
@@ -156,11 +156,11 @@ return function()
 	Field.TextXAlignment = Enum.TextXAlignment.Left
 	Field.Parent = Title
 
-	local UIPadding2 = Instance.new("UIPadding")
+	const UIPadding2 = Instance.new("UIPadding")
 	UIPadding2.PaddingLeft = UDim.new(0, 10)
 	UIPadding2.Parent = Title
 
-	local Label = Instance.new("TextLabel")
+	const Label = Instance.new("TextLabel")
 	Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Label.BackgroundTransparency = 1
 	Label.Font = Enum.Font.SourceSansLight
@@ -174,13 +174,13 @@ return function()
 	Label.TextYAlignment = Enum.TextYAlignment.Top
 	Label.Parent = Description
 
-	local UIPadding3 = Instance.new("UIPadding")
+	const UIPadding3 = Instance.new("UIPadding")
 	UIPadding3.PaddingBottom = UDim.new(0, 10)
 	UIPadding3.PaddingLeft = UDim.new(0, 10)
 	UIPadding3.PaddingRight = UDim.new(0, 10)
 	UIPadding3.Parent = Description
 
-	local Typed = Instance.new("TextLabel")
+	const Typed = Instance.new("TextLabel")
 	Typed.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Typed.BackgroundTransparency = 1
 	Typed.Font = Enum.Font.Code
@@ -192,11 +192,11 @@ return function()
 	Typed.TextXAlignment = Enum.TextXAlignment.Left
 	Typed.Parent = TextButton
 
-	local UIPadding4 = Instance.new("UIPadding")
+	const UIPadding4 = Instance.new("UIPadding")
 	UIPadding4.PaddingLeft = UDim.new(0, 10)
 	UIPadding4.Parent = TextButton
 
-	local Suggest = Instance.new("TextLabel")
+	const Suggest = Instance.new("TextLabel")
 	Suggest.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Suggest.BackgroundTransparency = 1
 	Suggest.Font = Enum.Font.Code
@@ -208,7 +208,7 @@ return function()
 	Suggest.TextXAlignment = Enum.TextXAlignment.Left
 	Suggest.Parent = TextButton
 
-	local Type = Instance.new("TextLabel")
+	const Type = Instance.new("TextLabel")
 	Type.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Type.BackgroundTransparency = 1
 	Type.BorderColor3 = Color3.fromRGB(255, 153, 153)

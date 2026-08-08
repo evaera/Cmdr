@@ -1,6 +1,4 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-
-local unitTable = {
+const UNIT_SECONDS: { [string]: number } = {
 	Years = 31556926,
 	Months = 2629744,
 	Weeks = 604800,
@@ -10,105 +8,104 @@ local unitTable = {
 	Seconds = 1,
 }
 
-local searchKeyTable = {}
-for key, _ in pairs(unitTable) do
-	table.insert(searchKeyTable, key)
-end
-local unitFinder = Util.MakeFuzzyFinder(searchKeyTable)
-
-local function stringToSecondDuration(stringDuration)
-	-- The duration cannot be null or an empty string.
-	if stringDuration == nil or stringDuration == "" then
-		return nil
-	end
-	-- Allow 0 by itself (without a unit) to indicate 0 seconds
-	local durationNum = tonumber(stringDuration)
-	if durationNum and durationNum == 0 then
-		return 0, 0, true
-	end
-	-- The duration must end with a unit,
-	-- if it doesn't then return true as the fourth value to indicate the need to offer autocomplete for units.
-	local endOnlyString = stringDuration:gsub("-?%d+%a+", "")
-	local endNumber = endOnlyString:match("-?%d+")
-	if endNumber then
-		return nil, tonumber(endNumber), true
-	end
-	local seconds = nil
-	local rawNum, rawUnit
-	for rawComponent in stringDuration:gmatch("-?%d+%a+") do
-		rawNum, rawUnit = rawComponent:match("(-?%d+)(%a+)")
-		local unitNames = unitFinder(rawUnit, false, true)
-		-- There were no matching units, it's invalid. Return the parsed number to be used for autocomplete
-		if #unitNames == 0 then
-			return nil, tonumber(rawNum)
-		end
-		if seconds == nil then
-			seconds = 0
-		end
-		-- While it was already defaulting to use minutes when using just "m", this does it without worrying
-		-- about any consistency between list ordering.
-		seconds = seconds + (rawUnit:lower() == "m" and 60 or unitTable[unitNames[1]]) * tonumber(rawNum)
-	end
-	-- If no durations were provided, return nil.
-	if seconds == nil then
-		return nil
-	else
-		return seconds, tonumber(rawNum)
-	end
+const unitNames: { string } = {}
+for unitName: string in pairs(UNIT_SECONDS) do
+	unitNames[#unitNames + 1] = unitName
 end
 
-local function mapUnits(units, rawText, lastNumber, subStart)
-	subStart = subStart or 1
-	local returnTable = {}
-	for i, unit in pairs(units) do
-		if lastNumber == 1 then
-			returnTable[i] = rawText .. unit:sub(subStart, #unit - 1)
-		else
-			returnTable[i] = rawText .. unit:sub(subStart)
-		end
+const function mapUnits(units: { string }, rawText: string, lastNumber: number?, startIndex: number?): { string }
+	const start: number = startIndex or 1
+	const results: { string } = {}
+
+	for index: number, unit: string in ipairs(units) do
+		results[index] = `{rawText}{if lastNumber == 1 then unit:sub(start, #unit - 1) else unit:sub(start)}`
 	end
-	return returnTable
+
+	return results
 end
 
-local durationType = {
-	Transform = function(text)
-		return text, stringToSecondDuration(text)
-	end,
+return function(registry: any)
+	const unitFinder = registry.Cmdr.Util.MakeFuzzyFinder(unitNames)
+	const function stringToSecondDuration(text: string): (number?, number?, boolean?)
+		if text == nil or text == "" then
+			return nil
+		end
 
-	Validate = function(_, duration)
-		return duration ~= nil
-	end,
+		const number = tonumber(text)
+		if number == 0 then
+			return 0, 0, true
+		end
 
-	Autocomplete = function(rawText, duration, lastNumber, isUnitMissing, matchedUnits)
-		local returnTable = {}
-		if isUnitMissing or matchedUnits then
-			local unitsTable = isUnitMissing == true and unitFinder("", false, true) or matchedUnits
-			if isUnitMissing == true then
-				-- Concat the entire unit name to existing text.
-				returnTable = mapUnits(unitsTable, rawText, lastNumber)
-			else
-				-- Concat the rest of the unit based on what already exists of the unit name.
-				local existingUnitLength = rawText:match("^.*(%a+)$"):len()
-				returnTable = mapUnits(unitsTable, rawText, existingUnitLength + 1)
+		const numberOnly = text:gsub("-?%d+%a+", "")
+		const missingUnit = numberOnly:match("-?%d+")
+
+		if missingUnit then
+			return nil, tonumber(missingUnit), true
+		end
+
+		local seconds: number = 0
+		local lastNumber: number?
+
+		for component: string in text:gmatch("-?%d+%a+") do
+			const rawNumber, rawUnit = component:match("(-?%d+)(%a+)")
+			if rawNumber == nil or rawUnit == nil then
+				continue
 			end
-		elseif duration ~= nil then
-			local endingUnit = rawText:match("^.*-?%d+(%a+)%s?$")
-			-- Assume there is a singular match at this point
-			local fuzzyUnits = unitFinder(endingUnit, false, true)
-			-- List all possible fuzzy matches. This is for the Minutes/Months ambiguity case.
-			returnTable = mapUnits(fuzzyUnits, rawText, lastNumber, #endingUnit + 1)
-			-- Sort alphabetically in the Minutes/Months case, so Minutes are displayed on top.
-			table.sort(returnTable)
+
+			lastNumber = tonumber(rawNumber)
+
+			const matches: { string } = unitFinder(rawUnit, false, true)
+
+			if #matches == 0 then
+				return nil, lastNumber
+			end
+
+			const unit: number = if rawUnit:lower() == "m" then 60 else UNIT_SECONDS[matches[1]]
+			seconds += unit * (lastNumber :: number)
 		end
-		return returnTable
-	end,
 
-	Parse = function(_, duration)
-		return duration
-	end,
-}
+		if seconds == 0 then
+			return nil
+		end
 
-return function(registry)
+		return seconds, lastNumber
+	end
+
+	const durationType = {
+		Transform = function(text: string): (string, number?, number?, boolean?)
+			return text, stringToSecondDuration(text)
+		end,
+
+		Validate = function(_, duration: number?): (boolean, string?)
+			return duration ~= nil, "Invalid duration format. Example: 1d6h, 30m, 10s."
+		end,
+
+		Autocomplete = function(
+			rawText: string,
+			duration: number?,
+			lastNumber: number?,
+			missingUnit: boolean?
+		): { string }
+			local results: { string } = {}
+			if missingUnit then
+				const units: { string } = unitFinder("", false, true)
+				results = mapUnits(units, rawText, lastNumber)
+			elseif duration ~= nil then
+				const endingUnit = rawText:match("^.*-?%d+(%a+)%s?$")
+				const matches: { string } = unitFinder(endingUnit, false, true)
+
+				results = mapUnits(matches, rawText, lastNumber, #endingUnit + 1)
+				table.sort(results)
+			end
+
+			return results
+		end,
+
+		Parse = function(_, duration: number): number
+			return duration
+		end,
+	}
+
 	registry:RegisterType("duration", durationType)
-	registry:RegisterType("durations", Util.MakeListableType(durationType))
+	registry:RegisterType("durations", registry.Cmdr.Util.MakeListableType(durationType))
 end

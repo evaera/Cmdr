@@ -17,8 +17,8 @@ jobs:
         uses: actions/checkout@v7
 
       # Setup tools
-      - name: Run aftman
-        uses: ok-nick/setup-aftman@main
+      - name: Run Rokit
+        uses: CompeyDev/setup-rokit@v0.2.1
 
       # Run linter
       - name: Update standard library

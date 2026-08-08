@@ -1,9 +1,9 @@
-local Players = game:GetService("Players")
+const Players = game:GetService("Players")
 
 return {
 	Name = "position",
 	Aliases = { "pos" },
-	Description = "Returns Vector3 position of you or other players. Empty string is the player has no character.",
+	Description = "Returns the Vector3 position of you or another player.",
 	Group = "DefaultDebug",
 	Args = {
 		{
@@ -14,11 +14,10 @@ return {
 		},
 	},
 
-	ClientRun = function(_, player)
-		local character = player.Character
-
+	ClientRun = function(_, player: Player): string
+		const character = player.Character
 		if not character or not character:FindFirstChild("HumanoidRootPart") then
-			return ""
+			return "This player doesn't have a character."
 		end
 
 		return tostring(character.HumanoidRootPart.Position):gsub("%s", "")

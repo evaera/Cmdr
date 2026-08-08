@@ -10,11 +10,11 @@ return {
 		{
 			Type = "string",
 			Name = "Command",
-			Description = "The command string to run",
+			Description = "The command string to run.",
 		},
 	},
 
-	ClientRun = function(context, commandString)
+	ClientRun = function(context: any, commandString: string): string
 		return context.Cmdr.Util.RunCommandString(context.Dispatcher, commandString)
 	end,
 }

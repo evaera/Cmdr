@@ -1,26 +1,23 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-
-return function(cmdr)
-	local typeType = {
-		Transform = function(text)
-			local findCommand = Util.MakeFuzzyFinder(cmdr:GetTypeNames())
-
-			return findCommand(text)
+return function(registry: any)
+	const typeType = {
+		Transform = function(text: string): { string }
+			const findType = registry.Cmdr.Util.MakeFuzzyFinder(registry:GetTypeNames())
+			return findType(text)
 		end,
 
-		Validate = function(commands)
-			return #commands > 0, "No type with that name could be found."
+		Validate = function(types: { string }): (boolean, string?)
+			return #types > 0, "No type with that name could be found."
 		end,
 
-		Autocomplete = function(commands)
-			return commands
+		Autocomplete = function(types: { string }): { string }
+			return types
 		end,
 
-		Parse = function(commands)
-			return commands[1]
+		Parse = function(types: { string }): string?
+			return types[1]
 		end,
 	}
 
-	cmdr:RegisterType("type", typeType)
-	cmdr:RegisterType("types", Util.MakeListableType(typeType))
+	registry:RegisterType("type", typeType)
+	registry:RegisterType("types", registry.Cmdr.Util.MakeListableType(typeType))
 end

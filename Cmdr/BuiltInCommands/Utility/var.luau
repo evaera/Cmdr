@@ -1,10 +1,9 @@
 return {
 	Name = "var",
-	Aliases = {},
 	Description = "Gets a stored variable.",
 	Group = "DefaultUtil",
 	AutoExec = {
-		'alias "init-edit|Edit your initialization script" edit ${var init} \\\\\n && var= init ||',
+		'alias "init-edit|Edit your initialization script." edit ${var init} \\\\\n && var= init ||',
 		'alias "init-run|Re-runs the initialization script manually." run-lines ${var init}',
 		"init-run",
 	},
@@ -16,7 +15,7 @@ return {
 		},
 	},
 
-	ClientRun = function(context, key)
+	ClientRun = function(context: any, key: any)
 		context:GetStore("vars_used")[key] = true
 	end,
 }

@@ -1,7 +1,6 @@
 return {
 	Name = "json-array-decode",
-	Aliases = {},
-	Description = "Decodes a JSON Array into a comma-separated list",
+	Description = "Decodes a JSON Array into a comma-separated list.",
 	Group = "DefaultUtil",
 	Args = {
 		{
@@ -11,11 +10,16 @@ return {
 		},
 	},
 
-	ClientRun = function(_, value)
+	ClientRun = function(_, value: any): string
 		if type(value) ~= "table" then
-			value = { value }
+			return tostring(value)
 		end
 
-		return table.concat(value, ",")
+		const stringValues = {}
+		for index, item in ipairs(value) do
+			stringValues[index] = tostring(item)
+		end
+
+		return table.concat(stringValues, ",")
 	end,
 }

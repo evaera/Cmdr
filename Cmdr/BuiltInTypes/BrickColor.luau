@@ -1,6 +1,4 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-
-local brickColorNames = {
+const BRICK_COLOR_NAMES = {
 	"White",
 	"Grey",
 	"Light yellow",
@@ -211,51 +209,50 @@ local brickColorNames = {
 	"Hot pink",
 }
 
-local brickColorFinder = Util.MakeFuzzyFinder(brickColorNames)
+return function(registry: any)
+	const brickColorFinder = registry.Cmdr.Util.MakeFuzzyFinder(BRICK_COLOR_NAMES)
+	const brickColorType = {
+		Prefixes = "% teamColor",
 
-local brickColorType = {
-	Prefixes = "% teamColor",
+		Transform = function(text: string): { [number]: BrickColor }
+			const brickColors = {}
 
-	Transform = function(text)
-		local brickColors = {}
-		for i, name in pairs(brickColorFinder(text)) do
-			brickColors[i] = BrickColor.new(name)
-		end
-		return brickColors
-	end,
+			for index: number, name: string in pairs(brickColorFinder(text)) do
+				brickColors[index] = BrickColor.new(name :: any) --< BrickColor.new gets overloaded
+			end
 
-	Validate = function(brickColors)
-		return #brickColors > 0, "No valid brick colors with that name could be found."
-	end,
+			return brickColors
+		end,
 
-	Autocomplete = function(brickColors)
-		return Util.GetNames(brickColors)
-	end,
+		Validate = function(brickColors: { [number]: BrickColor }): (boolean, string?)
+			return #brickColors > 0, "No valid brick colors with that name could be found."
+		end,
 
-	Parse = function(brickColors)
-		return brickColors[1]
-	end,
-}
+		Autocomplete = function(brickColors: { [number]: BrickColor }): { string }
+			return registry.Cmdr.Util.GetNames(brickColors)
+		end,
 
-local brickColor3Type = {
-	Transform = brickColorType.Transform,
-	Validate = brickColorType.Validate,
-	Autocomplete = brickColorType.Autocomplete,
+		Parse = function(brickColors: { [number]: BrickColor }): BrickColor
+			return brickColors[1]
+		end,
+	}
 
-	Parse = function(brickColors)
-		return brickColors[1].Color
-	end,
-}
+	const brickColor3Type = {
+		Transform = brickColorType.Transform,
+		Validate = brickColorType.Validate,
+		Autocomplete = brickColorType.Autocomplete,
 
-return function(registry)
+		Parse = function(brickColors: { [number]: BrickColor }): Color3
+			return brickColors[1].Color
+		end,
+	}
+
 	registry:RegisterType("brickColor", brickColorType)
 	registry:RegisterType(
 		"brickColors",
-		Util.MakeListableType(brickColorType, {
-			Prefixes = "% teamColors",
-		})
+		registry.Cmdr.Util.MakeListableType(brickColorType, { Prefixes = "% teamColors" })
 	)
 
 	registry:RegisterType("brickColor3", brickColor3Type)
-	registry:RegisterType("brickColor3s", Util.MakeListableType(brickColor3Type))
+	registry:RegisterType("brickColor3s", registry.Cmdr.Util.MakeListableType(brickColor3Type))
 end

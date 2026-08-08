@@ -5,4 +5,3 @@ Please **replace this sentence** with the details of your pull request; make sur
 - [ ] I declare that this contribution was created in whole or in part by me.
 - [ ] I declare that I have the right to submit this contribution under the terms of this repository's license and declarations.
 - [ ] I understand and agree that this contribution and a record of it are public, maintained permanently, and may be redistributed under the terms of this repository's license.
-

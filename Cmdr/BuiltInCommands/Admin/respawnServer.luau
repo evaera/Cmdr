@@ -1,8 +1,7 @@
-return function(_, players)
-	for _, player in pairs(players) do
-		if player.Character then
-			player:LoadCharacter()
-		end
+return function(_, players: { Player }): string
+	for _, player in ipairs(players) do
+		task.spawn(pcall, player.LoadCharacterAsync, player)
 	end
-	return ("Respawned %d players."):format(#players)
+
+	return `Respawned {#players} players.`
 end

@@ -1,43 +1,36 @@
-local Util = require(script.Parent.Parent.Shared.Util)
-local Players = game:GetService("Players")
+const Players = game:GetService("Players")
 
-local playerType = {
-	Transform = function(text)
-		local findPlayer = Util.MakeFuzzyFinder(Players:GetPlayers())
+return function(registry: any)
+	const playerType = {
+		Transform = function(text: string): { Player }
+			const findPlayer = registry.Cmdr.Util.MakeFuzzyFinder(Players:GetPlayers())
+			return findPlayer(text)
+		end,
 
-		return findPlayer(text)
-	end,
+		Validate = function(players: { Player }): (boolean, string?)
+			return #players > 0, "No player with that name could be found."
+		end,
 
-	Validate = function(players)
-		return #players > 0, "No player with that name could be found."
-	end,
+		Autocomplete = function(players: { Player }): { string }
+			return registry.Cmdr.Util.GetNames(players)
+		end,
 
-	Autocomplete = function(players)
-		return Util.GetNames(players)
-	end,
+		Parse = function(players: { Player }): Player?
+			return players[1]
+		end,
 
-	Parse = function(players)
-		return players[1]
-	end,
+		Default = function(player: Player): string
+			return player.Name
+		end,
 
-	Default = function(player)
-		return player.Name
-	end,
+		ArgumentOperatorAliases = {
+			me = ".",
+			all = "*",
+			others = "**",
+			random = "?",
+		},
+	}
 
-	ArgumentOperatorAliases = {
-		me = ".",
-		all = "*",
-		others = "**",
-		random = "?",
-	},
-}
-
-return function(cmdr)
-	cmdr:RegisterType("player", playerType)
-	cmdr:RegisterType(
-		"players",
-		Util.MakeListableType(playerType, {
-			Prefixes = "% teamPlayers",
-		})
-	)
+	registry:RegisterType("player", playerType)
+	registry:RegisterType("players", registry.Cmdr.Util.MakeListableType(playerType, { Prefixes = "% teamPlayers" }))
 end

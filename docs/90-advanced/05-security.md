@@ -26,8 +26,8 @@ Because exploiters can manipulate or bypass client code, permissions must **alwa
 - **Server `BeforeRun` hooks:** Serve as the actual security boundary. If a server hook returns an error string, execution stops completely.
 
 ```lua title="Server authorization hook"
-return function(registry)
-	registry:RegisterHook("BeforeRun", function(context)
+return function(registry: any)
+	registry:RegisterHook("BeforeRun", function(context: any): string?
 		-- Restrict admin commands to the place creator
 		if context.Group == "Admin" and context.Executor.UserId ~= game.CreatorId then
 			return "You do not have permission to run this command."
