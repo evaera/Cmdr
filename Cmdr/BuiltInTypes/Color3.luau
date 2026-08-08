@@ -49,7 +49,10 @@ return function(registry: any)
 	}
 
 	registry:RegisterType("color3", color3Type)
-	registry:RegisterType("color3s", registry.Cmdr.Util.MakeListableType(color3Type, { Prefixes = "# hexColor3s ! brickColor3s" }))
+	registry:RegisterType(
+		"color3s",
+		registry.Cmdr.Util.MakeListableType(color3Type, { Prefixes = "# hexColor3s ! brickColor3s" })
+	)
 
 	registry:RegisterType("hexColor3", hexColor3Type)
 	registry:RegisterType("hexColor3s", registry.Cmdr.Util.MakeListableType(hexColor3Type))

@@ -116,7 +116,10 @@ end
 ]=]
 function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?) -> any
 	const containerType = typeof(setOrContainer)
-	assert(containerType == "table" or containerType == "Enum" or containerType == "Instance", "[Cmdr] MakeFuzzyFinder only accepts a table, Enum, or Instance.")
+	assert(
+		containerType == "table" or containerType == "Enum" or containerType == "Instance",
+		"[Cmdr] MakeFuzzyFinder only accepts a table, Enum, or Instance."
+	)
 
 	if containerType == "Enum" then
 		setOrContainer = setOrContainer:GetEnumItems()
@@ -136,7 +139,12 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 			names = setOrContainer
 		else
 			const firstNameType = if firstType == "table" or firstType == "Instance" then typeof(first.Name) else "nil"
-			assert(firstType == "Instance" or firstType == "EnumItem" or (firstType == "table" and firstNameType == "string"), "[Cmdr] MakeFuzzyFinder only accepts tables of instances or strings.")
+			assert(
+				firstType == "Instance"
+					or firstType == "EnumItem"
+					or (firstType == "table" and firstNameType == "string"),
+				"[Cmdr] MakeFuzzyFinder only accepts tables of instances or strings."
+			)
 			names, instances = transformInstanceSet(setOrContainer)
 		end
 	end
@@ -178,8 +186,16 @@ function Util.MakeFuzzyFinder(setOrContainer: any): (string, boolean?, boolean?)
 				return aPriority < bPriority
 			end
 
-			const aString = if typeof(a) == "string" then a elseif typeof(a) == "Instance" then a.Name elseif typeof(a) == "table" and typeof(a.Name) == "string" then a.Name else ""
-			const bString = if typeof(b) == "string" then b elseif typeof(b) == "Instance" then b.Name elseif typeof(b) == "table" and typeof(b.Name) == "string" then b.Name else ""
+			const aString = if typeof(a) == "string"
+				then a
+				elseif typeof(a) == "Instance" then a.Name
+				elseif typeof(a) == "table" and typeof(a.Name) == "string" then a.Name
+				else ""
+			const bString = if typeof(b) == "string"
+				then b
+				elseif typeof(b) == "Instance" then b.Name
+				elseif typeof(b) == "table" and typeof(b.Name) == "string" then b.Name
+				else ""
 
 			return #aString < #bString
 		end)
@@ -611,7 +627,10 @@ function Util.MakeSequenceType(options: {
 	Prefixes: { string }?,
 	Length: number?,
 }): { [string]: any }
-	assert(options.Parse ~= nil or options.Constructor ~= nil, "[Cmdr] MakeSequenceType: Must provide one of: Constructor, Parse")
+	assert(
+		options.Parse ~= nil or options.Constructor ~= nil,
+		"[Cmdr] MakeSequenceType: Must provide one of: Constructor, Parse"
+	)
 	options.TransformEach = options.TransformEach or function(value: string): string
 		return value
 	end
@@ -756,7 +775,10 @@ end
 ]=]
 function Util:_registerDeprecationWarning(name: string, description: string)
 	assert(type(name) == "string" and #name > 0, "[Cmdr] Deprecation warning name must be a string.")
-	assert(type(description) == "string" and #description > 0, "[Cmdr] Deprecation warning description must be a string.")
+	assert(
+		type(description) == "string" and #description > 0,
+		"[Cmdr] Deprecation warning description must be a string."
+	)
 	assert(not self._deprecationWarnings[name], `[Cmdr] Deprecation warning {name} is already registered.`)
 
 	self._deprecationWarnings[name] = {
@@ -787,7 +809,10 @@ end
 	Suppresses a deprecation warning for a method.
 ]=]
 function Util:SuppressDeprecationWarning(names: string | { string })
-	assert(type(names) == "string" or type(names) == "table", "[Cmdr] Deprecation warning name(s) must be a string or an array of strings.")
+	assert(
+		type(names) == "string" or type(names) == "table",
+		"[Cmdr] Deprecation warning name(s) must be a string or an array of strings."
+	)
 	assert(#names > 0, "[Cmdr] Deprecation warning name(s) must not be empty.")
 
 	if type(names) == "string" then

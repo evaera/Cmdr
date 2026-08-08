@@ -1,3 +1,6 @@
+const TRUTHY_VALUES = { "true", "t", "yes", "y", "on", "enable", "enabled", "1", "+" }
+const FALSY_VALUES = { "false", "f", "no", "n", "off", "disable", "disabled", "0", "-" }
+
 type NumberTransformer = {
 	Transform: (text: string) -> number?,
 	Validate: (value: number?) -> (boolean, string?),
@@ -99,8 +102,9 @@ const digitType: NumberTransformer = {
 }
 
 return function(registry: any)
-	const truthy: { [string]: boolean } = registry.Cmdr.Util.MakeDictionary({ "true", "t", "yes", "y", "on", "enable", "enabled", "1", "+" })
-	const falsy: { [string]: boolean } = registry.Cmdr.Util.MakeDictionary({ "false", "f", "no", "n", "off", "disable", "disabled", "0", "-" })
+	const truthy: { [string]: boolean } = registry.Cmdr.Util.MakeDictionary(TRUTHY_VALUES)
+	const falsy: { [string]: boolean } = registry.Cmdr.Util.MakeDictionary(FALSY_VALUES)
+
 	const boolType = {
 		Transform = function(text: string): string
 			return text:lower()

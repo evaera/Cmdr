@@ -1,6 +1,15 @@
 const Players = game:GetService("Players")
 
-return function(_, playerIds: { number }, duration: number, displayReason: string, privateReason: string?, excludeAltAccounts: boolean, applyToUniverse: boolean, applyDeviceBlock: boolean): string
+return function(
+	_,
+	playerIds: { number },
+	duration: number,
+	displayReason: string,
+	privateReason: string?,
+	excludeAltAccounts: boolean,
+	applyToUniverse: boolean,
+	applyDeviceBlock: boolean
+): string
 	if #playerIds > 50 then
 		return "Too many players specified. BanAsync limits batches to a maximum of 50 players."
 	end

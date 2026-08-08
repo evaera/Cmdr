@@ -248,7 +248,10 @@ return function(registry: any)
 	}
 
 	registry:RegisterType("brickColor", brickColorType)
-	registry:RegisterType("brickColors", registry.Cmdr.Util.MakeListableType(brickColorType, { Prefixes = "% teamColors" }))
+	registry:RegisterType(
+		"brickColors",
+		registry.Cmdr.Util.MakeListableType(brickColorType, { Prefixes = "% teamColors" })
+	)
 
 	registry:RegisterType("brickColor3", brickColor3Type)
 	registry:RegisterType("brickColor3s", registry.Cmdr.Util.MakeListableType(brickColor3Type))

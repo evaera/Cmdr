@@ -56,8 +56,16 @@ const Dispatcher = {
 
 	Takes in raw command information and generates a command out of it.
 ]=]
-function Dispatcher:Evaluate(text: string, executor: Player, allowIncompleteArguments: boolean?, data: any?): (typeof(Command.new()) | false, string?)
-	assert(IS_SERVER or IS_CLIENT and executor == Players.LocalPlayer, "[Cmdr] Can't evaluate a command that isn't sent by the local player.")
+function Dispatcher:Evaluate(
+	text: string,
+	executor: Player,
+	allowIncompleteArguments: boolean?,
+	data: any?
+): (typeof(Command.new()) | false, string?)
+	assert(
+		IS_SERVER or IS_CLIENT and executor == Players.LocalPlayer,
+		"[Cmdr] Can't evaluate a command that isn't sent by the local player."
+	)
 	if typeof(text) ~= "string" or Util.TrimString(text) == "" then
 		return false, "Command cannot be empty."
 	end
@@ -66,7 +74,8 @@ function Dispatcher:Evaluate(text: string, executor: Player, allowIncompleteArgu
 	const commandName = table.remove(arguments, 1)
 	const commandObject = self.Registry:GetCommand(commandName)
 	if not commandObject then
-		return false, `{tostring(commandName)} is not a valid command name. Use the help command to see all available commands.`
+		return false,
+			`{tostring(commandName)} is not a valid command name. Use the help command to see all available commands.`
 	end
 
 	arguments = Util.MashExcessArguments(arguments, #commandObject.Args)
@@ -159,7 +168,10 @@ function Dispatcher:SendEvent(player: Player, event: string, ...: any)
 	if IS_SERVER then
 		self.Cmdr._remoteEvent:FireClient(player, event, ...)
 	elseif self.Cmdr._events[event] then
-		assert(player == Players.LocalPlayer, "[Cmdr] Event messages can only be sent to the local player on the client.")
+		assert(
+			player == Players.LocalPlayer,
+			"[Cmdr] Event messages can only be sent to the local player on the client."
+		)
 		self.Cmdr._events[event](...)
 	end
 end
@@ -220,7 +232,10 @@ function Dispatcher:RunGuards(commandContext: any, ...: any): string?
 
 	for _, guardMethod in ipairs(guardMethods) do
 		const guardMethodType = typeof(guardMethod)
-		assert(guardMethodType == "function", `expected a function for a value in Command.Guards, got {guardMethodType}`)
+		assert(
+			guardMethodType == "function",
+			`expected a function for a value in Command.Guards, got {guardMethodType}`
+		)
 
 		const result = guardMethod(commandContext, ...)
 		if result ~= nil then
@@ -245,16 +260,28 @@ end
 function Dispatcher:RunHooks(hookName: string, commandContext: any, passExactValue: boolean?): string?
 	const hooks = self.Registry._hooks[hookName]
 	assert(hooks, `[Cmdr] Invalid hook name: {hookName}`)
-	assert(not (IS_SERVER and hookName == "BeforeCommandRegister"), "[Cmdr] The BeforeCommandRegister hook can only be run by the client.")
+	assert(
+		not (IS_SERVER and hookName == "BeforeCommandRegister"),
+		"[Cmdr] The BeforeCommandRegister hook can only be run by the client."
+	)
 
-	if hookName == "BeforeRun" and #hooks == 0 and commandContext.Group ~= "DefaultUtil" and commandContext.Group ~= "UserAlias" and commandContext:HasImplementation() then
+	if
+		hookName == "BeforeRun"
+		and #hooks == 0
+		and commandContext.Group ~= "DefaultUtil"
+		and commandContext.Group ~= "UserAlias"
+		and commandContext:HasImplementation()
+	then
 		if not IS_STUDIO then
 			return "Command blocked for security as no BeforeRun hook is configured."
 		end
 
 		if not hasDisplayedBeforeRunHookWarning then
 			const environment = if IS_SERVER then "<Server>" else "<Client>"
-			commandContext:Reply(`{environment} Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/docs/commands-reference/hooks`, WARNING_COLOR)
+			commandContext:Reply(
+				`{environment} Commands will not run in-game if no BeforeRun hook is configured. Learn more: https://eryn.io/Cmdr/docs/commands-reference/hooks`,
+				WARNING_COLOR
+			)
 			hasDisplayedBeforeRunHookWarning = true
 		end
 	end
@@ -281,7 +308,10 @@ end
 	Runs all BeforeCommandRegister Hooks on the specified CommandDefinition.
 ]=]
 function Dispatcher:_runBeforeCommandRegisterHookForCommand(commandObject: any): string?
-	assert(IS_CLIENT, "[Cmdr] [Dispatcher::_runBeforeCommandRegisterHookForCommand] can only be called from the client.")
+	assert(
+		IS_CLIENT,
+		"[Cmdr] [Dispatcher::_runBeforeCommandRegisterHookForCommand] can only be called from the client."
+	)
 
 	const commandName = commandObject.Name:lower()
 	const commandContext = Command.new({
@@ -306,7 +336,10 @@ end
 	Runs all BeforeCommandRegister Hooks on the client.
 ]=]
 function Dispatcher:RunBeforeCommandRegisterHooks(player: Player?)
-	assert(IS_CLIENT or IS_SERVER and typeof(player) == "Instance" and player:IsA("Player"), "[Cmdr] Argument #1 must be a Player when called on the Server.")
+	assert(
+		IS_CLIENT or IS_SERVER and typeof(player) == "Instance" and player:IsA("Player"),
+		"[Cmdr] Argument #1 must be a Player when called on the Server."
+	)
 	assert(IS_CLIENT and player == nil, "[Cmdr] Argument #1 must be omitted when calling on the Client.")
 	if IS_SERVER and player then
 		self:SendEvent(player, "RunBeforeCommandRegisterHooks")

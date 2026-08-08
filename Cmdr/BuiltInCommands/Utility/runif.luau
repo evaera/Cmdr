@@ -85,7 +85,9 @@ return {
 		const conditionFunc = CONDITIONS[condition]
 		const success, text = pcall(conditionFunc, testAgainst, arg)
 		if success and text then
-			return context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text))
+			return context.Dispatcher:EvaluateAndRun(
+				context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command or text)
+			)
 		end
 
 		return ""

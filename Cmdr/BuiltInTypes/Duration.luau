@@ -80,7 +80,12 @@ return function(registry: any)
 			return duration ~= nil, "Invalid duration format. Example: 1d6h, 30m, 10s."
 		end,
 
-		Autocomplete = function(rawText: string, duration: number?, lastNumber: number?, missingUnit: boolean?): { string }
+		Autocomplete = function(
+			rawText: string,
+			duration: number?,
+			lastNumber: number?,
+			missingUnit: boolean?
+		): { string }
 			local results: { string } = {}
 			if missingUnit then
 				const units: { string } = unitFinder("", false, true)

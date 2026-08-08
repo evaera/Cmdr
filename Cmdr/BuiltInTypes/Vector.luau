@@ -28,16 +28,19 @@ return function(registry: any)
 			const character = executor.Character
 			const currentPosition = if character then character:GetPivot().Position else Vector3.zero
 
-			return registry.Cmdr.Util.Map(registry.Cmdr.Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value: string, index: number): number?
-				if value:sub(1, 1) ~= "~" then
-					return tonumber(value)
-				end
+			return registry.Cmdr.Util.Map(
+				registry.Cmdr.Util.SplitPrioritizedDelimeter(text, { ",", "%s" }),
+				function(value: string, index: number): number?
+					if value:sub(1, 1) ~= "~" then
+						return tonumber(value)
+					end
 
-				const axis = AXES[index]
-				const currentComponent = if axis then currentPosition[axis] else 0
-				const offset = tonumber(value:sub(2))
-				return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
-			end)
+					const axis = AXES[index]
+					const currentComponent = if axis then currentPosition[axis] else 0
+					const offset = tonumber(value:sub(2))
+					return if value == "~" then currentComponent elseif offset then currentComponent + offset else nil
+				end
+			)
 		end,
 		ValidateEach = validateVector,
 		Constructor = Vector3.new,

@@ -8,7 +8,8 @@ const VALID_STORED_KEY_NAME_PATTERNS: { string } = {
 return function(registry: any)
 	const storedKeyType = {
 		Autocomplete = function(text: string): { string }
-			const find = registry.Cmdr.Util.MakeFuzzyFinder(registry.Cmdr.Util.DictionaryKeys(registry:GetStore("vars_used") or {}))
+			const store = registry:GetStore("vars_used") or {}
+			const find = registry.Cmdr.Util.MakeFuzzyFinder(registry.Cmdr.Util.DictionaryKeys(store))
 			return find(text)
 		end,
 

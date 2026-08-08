@@ -51,7 +51,12 @@ return {
 		},
 	},
 
-	ClientRun = function(context: any, bind: Enum.UserInputType | Enum.KeyCode | Player, command: string, arguments: string): string
+	ClientRun = function(
+		context: any,
+		bind: Enum.UserInputType | Enum.KeyCode | Player,
+		command: string,
+		arguments: string
+	): string
 		if not hasHelperRan then
 			runBindHelper(context.Cmdr)
 		end
@@ -75,13 +80,20 @@ return {
 				end
 
 				if input.UserInputType == bind or input.KeyCode == bind then
-					context:Reply(context.Dispatcher:EvaluateAndRun(context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command)))
+					context:Reply(
+						context.Dispatcher:EvaluateAndRun(
+							context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command)
+						)
+					)
 				end
 			end)
 		elseif bindType == "player" then
 			binds[bind] = function(message: TextChatMessage)
 				const args = { message.Text }
-				const chatCommand = context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, context.Cmdr.Util.SubstituteArgs(command, args))
+				const chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
+					context.Dispatcher,
+					context.Cmdr.Util.SubstituteArgs(command, args)
+				)
 				const result = context.Dispatcher:EvaluateAndRun(chatCommand)
 				context:Reply(`{bind.Name} $ {chatCommand} : {result}`, Color3.fromRGB(244, 92, 66))
 			end

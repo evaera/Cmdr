@@ -59,5 +59,8 @@ return function(registry: any)
 	}
 
 	registry:RegisterType("playerId", playerIdType)
-	registry:RegisterType("playerIds", registry.Cmdr.Util.MakeListableType(playerIdType, { Prefixes = "# positiveIntegers" }))
+	registry:RegisterType(
+		"playerIds",
+		registry.Cmdr.Util.MakeListableType(playerIdType, { Prefixes = "# positiveIntegers" })
+	)
 end

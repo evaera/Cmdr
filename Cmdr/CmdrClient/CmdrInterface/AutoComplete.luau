@@ -32,8 +32,15 @@ return function(CmdrClient)
 
 	-- Updates the size of the container.
 	const function updateContainerSize()
-		const xOffset = math.max(AutoComplete._title.Field.TextBounds.X + AutoComplete._title.Field.Type.TextBounds.X, autoCompleteFrame.Size.X.Offset)
-		const yOffset = math.min(autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y, autoCompleteFrame.Parent.AbsoluteSize.Y - autoCompleteFrame.AbsolutePosition.Y - 10)
+		const titleWidth = AutoComplete._title.Field.TextBounds.X
+		const typeWidth = AutoComplete._title.Field.Type.TextBounds.X
+		const frameWidth = autoCompleteFrame.Size.X.Offset
+
+		const availableHeight = autoCompleteFrame.Parent.AbsoluteSize.Y - autoCompleteFrame.AbsolutePosition.Y - 10
+		const contentHeight = autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y
+
+		const xOffset = math.max(titleWidth + typeWidth, frameWidth)
+		const yOffset = math.min(contentHeight, availableHeight)
 		autoCompleteFrame.Size = UDim2.fromOffset(xOffset, yOffset)
 	end
 
@@ -44,8 +51,9 @@ return function(CmdrClient)
 		Updates the position of the container.
 	]=]
 	function AutoComplete:_updateContainerPosition(offset: number?)
-		const xOffset = if offset then self._entry.TextBox.AbsolutePosition.X - 10 + offset else self._entry.TextBox.AbsolutePosition.X
-		const yOffset = self._entry.TextBox.AbsolutePosition.Y + 30
+		const entryPosition = self._entry.TextBox.AbsolutePosition
+		const xOffset = if offset then entryPosition.X - 10 + offset else entryPosition.X
+		const yOffset = entryPosition.Y + 30
 		autoCompleteFrame.Position = UDim2.fromOffset(xOffset, yOffset)
 	end
 
@@ -72,8 +80,10 @@ return function(CmdrClient)
 		Updates the displayed auto completion info.
 	]=]
 	function AutoComplete:_updateInfoDisplay(options: any)
+		const typeName = options.type and `{options.type:sub(1, 1):upper()}{options.type:sub(2)}`
+		const typeText = typeName and `: {typeName}`
 		self:_setText(self._title, self._title.Field, options.name, true)
-		self:_setText(self._title.Field.Type, self._title.Field.Type, options.type and `: {options.type:sub(1, 1):upper()}{options.type:sub(2)}`)
+		self:_setText(self._title.Field.Type, self._title.Field.Type, typeText)
 		self:_setText(self._description, self._description.Label, options.description)
 
 		self._description.Label.TextColor3 = if options.invalid then INVALID_TEXT_COLOR else VALID_TEXT_COLOR
@@ -132,8 +142,10 @@ return function(CmdrClient)
 				stop = #suggestionText
 			end
 
+			const prefix = suggestionText:sub(1, start - 1)
+			const suffix = suggestionText:sub(stop + 1)
 			button.Typed.Text = `{(" "):rep(start - 1)}{typedText}`
-			button.Suggest.Text = `{suggestionText:sub(1, start - 1)}{(" "):rep(#typedText)}{suggestionText:sub(stop + 1)}`
+			button.Suggest.Text = `{prefix}{(" "):rep(#typedText)}{suffix}`
 
 			button.LayoutOrder = index
 			button.Parent = autoCompleteFrame
@@ -152,9 +164,10 @@ return function(CmdrClient)
 
 		table.remove(words, #words)
 
-		const offset = (options.at or (#table.concat(words, " ") + 1)) * 7
-		self:_updateContainerPosition(offset)
-		autoCompleteFrame.Size = UDim2.fromOffset(autocompleteWidth, autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y)
+		const positionOffset = (options.at or (#table.concat(words, " ") + 1)) * 7
+		const sizeOffset = UDim2.fromOffset(autocompleteWidth, autoCompleteFrame.UIListLayout.AbsoluteContentSize.Y)
+		self:_updateContainerPosition(positionOffset)
+		autoCompleteFrame.Size = sizeOffset
 		autoCompleteFrame.Visible = true
 
 		self:_updateInfoDisplay(if self.Items[1] and self.Items[1].options then self.Items[1].options else options)

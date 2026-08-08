@@ -5,8 +5,31 @@ const Util = require("./Util")
 const IS_SERVER = RunService:IsServer()
 const IS_CLIENT = RunService:IsClient()
 
-const TYPE_METHODS = Util.MakeDictionary({ "Transform", "Validate", "Autocomplete", "Parse", "DisplayName", "Listable", "ValidateOnce", "Prefixes", "Default", "ArgumentOperatorAliases" })
-const COMMAND_METHODS = Util.MakeDictionary({ "Name", "Aliases", "AutoExec", "Description", "Args", "Run", "ClientRun", "Data", "Group", "Guards", "_scriptInstance" })
+const TYPE_METHODS = Util.MakeDictionary({
+	"Transform",
+	"Validate",
+	"Autocomplete",
+	"Parse",
+	"DisplayName",
+	"Listable",
+	"ValidateOnce",
+	"Prefixes",
+	"Default",
+	"ArgumentOperatorAliases",
+})
+const COMMAND_METHODS = Util.MakeDictionary({
+	"Name",
+	"Aliases",
+	"AutoExec",
+	"Description",
+	"Args",
+	"Run",
+	"ClientRun",
+	"Data",
+	"Group",
+	"Guards",
+	"_scriptInstance",
+})
 const COMMAND_ARGUMENT_PROPERTIES = Util.MakeDictionary({ "Name", "Type", "Description", "Optional", "Default" })
 
 const NIL_PROPERTIES = { "_autoExecFlushConnection" }
@@ -186,7 +209,10 @@ const Registry = {
 ]=]
 function Registry:RegisterType(name: string, typeObject: any)
 	assert(typeof(name) == "string", `[Cmdr] Invalid type name provided: {tostring(name)}`)
-	assert(name:find("^[%d%l]%w*$") ~= nil, `[Cmdr] Invalid type name provided: "{name}", type names must be alphanumeric and start with a lowercase letter or digit.`)
+	assert(
+		name:find("^[%d%l]%w*$") ~= nil,
+		`[Cmdr] Invalid type name provided: "{name}", type names must be alphanumeric and start with a lowercase letter or digit.`
+	)
 
 	for key in pairs(typeObject) do
 		assert(TYPE_METHODS[key] ~= nil, `[Cmdr] Unknown key/method in type "{name}": {key}`)
@@ -283,7 +309,10 @@ function Registry:_validateCommandArguments(commandObject: any)
 		end
 
 		for key in pairs(argument) do
-			assert(COMMAND_ARGUMENT_PROPERTIES[key], `[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{index}: {key}`)
+			assert(
+				COMMAND_ARGUMENT_PROPERTIES[key],
+				`[Cmdr] Unknown property in command "{commandObject.Name or "unknown"}" argument #{index}: {key}`
+			)
 		end
 	end
 end
@@ -299,7 +328,10 @@ end
 ]=]
 function Registry:_validateCommand(commandObject: any)
 	for key in pairs(commandObject) do
-		assert(COMMAND_METHODS[key], `[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`)
+		assert(
+			COMMAND_METHODS[key],
+			`[Cmdr] Unknown key/method in command "{commandObject.Name or "unknown command"}": {key}`
+		)
 	end
 
 	if commandObject.Args then
@@ -339,7 +371,9 @@ function Registry:RegisterCommandObject(commandObject: any, isDefault: boolean?)
 		const existingIsDefault = existingCommand._isDefault
 
 		if isDefault and not existingIsDefault then
-			warn(`[Cmdr] Ignored default command "{commandObject.Name}" because a custom developer command is already registered with this name.`)
+			warn(
+				`[Cmdr] Ignored default command "{commandObject.Name}" because a custom developer command is already registered with this name.`
+			)
 			return false
 		end
 
@@ -390,9 +424,19 @@ end
 	Registers a command definition and its server equivalent.
 	Handles replicating the definition to the client.
 ]=]
-function Registry:RegisterCommand(commandScript: ModuleScript, commandServerScript: ModuleScript?, filter: ((any) -> boolean)?, isDefault: boolean?)
+function Registry:RegisterCommand(
+	commandScript: ModuleScript,
+	commandServerScript: ModuleScript?,
+	filter: ((any) -> boolean)?,
+	isDefault: boolean?
+)
 	local commandObject = require(commandScript)
-	assert(typeof(commandObject) == "table", `[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(commandObject)})`)
+	assert(
+		typeof(commandObject) == "table",
+		`[Cmdr] Invalid return value from command script "{commandScript.Name}" (CommandDefinition expected, got {typeof(
+			commandObject
+		)})`
+	)
 
 	if commandServerScript then
 		assert(IS_SERVER, "[Cmdr] The commandServerScript parameter is not valid for client usage.")
@@ -441,7 +485,9 @@ function Registry:RegisterCommandsIn(container: Instance, filter: ((any) -> bool
 
 	for skippedScript in pairs(skippedServerScripts) do
 		if not usedServerScripts[skippedScript] then
-			warn(`[Cmdr] Command script {skippedScript.Name} was skipped because it has 'Server' in its name, and has no equivalent shared script.`)
+			warn(
+				`[Cmdr] Command script {skippedScript.Name} was skipped because it has 'Server' in its name, and has no equivalent shared script.`
+			)
 		end
 	end
 end
@@ -528,7 +574,10 @@ end
 	@deprecated v1.8.0 -- This method was renamed to GetCommandNames in v1.8.0. The old name exists for backwards compatibility and should not be used for new work.
 ]=]
 Registry.GetCommandsAsStrings = Registry.GetCommandNames
-Util:_registerDeprecationWarning("GetCommandsAsStrings", "This method was renamed to GetCommandNames in v1.8.0. The old name exists for backwards compatibility and should not be used for new work.")
+Util:_registerDeprecationWarning(
+	"GetCommandsAsStrings",
+	"This method was renamed to GetCommandNames in v1.8.0. The old name exists for backwards compatibility and should not be used for new work."
+)
 
 --[=[
 	@within Registry
@@ -589,7 +638,10 @@ end
 	@deprecated v1.1.2 -- This method was renamed to RegisterHook in v1.1.2. The old name exists for backwards compatibility and should not be used for new work.
 ]=]
 Registry.AddHook = Registry.RegisterHook
-Util:_registerDeprecationWarning("AddHook", "This method was renamed to RegisterHook in v1.1.2. The old name exists for backwards compatibility and should not be used for new work.")
+Util:_registerDeprecationWarning(
+	"AddHook",
+	"This method was renamed to RegisterHook in v1.1.2. The old name exists for backwards compatibility and should not be used for new work."
+)
 
 --[=[
 	@within Registry
@@ -655,7 +707,10 @@ return function(Cmdr): Registry
 			return value
 		end,
 		__newindex = function(_, key, value)
-			assert(table.find(NIL_PROPERTIES, key) or Registry[key], `[Cmdr] Cannot assign key "{key}"; the Registry is read-only.`)
+			assert(
+				table.find(NIL_PROPERTIES, key) or Registry[key],
+				`[Cmdr] Cannot assign key "{key}"; the Registry is read-only.`
+			)
 			Registry[key] = value
 		end,
 	}) :: Registry

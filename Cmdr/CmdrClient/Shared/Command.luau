@@ -211,7 +211,10 @@ function Command:Parse(allowIncompleteArguments: boolean?): (boolean, string?)
 		end
 
 		const required = definition.Default == nil and definition.Optional ~= true
-		assert(not (required and hadOptional), `[Cmdr] Command {self.Name} has required arguments after optional arguments.`)
+		assert(
+			not (required and hadOptional),
+			`[Cmdr] Command {self.Name} has required arguments after optional arguments.`
+		)
 
 		if not required then
 			hadOptional = true
@@ -320,7 +323,9 @@ function Command:Run(): string?
 			self.Response = self.Object.Run(self, unpack(values, 1, length))
 		elseif IS_SERVER then
 			if self.Object.ClientRun then
-				warn(`[Cmdr] {self.Name} command fell back to the server because ClientRun returned nil, but there is no server implementation!`)
+				warn(
+					`[Cmdr] {self.Name} command fell back to the server because ClientRun returned nil, but there is no server implementation!`
+				)
 			else
 				warn(`[Cmdr] {self.Name} command has no implementation!`)
 			end

@@ -4,7 +4,8 @@ const TextChatService = game:GetService("TextChatService")
 const UserInputService = game:GetService("UserInputService")
 
 const WINDOW_MAX_HEIGHT = 300
-const MOUSE_TOUCH_INPUTS = { Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch }
+const MOUSE_TOUCH_INPUTS =
+	{ Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch }
 
 const VALID_TEXT_COLOR = Color3.fromRGB(255, 255, 255)
 const INVALID_TEXT_COLOR = Color3.fromRGB(255, 73, 73)
@@ -16,7 +17,10 @@ const Player = Players.LocalPlayer
 const function isPositionOutsideGui(position: Vector3, gui: GuiObject): boolean
 	local absolutePosition = gui.AbsolutePosition
 	local absoluteSize = gui.AbsoluteSize
-	return position.X < absolutePosition.X or position.X > absolutePosition.X + absoluteSize.X or position.Y < absolutePosition.Y or position.Y > absolutePosition.Y + absoluteSize.Y
+	return position.X < absolutePosition.X
+		or position.X > absolutePosition.X + absoluteSize.X
+		or position.Y < absolutePosition.Y
+		or position.Y > absolutePosition.Y + absoluteSize.Y
 end
 
 -- Constructs auto-completed text string from command argument definitions
@@ -95,7 +99,10 @@ return function(CmdrClient, AutoComplete)
 		const padding = entryFrame.UIPadding
 		const height = layout.AbsoluteContentSize.Y + padding.PaddingTop.Offset + padding.PaddingBottom.Offset
 
-		entryFrame.Size = UDim2.new(entryFrame.Size.X.Scale, entryFrame.Size.X.Offset, 0, math.clamp(height, 0, WINDOW_MAX_HEIGHT))
+		const xSize = entryFrame.Size.X
+		const clampedHeight = math.clamp(height, 0, WINDOW_MAX_HEIGHT)
+
+		entryFrame.Size = UDim2.new(xSize.Scale, xSize.Offset, 0, clampedHeight)
 		entryFrame.CanvasPosition = Vector2.new(0, height)
 		AutoComplete:_updateContainerPosition()
 	end
@@ -165,9 +172,15 @@ return function(CmdrClient, AutoComplete)
 			TextChatService.ChannelTabsConfiguration.Enabled = false
 		else
 			-- Restore previous state
-			TextChatService.ChatWindowConfiguration.Enabled = if self._previousChatWindowEnabled ~= nil then self._previousChatWindowEnabled else true
-			TextChatService.ChatInputBarConfiguration.Enabled = if self._previousChatInputBarEnabled ~= nil then self._previousChatInputBarEnabled else true
-			TextChatService.ChannelTabsConfiguration.Enabled = if self._previousChannelTabsEnabled ~= nil then self._previousChannelTabsEnabled else true
+			TextChatService.ChatWindowConfiguration.Enabled = if self._previousChatWindowEnabled ~= nil
+				then self._previousChatWindowEnabled
+				else true
+			TextChatService.ChatInputBarConfiguration.Enabled = if self._previousChatInputBarEnabled ~= nil
+				then self._previousChatInputBarEnabled
+				else true
+			TextChatService.ChannelTabsConfiguration.Enabled = if self._previousChannelTabsEnabled ~= nil
+				then self._previousChannelTabsEnabled
+				else true
 		end
 	end
 
@@ -279,7 +292,11 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		self._historyState.Position = math.clamp(self._historyState.Position + delta, 1, #history + 1)
-		self:_setEntryText(if self._historyState.Position == #history + 1 then self._historyState.InitialText else history[self._historyState.Position])
+		self:_setEntryText(
+			if self._historyState.Position == #history + 1
+				then self._historyState.InitialText
+				else history[self._historyState.Position]
+		)
 	end
 
 	--[=[
@@ -497,7 +514,13 @@ return function(CmdrClient, AutoComplete)
 
 		Processes autocomplete for command arguments once a command name is active.
 	]=]
-	function Window._handleArgumentAutoComplete(command: any, arguments: { string }, text: string, hasTrailingSpace: boolean, atEnd: boolean)
+	function Window._handleArgumentAutoComplete(
+		command: any,
+		arguments: { string },
+		text: string,
+		hasTrailingSpace: boolean,
+		atEnd: boolean
+	)
 		const commandValid, commandError = command:Validate()
 		Window:_setIsValidInput(commandValid, `Validation errors: {commandError or ""}`)
 
@@ -583,7 +606,10 @@ return function(CmdrClient, AutoComplete)
 				Window:HideInvalidState()
 			end
 		else
-			Window:_setIsValidInput(false, `{commandText} is not a valid command name. Use the help command to see all available commands.`)
+			Window:_setIsValidInput(
+				false,
+				`{commandText} is not a valid command name. Use the help command to see all available commands.`
+			)
 		end
 
 		const autocompleteItems = { exactMatch }

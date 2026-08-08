@@ -142,9 +142,13 @@ function Argument.new(command: any, argumentDefinition: any, value: any)
 	if type(argumentDefinition.Type) == "table" then
 		self.Type = argumentDefinition.Type
 	else
-		const parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(command.Cmdr.Registry:GetTypeName(argumentDefinition.Type), value)
+		const typeName = command.Cmdr.Registry:GetTypeName(argumentDefinition.Type)
+		const parsedType, parsedRawValue, prefix = Util.ParsePrefixedUnionType(typeName, value)
 		const existingType = command.Dispatcher.Registry:GetType(parsedType)
-		assert(existingType, `[Cmdr] Argument "{self.Name or "none"}" has an unregistered type {parsedType or "<none>"}`)
+		assert(
+			existingType,
+			`[Cmdr] Argument "{self.Name or "none"}" has an unregistered type {parsedType or "<none>"}`
+		)
 
 		self.Type = existingType
 		self.RawValue = parsedRawValue

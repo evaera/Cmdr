@@ -8,7 +8,8 @@ return function(context: any, players: { Player }, reason: string): string
 	local filterSuccess, filteredReason = nil, reason
 	if reason ~= "No reason provided" then
 		filterSuccess, filteredReason = pcall(function()
-			const filterResult = TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
+			const filterResult =
+				TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
 			return filterResult:GetNonChatStringForBroadcastAsync()
 		end)
 
@@ -17,7 +18,7 @@ return function(context: any, players: { Player }, reason: string): string
 		end
 	end
 
-	for _, player: Player in pairs(players) do
+	for _, player in ipairs(players) do
 		player:Kick(filteredReason)
 	end
 

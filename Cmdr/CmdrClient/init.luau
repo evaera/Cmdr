@@ -1,5 +1,10 @@
 const RunService = game:GetService("RunService")
-assert(RunService:IsClient(), "[Cmdr] The Cmdr client library cannot be required by the server. Please require the server libary instead.")
+
+const IS_CLIENT = RunService:IsClient()
+assert(
+	IS_CLIENT,
+	"[Cmdr] The Cmdr client library cannot be required by the server. Please require the server libary instead."
+)
 
 const Dispatcher = require("@self/Shared/Dispatcher")
 const Registry = require("@self/Shared/Registry")
@@ -358,7 +363,12 @@ return setmetatable(CmdrClient, {
 
 		if type(value) == "function" then
 			if not script:GetAttribute("HasShownProxyCallWarning") then
-				warn(debug.traceback(`[Cmdr] [APIUsage::ProxyCalls] Method calls should be performed by their respective modules rather than the Cmdr object.`, 2))
+				warn(
+					debug.traceback(
+						`[Cmdr] [APIUsage::ProxyCalls] Method calls should be performed by their respective modules rather than the Cmdr object.`,
+						2
+					)
+				)
 				script:SetAttribute("HasShownProxyCallWarning", true)
 			end
 
