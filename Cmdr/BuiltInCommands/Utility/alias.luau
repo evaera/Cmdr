@@ -16,9 +16,6 @@ return {
 	},
 
 	ClientRun = function(context: any, name: string, commandString: string): string
-		if context.Cmdr.Registry._commands[name] then
-			return `There is already a command registered with the name {name}.`
-		end
 
 		context.Cmdr.Registry:RegisterCommandObject(context.Cmdr.Util.MakeAliasCommand(name, commandString), true)
 		return `Created alias {name}.`
