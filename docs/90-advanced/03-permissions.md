@@ -42,7 +42,7 @@ local MIN_RANK_REQUIRED = 250 -- e.g., Admin rank in your Roblox group
 local GROUP_ID = 0000000 -- Replace with your Roblox GroupId
 
 return function(registry: any)
-	registry:RegisterHook("BeforeRun", function(context)
+	registry:RegisterHook("BeforeRun", function(context: any): string?
 		local player = context.Executor
 
 		-- Always allow non-sensitive, structural, or utility groups
@@ -105,7 +105,7 @@ local Cmdr = require(path.to.Cmdr)
 -- Retrieve or initialize a unique in-memory list for this server instance
 local banStore = Cmdr.Registry:GetStore("BannedPlayers")
 
-Cmdr.Registry:RegisterHook("BeforeRun", function(context)
+Cmdr.Registry:RegisterHook("BeforeRun", function(context: any): string?
 	local player = context.Executor
 
 	-- Prevent session-banned players from executing anything on the server
@@ -118,7 +118,7 @@ end)
 Any server-side command can then modify this in-memory list directly:
 
 ```lua title="commands/BanServer.luau"
-return function(context: any, targetPlayer)
+return function(context: any, targetPlayer: Player): string?
 	local banStore = context:GetStore("BannedPlayers")
 
 	-- Only append to the list if they aren't already tracked
@@ -149,7 +149,7 @@ return {
 	Description = "Performs an action on the player under your cursor.",
 	Group = "Admin",
 	Args = {},
-	Data = function()
+	Data = function(): number?
 		-- Runs on the client
 		local mouse = Players.LocalPlayer:GetMouse()
 		local target = mouse.Target
@@ -174,7 +174,7 @@ local MIN_RANK_REQUIRED = 250
 local GROUP_ID = 123456
 
 return function(registry: any)
-	registry:RegisterHook("BeforeRun", function(context)
+	registry:RegisterHook("BeforeRun", function(context: any): string?
 		-- Explicitly block non-admins from passing payload data through this command
 		if context.Name == "moderatorclick" and context.Group == "Admin" then
 			local player = context.Executor

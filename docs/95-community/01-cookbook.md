@@ -62,7 +62,7 @@ Filter both the `Title` and `Message` arguments through `TextService:FilterStrin
 ```lua
 local TextService = game:GetService("TextService")
 
-local function filterText(text, fromUserId)
+local function filterText(text: string, fromUserId: number): string?
 	local success, filterResult = pcall(TextService.FilterStringAsync, TextService, text, fromUserId)
 
 	if not (success and filterResult) then
@@ -74,7 +74,7 @@ local function filterText(text, fromUserId)
 	return broadcastSuccess and filteredString
 end
 
-return function(context: any, targets, title, message, duration)
+return function(context: any, targets: { Player }, title: string, message: string, duration: number): string
 	local authorUserId = context.Executor.UserId
 
 	-- Filter title and message before sending to target players
@@ -112,7 +112,7 @@ local StarterGui = game:GetService("StarterGui")
 local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Listen for the custom "ShowNotification" network event
-Cmdr:HandleEvent("ShowNotification", function(title, message, duration)
+Cmdr:HandleEvent("ShowNotification", function(title: string, message: string, duration: number)
 	-- Replace this with your custom UI/notification framework logic
 	print(`[Notification Received] {title}: {message} (Duration: {duration}s)`)
 
