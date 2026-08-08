@@ -107,6 +107,7 @@
   border-bottom: 1px solid var(--border-subtle);
   margin-bottom: 3rem;
   padding: 3rem 1.5rem;
+  padding-top: 0; /* Remove when the feedback alert goes away */
 }
 
 .featuresInner {

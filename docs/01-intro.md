@@ -5,7 +5,7 @@ sidebar_position: -1
 # Introduction
 
 :::info Feedback
-This website is a new service and [your feedback](https://github.com/evaera/Cmdr/issues/new?assignees=&labels=scope%3Aixp&projects=&template=websitefeedback.md) will help improve it.
+This website is new and [your feedback](https://github.com/evaera/Cmdr/issues/new?assignees=&labels=scope%3Aixp&projects=&template=websitefeedback.md) will help improve it.
 :::
 
 ## What is Cmdr and who is it for?
