@@ -2,5 +2,6 @@
 * text=auto
 
 # Exclude directories from repository stats
-.moonwave/** linguist-documentation
-pages/** linguist-documentation
+website/** linguist-documentation
+docs/** linguist-documentation
+scripts/** linguist-documentation

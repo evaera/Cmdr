@@ -1,11 +1,13 @@
 [package]
 name = "evaera/cmdr"
-description = "Extensible command console for Roblox developers"
+description = "A fully extensible, type-safe command framework for Roblox."
 version = "1.12.0"
 license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
+homepage = "https://eryn.io/Cmdr/"
+repository = "https://github.com/evaera/Cmdr"
 realm = "server"
-exclude = ["assets", "docs"]
+exclude = ["website", "docs", "scripts"]
 include = ["CHANGELOG.md", "Cmdr", "default.project.json", "LICENSE"]
 
 [dependencies]
