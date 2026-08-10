@@ -1,3 +1,8 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const HasCharacter = require(BuiltInGuards.HasCharacter) :: (number?) -> (any) -> string?
+
 return {
 	Name = "teleport",
 	Aliases = { "tp" },
@@ -18,5 +23,8 @@ return {
 			Name = "Destination",
 			Description = "The target player or coordinates to teleport to.",
 		},
+	},
+	Guards = {
+		HasCharacter(2),
 	},
 }

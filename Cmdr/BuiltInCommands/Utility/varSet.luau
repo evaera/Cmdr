@@ -1,3 +1,8 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const IsDataStoreAvailable = require(BuiltInGuards.IsDataStoreAvailable) :: (number?) -> (any) -> string?
+
 return {
 	Name = "var=",
 	Description = "Sets a stored value.",
@@ -14,6 +19,9 @@ return {
 			Description = "Value or values to set.",
 			Default = "",
 		},
+	},
+	Guards = {
+		IsDataStoreAvailable(1),
 	},
 
 	ClientRun = function(context: any, key: string)

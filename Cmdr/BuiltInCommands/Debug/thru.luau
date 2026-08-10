@@ -1,3 +1,8 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const HasCharacter = require(BuiltInGuards.HasCharacter) :: (number?) -> (any) -> string?
+
 return {
 	Name = "thru",
 	Aliases = { "t", "through" },
@@ -11,16 +16,17 @@ return {
 			Default = 0,
 		},
 	},
+	Guards = {
+		HasCharacter(),
+	},
 
 	ClientRun = function(context: any, extra: number): string
 		-- We implement this here because player position is owned by the client.
 		-- No reason to bother the server for this!
 
 		const mouse = context.Executor:GetMouse() :: Mouse
-		const character = context.Executor.Character :: Model?
-		if not character or not character:FindFirstChild("HumanoidRootPart") then
-			return "You don't have a character."
-		end
+		const character = context.Executor.Character :: Model
+		const rootPart = character:FindFirstChild("HumanoidRootPart") :: BasePart
 
 		const raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
@@ -30,7 +36,7 @@ return {
 
 		const raycastResult = workspace:Raycast(mouse.UnitRay.Origin, mouse.UnitRay.Direction * 1000, raycastParams)
 		if raycastResult then
-			const pos = character.HumanoidRootPart.Position
+			const pos = rootPart.Position
 			const diff = (raycastResult.Position - pos)
 			const unitDirection = if diff.Magnitude > 0 then diff.Unit else Vector3.new()
 

@@ -10,6 +10,7 @@ return function(context: any, players: { Player }, reason: string): string
 		filterSuccess, filteredReason = pcall(function()
 			const filterResult =
 				TextService:FilterStringAsync(reason, context.Executor.UserId, Enum.TextFilterContext.PublicChat)
+
 			return filterResult:GetNonChatStringForBroadcastAsync()
 		end)
 

@@ -1,19 +1,24 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const HasCharacter = require(BuiltInGuards.HasCharacter) :: (number?) -> (any) -> string?
+
 return {
 	Name = "blink",
 	Aliases = { "b" },
 	Description = "Teleports you to where your mouse is hovering.",
 	Group = "DefaultDebug",
 	Args = {},
+	Guards = {
+		HasCharacter(),
+	},
 
 	ClientRun = function(context: any): string
 		-- We implement this here because player position is owned by the client.
 		-- No reason to bother the server for this!
 
 		const mouse = context.Executor:GetMouse() :: Mouse
-		const character = context.Executor.Character :: Model?
-		if not character or not character:FindFirstChild("HumanoidRootPart") then
-			return "You don't have a character."
-		end
+		const character = context.Executor.Character :: Model
 
 		const raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
