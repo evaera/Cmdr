@@ -5,7 +5,7 @@ end
 
 return function(index: number?)
 	return function(context: any): string?
-		local target = context.Executor
+		local target: Player | { Player } = context.Executor
 		if index then
 			const arg = context:GetArgument(index)
 			target = if arg then arg:GetValue() else nil
@@ -18,7 +18,7 @@ return function(index: number?)
 			return nil
 		end
 
-		const players = if isSingle then { target } else target
+		const players: { Player } = if isSingle then { target :: Player } else target :: { Player }
 
 		for _, player in ipairs(players) do
 			if hasValidCharacter(player) then
