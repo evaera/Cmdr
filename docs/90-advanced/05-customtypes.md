@@ -1,12 +1,12 @@
 # Creating custom types
 
-Custom types give your arguments validation, autocompletion, and transformations. You can register custom types just like you would hooks, using the central `Registry` module.
+Custom types give your arguments validation, autocompletion, and transformations. You can register custom types just like you would hooks, using the central [`Registry`](/api/Registry) module.
 
 ---
 
 ## Writing type definition files
 
-When a type is contained in a `ModuleScript`, it shouldn't return a plain table. Instead, it **must return a function** that accepts the `Registry` as its sole argument. From there, you register the custom type dictionary using `registry:RegisterType("typeName", typeTable)`.
+When a type is contained in a `ModuleScript`, it shouldn't return a plain table. Instead, it **must return a function** that accepts the [`Registry`](/api/Registry) as its sole argument. From there, you register the custom type dictionary using `registry:RegisterType("typeName", typeTable)`.
 
 :::warning Client-Side Registration
 
@@ -137,7 +137,7 @@ The `Default` function must always return a **string**. This string value is ins
 
 ## Type helper functions
 
-Cmdr provides a few standard factory functions within `Util` to quickly spin up custom types without writing complex validation loops.
+Cmdr provides a few standard factory functions within [`Util`](/api/Util) to quickly spin up custom types without writing complex validation loops.
 
 ### Enum types (`Util.MakeEnumType`)
 

@@ -1,12 +1,6 @@
 const TeleportService = game:GetService("TeleportService")
 
 return function(context: any, players: { Player }, placeId: number, jobId: string?): string
-	if placeId <= 0 then
-		return "Invalid place ID"
-	elseif jobId == "-" then
-		return "Invalid job ID"
-	end
-
 	context:Reply("Commencing teleport...")
 
 	const success, errorMessage = pcall(function()

@@ -31,7 +31,7 @@ The server implementation should be in a separate ModuleScript. Cmdr will never 
 
 You can also include a client implementation, this is done by adding a function to your command definition (above) with the `ClientRun` key. You can also include both client and server implementations in one command but that's an advanced feature we'll discuss later on.
 
-The implementation — whether on the server or client — is passed the [CommandContext](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
+The implementation — whether on the server or client — is passed the [`CommandContext`](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
 ```lua title="TeleportServer.luau"
 -- These arguments are guaranteed to exist and be correctly typed.
@@ -183,11 +183,11 @@ Here is a list of automatic prefixed union types:
 
 ## Dynamic arguments and inline types
 
-Dynamic arguments are included within a command definition's `Args` array, they are functions which take in the command context and then return an [ArgumentDefinition](/api/Registry#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
+Dynamic arguments are included within a command definition's `Args` array, they are functions which take in the command context and then return an [`ArgumentDefinition`](/api/Registry#ArgumentDefinition). Despite being called inline types, they are not types themselves. This is as opposed to static arguments, which are ArgumentDefinitions rather than functions.
 
 Inline types allow developers to save time adding bespoke types for individual commands, or types which need to vary depending on the command context. For example, you could have an `allowlist` command which takes an enum of `add` or `remove` as its first argument, the second argument then could be a `playerId` (for add) or a custom `allowlistPlayer` type (for remove) depending on the first argument.
 
-Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [TypeDefinition](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/commands-reference/types#enum-types):
+Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [`TypeDefinition`](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/commands-reference/types#enum-types):
 
 ```lua title="allowlist.luau"
 return {

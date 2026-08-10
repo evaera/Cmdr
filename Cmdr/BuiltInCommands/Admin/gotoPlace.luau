@@ -1,3 +1,8 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const NotEquals = require(BuiltInGuards.NotEquals) :: (number, any) -> (any) -> string?
+
 return {
 	Name = "goto-place",
 	Description = "Teleport to a Roblox place.",
@@ -23,5 +28,8 @@ return {
 			Description = "The JobId to teleport to.",
 			Optional = true,
 		},
+	},
+	Guards = {
+		NotEquals(3, "-"),
 	},
 }

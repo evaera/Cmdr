@@ -1,3 +1,10 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const MaxArrayLength = require(BuiltInGuards.MaxArrayLength) :: (number, number) -> (any) -> string?
+const MaxStringLength = require(BuiltInGuards.MaxStringLength) :: (number, number) -> (any) -> string?
+const NonEmptyString = require(BuiltInGuards.NonEmptyString) :: (number) -> (any) -> string?
+
 return {
 	Name = "ban",
 	Description = "Bans a player or set of players.",
@@ -42,5 +49,11 @@ return {
 			Description = "Block their device from rejoining for 24 hours.",
 			Default = false,
 		},
+	},
+	Guards = {
+		MaxArrayLength(1, 50),
+		NonEmptyString(3),
+		MaxStringLength(3, 400),
+		MaxStringLength(4, 1000),
 	},
 }

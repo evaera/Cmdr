@@ -1,3 +1,8 @@
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const IsDataStoreAvailable = require(BuiltInGuards.IsDataStoreAvailable) :: (number?) -> (any) -> string?
+
 return {
 	Name = "var",
 	Description = "Gets a stored variable.",
@@ -13,6 +18,9 @@ return {
 			Name = "Key",
 			Description = "The key to get, retrieved from your user data store. Keys prefixed with . are not saved. Keys prefixed with $ are game-wide. Keys prefixed with $. are game-wide and non-saved.",
 		},
+	},
+	Guards = {
+		IsDataStoreAvailable(1),
 	},
 
 	ClientRun = function(context: any, key: any)

@@ -1,4 +1,8 @@
 const Players = game:GetService("Players")
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+const BuiltInGuards = ReplicatedStorage.CmdrClient.Shared.BuiltInGuards
+const HasCharacter = require(BuiltInGuards.HasCharacter) :: (number?) -> (any) -> string?
 
 return {
 	Name = "position",
@@ -13,13 +17,14 @@ return {
 			Default = Players.LocalPlayer,
 		},
 	},
+	Guards = {
+		HasCharacter(1),
+	},
 
 	ClientRun = function(_, player: Player): string
-		const character = player.Character
-		if not character or not character:FindFirstChild("HumanoidRootPart") then
-			return "This player doesn't have a character."
-		end
+		const character = player.Character :: Model
+		const rootPart = character:FindFirstChild("HumanoidRootPart") :: BasePart
 
-		return tostring(character.HumanoidRootPart.Position):gsub("%s", "")
+		return tostring(rootPart.Position):gsub("%s", "")
 	end,
 }
