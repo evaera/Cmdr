@@ -15,14 +15,12 @@ if (version === undefined || extra.length > 0) {
 
 // This gets a dedicated error because it's such a likely mistake.
 if (version.startsWith("v")) {
-  throw new Error(
-    `Invalid version: ${version}. Versions must not be prefixed with a v.`,
-  );
+  throw new Error(`Invalid version: ${version}. Versions must not be prefixed with a v.`);
 }
 
 if (semver.valid(version) !== version) {
   throw new Error(
-    `Invalid version: ${version}. Must be a canonical version, e.g. 1.13.0 or 1.13.0-rc.2.`,
+    `Invalid version: ${version}. Must be a canonical version, e.g. 1.13.0 or 1.13.0-rc.2.`
   );
 }
 
@@ -33,9 +31,7 @@ async function replaceLine(relativePath, pattern, replacement) {
   const contents = await readFile(path, "utf8");
 
   if (!pattern.test(contents)) {
-    throw new Error(
-      `Could not find a version line to replace in ${relativePath}`,
-    );
+    throw new Error(`Could not find a version line to replace in ${relativePath}`);
   }
 
   await writeFile(path, contents.replace(pattern, replacement), "utf8");
@@ -52,11 +48,7 @@ async function updateJson(relativePath, update) {
   console.log(`Updated ${relativePath}`);
 }
 
-await replaceLine(
-  "wally.toml",
-  /^version\s*=\s*.*$/m,
-  `version = "${version}"`,
-);
+await replaceLine("wally.toml", /^version\s*=\s*.*$/m, `version = "${version}"`);
 
 await updateJson("package.json", (data) => {
   data.version = version;
@@ -70,5 +62,5 @@ await updateJson("package-lock.json", (data) => {
 await replaceLine(
   "Cmdr/BuiltInCommands/Debug/version.luau",
   /^const VERSION = ".*"$/m,
-  `const VERSION = "v${version}"`,
+  `const VERSION = "v${version}"`
 );
