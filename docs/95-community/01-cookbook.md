@@ -60,26 +60,26 @@ return {
 Filter both the `Title` and `Message` arguments through `TextService:FilterStringAsync()` using the command executor's `UserId`. Once filtered, dispatch the payload to the target clients.
 
 ```luau
-local TextService = game:GetService("TextService")
+const TextService = game:GetService("TextService")
 
-local function filterText(text: string, fromUserId: number): string?
-	local success, filterResult = pcall(TextService.FilterStringAsync, TextService, text, fromUserId)
+const function filterText(text: string, fromUserId: number): string?
+	const success, filterResult = pcall(TextService.FilterStringAsync, TextService, text, fromUserId)
 
 	if not (success and filterResult) then
 		return
 	end
 
-	local broadcastSuccess, filteredString = pcall(filterResult.GetNonChatStringForBroadcastAsync, filterResult)
+	const broadcastSuccess, filteredString = pcall(filterResult.GetNonChatStringForBroadcastAsync, filterResult)
 
 	return broadcastSuccess and filteredString
 end
 
 return function(context: any, targets: { Player }, title: string, message: string, duration: number): string
-	local authorUserId = context.Executor.UserId
+	const authorUserId = context.Executor.UserId
 
 	-- Filter title and message before sending to target players
-	local filteredTitle = filterText(title, authorUserId)
-	local filteredMessage = filterText(message, authorUserId)
+	const filteredTitle = filterText(title, authorUserId)
+	const filteredMessage = filterText(message, authorUserId)
 
 	if not (filteredTitle and filteredMessage) then
 		return "Failed to filter notification text."
@@ -106,10 +106,10 @@ If you want to broadcast a notification to every connected player at once, use `
 Register a listener on the client with `CmdrClient:HandleEvent` to receive the filtered payload and trigger your UI logic.
 
 ```luau
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterGui = game:GetService("StarterGui")
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+const StarterGui = game:GetService("StarterGui")
 
-local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
+const Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Listen for the custom "ShowNotification" network event
 Cmdr:HandleEvent("ShowNotification", function(title: string, message: string, duration: number)

@@ -17,7 +17,7 @@ While missing a client-side registration won't inherently break execution on the
 Here is the template for a custom type module:
 
 ```luau
-local myCustomType = {
+const myCustomType = {
 	Transform = function(text: string): string
 		-- Step 1: Receive the raw input string
 		return string.lower(text)
@@ -25,7 +25,7 @@ local myCustomType = {
 
 	Validate = function(transformedValue: string): (boolean, string)
 		-- Step 2: Validates the output from Transform
-		local isValid = #transformedValue > 3
+		const isValid = #transformedValue > 3
 		return isValid, "The value must be longer than 3 characters."
 	end,
 
@@ -145,7 +145,7 @@ For basic collections of discrete string choices, use `Util.MakeEnumType(name, c
 
 ```luau
 return function(registry: any)
-	local customEnum = registry.Cmdr.Util.MakeEnumType("rarity", { "Common", "Rare", "Epic", "Legendary" })
+	const customEnum = registry.Cmdr.Util.MakeEnumType("rarity", { "Common", "Rare", "Epic", "Legendary" })
 	registry:RegisterType("rarity", customEnum)
 end
 ```
@@ -155,7 +155,7 @@ end
 For multi-value structural types like positions, vectors, or colors, use `Util.MakeSequenceType`. It splits a space- or comma-delimited string sequence and runs validation logic on each piece.
 
 ```luau
-local vector2Type = registry.Cmdr.Util.MakeSequenceType({
+const vector2Type = registry.Cmdr.Util.MakeSequenceType({
 	Length = 2,
 	TransformEach = tonumber,
 	ValidateEach = function(value: number?, index: number): (boolean, string)

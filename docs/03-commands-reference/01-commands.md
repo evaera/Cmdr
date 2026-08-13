@@ -37,7 +37,7 @@ The implementation — whether on the server or client — is passed the [`Comma
 -- These arguments are guaranteed to exist and be correctly typed.
 return function(context: any, fromPlayers: { Player }, toPlayer: Player): string
 	if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
-		local position = toPlayer.Character.HumanoidRootPart.CFrame
+		const position = toPlayer.Character.HumanoidRootPart.CFrame
 
 		for _, player in ipairs(fromPlayers) do
 			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -206,7 +206,7 @@ return {
 
 		-- This is an example of a dynamic argument
 		function(context: any)
-			local action = context:GetArgument(1):GetValue()
+			const action = context:GetArgument(1):GetValue()
 			return {
 				Type = if action == "add" then `playerId` else `allowlistPlayer`,
 				Name = "Player",

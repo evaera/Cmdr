@@ -42,7 +42,7 @@ Custom types are defined as tables that implement specific named functions. When
 Check out the [API reference](/api/Registry#TypeDefinition) for a full reference of all available options.
 
 ```luau
-local intType = {
+const intType = {
 	Transform = function(text: string): number?
 		return tonumber(text)
 	end,

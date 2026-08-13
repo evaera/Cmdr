@@ -28,8 +28,8 @@ You should create a folder to keep your commands inside and then register them o
 
 ```luau
 -- This is a script you would create in ServerScriptService, for example
-local ServerScriptService = game:GetService("ServerScriptService")
-local Cmdr = require(path.to.Cmdr) -- e.g. ServerScriptService.Packages.Cmdr
+const ServerScriptService = game:GetService("ServerScriptService")
+const Cmdr = require(path.to.Cmdr) -- e.g. ServerScriptService.Packages.Cmdr
 
 Cmdr.Registry:RegisterDefaultCommands() -- Optional: This loads the default set of commands that Cmdr comes with.
 -- Cmdr.Registry:RegisterCommandsIn(ServerScriptService.CmdrCommands) -- Optional: Register commands from your own folder.
@@ -56,8 +56,8 @@ Cmdr will place CmdrClient into ReplicatedStorage automatically, no action is re
 
 ```luau
 -- This is a local/client script you would create in StarterPlayerScripts, for example
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+const Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Optional. Configurable, and you can choose multiple keys
 Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
