@@ -25,7 +25,7 @@ Because exploiters can manipulate or bypass client code, permissions must **alwa
 - **Client `BeforeRun` hooks:** Provide immediate user feedback in the local console UI without making an unnecessary network request.
 - **Server `BeforeRun` hooks:** Serve as the actual security boundary. If a server hook returns an error string, execution stops completely.
 
-```lua title="Server authorization hook"
+```luau title="Server authorization hook"
 return function(registry: any)
 	registry:RegisterHook("BeforeRun", function(context: any): string?
 		-- Restrict admin commands to the place creator

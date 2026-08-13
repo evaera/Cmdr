@@ -16,7 +16,7 @@ While missing a client-side registration won't inherently break execution on the
 
 Here is the template for a custom type module:
 
-```lua
+```luau
 local myCustomType = {
 	Transform = function(text: string): string
 		-- Step 1: Receive the raw input string
@@ -71,7 +71,7 @@ Your type definition dictionary can implement several unique lifecycle methods:
 
 ### Transform
 
-```lua
+```luau
 Transform = function(text: string, player: Player): any
 ```
 
@@ -79,7 +79,7 @@ An optional function that accepts the raw text argument input and the player who
 
 ### Validate
 
-```lua
+```luau
 Validate = function(transformedValue: any): (boolean, string?)
 ```
 
@@ -87,7 +87,7 @@ Evaluates whether the value matches your requirements. It receives the output re
 
 ### ValidateOnce
 
-```lua
+```luau
 ValidateOnce = function(transformedValue: any): (boolean, string?)
 ```
 
@@ -95,7 +95,7 @@ Works identically to `Validate`, but **only executes after the user presses Ente
 
 ### Autocomplete
 
-```lua
+```luau
 Autocomplete = function(transformedValue: any): ({ string }, { IsPartial: boolean? }?)
 ```
 
@@ -103,7 +103,7 @@ Populates Cmdr's dropdown menu as users type. It must return an array of strings
 
 ### Parse
 
-```lua
+```luau
 Parse = function(transformedValue: any): any
 ```
 
@@ -127,7 +127,7 @@ When enabled, you do not need to update your parsing or validation architecture.
 
 You can provide fallback string options if an argument is skipped or if a user passes a period (`.`) literal token.
 
-```lua
+```luau
 Default = function(player: Player): string
 ```
 
@@ -143,7 +143,7 @@ Cmdr provides a few standard factory functions within [`Util`](/api/Util) to qui
 
 For basic collections of discrete string choices, use `Util.MakeEnumType(name, choices)`. This automatically provides full fuzzy-matching autocomplete suggestions and ensures the parsed output explicitly matches a key within your options array.
 
-```lua
+```luau
 return function(registry: any)
 	local customEnum = registry.Cmdr.Util.MakeEnumType("rarity", { "Common", "Rare", "Epic", "Legendary" })
 	registry:RegisterType("rarity", customEnum)
@@ -154,7 +154,7 @@ end
 
 For multi-value structural types like positions, vectors, or colors, use `Util.MakeSequenceType`. It splits a space- or comma-delimited string sequence and runs validation logic on each piece.
 
-```lua
+```luau
 local vector2Type = registry.Cmdr.Util.MakeSequenceType({
 	Length = 2,
 	TransformEach = tonumber,

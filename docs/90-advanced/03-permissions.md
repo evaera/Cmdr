@@ -25,7 +25,7 @@ The safest architectural pattern for permissions is to **deny all groups by defa
 
 When you define a command, you can give it a custom `Group` string (e.g., `"Admin"` or `"Moderator"`). Your hook can read `context.Group` to determine what authorization level is required. Non-sensitive built-in command groups like `DefaultUtil` should be allowlisted for everyone, along with `UserAlias` (which handles internal user-created command shortcuts).
 
-```lua title="hooks/Permissions.luau"
+```luau title="hooks/Permissions.luau"
 local GroupService = game:GetService("GroupService")
 
 local ALLOWED_USER_IDS = {
@@ -99,7 +99,7 @@ Cmdr stores are **in-memory tables unique to the current server instance**. They
 
 Because the client and server do not share memory space, registering a hook that reads a shared store via `RegisterHooksIn` will fail on the client. Instead, keep this hook strictly on the server by registering it directly in your server startup script rather than a shared folder.
 
-```lua title="ServerScriptService/CmdrSetup.luau"
+```luau title="ServerScriptService/CmdrSetup.luau"
 local Cmdr = require(path.to.Cmdr)
 
 -- Retrieve or initialize a unique in-memory list for this server instance
@@ -117,7 +117,7 @@ end)
 
 Any server-side command can then modify this in-memory list directly:
 
-```lua title="commands/BanServer.luau"
+```luau title="commands/BanServer.luau"
 return function(context: any, targetPlayer: Player): string?
 	local banStore = context:GetStore("BannedPlayers")
 
@@ -140,7 +140,7 @@ For example, imagine a `moderatorClick` command that targets whatever player the
 
 First, the command definition uses `Data` to grab the target client-side:
 
-```lua title="commands/ModeratorClick.luau"
+```luau title="commands/ModeratorClick.luau"
 local Players = game:GetService("Players")
 
 return {
@@ -167,7 +167,7 @@ return {
 
 Next, your server hook ensures that the executor is actually allowed to send data from this command, preventing standard users from mimicking the network call:
 
-```lua title="hooks/VerifyClickData.luau"
+```luau title="hooks/VerifyClickData.luau"
 local GroupService = game:GetService("GroupService")
 
 local MIN_RANK_REQUIRED = 250

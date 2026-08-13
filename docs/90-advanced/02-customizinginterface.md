@@ -14,7 +14,7 @@ When required on the client, Cmdr dynamically generates its console interface (c
 
 The intended and supported way to customize the Cmdr console layout, theme, or behavior is by accessing the interface directly through the client-side API. Once you have initialized the client, you can reference the `Cmdr.Gui` property.
 
-```lua title="StarterPlayer/StarterPlayerScripts/CmdrClientSetup.luau"
+```luau title="StarterPlayer/StarterPlayerScripts/CmdrClientSetup.luau"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 

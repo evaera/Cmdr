@@ -4,7 +4,7 @@ No commands are registered by default. Cmdr ships with a set of default commands
 
 Commands are defined in ModuleScripts that return a single table.
 
-```lua title="Teleport.luau"
+```luau title="Teleport.luau"
 return {
 	Name = "teleport",
 	Aliases = { "tp" },
@@ -33,7 +33,7 @@ You can also include a client implementation, this is done by adding a function 
 
 The implementation — whether on the server or client — is passed the [`CommandContext`](/api/CommandContext), which is a special object that represents a single command run. The context can be used to get the executing player, send events, reply with additional lines in the console, and more. See CommandContext in the API reference for more details. After the context, any arguments you defined in the command definition will be passed in order.
 
-```lua title="TeleportServer.luau"
+```luau title="TeleportServer.luau"
 -- These arguments are guaranteed to exist and be correctly typed.
 return function(context: any, fromPlayers: { Player }, toPlayer: Player): string
 	if toPlayer.Character and toPlayer:FindFirstChild("HumanoidRootPart") then
@@ -108,7 +108,7 @@ If you only want some, but not all, of the default commands, you can restrict th
 1. Pass an array of groups to the RegisterDefaultCommands function: `Cmdr.Registry:RegisterDefaultCommands({"Help", "DefaultUtil"})`
 2. Pass a filter function that accepts a CommandDefinition and either returns `true` or `false`:
 
-```lua
+```luau
 Cmdr.Registry:RegisterDefaultCommands(function(cmd: any): boolean
 	return #cmd.Name < 6 -- This is absurd... but possible!
 end)
@@ -189,7 +189,7 @@ Inline types allow developers to save time adding bespoke types for individual c
 
 Inline types can be and usually are paired with dynamic types. Inline types are not registered (so their names don't need to be unique) and take advantage of the fact that the `Type` key in an [argument definition](/api/Registry#ArgumentDefinition) can also be a [`TypeDefinition`](/api/Registry#TypeDefinition) itself. This is most commonly used with [enum types](/docs/commands-reference/types#enum-types):
 
-```lua title="allowlist.luau"
+```luau title="allowlist.luau"
 return {
 	Name = "allowlist",
 	Description = "Add or remove a player from the allow list.",

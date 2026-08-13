@@ -45,7 +45,7 @@ You can use `AutoExec` to instantly register macro shortcuts that point to more 
 
 For example, you can cleanly map dedicated `bring` and `to` commands directly onto a central `teleport` backend by pre-filling contextual target variables like `${me}` alongside custom argument validation types:
 
-```lua
+```luau
 AutoExec = {
 	-- Maps "bring <players>" to pull others to your exact location
 	'alias "bring|Brings a player or set of players to you." teleport $1{players|players|The players to bring} ${me}',
@@ -59,7 +59,7 @@ AutoExec = {
 
 You can run multiple distinct commands sequentially within a single `AutoExec` string by separating them with the `&&` delimiter. This is exceptionally powerful for evaluating or creating variables and immediately feeding them into structural macros.
 
-```lua
+```luau
 AutoExec = {
 	-- Creates an alias, then outputs a verification log sequentially
 	"alias reset_debug var= .debugMode false && echo Debug environment has been reset!",
@@ -70,7 +70,7 @@ AutoExec = {
 
 When chaining commands with `&&`, you can easily capture the output text of the previous command and inject it into the next one by using the `||` slot operator. If the captured text contains spaces, Cmdr will automatically wrap the injected value in quotes.
 
-```lua
+```luau
 AutoExec = {
 	-- Fetches the 'init' variable value and immediately passes it to the run-lines command
 	"var init && run-lines ||",
@@ -81,7 +81,7 @@ AutoExec = {
 
 If you want to let users view, update, or manually execute persistent strings (like startup scripts), you can use `AutoExec` blocks to cleanly establish editing macros. Combined with sub-command embedding (`${}`) and the slot operator (`||`), you can create streamlined workflows:
 
-```lua
+```luau
 -- How Cmdr internally pairs variable initialization and script execution
 AutoExec = {
 	'alias "init-edit|Edit your initialization script" edit ${var init} \\\\\n && var= init ||',

@@ -20,7 +20,7 @@ Roblox requires all user-generated text displayed to other players to be filtere
 
 Define the command structure, requiring target players, a title, a body message, and an optional duration.
 
-```lua
+```luau
 return {
 	Name = "notify",
 	Aliases = { "toast" },
@@ -59,7 +59,7 @@ return {
 
 Filter both the `Title` and `Message` arguments through `TextService:FilterStringAsync()` using the command executor's `UserId`. Once filtered, dispatch the payload to the target clients.
 
-```lua
+```luau
 local TextService = game:GetService("TextService")
 
 local function filterText(text: string, fromUserId: number): string?
@@ -105,7 +105,7 @@ If you want to broadcast a notification to every connected player at once, use `
 
 Register a listener on the client with `CmdrClient:HandleEvent` to receive the filtered payload and trigger your UI logic.
 
-```lua
+```luau
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 
