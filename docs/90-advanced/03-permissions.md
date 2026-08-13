@@ -25,25 +25,25 @@ The safest architectural pattern for permissions is to **deny all groups by defa
 
 When you define a command, you can give it a custom `Group` string (e.g., `"Admin"` or `"Moderator"`). Your hook can read `context.Group` to determine what authorization level is required. Non-sensitive built-in command groups like `DefaultUtil` should be allowlisted for everyone, along with `UserAlias` (which handles internal user-created command shortcuts).
 
-```lua title="hooks/Permissions.luau"
-local GroupService = game:GetService("GroupService")
+```luau title="hooks/Permissions.luau"
+const GroupService = game:GetService("GroupService")
 
-local ALLOWED_USER_IDS = {
+const ALLOWED_USER_IDS = {
 	123456, -- Replace with actual UserIds
 }
 
 -- Groups that anyone is allowed to run (utilities, help commands, aliases)
-local PUBLIC_GROUPS = {
+const PUBLIC_GROUPS = {
 	"DefaultUtil",
 	"UserAlias",
 }
 
-local MIN_RANK_REQUIRED = 250 -- e.g., Admin rank in your Roblox group
-local GROUP_ID = 0000000 -- Replace with your Roblox GroupId
+const MIN_RANK_REQUIRED = 250 -- e.g., Admin rank in your Roblox group
+const GROUP_ID = 0000000 -- Replace with your Roblox GroupId
 
 return function(registry: any)
 	registry:RegisterHook("BeforeRun", function(context: any): string?
-		local player = context.Executor
+		const player = context.Executor
 
 		-- Always allow non-sensitive, structural, or utility groups
 		if table.find(PUBLIC_GROUPS, context.Group) then
@@ -57,7 +57,7 @@ return function(registry: any)
 
 		-- Restrict administrative command groups via GroupService checks
 		if context.Group == "Admin" or context.Group == "DefaultAdmin" then
-			local success, result = pcall(GroupService.GetRolesInGroupAsync, GroupService, player.UserId, GROUP_ID)
+			const success, result = pcall(GroupService.GetRolesInGroupAsync, GroupService, player.UserId, GROUP_ID)
 
 			if not success or not result.IsMember then
 				return "You do not have permission to run administrative commands."
@@ -99,14 +99,14 @@ Cmdr stores are **in-memory tables unique to the current server instance**. They
 
 Because the client and server do not share memory space, registering a hook that reads a shared store via `RegisterHooksIn` will fail on the client. Instead, keep this hook strictly on the server by registering it directly in your server startup script rather than a shared folder.
 
-```lua title="ServerScriptService/CmdrSetup.luau"
-local Cmdr = require(path.to.Cmdr)
+```luau title="ServerScriptService/CmdrSetup.luau"
+const Cmdr = require(path.to.Cmdr)
 
 -- Retrieve or initialize a unique in-memory list for this server instance
-local banStore = Cmdr.Registry:GetStore("BannedPlayers")
+const banStore = Cmdr.Registry:GetStore("BannedPlayers")
 
 Cmdr.Registry:RegisterHook("BeforeRun", function(context: any): string?
-	local player = context.Executor
+	const player = context.Executor
 
 	-- Prevent session-banned players from executing anything on the server
 	if table.find(banStore, player.UserId) then
@@ -117,9 +117,9 @@ end)
 
 Any server-side command can then modify this in-memory list directly:
 
-```lua title="commands/BanServer.luau"
+```luau title="commands/BanServer.luau"
 return function(context: any, targetPlayer: Player): string?
-	local banStore = context:GetStore("BannedPlayers")
+	const banStore = context:GetStore("BannedPlayers")
 
 	-- Only append to the list if they aren't already tracked
 	if not table.find(banStore, targetPlayer.UserId) then
@@ -140,8 +140,8 @@ For example, imagine a `moderatorClick` command that targets whatever player the
 
 First, the command definition uses `Data` to grab the target client-side:
 
-```lua title="commands/ModeratorClick.luau"
-local Players = game:GetService("Players")
+```luau title="commands/ModeratorClick.luau"
+const Players = game:GetService("Players")
 
 return {
 	Name = "moderatorclick",
@@ -151,11 +151,11 @@ return {
 	Args = {},
 	Data = function(): number?
 		-- Runs on the client
-		local mouse = Players.LocalPlayer:GetMouse()
-		local target = mouse.Target
+		const mouse = Players.LocalPlayer:GetMouse()
+		const target = mouse.Target
 
 		if target and target.Parent:FindFirstChild("Humanoid") then
-			local targetPlayer = Players:GetPlayerFromCharacter(target.Parent)
+			const targetPlayer = Players:GetPlayerFromCharacter(target.Parent)
 			if targetPlayer then
 				return targetPlayer.UserId
 			end
@@ -167,19 +167,19 @@ return {
 
 Next, your server hook ensures that the executor is actually allowed to send data from this command, preventing standard users from mimicking the network call:
 
-```lua title="hooks/VerifyClickData.luau"
-local GroupService = game:GetService("GroupService")
+```luau title="hooks/VerifyClickData.luau"
+const GroupService = game:GetService("GroupService")
 
-local MIN_RANK_REQUIRED = 250
-local GROUP_ID = 123456
+const MIN_RANK_REQUIRED = 250
+const GROUP_ID = 123456
 
 return function(registry: any)
 	registry:RegisterHook("BeforeRun", function(context: any): string?
 		-- Explicitly block non-admins from passing payload data through this command
 		if context.Name == "moderatorclick" and context.Group == "Admin" then
-			local player = context.Executor
+			const player = context.Executor
 
-			local success, result = pcall(GroupService.GetRolesInGroupAsync, GroupService, player.UserId, GROUP_ID)
+			const success, result = pcall(GroupService.GetRolesInGroupAsync, GroupService, player.UserId, GROUP_ID)
 			if not success or not result.IsMember then
 				return "Bypassing data parameters is prohibited."
 			end
@@ -197,7 +197,7 @@ return function(registry: any)
 			end
 
 			-- Retrieve the safe payload gathered from the client
-			local targetUserId = context:GetData()
+			const targetUserId = context:GetData()
 			if not targetUserId then
 				return "No valid target selected."
 			end

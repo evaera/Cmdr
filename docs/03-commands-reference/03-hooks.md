@@ -19,7 +19,7 @@ There can be multiple hooks registered for each phase. Hooks execute in **order 
 
 You can register hooks manually with `Cmdr.Registry:RegisterHook`, or bulk-register them across both client and server using `Cmdr.Registry:RegisterHooksIn(folder)`.
 
-```lua title="A ModuleScript inside your hooks folder."
+```luau title="A ModuleScript inside your hooks folder."
 return function(registry: any)
 	registry:RegisterHook("BeforeRun", function(context: any): string?
 		if context.Group == "DefaultAdmin" and context.Executor.UserId ~= game.CreatorId then
@@ -54,7 +54,7 @@ The `BeforeCommandRegister` hook runs on the **client** when command definitions
 - **Returning `false`:** Hides the command from console autocomplete, the `help` listing, and client execution.
 - **Returning `nil`:** Registers and displays the command as normal.
 
-```lua title="Client-side hook"
+```luau title="Client-side hook"
 return function(registry: any)
 	registry:RegisterHook("BeforeCommandRegister", function(context: any): boolean?
 		-- Prevent non-allowed users from seeing admin commands
@@ -102,7 +102,7 @@ If an `AfterRun` callback returns a string, it replaces the command's original r
 
 This hook is ideal for logging actions.
 
-```lua title="Server-side hook registration"
+```luau title="Server-side hook registration"
 -- Higher priority ensures this runs after standard response modifiers
 Cmdr.Registry:RegisterHook("AfterRun", function(context: any)
 	print(`{context.Executor.Name} ran {context.Text}: {context.Response}`)

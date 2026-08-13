@@ -41,8 +41,8 @@ Custom types are defined as tables that implement specific named functions. When
 
 Check out the [API reference](/api/Registry#TypeDefinition) for a full reference of all available options.
 
-```lua
-local intType = {
+```luau
+const intType = {
 	Transform = function(text: string): number?
 		return tonumber(text)
 	end,
@@ -73,7 +73,7 @@ For any argument whose type has a default value, you can simply input `.` and th
 
 Because Enum types are so common, there is a special function that easily lets you create an Enum type. When a command has an argument of this type, it'll always be a string matching exactly one of the strings in the array you define (see below).
 
-```lua
+```luau
 return function(registry: any)
 	registry:RegisterType("place", registry.Cmdr.Util.MakeEnumType("Place", {"World 1", "World 2", "World 3", "Final World"}))
 end

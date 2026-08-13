@@ -10,17 +10,17 @@ When you have requirements that pop up across multiple commands, such as checkin
 
 You declare guards by adding a `Guards` array to your command definition table. Each entry in the array is a function that receives the [`CommandContext`](/api/CommandContext) as its first argument.
 
-```lua title="teleport.luau"
-local function hasAliveCharacter(context: any): string?
-	local character = context.Executor.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+```luau title="teleport.luau"
+const function hasAliveCharacter(context: any): string?
+	const character = context.Executor.Character
+	const humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
 	if not humanoid or humanoid.Health <= 0 then
 		return "You must be alive to run this command."
 	end
 end
 
-local function isCreator(context: any): string?
+const function isCreator(context: any): string?
 	if context.Executor.UserId ~= game.CreatorId then
 		return "You are not allowed to do this!"
 	end
@@ -76,7 +76,7 @@ _\* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`._
 
 The dispatcher passes the current [`CommandContext`](/api/CommandContext) as the primary argument to each guard function.
 
-```lua
+```luau
 Guards = {
 	function(context: any, ... any): string?
 		-- context gives you access to Executor, Arguments, Cmdr, etc.

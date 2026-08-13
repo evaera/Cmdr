@@ -6,7 +6,7 @@ For example, consider the default `announce` command, which creates a message on
 
 If you wanted to display announcements some other way, you could just override the default event handler:
 
-```lua
+```luau
 CmdrClient:HandleEvent("Message", function(text: string, player: Player)
 	print("Announcement from", player.Name, text)
 end)

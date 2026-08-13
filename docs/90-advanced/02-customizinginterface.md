@@ -14,20 +14,20 @@ When required on the client, Cmdr dynamically generates its console interface (c
 
 The intended and supported way to customize the Cmdr console layout, theme, or behavior is by accessing the interface directly through the client-side API. Once you have initialized the client, you can reference the `Cmdr.Gui` property.
 
-```lua title="StarterPlayer/StarterPlayerScripts/CmdrClientSetup.luau"
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
+```luau title="StarterPlayer/StarterPlayerScripts/CmdrClientSetup.luau"
+const ReplicatedStorage = game:GetService("ReplicatedStorage")
+const Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
 
 -- Access the generated ScreenGui directly from the API
-local consoleGui = Cmdr.Gui
+const consoleGui = Cmdr.Gui
 
 -- Access the main text-display console window frame
-local mainConsoleFrame = consoleGui:WaitForChild("Frame")
+const mainConsoleFrame = consoleGui:WaitForChild("Frame")
 mainConsoleFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 mainConsoleFrame.BackgroundTransparency = 0.2
 
 -- Access the autocomplete utility window frame
-local autocompleteMenu = consoleGui:WaitForChild("Autocomplete")
+const autocompleteMenu = consoleGui:WaitForChild("Autocomplete")
 autocompleteMenu.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
 ```
 
