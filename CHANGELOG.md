@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.13.0 (~~currently rc.3~~)
+## v1.13.0 (currently rc.3)
 
 *This is currently a prerelease version. Assuming no bugs, it will become `v1.13.0`. This version is expected to be stable but has not been as widely tested as we'd like.*
 
