@@ -331,7 +331,7 @@ end
 
 --[=[
 	@within Dispatcher
-	@param player Player? -- The player to run the hook for. This argument is required when the method is called from the server.
+	@param player Player? -- The player to run the hook for. This argument is required when the method is called from the server, and must be `nil`` on the client.
 
 	Runs all BeforeCommandRegister Hooks on the client.
 ]=]
