@@ -18,7 +18,7 @@ The [API reference](https://eryn.io/Cmdr/api/Cmdr) now uses Moonwave, meaning it
 
 This has been the main bottleneck for this update. Going forward, new releases should be much simpler and more frequent (but still only when needed and with backwards-compatibility as a top priority).
 
-The previous Cmdr website uses obsolete technology and was last updated in 2020. A copy of it is still available at [https://eryn.io/Cmdr/legacy](https://eryn.io/Cmdr/legacy/).
+The previous Cmdr website used obsolete technology and was last updated in 2020. A copy of it is still available at [https://eryn.io/Cmdr/legacy](https://eryn.io/Cmdr/legacy/).
 
 Note that we haven't created any redirects, either from the old pages or from the temporary `Cmdr/alpha` and `Cmdr/beta` pages, due to technical limitations.
 
