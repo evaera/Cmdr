@@ -94,6 +94,10 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 - The window might work a bit better on mobile? Mobile still isn't officially supported, but we're always happy to merge patches that make it a little easier.
 
+- Fixed a bug causing [duplicated outputs on Linux](https://github.com/evaera/Cmdr/issues/365)
+
+- You can now customize the interface to use new FontFaces without breaking Cmdr.
+
 - [Fixed replication bugs causing commands or types to not load on the client.](https://github.com/evaera/Cmdr/commit/8db4824f52bef023474c837fb2667a0b359a69df)
 
 
