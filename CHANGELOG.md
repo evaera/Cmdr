@@ -61,7 +61,7 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 - The maximum command string length has been reduced from 100,000 to 10,000, this will only affect commands that have a server element. If this [breaks you](https://xkcd.com/1172/): why? why on earth?
 
-- The `rotriever.toml` manifest has been deleted, which might break like 4 Roblox employees, and the 1 person in rural Nebraska still using Kayak instead of Wally. ([Let us know](https://github.com/evaera/Cmdr/issues/new?template=BLANK_ISSUE) if you're stuck with Rotriever-aligned tools and can't migrate to Wally, we'll reintroduce the manifest.)
+- The `rotriever.toml` manifest has been removed. [This doesn't impact any published code](https://github.com/search?q=path%3A**%2Frotriever.toml+%22Cmdr%22&type=code), but it might break some private code used by Roblox employees or if there's 1 person in rural Nebraska still using Kayak instead of Wally. ([Let us know](https://github.com/evaera/Cmdr/issues/new?template=BLANK_ISSUE) if you're stuck with Rotriever-aligned tools and can't migrate to Wally, we'll reintroduce the manifest.)
 
 ### API
 
