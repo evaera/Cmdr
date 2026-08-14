@@ -127,8 +127,8 @@ end)
 
 ---
 
-{/* Keep this the last one. /*}
-{/* and, no, MDX doesn't support HTML comments /*}
+{/* Keep this the last one. */}
+{/* and, no, MDX doesn't support HTML comments */}
 
 ## Adding Luau LSP type definitions
 
