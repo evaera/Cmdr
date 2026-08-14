@@ -34,7 +34,7 @@ We've added an `exit` `DefaultUtil` command, which will close the Cmdr window.
 
 This will be automatically included if you run [`Cmdr:RegisterDefaultCommands()`](https://eryn.io/Cmdr/api/Registry#RegisterDefaultCommands)
 
-Developer commands will [automatically supersede builtin commands](https://github.com/evaera/Cmdr/commit/49de87e516dca385dbfdbeb0260e2d706ef8c468). This would usually happen anyway, but now it's explict, instead of being at risk to race conditions.
+Developer commands will [automatically supersede builtin commands](https://github.com/evaera/Cmdr/commit/49de87e516dca385dbfdbeb0260e2d706ef8c468). This would usually happen anyway, but now it's explicit, instead of being at risk to race conditions.
 
 **Relative positions**
 
