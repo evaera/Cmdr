@@ -21,4 +21,4 @@ If you're experiencing issues, our first recommendation will always be to update
 
 Making sure you're always running the newest version of Cmdr will give you access to the latest features and bug fixes, and also keep your game safe from any vulnerabilities we find or are alerted to.
 
-We have a separate article talking about [Cmdr's security model](/docs/90-advanced/06-security.md)
+We have a separate article talking about [Cmdr's security model](/docs/advanced/security)
