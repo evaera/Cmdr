@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkcmdr||=[]).push([[7035],{99480(r){r.exports=JSON.parse('{"sourceUrl":"https://github.com/evaera/cmdr/blob/master","baseUrl":"/Cmdr/","classOrder":["Cmdr","CmdrClient","Registry","Dispatcher","Util","CommandContext","ArgumentContext"],"apiCategories":[]}')}}]);
