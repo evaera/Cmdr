@@ -103,7 +103,7 @@ end
 	@private
 
 	@prop _replicatedRoot ModuleScript
-	
+
 	Refers to the CmdrClient modulescript containing all shared functionality.
 ]=]
 
@@ -309,7 +309,7 @@ end
 
 --[=[
 	@within CmdrClient
-	Sets the [network event handler](/docs/commands-reference/networkeventhandlers) for a certain event type.
+	Sets the [network event handler](/docs/reference/networkeventhandlers) for a certain event type.
 ]=]
 function CmdrClient:HandleEvent(name: string, callback: (...any) -> ())
 	self._events[name] = callback

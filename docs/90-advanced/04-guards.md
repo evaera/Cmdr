@@ -56,7 +56,7 @@ Cmdr processes guards sequentially in the order they are listed inside the `Guar
 
 Because command definitions are shared between client and server, guards are evaluated on the client first during UI invocation, and evaluated **again on the server** prior to running server code to prevent exploiters from bypassing client checks.
 
-Including [Hooks](/docs/commands-reference/hooks) and client functions, the full execution order is:
+Including [Hooks](/docs/reference/hooks) and client functions, the full execution order is:
 
 1. `BeforeRun` hook on client.
 2. Command `Guards` on client.

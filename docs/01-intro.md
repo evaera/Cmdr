@@ -27,7 +27,7 @@ Originally designed for debugging, Cmdr has grown into a general-purpose command
 Cmdr might not be the right tool for your game if:
 
 - **You want a massive library of pre-made "admin" commands out of the box.** Cmdr ships with core utility commands, not a full suite of moderation or fun commands. You'll need to write the bulk of your command library yourself or adapt them from the [Cookbook](/docs/community/cookbook).
-- **You or your team are still learning Luau.** Cmdr is developer-focused. You'll need to write your own [command implementations](/docs/commands-reference/commands), [permission hooks](/docs/commands-reference/hooks), and custom systems (like logging) from scratch using code.
+- **You or your team are still learning Luau.** Cmdr is developer-focused. You'll need to write your own [command implementations](/docs/reference/commands), [permission hooks](/docs/reference/hooks), and custom systems (like logging) from scratch using code.
 - **Mobile or console players are your primary audience.** Cmdr is designed keyboard-first. While it works on other platforms, mobile UI support is basic and you'll need to build your own custom toggles or buttons for touch and controller users to open the console.
 
 ## How do I get started?

@@ -45,7 +45,7 @@ When registering a hook via `Cmdr.Registry:RegisterHook(hookName, callback, prio
 
 :::info Version Requirement
 
-`BeforeCommandRegister` was introduced in **v1.13.0**. If you are using an older release (such as **v1.12.0** on Wally), this hook is not yet available and attempting to register it will result in an error. Make sure your Cmdr installation is updated to v1.13.0 or higher to use this feature.
+`BeforeCommandRegister` was introduced in **v1.13.0**. If you are using an older release (such as **v1.12.0**), this hook is not yet available and attempting to register it will result in an error. Make sure your Cmdr installation is updated to use this feature.
 
 :::
 

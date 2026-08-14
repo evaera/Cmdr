@@ -69,6 +69,6 @@ Activation keys are used to show or hide Cmdr. By default, this is just `F2` but
 
 ## Next steps
 
-By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands-reference/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/commands-reference/hooks).
+By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/reference/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/reference/hooks).
 
 If you ever need help, you can check [the support page](/docs/intro#how-do-i-get-help-with-cmdr).
