@@ -32,3 +32,9 @@ autocompleteMenu.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
 ```
 
 Because `Cmdr.Gui` gives you a direct reference to the active `ScreenGui` instance, you can safely write visual styling extensions, apply custom UI themes, or listen to UI state changes immediately after activation without worrying about character spawn timing or race conditions.
+
+## Replacing the Cmdr interface
+
+If a `Cmdr` instance exists in `StarterGui`, CmdrClient will always wait for it to be inserted into the `PlayerGui`.
+
+This allows advanced uses to entirely replace the Cmdr interface, but we don't recommend this.
