@@ -145,7 +145,8 @@ module.exports = {
       {
         docs: {
           path: "../docs",
-          editUrl: ({ docPath }) => `${GIT_REPO_URL}/edit/${GIT_SOURCE_BRANCH}/docs/${docPath}`,
+          editUrl: ({ docPath }) =>
+            `${GIT_REPO_URL}/edit/${GIT_SOURCE_BRANCH}/docs/${docPath}`,
           sidebarCollapsible: true,
           sidebarPath: "./sidebars.js",
         },

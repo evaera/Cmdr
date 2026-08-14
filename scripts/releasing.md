@@ -5,7 +5,7 @@
 3. write your changelog
 4. push to master so that way you build and submit from github's head (which'll be the same head the tag is made from)
    - GitHub gives you bonus points if the commit is signed.
-5. update and publish docs and make sure they're pushed
+5. update and [publish docs](/.github/workflows/deploy-site.yml) and make sure they're live
 
 **actually do the release**
 
