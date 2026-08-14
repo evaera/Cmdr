@@ -13,8 +13,6 @@ Depending on your use case, you may need to register hooks on one or both sides.
 
 There can be multiple hooks registered for each phase. Hooks execute in **order of priority (lowest to highest)** until one returns a value that halts further execution.
 
----
-
 ## Registering hooks
 
 You can register hooks manually with `Cmdr.Registry:RegisterHook`, or bulk-register them across both client and server using `Cmdr.Registry:RegisterHooksIn(folder)`.
@@ -37,8 +35,6 @@ You can load data like a user's permissions or group roles into tables and read 
 
 :::
 
----
-
 ## Hook priority and ordering
 
 When registering a hook via `Cmdr.Registry:RegisterHook(hookName, callback, priority)`, you can pass an optional numeric `priority` argument (defaults to `0`).
@@ -46,8 +42,6 @@ When registering a hook via `Cmdr.Registry:RegisterHook(hookName, callback, prio
 - **Lowest values run first:** A hook with priority `-10` will run before a hook with priority `0`.
 - **Higher values run later:** A hook with priority `10` will run after standard priority (`0`) hooks.
 - **First return wins:** If a hook returns a halting value (such as a string for `BeforeRun` or `false` for `BeforeCommandRegister`), hook execution stops immediately.
-
----
 
 ## BeforeCommandRegister
 
@@ -99,8 +93,6 @@ The name is slightly misleading, because it can be ran against commands already 
 
 :::
 
----
-
 ## BeforeRun
 
 The `BeforeRun` hook is the last step before a command implementation itself executes, so all parsed arguments and context properties are fully available.
@@ -112,8 +104,6 @@ Returning a string from a `BeforeRun` hook halts command execution immediately a
 Commands will be blocked from running in a live game unless you register at least one `BeforeRun` hook. Commands in the `DefaultUtil` or `UserAlias` groups are exempt from this requirement.
 
 :::
-
----
 
 ## AfterRun
 
@@ -130,8 +120,6 @@ Cmdr.Registry:RegisterHook("AfterRun", function(context: any)
 	return nil
 end, 10)
 ```
-
----
 
 ## Execution order
 

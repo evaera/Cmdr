@@ -2,8 +2,6 @@
 
 Custom types give your arguments validation, autocompletion, and transformations. You can register custom types just like you would hooks, using the central [`Registry`](/api/Registry) module.
 
----
-
 ## Writing type definition files
 
 When a type is contained in a `ModuleScript`, it shouldn't return a plain table. Instead, it **must return a function** that accepts the [`Registry`](/api/Registry) as its sole argument. From there, you register the custom type dictionary using `registry:RegisterType("typeName", typeTable)`.
@@ -40,8 +38,6 @@ return function(registry: any)
 end
 ```
 
----
-
 ## The type execution pipeline
 
 When a user executes a command, their argument inputs run sequentially through a distinct execution pipeline. If any step fails or yields an error, the pipeline halts immediately.
@@ -60,8 +56,6 @@ When a user executes a command, their argument inputs run sequentially through a
    - **Input:** Output of `Transform()`.
    - **Returns:** Final Luau type.
    - **Description:** Converts the string into the target Luau type.
-
----
 
 ## Structure of a TypeDefinition
 
@@ -109,8 +103,6 @@ Parse = function(transformedValue: any): any
 
 **[REQUIRED]** The final stage of the lifecycle pipeline before the value is marked complete. This transforms the processed text tokens into the final Luau type object (e.g., an Instance, a Color3, or a table) which will be fed directly into your final command implementation module.
 
----
-
 ## Specialized type options
 
 Beyond basic processing, `TypeDefinition` objects can include metadata fields that dramatically alter how Cmdr interacts with them.
@@ -132,8 +124,6 @@ Default = function(player: Player): string
 ```
 
 The `Default` function must always return a **string**. This string value is inserted and treated exactly as raw user text **before** any parsing or `Transform` operations are evaluated.
-
----
 
 ## Type helper functions
 

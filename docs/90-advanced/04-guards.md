@@ -4,8 +4,6 @@ Guards are command-specific check functions defined directly in a command defini
 
 When you have requirements that pop up across multiple commands, such as checking if a player has an active character alive in the workspace or verifying an attribute, guards let you abstract those conditions into reusable functions rather than cluttering your actual command logic.
 
----
-
 ## Defining guards
 
 You declare guards by adding a `Guards` array to your command definition table. Each entry in the array is a function that receives the [`CommandContext`](/api/CommandContext) as its first argument.
@@ -45,8 +43,6 @@ return {
 }
 ```
 
----
-
 ## Execution flow and behavior
 
 Cmdr processes guards sequentially in the order they are listed inside the `Guards` array.
@@ -70,8 +66,6 @@ Including [Hooks](/docs/reference/hooks) and client functions, the full executio
 
 _\* Only runs if `ClientRun` isn't present or `ClientRun` returns `nil`._
 
----
-
 ## Parameters and varargs
 
 The dispatcher passes the current [`CommandContext`](/api/CommandContext) as the primary argument to each guard function.
@@ -85,8 +79,6 @@ Guards = {
 ```
 
 Behind the scenes, Cmdr's dispatcher also passes through any additional varargs supplied during internal dispatching. While standard command execution won't pass extra arguments beyond the context, this keeps guard execution consistent with how hooks receive arbitrary parameters.
-
----
 
 ## When to use guards vs. hooks
 

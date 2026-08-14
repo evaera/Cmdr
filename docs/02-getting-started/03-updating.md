@@ -8,8 +8,6 @@ Before updating, ensure your custom commands, types, and hooks are stored in the
 
 :::
 
----
-
 ## Model file (.rbxm)
 
 If you installed Cmdr manually using the Roblox model file, follow these steps to replace the old version:
@@ -21,8 +19,6 @@ If you installed Cmdr manually using the Roblox model file, follow these steps t
    - Drag and drop the downloaded `Cmdr.rbxm` file directly into the viewport or the Explorer window.
    - Right-click your preferred directory in the **Explorer** panel, hover over **Insert**, click **Import Roblox Model**, navigate to the `Cmdr.rbxm` file, and click **Open**.
 5. Ensure the new `Cmdr` ModuleScript is located in your preferred server directory.
-
----
 
 ## Wally
 
@@ -38,8 +34,6 @@ If you manage your packages using Wally and sync via Rojo, updating involves a q
 
 4. If you want to force an upgrade to a brand-new major version that falls outside your current range, manually change the version number string in your `wally.toml` to match the [latest release](https://github.com/evaera/Cmdr/releases/latest) version, then run `wally install`.
 5. Run your Rojo sync command to push the updated `ServerPackages` into Roblox Studio.
-
----
 
 ## Git submodule
 
@@ -80,8 +74,6 @@ _Note: Using the `--init` flag ensures that the submodule is properly initialize
 By default, running `git submodule update` places the sub-repository into a "detached HEAD" state, meaning changes are not tracked by a local working branch. If you intend to modify the Cmdr source code locally, remember to navigate into the submodule folder (`cd Cmdr`) and check out a dedicated working branch (e.g., `git checkout master`) before editing.
 
 :::
-
----
 
 ## Manual repository clone
 

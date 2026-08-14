@@ -16,8 +16,6 @@ Before `AutoExec`, creating aliases or running initialization sequences required
 
 :::
 
----
-
 ## Setting up persistent and session states with variables
 
 Because `AutoExec` runs entirely on the client, you can combine it with the default `var` and `var=` commands to read, write, and manage localized configuration environments.
@@ -34,8 +32,6 @@ When interacting with keys via `var` or `var=`, pay close attention to the prefi
 | `.`      | User-Specific, Session-Only | In-Memory (Server/Client Store) | Temporary runtime toggles, local debugging state.                |
 | `$`      | Game-Wide, Persistent       | Roblox `DataStoreService`       | Global developer toggles, cross-server maintenance flags.        |
 | `$.`     | Game-Wide, Session-Only     | In-Memory (Server/Client Store) | Current server-wide match preferences or temporary lobby states. |
-
----
 
 ## Best practices for AutoExec variables
 

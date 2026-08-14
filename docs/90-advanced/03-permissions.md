@@ -17,8 +17,6 @@ Registering hooks using `Cmdr.Registry:RegisterHooksIn()` clones your code to bo
 - **Client Commands:** If a command runs purely on the client via `ClientRun`, an exploiter could run it anyway. This is fine for visual or local utilities (like performance toggles), as exploiters can already modify their own client.
 - **Server Commands:** Any command that alters the game state, manages data, or affects other players **must** be enforced by a hook running securely on the server.
 
----
-
 ## Simple group-based permissions
 
 The safest architectural pattern for permissions is to **deny all groups by default** and selectively allowlist specific ones.
@@ -85,8 +83,6 @@ return function(registry: any)
 end
 ```
 
----
-
 ## Using persistent server stores for mod/ban bystems
 
 If your command needs to dynamically change a player's permission status mid-game (like a session-based `ban` or `tempmod` command), you can use Cmdr's built-in memory storage via `registry:GetStore()`.
@@ -129,8 +125,6 @@ return function(context: any, targetPlayer: Player): string?
 	return `Player {targetPlayer.Name} has been barred from using console commands for the remainder of this session.`
 end
 ```
-
----
 
 ## Gathering sensitive context via client data
 

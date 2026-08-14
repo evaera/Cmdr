@@ -2,8 +2,6 @@
 
 Welcome to the Cmdr cookbook! Here you will find practical recipes and code patterns for implementing common administrative workflows, custom user interfaces, and advanced network routines.
 
----
-
 ## Sending custom client notifications with network events
 
 Cmdr allows commands running on the server to dispatch messages to specific clients or broadcast them to every client using `context:SendEvent` and `context:BroadcastEvent`.
@@ -53,8 +51,6 @@ return {
 }
 ```
 
----
-
 ### Server implementation (`notifyServer.luau`)
 
 Filter both the `Title` and `Message` arguments through `TextService:FilterStringAsync()` using the command executor's `UserId`. Once filtered, dispatch the payload to the target clients.
@@ -99,8 +95,6 @@ If you want to broadcast a notification to every connected player at once, use `
 
 :::
 
----
-
 ### Client event listener (`CmdrClient.luau`)
 
 Register a listener on the client with `CmdrClient:HandleEvent` to receive the filtered payload and trigger your UI logic.
@@ -125,10 +119,9 @@ Cmdr:HandleEvent("ShowNotification", function(title: string, message: string, du
 end)
 ```
 
----
-
-{/* Keep this the last one. */}
-{/* and, no, MDX doesn't support HTML comments */}
+<!--
+Keep this the last one.
+-->
 
 ## Adding Luau LSP type definitions
 
@@ -413,8 +406,6 @@ export type CmdrLike = Cmdr | CmdrClient
 return nil
 ```
 
----
-
 ### Usage example
 
 To enforce these types inside your command definitions or execution scripts, import `CmdrTypes` at the top of your module:
@@ -437,5 +428,3 @@ const command: CmdrTypes.CommandDefinition = {
 
 return command
 ```
-
-

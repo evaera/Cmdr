@@ -4,8 +4,6 @@ Cmdr is designed with security as a top priority. It provides strict server-side
 
 There's a separate page [about security vulnerabilities in Cmdr itself](/docs/community/securityreport). Make sure you keep Cmdr up to date, we don't usually fix bugs in old versions of Cmdr.
 
----
-
 ## Can exploiters run my commands?
 
 **Not unless you explicitly permit them to.**
@@ -15,8 +13,6 @@ Exploiters have complete control over their local client environment and can fir
 - **Dual-side type validation:** Cmdr validates argument types on both the client and the server. Even if an exploiter bypasses client-side checks or fires raw network requests, the server re-validates all arguments before any command code is run.
 - **Mandatory server authorization:** Non-default commands are automatically blocked from running in live games unless you register at least one `BeforeRun` hook on the server.
 - **Server-authoritative execution:** Command logic executes strictly on the server. Returning an error string from a server `BeforeRun` hook halts command execution immediately, preventing any code from touching server state.
-
----
 
 ## How permission hooks work
 
@@ -38,8 +34,6 @@ return function(registry: any)
 end
 ```
 
----
-
 ## Command replication and `BeforeCommandRegister`
 
 Understanding how Cmdr handles command definition files is essential for maintaining secure games:
@@ -57,8 +51,6 @@ The `BeforeCommandRegister` hook runs on the **client** to filter which commands
 
 > **Key takeaway:** `BeforeCommandRegister` is purely a visual and UX filter to keep console menus clean. Never rely on hidden command names or client-side filtering as a security mechanism. Always authorize commands on the server using a `BeforeRun` hook.
 
----
-
 ## Noteworthy internals
 
 For security-focused developers, a few aspects of Cmdr's architecture are worth highlighting:
@@ -74,8 +66,6 @@ When a client sends a command request to the server, Cmdr does not blindly evalu
 ### Client-side execution isolation
 
 Commands with a `ClientRun` function or local utilities execute exclusively on the client that invoked them. Even if an exploiter modifies client-side utilities or local command scripts, those changes only affect their local client environment and cannot corrupt state on the server or for other players.
-
----
 
 ## Best practices for a secure setup
 
