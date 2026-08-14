@@ -1,5 +1,106 @@
 # Changelog
 
+## v1.13.0 (~~currently rc.3~~)
+
+*This is currently a prerelease version. Assuming no bugs, it will become `v1.13.0`. This version is expected to be stable but has not been as widely tested as we'd like.*
+
+It's been a long time since the last release and there have been [a lot of changes](https://github.com/evaera/Cmdr/compare/v1.12.0...v1.13.0-rc.3), purely internal ones have been skipped over.
+
+### Highlights
+
+**New website**
+
+Cmdr has a [new website](https://eryn.io/Cmdr), rebuilt from scratch using Docusaurus and Moonwave.
+
+The new website has updated documentation pages, including [advanced guides on topics like permissions](https://eryn.io/Cmdr/docs/advanced/permissions), [creating custom types](https://eryn.io/Cmdr/docs/advanced/customtypes), [Cmdr's security model](https://eryn.io/Cmdr/docs/advanced/security) as well as a [cookbook of examples](https://eryn.io/Cmdr/docs/community/cookbook).
+
+The [API reference](https://eryn.io/Cmdr/api/Cmdr) now uses Moonwave, meaning it'll always be kept up-to-date with Cmdr's source, and you can view a wider range of methods. Note that although _private_ properties and methods aren't restricted (you _can_ use them), they might be broken without warning by updates.
+
+This has been the main bottleneck for this update. Going forward, new releases should be much simpler and more frequent (but still only when needed and with backwards-compatibility as a top priority).
+
+The previous Cmdr website used obsolete technology and was last updated in 2020. A copy of it is still available at [https://eryn.io/Cmdr/legacy](https://eryn.io/Cmdr/legacy/).
+
+Note that we haven't created any redirects, either from the old pages or from the temporary `Cmdr/alpha` and `Cmdr/beta` pages, due to technical limitations.
+
+**Guards**
+
+Command definitions now include a [`Guards`](https://eryn.io/Cmdr/docs/advanced/guards) element. This allows command-specific check functions to be attached, which in turn can be reused across commands. For example, `hasAliveCharacter` could be pulled from a shared module and used in many commands.
+
+**New builtin commands**
+
+Roblox introduced a ban API in June 2024. We've added two `DefaultAdmin` commands: `ban` and `unban` which use these.
+
+We've added an `exit` `DefaultUtil` command, which will close the Cmdr window.
+
+This will be automatically included if you run [`Cmdr:RegisterDefaultCommands()`](https://eryn.io/Cmdr/api/Registry#RegisterDefaultCommands)
+
+Developer commands will [automatically supersede builtin commands](https://github.com/evaera/Cmdr/commit/49de87e516dca385dbfdbeb0260e2d706ef8c468). This would usually happen anyway, but now it's explicit, instead of being at risk to race conditions.
+
+**Relative positions**
+
+`teleport` builtin command now uses the new `positionVector3` builtin type (the `vector3` builtin type has not been changed).
+
+This type allows you to use `~[studs]` (where `[studs]` is a number of studs) for any part (or all) of a position, which will be calculated relative to your character's position (or `0` if you don't have a character). For example:
+
+- `tp . @~,~5,~` will teleport you 5 studs into the air, and correspondingly `tp . @~,~-5,~` will teleport you 5 studs into the ground.
+- `tp . @200,~,200` will teleport you to `200, 200` on the X and Z axes but not change your Y axis.
+
+**Deprecation warnings**
+
+Cmdr is over 8 years old, and we maintain as much compatibility as possible with previous versions. In order to avoid future pain, we've added deprecation warnings, for example when using the old name of a method.
+
+You can turn off specific deprecation warnings with [`[Cmdr/CmdrClient].Util:SuppressDeprecationWarning`](https://eryn.io/Cmdr/api/Util/#SuppressDeprecationWarning).
+
+Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationWarning::{the name of the deprecation warning}]`, followed by the content of the warning, and a stack trace.
+
+### Changes that might break you
+
+- If a `Cmdr` instance exists in `StarterGui`, CmdrClient will always `PlayerGui:WaitForChild("Cmdr")` before loading. This might break you if you've [customized the interface](https://eryn.io/Cmdr/docs/advanced/customizinginterface) and do custom character loading.
+
+- `blink` and `thru` builtin commands now ignore non-collidable parts. This might break you [if you blink to touchable but not collidable parts for triggering events](https://github.com/evaera/Cmdr/issues/321#issuecomment-2064428309).
+
+- The maximum command string length has been reduced from 100,000 to 10,000, this will only affect commands that have a server element. If this [breaks you](https://xkcd.com/1172/): why? why on earth?
+
+- The `rotriever.toml` manifest has been removed. [This doesn't impact any published code](https://github.com/search?q=path%3A**%2Frotriever.toml+%22Cmdr%22&type=code), but it might break some private code used by Roblox employees or if there's 1 person in rural Nebraska still using Kayak instead of Wally. ([Let us know](https://github.com/evaera/Cmdr/issues/new?template=BLANK_ISSUE) if you're stuck with Rotriever-aligned tools and can't migrate to Wally, we'll reintroduce the manifest.)
+
+### API
+
+- [`CmdrClient.Gui`](https://eryn.io/Cmdr/api/CmdrClient#Gui) added. This is a property that points to the current Cmdr GUI. Use this when [customizing the interface](https://eryn.io/Cmdr/docs/advanced/customizinginterface).
+
+- [`CmdrClient.Toggled`](https://eryn.io/Cmdr/api/CmdrClient#Toggled) added. This is a signal that fires when the Cmdr window is toggled, passing the new `visible` status.
+
+- Command hiding has been added, using the new [`BeforeCommandRegister`](https://eryn.io/Cmdr/docs/commands/hooks#beforecommandregister) hook.
+
+- Cmdr will now warn if it's located outside of a server container, and the Wally manifest now explicitly uses the `server` realm. We don't know why, but there have been really obscure bugs we haven't been able to understand and only happen when the Cmdr server library lives in a replicated container. You can ignore the warning if you don't have any issues with your setup.
+
+- Fuzzy finders now have a [matchStart optional parameter](https://github.com/evaera/Cmdr/commit/67fc84b0a770a2dba524e996b794bb713a0cc606) and now [automatically sort](https://github.com/evaera/Cmdr/commit/8491d3416898e982915e174c486d032dd7bb91f3).
+
+### Builtin commands
+
+- The `runif` builtin command now has [more conditions](https://github.com/evaera/Cmdr/commit/c3c73617dbdfb7d75c8456d7057c214a385e34c5).
+- `kick` builtin command now has a reason argument.
+- `teleport` builtin command now unseats players.
+- `commands` and `cmds` are now aliases for the `help` command.
+- `help` command no longer breaks with inline arguments.
+- `rand` builtin command now uses `Random:NextInteger` instead of `math.random`.
+
+### Interface and internal
+
+- TextChatService is now supported, including in the `announce` builtin command, `bind` builtin command, and Cmdr window.
+
+- Cmdr now has a [vulnerability reporting policy](https://github.com/evaera/Cmdr/blob/master/SECURITY.md).
+
+- Warning and error console outputs from Cmdr will now start with `[Cmdr]`.
+
+- The window might work a bit better on mobile? Mobile still isn't officially supported, but we're always happy to merge patches that make it a little easier.
+
+- Fixed a bug causing [duplicated outputs on Linux](https://github.com/evaera/Cmdr/issues/365)
+
+- You can now customize the interface to use new FontFaces without breaking Cmdr.
+
+- [Fixed replication bugs causing commands or types to not load on the client.](https://github.com/evaera/Cmdr/commit/8db4824f52bef023474c837fb2667a0b359a69df)
+
+
 ## v1.12.0
 
 - Add `convertTimestamp` default command, outputs a human-readable timestamp from epoch seconds
