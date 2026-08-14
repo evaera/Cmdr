@@ -39,7 +39,7 @@ The [Cmdr Discord server](https://discord.gg/xFzPVg5WXm) is a good place to star
 
 If all else fails and you can't get in touch with any maintainer, please open a GitHub issue stating simply you have a security report and you're struggling to get in touch. We can help from there.
 
-> **Warning**: If you attempt to get in touch publicly, you must not disclose or hint at any information pertaining to the contents of your report. Please do not send details privately in a drive-by fashion either; we will tell you, explicitly when to provide information about your report, which will be in a secure channel (usually a private Discord groupchat between you and the maintainers).
+> [!CAUTION] If you attempt to get in touch publicly, you must not disclose or hint at any information pertaining to the contents of your report. Please do not send details privately in a drive-by fashion either; we will tell you, explicitly when to provide information about your report, which will be in a secure channel (usually a private Discord groupchat between you and the maintainers).
 
 ### Email
 
@@ -49,7 +49,7 @@ We're planning on creating an email address for reports to be submitted to, but 
 
 After we've received your report, we'll start investigating as soon as possible. We are volunteers at the end of the day.
 
-Your report will be shared with an internal group of trusted contributors and advisers, they'll help us to handle your report and get the issue fixed. We'll do our best to keep you up-to-date with the progress of your report, but can't make any guarantees; you're welcome to infrequently enquire on the status of your report.
+Your report will be shared with an internal group of trusted contributors and advisers, they'll help us to handle your report and get the issue fixed. We'll do our best to keep you up-to-date with the progress of your report, but can't make any guarantees; you're welcome to periodically enquire on the status of your report.
 
 We will notify you when we have identified a fix to the vulnerability. You may be invited to confirm that our solution covers the vulnerability adequately.
 
@@ -59,7 +59,7 @@ We will publish a new release containing the fix and - unless exceptional circum
 
 We appreciate that recognition is important to researchers and contributors and will provide credit where due. We will advise you when it is appropriate for you to fully disclose and publicly discuss the vulnerability. Ordinarily, this will be when a full advisory has released. We'll then close the groupchat or email thread about your report.
 
-> **Warning**: To protect our users, we ask for you to be discreet. Prior to the publishing of a remediation release, you must **not** publicly discuss any information regarding the vulnerability, and we ask you to be mindful of who you discuss the vulnerability with.
+> [!NOTE] To protect our users, we ask for you to be discreet. Prior to the publishing of a remediation release, you must **not** publicly discuss any information regarding the vulnerability, and we ask you to be mindful of who you discuss the vulnerability with.
 
 ## Guidance
 
@@ -76,7 +76,7 @@ We will **not** consider reports which:
 - indicate that the library does not fully align with "best practice" without identifying a specific vulnerability
 - detail vulnerabilities that require the execution of server-sided code
 - detail vulnerabilities that only have client-sided impact; for instance, bypassing hooks or guards on a client-only command
-- vulnerabilities which do not affect the latest released version of Cmdr or the 'mainline' version (the current code on the main branch)
+- vulnerabilities which do not affect the latest released version of Cmdr or the "next" version (the current code on the `master` branch)
 - do not relate to the Cmdr library; for example, a bug in example code we provide on our website/Discord or a bug which only affects a downstream project or game that uses/depends on Cmdr. In the case of downstream vulnerabilities, you should report these to them directly.
 
 Generally speaking, reports peratining to things like Denial of Service, rate limiting, and spam are unlikely to be considered unless these have side effects which can create a vulnerability (fictional example: spamming a hook-restricted command 100,000 times will let you bypass the hook).
@@ -89,6 +89,6 @@ If you've identified a potential vulnerability in a pull request which hasn't be
 
 This policy is designed to be compatible with common vulnerability disclosure good practice. It does not give you permission to act in any way that is inconsistent with the law, or which might cause us or our users to be in breach of any legal obligations.
 
-Since we don't own the games Cmdr runs in, we usually do not have the standing to seek charges for computer intrusion or abuse offences. Accordingly, we can't provide any type of indemnity; you should refer to the policies of Roblox and any game you intend to conduct testing against (if not your own).
+Since we don't own the games Cmdr runs in, we can't provide legal authority for security testing. You should refer to the policies of Roblox and any game you intend to conduct testing against (if not your own).
 
 **Nothing in this policy is legal advice. Nothing in this policy is legally binding (e.g. a contract).**

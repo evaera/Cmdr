@@ -20,3 +20,5 @@ It's important that you keep your libraries up to date. We do not monitor, accep
 If you're experiencing issues, our first recommendation will always be to update Cmdr; this applies even if the update is major (breaking).
 
 Making sure you're always running the newest version of Cmdr will give you access to the latest features and bug fixes, and also keep your game safe from any vulnerabilities we find or are alerted to.
+
+We have a separate article talking about [Cmdr's security model](/docs/90-advanced/06-security.md)
