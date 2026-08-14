@@ -84,7 +84,7 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 - `help` command no longer breaks with inline arguments.
 - `rand` builtin command now uses `Random:NextInteger` instead of `math.random`.
 
-## Interface and internal
+### Interface and internal
 
 - [Player display names will now, well, display](https://github.com/evaera/Cmdr/commit/a77c5beb9354903e4ec369b185153cd1eeba053f) (but only if different from the player's username).
 
