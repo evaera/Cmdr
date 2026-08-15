@@ -7,7 +7,12 @@ registry = "https://github.com/UpliftGames/wally-index"
 homepage = "https://eryn.io/Cmdr/"
 repository = "https://github.com/evaera/Cmdr"
 realm = "server"
-exclude = ["website", "docs", "scripts"]
-include = ["CHANGELOG.md", "Cmdr", "default.project.json", "LICENSE"]
+exclude = ["**"]
+include = [
+  "assets", "assets/**",
+  "Cmdr", "Cmdr/**",
+  "CHANGELOG.md", "LICENSE", "README.md", "SECURITY.md",
+  "wally.toml", "default.project.json"
+]
 
 [dependencies]

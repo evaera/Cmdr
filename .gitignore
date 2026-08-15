@@ -1,5 +1,6 @@
 # Editor files
 .vscode
+.DS_Store
 
 # Rojo & Selene
 sourcemap.json
