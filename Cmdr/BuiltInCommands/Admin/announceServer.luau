@@ -12,6 +12,6 @@ return function(context: any, text: string): string
 		return `Failed to filter announcement: {filteredText}`
 	end
 
-	context:BroadcastEvent("Message", filteredText)
+	context:BroadcastEvent("Message", filteredText, context.Executor)
 	return "Created announcement."
 end
