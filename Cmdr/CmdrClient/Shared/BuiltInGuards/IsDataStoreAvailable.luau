@@ -47,7 +47,7 @@ return function(index: number)
 
 		if RunService:IsClient() then
 			if game.PlaceId == 0 then
-				return "You must publish this place to the web to use saved keys."
+				return "# You must publish this place to the web to use saved keys."
 			end
 		else
 			if dataStoresActive == nil then
@@ -56,7 +56,7 @@ return function(index: number)
 			end
 
 			if not dataStoresActive then
-				return "You must publish this place to the web to use saved keys."
+				return "# You must publish this place to the web to use saved keys."
 			end
 		end
 
