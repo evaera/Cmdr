@@ -1,27 +1,4 @@
-const DataStoreService = game:GetService("DataStoreService")
 const RunService = game:GetService("RunService")
-
-local dataStoresActive: boolean? = nil
-const queue: { thread } = {}
-
-if RunService:IsServer() then
-	task.spawn(function()
-		local success
-		success = pcall(function()
-			const targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
-			targetStore:GetAsync("test_key")
-		end)
-
-		dataStoresActive = success
-
-		while #queue > 0 do
-			const nextThread = table.remove(queue, 1)
-			if nextThread then
-				coroutine.resume(nextThread)
-			end
-		end
-	end)
-end
 
 return function(index: number)
 	return function(context: any): string?
@@ -33,6 +10,7 @@ return function(index: number)
 		end
 
 		local saved = true
+
 		if key:sub(1, 1) == "$" then
 			key = key:sub(2)
 		end
@@ -49,15 +27,8 @@ return function(index: number)
 			if game.PlaceId == 0 then
 				return "# You must publish this place to the web to use saved keys."
 			end
-		else
-			if dataStoresActive == nil then
-				table.insert(queue, coroutine.running())
-				coroutine.yield()
-			end
-
-			if not dataStoresActive then
-				return "# You must publish this place to the web to use saved keys."
-			end
+		elseif not context.Cmdr.Util.GetDataStore() then
+			return "# You must publish this place to the web to use saved keys."
 		end
 
 		return nil
