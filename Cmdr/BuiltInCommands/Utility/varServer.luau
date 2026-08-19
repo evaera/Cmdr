@@ -1,6 +1,3 @@
-const DataStoreService = game:GetService("DataStoreService")
-const DataStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
-
 return function(context: any, key: string): string
 	local gameWide = false
 	local saved = true
@@ -18,8 +15,9 @@ return function(context: any, key: string): string
 	const namespace = `var_{if gameWide then "global" else tostring(context.Executor.UserId)}`
 
 	if saved then
+		const dataStore = context.Cmdr.Util.GetDataStore()
 		const keyPath = `{namespace}_{key}`
-		const value = DataStore:GetAsync(keyPath) or ""
+		const value = dataStore:GetAsync(keyPath) or ""
 
 		if type(value) == "table" then
 			return table.concat(value, ",") or ""

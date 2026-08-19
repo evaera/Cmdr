@@ -1,6 +1,12 @@
 -- Here be dragons
 
+const DataStoreService = game:GetService("DataStoreService")
+const RunService = game:GetService("RunService")
 const TextService = game:GetService("TextService")
+
+local dataStoreActive: boolean? = nil
+local dataStore: GlobalDataStore? = nil
+const dataStoreQueue: { thread } = {}
 
 const CMDR_ESCAPE = "___!CMDR_ESCAPE!___"
 const CMDR_QUOTE = "___!CMDR_QUOTE!___"
@@ -14,6 +20,30 @@ const END_QUOTE_PATTERN = [=[(['"])$]=]
 const ESCAPED_QUOTE_PATTERN = [=[(\*)['"]$]=]
 
 const CACHED_LABELS = setmetatable({}, { __mode = "k" })
+
+if RunService:IsServer() then
+	task.spawn(function()
+		const success, result = pcall(function()
+			const targetStore = DataStoreService:GetDataStore("_package/eryn.io/Cmdr")
+			targetStore:GetAsync("test_key")
+			return targetStore
+		end)
+
+		dataStoreActive = success
+
+		if success then
+			dataStore = result
+		end
+
+		while #dataStoreQueue > 0 do
+			const nextThread = table.remove(dataStoreQueue, 1)
+
+			if nextThread then
+				coroutine.resume(nextThread)
+			end
+		end
+	end)
+end
 
 -- Converts instances into display names and keeps the original values.
 const function transformInstanceSet(instances: { any }): ({ string }, { any })
@@ -75,6 +105,19 @@ end
 const Util = {
 	_deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } },
 }
+
+function Util.GetDataStore(): GlobalDataStore?
+	if RunService:IsClient() then
+		return
+	end
+
+	if dataStoreActive == nil then
+		table.insert(dataStoreQueue, coroutine.running())
+		coroutine.yield()
+	end
+
+	return dataStore
+end
 
 --[=[
 	@within Util
