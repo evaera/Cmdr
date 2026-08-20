@@ -219,8 +219,8 @@ return function(CmdrClient, AutoComplete)
 			self:_setChatEnabled(false)
 			self:_setMouseUnlocked(true)
 
-			self:_setEntryText("")
 			self._entry.TextBox:CaptureFocus()
+			self:_setEntryText("")
 		else
 			self:_setChatEnabled(true)
 			self:_setMouseUnlocked(false)
