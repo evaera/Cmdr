@@ -219,8 +219,8 @@ return function(CmdrClient, AutoComplete)
 			self:_setChatEnabled(false)
 			self:_setMouseUnlocked(true)
 
-			self:_setEntryText("")
 			self._entry.TextBox:CaptureFocus()
+			self:_setEntryText("")
 		else
 			self:_setChatEnabled(true)
 			self:_setMouseUnlocked(false)
@@ -459,7 +459,7 @@ return function(CmdrClient, AutoComplete)
 
 		-- Check for activation shortcut keys
 		if table.find(CmdrClient._activationKeys, input.KeyCode) then
-			self:_handleActivationKey()
+			task.defer(self._handleActivationKey, self)
 			return
 		end
 
