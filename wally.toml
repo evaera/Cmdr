@@ -6,7 +6,7 @@ license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 homepage = "https://eryn.io/Cmdr/"
 repository = "https://github.com/evaera/Cmdr"
-realm = "server"
+realm = "shared"
 exclude = ["**"]
 include = [
   "assets", "assets/**",
