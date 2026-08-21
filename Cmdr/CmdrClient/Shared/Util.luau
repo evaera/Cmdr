@@ -392,7 +392,7 @@ function Util.MashExcessArguments(arguments: { string }, max: number): { string 
 
 	for argumentIndex = 1, #arguments do
 		if argumentIndex > max then
-			results[max] ..= ` {arguments[argumentIndex]}`
+			results[max] = (results[max] or "") .. ` {arguments[argumentIndex]}`
 		else
 			results[argumentIndex] = arguments[argumentIndex]
 		end
