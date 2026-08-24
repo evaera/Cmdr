@@ -6,6 +6,8 @@ const path = require("path");
 const GIT_REPO_URL = "https://github.com/evaera/cmdr";
 const GIT_SOURCE_BRANCH = "master";
 
+const LATEST_VERSION = require("../package.json").version;
+
 module.exports = {
   title: "Cmdr",
   tagline: "The extensible command console for Roblox developers",
@@ -19,24 +21,10 @@ module.exports = {
   deploymentBranch: "gh-pages",
 
   onBrokenLinks: "throw",
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: "warn",
-    },
-  },
 
   themeConfig: {
     prism: {
-      additionalLanguages: [
-        "bash",
-        "css",
-        "javascript",
-        "diff",
-        "git",
-        "json",
-        "typescript",
-        "toml",
-      ],
+      additionalLanguages: ["bash", "diff", "toml"],
     },
 
     navbar: {
@@ -64,7 +52,9 @@ module.exports = {
         },
         {
           href: `${GIT_REPO_URL}/releases`,
-          label: "Releases",
+          label: /[\-]/.test(LATEST_VERSION)
+            ? LATEST_VERSION
+            : `Latest: ${LATEST_VERSION}`,
           position: "right",
         },
         {
@@ -89,20 +79,23 @@ module.exports = {
           title: "Learn",
           items: [
             { label: "Introduction", href: "/docs/intro" },
-            { label: "Best practice", href: "/docs/advanced/bestpractice" },
             { label: "API reference", href: "/api/Cmdr" },
             { label: "Changelog", href: "/changelog" },
+            { label: "Cookbook", href: "/docs/cookbook" },
           ],
         },
         {
           title: "Community",
           items: [
-            { label: "Contribute", href: "/docs/contribute/index" },
-            { label: "Security", href: "/docs/community/securityreport" },
             { label: "Discord", href: "https://discord.gg/xFzPVg5WXm" },
             {
               label: "Bug tracker",
               href: "https://github.com/evaera/Cmdr/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc",
+            },
+            { label: "Contribute", href: "/docs/contribute" },
+            {
+              label: "Report vulnerability",
+              href: "/docs/securityreport",
             },
           ],
         },
@@ -134,6 +127,41 @@ module.exports = {
           "ArgumentContext",
         ],
         apiCategories: [],
+      },
+    ],
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        // prettier-ignore
+        redirects: [
+          { from: "/docs", to: "/docs/intro" },
+          { from: "/docs/getting-started/installation", to: "/docs/installation" },
+          { from: "/docs/getting-started/setup", to: "/docs/setup" },
+          { from: "/docs/getting-started/updating", to: "/docs/updating" },
+
+          { from: "/docs/reference/commands", to: "/docs/commands" },
+          { from: "/docs/reference/hooks", to: "/docs/hooks" },
+          { from: "/docs/reference/types", to: "/docs/types" },
+          { from: "/docs/reference/metacommands", to: "/docs/metacommands", },
+          { from: "/docs/reference/networkeventhandlers", to: "/docs/networkeventhandlers" },
+          { from: "/docs/reference/autoexec", to: "/docs/autoexec" },
+          { from: "/docs/commands-reference/commands", to: "/docs/commands" },
+          { from: "/docs/commands-reference/hooks", to: "/docs/hooks" },
+          { from: "/docs/commands-reference/types", to: "/docs/types" },
+          { from: "/docs/commands-reference/metacommands", to: "/docs/metacommands", },
+          { from: "/docs/commands-reference/networkeventhandlers", to: "/docs/networkeventhandlers" },
+          { from: "/docs/commands-reference/autoexec", to: "/docs/autoexec" },
+
+          { from: "/docs/advanced/permissions", to: "/docs/permissions" },
+          { from: "/docs/advanced/customizinginterface", to: "/docs/customizinginterface" },
+          { from: "/docs/advanced/customisinginterface", to: "/docs/customizinginterface" },
+          { from: "/docs/customisinginterface", to: "/docs/customizinginterface" },
+          { from: "/docs/advanced/guards", to: "/docs/guards" },
+          { from: "/docs/advanced/customtypes", to: "/docs/customtypes" },
+          { from: "/docs/advanced/security", to: "/docs/security" },
+          { from: "/docs/community/cookbook", to: "/docs/cookbook" },
+          { from: "/docs/community/securityreport", to: "/docs/securityreport" },
+        ],
       },
     ],
     "docusaurus-lunr-search",
