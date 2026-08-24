@@ -47,7 +47,7 @@ const NIL_PROPERTIES = { "_autoExecFlushConnection" }
 --[=[
 	@within Registry
 	@interface ArgumentDefinition
-	.Type string | TypeDefinition -- The argument type (case sensitive), or an [inline TypeDefinition object](/docs/reference/commands#dynamic-arguments-and-inline-types).
+	.Type string | TypeDefinition -- The argument type (case sensitive), or an [inline TypeDefinition object](/docs/commands#dynamic-arguments-and-inline-types).
 	.Name string -- The argument name, this is displayed to the user as they type.
 	.Description string? -- A description of what the argument is, this is also displayed to the user.
 	.Optional boolean? -- If this is set to `true`, then the user can run the command without filling out the value. In which case, the argument will be sent to implementations as `nil`.
@@ -74,7 +74,7 @@ const NIL_PROPERTIES = { "_autoExecFlushConnection" }
 --[=[
 	@within Registry
 	@interface TypeDefinition
-	.Prefixes string? -- String containing [prefixed union types](/docs/reference/commands#prefixed-union-types) for this type. This property should omit the inital type, so the string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`
+	.Prefixes string? -- String containing [prefixed union types](/docs/commands#prefixed-union-types) for this type. This property should omit the inital type, so the string should begin with a prefix character, e.g. `Prefixes = "# integer ! boolean"`
 	.DisplayName string? -- Overrides the user-facing name of this type in the autocomplete menu. Otherwise, the registered name of the type will be used.
 	.Default ((Player) -> string)? -- Should return the "default" value for this type as a string. For example, the default value of the `player` type is the name of the player who ran the command.
 	.Listable boolean? -- If true, this will tell Cmdr that comma-separated lists are allowed for this type. Cmdr will automatically split the list and parse each segment through your `Transform`, `Validate`, `Autocomplete` and `Parse` functions individually, so you don't have to change the logic of your type at all. The only limitation is that your `Parse` function **must return a table**, the tables from each individual segment's `Parse` functions will be merged into one table at the end of the parsing step. The uniqueness of values is ensured upon merging, so even if the user lists the same value several times, it will only appear once in the final table.
