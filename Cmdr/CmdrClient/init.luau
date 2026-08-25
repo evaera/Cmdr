@@ -362,15 +362,7 @@ return setmetatable(CmdrClient, {
 		assert(value, `[Cmdr] Dispatcher has no method or property "{key}".`)
 
 		if type(value) == "function" then
-			if not script:GetAttribute("HasShownProxyCallWarning") then
-				warn(
-					debug.traceback(
-						`[Cmdr] [APIUsage::ProxyCalls] Method calls should be performed by their respective modules rather than the Cmdr object.`,
-						2
-					)
-				)
-				script:SetAttribute("HasShownProxyCallWarning", true)
-			end
+			Util:_emitDeprecationWarning("ProxyCalls")
 
 			return function(_, ...)
 				return value(dispatcher, ...)

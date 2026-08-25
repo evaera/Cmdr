@@ -88,7 +88,7 @@ end
 	@private
 
 	@prop _replicatedRoot ModuleScript
-	
+
 	Refers to the CmdrClient modulescript containing all shared functionality.
 ]=]
 
@@ -163,15 +163,7 @@ return setmetatable(Cmdr, {
 		assert(value, `[Cmdr] Registry has no method or property "{key}".`)
 
 		if type(value) == "function" then
-			if not self._replicatedRoot:GetAttribute("HasShownProxyCallWarning") then
-				warn(
-					debug.traceback(
-						`[Cmdr] [APIUsage::ProxyCalls] Method calls should be performed by their respective modules rather than the Cmdr object.`,
-						2
-					)
-				)
-				self._replicatedRoot:SetAttribute("HasShownProxyCallWarning", true)
-			end
+			Util:_emitDeprecationWarning("ProxyCalls")
 
 			return function(_, ...)
 				return value(registry, ...)
