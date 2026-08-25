@@ -32,7 +32,7 @@ end
 	@class Cmdr
 	@server
 
-	The Cmdr server singleton and entry point.
+	The Cmdr server object and entry point.
 ]=]
 
 --[=[
@@ -173,6 +173,6 @@ return setmetatable(Cmdr, {
 		return nil
 	end,
 	__newindex = function(_, key)
-		error(`[Cmdr] Cannot assign key "{key}"; the Cmdr singleton is read-only.`)
+		error(`[Cmdr] Cannot assign key "{key}"; the Cmdr object is read-only.`)
 	end,
 })

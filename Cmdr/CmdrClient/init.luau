@@ -39,7 +39,7 @@ end
 	@class CmdrClient
 	@client
 
-	The Cmdr client singleton and entry point.
+	The Cmdr client object and entry point.
 ]=]
 
 --[=[
@@ -372,6 +372,6 @@ return setmetatable(CmdrClient, {
 		return nil
 	end,
 	__newindex = function(_, key)
-		error(`[Cmdr] Cannot assign key "{key}"; the CmdrClient singleton is read-only.`)
+		error(`[Cmdr] Cannot assign key "{key}"; the CmdrClient object is read-only.`)
 	end,
 })
