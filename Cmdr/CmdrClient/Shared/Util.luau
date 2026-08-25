@@ -869,4 +869,11 @@ function Util:SuppressDeprecationWarning(names: string | { string })
 	end
 end
 
+Util:_registerDeprecationWarning(
+	"ProxyCalls",
+	`Method calls should be performed against their respective modules rather than the {if RunService:IsServer()
+		then "Cmdr"
+		else "CmdrClient"} object. Proxy calls are deprecated, they exist for backwards compatibility and should not be used for new work.`
+)
+
 return Util
