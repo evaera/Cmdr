@@ -1,5 +1,6 @@
 **prepare for release**
 
+0. make sure `@unreleased` moonwave tags are updated to `@since` – the docs site shows the latest released version at the top, so we have to be careful about unreleased features showing up in the API
 1. `npm run set-version 1.14.0`
 2. check diffs: make sure you haven't accidentally clobbered wally, etc.
 3. write your changelog
