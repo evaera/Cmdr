@@ -47,7 +47,7 @@ This type allows you to use `~[studs]` (where `[studs]` is a number of studs) fo
 
 **Deprecation warnings**
 
-Cmdr is over 8 years old, and we maintain as much compatibility as possible with previous versions. In order to avoid future pain, we've added deprecation warnings, for example when using the old name of a method.
+Cmdr is over 8 years old, and we maintain as much compatibility as possible with previous versions. In order to avoid future pain, we've added deprecation warnings, for example when using the old name of a method or when using proxy calls like `Cmdr:RegisterCommandsIn` instead of `Cmdr.Registry:RegisterCommandsIn`.
 
 You can turn off specific deprecation warnings with [`[Cmdr/CmdrClient].Util:SuppressDeprecationWarning`](https://eryn.io/Cmdr/api/Util/#SuppressDeprecationWarning).
 
@@ -61,7 +61,7 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 - The maximum command string length has been reduced from 100,000 to 10,000, this will only affect commands that have a server element. If this [breaks you](https://xkcd.com/1172/): why? why on earth?
 
-- The `rotriever.toml` manifest has been removed. [This doesn't impact any published code](https://github.com/search?q=path%3A**%2Frotriever.toml+%22Cmdr%22&type=code), but it might break some private code used by Roblox employees or if there's 1 person in rural Nebraska still using Kayak instead of Wally. ([Let us know](https://github.com/evaera/Cmdr/issues/new?template=BLANK_ISSUE) if you're stuck with Rotriever-aligned tools and can't migrate to Wally, we'll reintroduce the manifest.)
+- The `rotriever.toml` manifest has been removed. [This doesn't impact any published code](https://github.com/search?q=path%3A**%2Frotriever.toml+%22Cmdr%22&type=code) but it might break some private code. ([Let us know](https://github.com/evaera/Cmdr/issues/new?template=BLANK_ISSUE) if you're stuck with Rotriever-aligned tools and can't migrate to Wally, we'll reintroduce the manifest.)
 
 ### API
 
@@ -71,9 +71,11 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 - Command hiding has been added, using the new [`BeforeCommandRegister`](https://eryn.io/Cmdr/docs/hooks#beforecommandregister) hook.
 
-- Cmdr will now warn if it's located outside of a server container, and the Wally manifest now explicitly uses the `server` realm. We don't know why, but there have been really obscure bugs we haven't been able to understand and only happen when the Cmdr server library lives in a replicated container. You can ignore the warning if you don't have any issues with your setup.
+- Cmdr will now warn if it's located outside of a server container. We don't know why, but there have been really obscure bugs we haven't been able to understand and only happen when the Cmdr server library lives in a replicated container. You can ignore the warning if you don't have any issues with your setup.
 
 - Fuzzy finders now have a [matchStart optional parameter](https://github.com/evaera/Cmdr/commit/67fc84b0a770a2dba524e996b794bb713a0cc606) and now [automatically sort](https://github.com/evaera/Cmdr/commit/8491d3416898e982915e174c486d032dd7bb91f3).
+
+- There are now explicit errors when invalid methods or properties are used.
 
 ### Builtin commands
 
@@ -100,6 +102,9 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 - [Fixed replication bugs causing commands or types to not load on the client.](https://github.com/evaera/Cmdr/commit/8db4824f52bef023474c837fb2667a0b359a69df)
 
+- Command aliases now display correctly with autocomplete.
+
+- 3 keybinds have been added: `ESC` to close the UI, `LCTRL` + `BACKSP` to clear the input line, and `TAB` to recapture input line focus.
 
 ## v1.12.0
 

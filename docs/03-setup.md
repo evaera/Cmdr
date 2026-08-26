@@ -36,7 +36,7 @@ Cmdr.Registry:RegisterDefaultCommands() -- Optional: This loads the default set 
 -- You can also register types or hooks here: read on or check the API reference!
 ```
 
-The [`Cmdr` object](/api/Cmdr) is the main server singleton. The [`Registry`](/api/Registry) is used on both the client and server, and it keeps track of all the commands, types and hooks that Cmdr knows about.
+The [`Cmdr` object](/api/Cmdr) is the main server object. The [`Registry`](/api/Registry) is used on both the client and server, and it keeps track of all the commands, types and hooks that Cmdr knows about.
 
 Cmdr will automatically create and insert into StarterGui its console interface (called Window). If you'd like to (optionally) customise the look of the Window, we have [a guide on this in our Advanced section](/docs/customizinginterface).
 
