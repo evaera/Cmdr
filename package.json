@@ -1,7 +1,7 @@
 {
   "name": "cmdr",
   "private": true,
-  "version": "1.13.0-rc.3",
+  "version": "1.13.0-rc.4",
   "description": "Extensible command console for Roblox developers",
   "license": "MIT",
   "scripts": {
