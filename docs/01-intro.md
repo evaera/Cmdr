@@ -26,8 +26,8 @@ Originally designed for debugging, Cmdr has grown into a general-purpose command
 
 Cmdr might not be the right tool for your game if:
 
-- **You want a massive library of pre-made "admin" commands out of the box.** Cmdr ships with core utility commands, not a full suite of moderation or fun commands. You'll need to write the bulk of your command library yourself or adapt them from the [Cookbook](/docs/community/cookbook).
-- **You or your team are still learning Luau.** Cmdr is developer-focused. You'll need to write your own [command implementations](/docs/reference/commands), [permission hooks](/docs/reference/hooks), and custom systems (like logging) from scratch using code.
+- **You want a massive library of pre-made "admin" commands out of the box.** Cmdr ships with core utility commands, not a full suite of moderation or fun commands. You'll need to write the bulk of your command library yourself.
+- **You or your team are still learning Luau.** Cmdr is developer-focused. You'll need to write your own [command implementations](/docs/commands), [permission hooks](/docs/hooks), and custom systems (like logging) from scratch using code.
 - **Mobile or console players are your primary audience.** Cmdr is designed keyboard-first. While it works on other platforms, mobile UI support is basic and you'll need to build your own custom toggles or buttons for touch and controller users to open the console.
 
 ## How do I get started?
@@ -36,11 +36,11 @@ Cmdr might not be the right tool for your game if:
 
 Please **do not** modify the source code of Cmdr for your game. Use the API to customize behavior. Modifying core files makes receiving future updates significantly harder.
 
-If you hit a limitation or bug, please [open an issue](https://github.com/evaera/cmdr/issues) or [contribute a fix](/docs/contribute/index).
+If you hit a limitation or bug, please [open an issue](https://github.com/evaera/cmdr/issues) or [contribute a fix](/docs/contribute).
 
 :::
 
-1. Follow the [Installation guide](/docs/getting-started/installation).
+1. Follow the [Installation guide](/docs/installation).
 2. Review the core concepts in the documentation.
 3. Reference the [API reference](/api/Cmdr) as needed for deeper integration.
 
@@ -58,5 +58,5 @@ Support channels exist exclusively for Cmdr-specific API issues. We cannot assis
 
 Stick to official resources for reliable setup instructions:
 
-- **Documentation:** Use this site and the official [Cookbook](/docs/community/cookbook).
+- **Documentation:** Use this site and its resources.
 - **Discord:** Join the [Cmdr Discord server](https://discord.gg/xFzPVg5WXm) and post in the [`help`](https://discord.com/channels/1497725941974040731/1497730144260063334) channel.

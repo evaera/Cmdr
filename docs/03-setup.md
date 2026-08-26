@@ -16,7 +16,7 @@ There are plenty of resources available to help you with Cmdr, such as this webs
 
 Please **do not** modify the source code of Cmdr for your game. Instead, use the API to customise the behaviour you want. Modifying the source code makes it much harder for you to receive future updates.
 
-There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute/index)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
+There shouldn't be any reason why you need to modify the source code of Cmdr (unless you're [adding a new feature or fixing a bug](/docs/contribute)). If there's something you think we're missing, please [open an issue](https://github.com/evaera/cmdr/issues).
 
 :::
 
@@ -38,7 +38,7 @@ Cmdr.Registry:RegisterDefaultCommands() -- Optional: This loads the default set 
 
 The [`Cmdr` object](/api/Cmdr) is the main server object. The [`Registry`](/api/Registry) is used on both the client and server, and it keeps track of all the commands, types and hooks that Cmdr knows about.
 
-Cmdr will automatically create and insert into StarterGui its console interface (called Window). If you'd like to (optionally) customise the look of the Window, we have [a guide on this in our Advanced section](/docs/advanced/customizinginterface).
+Cmdr will automatically create and insert into StarterGui its console interface (called Window). If you'd like to (optionally) customise the look of the Window, we have [a guide on this in our Advanced section](/docs/customizinginterface).
 
 Cmdr will also insert into `ReplicatedStorage` the [`CmdrClient`](/api/CmdrClient) module. On top of being the client entry point (read on below!), this module also houses stuff for internal use, like replication (any commands, types and hooks the client needs to know about) and networking.
 
@@ -69,6 +69,6 @@ Activation keys are used to show or hide Cmdr. By default, this is just `F2` but
 
 ## Next steps
 
-By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/reference/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/reference/hooks).
+By now, Cmdr is up and running, and will work fine in studio. However, you'll probably want to [write your own commands](/docs/commands) and to run any commands in a live server, you **must** [create a BeforeRun hook](/docs/hooks).
 
 If you ever need help, you can check [the support page](/docs/intro#how-do-i-get-help-with-cmdr).

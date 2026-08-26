@@ -1,3 +1,7 @@
+---
+sidebar_class_name: hidden
+---
+
 # Report security vulnerability
 
 We take the security of Cmdr extremely seriously. If you believe you have found a vulnerability within the library, you need to report it to us.
@@ -21,4 +25,4 @@ If you're experiencing issues, our first recommendation will always be to update
 
 Making sure you're always running the newest version of Cmdr will give you access to the latest features and bug fixes, and also keep your game safe from any vulnerabilities we find or are alerted to.
 
-We have a separate article talking about [Cmdr's security model](/docs/advanced/security)
+We have a separate article talking about [Cmdr's security model](/docs/security)

@@ -12,7 +12,7 @@ It's been a long time since the last release and there have been [a lot of chang
 
 Cmdr has a [new website](https://eryn.io/Cmdr), rebuilt from scratch using Docusaurus and Moonwave.
 
-The new website has updated documentation pages, including [advanced guides on topics like permissions](https://eryn.io/Cmdr/docs/advanced/permissions), [creating custom types](https://eryn.io/Cmdr/docs/advanced/customtypes), [Cmdr's security model](https://eryn.io/Cmdr/docs/advanced/security) as well as a [cookbook of examples](https://eryn.io/Cmdr/docs/community/cookbook).
+The new website has updated documentation pages, including [guides on topics like permissions](https://eryn.io/Cmdr/docs/permissions), [creating custom types](https://eryn.io/Cmdr/docs/customtypes), [Cmdr's security model](https://eryn.io/Cmdr/docs/security) as well as a [cookbook of examples](https://eryn.io/Cmdr/docs/cookbook).
 
 The [API reference](https://eryn.io/Cmdr/api/Cmdr) now uses Moonwave, meaning it'll always be kept up-to-date with Cmdr's source, and you can view a wider range of methods. Note that although _private_ properties and methods aren't restricted (you _can_ use them), they might be broken without warning by updates.
 
@@ -24,7 +24,7 @@ Note that we haven't created any redirects, either from the old pages or from th
 
 **Guards**
 
-Command definitions now include a [`Guards`](https://eryn.io/Cmdr/docs/advanced/guards) element. This allows command-specific check functions to be attached, which in turn can be reused across commands. For example, `hasAliveCharacter` could be pulled from a shared module and used in many commands.
+Command definitions now include a [`Guards`](https://eryn.io/Cmdr/docs/guards) element. This allows command-specific check functions to be attached, which in turn can be reused across commands. For example, `hasAliveCharacter` could be pulled from a shared module and used in many commands.
 
 **New builtin commands**
 
@@ -55,7 +55,7 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 ### Changes that might break you
 
-- If a `Cmdr` instance exists in `StarterGui`, CmdrClient will always `PlayerGui:WaitForChild("Cmdr")` before loading. This might break you if you've [customized the interface](https://eryn.io/Cmdr/docs/advanced/customizinginterface) and do custom character loading.
+- If a `Cmdr` instance exists in `StarterGui`, CmdrClient will always `PlayerGui:WaitForChild("Cmdr")` before loading. This might break you if you've [customized the interface](https://eryn.io/Cmdr/docs/customizinginterface) and do custom character loading.
 
 - `blink` and `thru` builtin commands now ignore non-collidable parts. This might break you [if you blink to touchable but not collidable parts for triggering events](https://github.com/evaera/Cmdr/issues/321#issuecomment-2064428309).
 
@@ -65,11 +65,11 @@ Deprecation warnings are emitted with the following format `[Cmdr] [DeprecationW
 
 ### API
 
-- [`CmdrClient.Gui`](https://eryn.io/Cmdr/api/CmdrClient#Gui) added. This is a property that points to the current Cmdr GUI. Use this when [customizing the interface](https://eryn.io/Cmdr/docs/advanced/customizinginterface).
+- [`CmdrClient.Gui`](https://eryn.io/Cmdr/api/CmdrClient#Gui) added. This is a property that points to the current Cmdr GUI. Use this when [customizing the interface](https://eryn.io/Cmdr/docs/customizinginterface).
 
 - [`CmdrClient.Toggled`](https://eryn.io/Cmdr/api/CmdrClient#Toggled) added. This is a signal that fires when the Cmdr window is toggled, passing the new `visible` status.
 
-- Command hiding has been added, using the new [`BeforeCommandRegister`](https://eryn.io/Cmdr/docs/commands/hooks#beforecommandregister) hook.
+- Command hiding has been added, using the new [`BeforeCommandRegister`](https://eryn.io/Cmdr/docs/hooks#beforecommandregister) hook.
 
 - Cmdr will now warn if it's located outside of a server container. We don't know why, but there have been really obscure bugs we haven't been able to understand and only happen when the Cmdr server library lives in a replicated container. You can ignore the warning if you don't have any issues with your setup.
 

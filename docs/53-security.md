@@ -1,8 +1,8 @@
-# Security
+# Security model
 
 Cmdr is designed with security as a top priority. It provides strict server-side argument validation, explicit permission hooks, and clear separation between client-side UI display and server-authoritative execution.
 
-There's a separate page [about security vulnerabilities in Cmdr itself](/docs/community/securityreport). Make sure you keep Cmdr up to date, we don't usually fix bugs in old versions of Cmdr.
+There's a separate page [about security vulnerabilities in Cmdr itself](/docs/securityreport). Make sure you keep Cmdr up to date, we don't usually fix bugs in old versions of Cmdr.
 
 ## Can exploiters run my commands?
 

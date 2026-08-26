@@ -85,7 +85,7 @@ Argument.__index = Argument
 	@readonly
 	@prop Prefix string
 
-	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See [Prefixed Union Types](/docs/reference/commands#prefixed-union-types) for more details.
+	The prefix used in this argument (like `%` in `%Team`). Empty string if no prefix was used. See [Prefixed Union Types](/docs/commands#prefixed-union-types) for more details.
 ]=]
 
 --[=[
