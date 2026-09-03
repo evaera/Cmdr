@@ -1,10 +1,8 @@
 # Changelog
 
-## v1.13.0 (currently rc.4)
+## v1.13.0
 
-*This is currently a prerelease version. Assuming no bugs, it will become `v1.13.0`. This version is expected to be stable but has not been as widely tested as we'd like.*
-
-It's been a long time since the last release and there have been [a lot of changes](https://github.com/evaera/Cmdr/compare/v1.12.0...v1.13.0-rc.4), purely internal ones have been skipped over.
+It's been a long time since the last release and there have been [a lot of changes](https://github.com/evaera/Cmdr/compare/v1.12.0...v1.13.0), purely internal ones have been skipped over.
 
 ### Highlights
 
