@@ -172,15 +172,20 @@ return function(CmdrClient, AutoComplete)
 			TextChatService.ChannelTabsConfiguration.Enabled = false
 		else
 			-- Restore previous state
-			TextChatService.ChatWindowConfiguration.Enabled = if self._previousChatWindowEnabled ~= nil
-				then self._previousChatWindowEnabled
-				else true
-			TextChatService.ChatInputBarConfiguration.Enabled = if self._previousChatInputBarEnabled ~= nil
-				then self._previousChatInputBarEnabled
-				else true
-			TextChatService.ChannelTabsConfiguration.Enabled = if self._previousChannelTabsEnabled ~= nil
-				then self._previousChannelTabsEnabled
-				else true
+			if self._previousChatWindowEnabled ~= nil then
+				TextChatService.ChatWindowConfiguration.Enabled = self._previousChatWindowEnabled
+				self._previousChatWindowEnabled = nil
+			end
+
+			if self._previousChatInputBarEnabled ~= nil then
+				TextChatService.ChatInputBarConfiguration.Enabled = self._previousChatInputBarEnabled
+				self._previousChatInputBarEnabled = nil
+			end
+
+			if self._previousChannelTabsEnabled ~= nil then
+				TextChatService.ChannelTabsConfiguration.Enabled = self._previousChannelTabsEnabled
+				self._previousChannelTabsEnabled = nil
+			end
 		end
 	end
 
@@ -213,6 +218,10 @@ return function(CmdrClient, AutoComplete)
 		Sets whether the command bar is visible.
 	]=]
 	function Window:SetVisible(visible: boolean)
+		if entryFrame.Visible == visible then
+			return
+		end
+
 		entryFrame.Visible = visible
 
 		if visible then
