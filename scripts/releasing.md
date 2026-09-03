@@ -10,8 +10,8 @@
 
 **actually do the release**
 
-GitHub's releases UI will create a tag for you (and sign it for you). You might create a draft release so you can get the pull requests and new contributors headings.
+GitHub's releases UI will create a tag and sign it for you on publish (it won't do this until you click publish). You might create a draft release so you can get the pull requests and new contributors headings.
 
-`rojo build` with `default.project.json` will allow you to generate the `Cmdr.rbxm`, attach it to the GitHub release before you publish it.
+`rojo build default.project.json -o Cmdr.rbxm` to generate the `Cmdr.rbxm`, attach it to the GitHub release before you publish it.
 
-You'll need to log into wally (`wally login`) and then run `wally publish`. I haven't done this so can't tell you how it works (or doesn't) lol.
+You'll need to log into wally (`wally login`) and then run `wally publish`.
