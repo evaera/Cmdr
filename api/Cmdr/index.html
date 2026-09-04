@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.2">
 <title data-rh="true">Cmdr</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://eryn.io/Cmdr/api/Cmdr"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Cmdr"><meta data-rh="true" name="description" content="The Cmdr server object and entry point."><meta data-rh="true" property="og:description" content="The Cmdr server object and entry point."><link data-rh="true" rel="canonical" href="https://eryn.io/Cmdr/api/Cmdr"><link data-rh="true" rel="alternate" href="https://eryn.io/Cmdr/api/Cmdr" hreflang="en"><link data-rh="true" rel="alternate" href="https://eryn.io/Cmdr/api/Cmdr" hreflang="x-default"><link rel="stylesheet" href="/Cmdr/assets/css/styles.9d3e44e9.css">
-<script src="/Cmdr/assets/js/runtime~main.d1557940.js" defer="defer"></script>
-<script src="/Cmdr/assets/js/main.c323be14.js" defer="defer"></script>
+<script src="/Cmdr/assets/js/runtime~main.675584b8.js" defer="defer"></script>
+<script src="/Cmdr/assets/js/main.371501b8.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -22,6 +22,17 @@
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [],
     &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;_replicatedRoot&quot;,
+            &quot;desc&quot;: &quot;Refers to the CmdrClient modulescript containing all shared functionality.&quot;,
+            &quot;lua_type&quot;: &quot;ModuleScript&quot;,
+            &quot;private&quot;: true,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 109,
+                &quot;path&quot;: &quot;Cmdr/CmdrClient/init.luau&quot;
+            }
+        },
         {
             &quot;name&quot;: &quot;Registry&quot;,
             &quot;desc&quot;: &quot;Refers to the command Registry.&quot;,
@@ -105,17 +116,6 @@
             &quot;source&quot;: {
                 &quot;line&quot;: 114,
                 &quot;path&quot;: &quot;Cmdr/init.luau&quot;
-            }
-        },
-        {
-            &quot;name&quot;: &quot;_replicatedRoot&quot;,
-            &quot;desc&quot;: &quot;Refers to the CmdrClient modulescript containing all shared functionality.&quot;,
-            &quot;lua_type&quot;: &quot;ModuleScript&quot;,
-            &quot;private&quot;: true,
-            &quot;readonly&quot;: true,
-            &quot;source&quot;: {
-                &quot;line&quot;: 109,
-                &quot;path&quot;: &quot;Cmdr/CmdrClient/init.luau&quot;
             }
         }
     ],
