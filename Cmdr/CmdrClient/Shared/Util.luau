@@ -528,7 +528,7 @@ end
 	@within Util
 	@param dispatcher Dispatcher
 
-	Creates a listable type from a singular type
+	Runs a command string, chaining commands with && and replacing || with the previous command's output.
 ]=]
 function Util.RunCommandString(dispatcher: any, commandString: string): string?
 	commandString = Util.ParseEscapeSequences(commandString)
