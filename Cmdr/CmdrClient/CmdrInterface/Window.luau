@@ -225,6 +225,7 @@ return function(CmdrClient, AutoComplete)
 		entryFrame.Visible = visible
 
 		if visible then
+			task.wait()
 			self:_setChatEnabled(false)
 			self:_setMouseUnlocked(true)
 
