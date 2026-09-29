@@ -65,7 +65,6 @@ return {
 		if context:GetArgument(1).Type.Name == "userInput" then
 			const actionName = `evaera/Cmdr/bind_{bind}`
 
-
 			const function runCommand()
 				context:Reply(
 					context.Dispatcher:EvaluateAndRun(Util.RunEmbeddedCommands(context.Dispatcher, commandString))
