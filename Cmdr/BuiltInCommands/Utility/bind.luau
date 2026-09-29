@@ -63,7 +63,8 @@ return {
 		const commandString = `{command} {arguments}`
 
 		if context:GetArgument(1).Type.Name == "userInput" then
-			const actionName = `CmdrBind_{bind}`
+			const actionName = `evaera/Cmdr/bind_{bind}`
+
 
 			const function runCommand()
 				context:Reply(
