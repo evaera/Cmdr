@@ -1,6 +1,11 @@
+const Players = game:GetService("Players")
+const RunService = game:GetService("RunService")
+
+const IS_SERVER = RunService:IsServer()
+
 const function hasValidCharacter(player: Player): boolean
 	const character = player.Character
-	return character ~= nil and character:FindFirstChild("HumanoidRootPart")
+	return character ~= nil and character:FindFirstChild("HumanoidRootPart") ~= nil
 end
 
 return function(index: number?)
@@ -19,9 +24,11 @@ return function(index: number?)
 		end
 
 		const players: { Player } = if isSingle then { target :: Player } else target :: { Player }
+		const canVerifyEveryone = IS_SERVER or not workspace.StreamingEnabled
 
 		for _, player in ipairs(players) do
-			if hasValidCharacter(player) then
+			const canVerify = canVerifyEveryone or player == Players.LocalPlayer
+			if not canVerify or hasValidCharacter(player) then
 				continue
 			end
 

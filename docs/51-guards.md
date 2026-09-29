@@ -52,6 +52,8 @@ Cmdr processes guards sequentially in the order they are listed inside the `Guar
 
 Because command definitions are shared between client and server, guards are evaluated on the client first during UI invocation, and evaluated **again on the server** prior to running server code to prevent exploiters from bypassing client checks.
 
+Keep in mind that the client doesn't see everything the server does. For example, with [`Workspace.StreamingEnabled`](https://create.roblox.com/docs/reference/engine/classes/Workspace#StreamingEnabled) another player's character might not be replicated to the executor's client, so a client-side check can't tell the difference between "not there" and "not visible to me". Guards which inspect state the client might be missing should defer to the server (return `nil`) instead of rejecting the command, as the server check runs regardless.
+
 Including [Hooks](/docs/hooks) and client functions, the full execution order is:
 
 1. `BeforeRun` hook on client.
