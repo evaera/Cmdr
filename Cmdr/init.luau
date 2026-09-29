@@ -141,10 +141,19 @@ const function initialize()
 
 	Cmdr._remoteFunction.OnServerInvoke = function(player: Player, text: string, options: any)
 		if #text > 10000 then
-			return "Input too long"
+			return "Input too long", Util.ErrorColor
 		end
 
-		return Cmdr.Dispatcher:EvaluateAndRun(text, player, options)
+		const clientOptions = if type(options) == "table" then options else {}
+
+		return Cmdr.Dispatcher:EvaluateAndRun(text, player, {
+			Data = clientOptions.Data,
+			Output = if clientOptions.Defer == true
+				then function(response: string, responseColor: Color3?)
+					Cmdr.Dispatcher:SendEvent(player, "AddLine", response, responseColor)
+				end
+				else nil,
+		})
 	end
 
 	Cmdr.Registry:RegisterTypesIn(Cmdr._defaultTypesFolder)

@@ -87,9 +87,40 @@ const function quoteString(value: string): string
 	return ("%q"):format(value)
 end
 
+const function isCallable(value: any): boolean
+	if type(value) == "function" then
+		return true
+	end
+
+	if type(value) == "table" then
+		const metatable = getmetatable(value)
+		return type(metatable) == "table" and rawget(metatable, "__call") ~= nil
+	end
+
+	return false
+end
+
 --[=[
 	@class Util
 	Cmdr utilities module.
+]=]
+
+--[=[
+	@within Util
+	@readonly
+
+	@prop ErrorColor Color3
+
+	The color the console displays a failed command in.
+]=]
+
+--[=[
+	@within Util
+	@readonly
+
+	@prop Pending Pending
+
+	A symbol representing a placeholder command response; the real response will be given to its output callback later. See [Dispatcher:EvaluateAndRun].
 ]=]
 
 --[=[
@@ -103,6 +134,8 @@ end
 ]=]
 
 const Util = {
+	ErrorColor = Color3.fromRGB(255, 153, 153),
+	Pending = table.freeze({}) :: Pending,
 	_deprecationWarnings = {} :: { [string]: { Description: string, Suppressed: boolean, Emitted: boolean } },
 }
 
@@ -808,6 +841,98 @@ function Util.Mutex(): () -> ()
 			end
 		end
 	end
+end
+
+--[=[
+	@within Util
+	@type Pending {}
+
+	The type of [Util.Pending], the response of a command whose real response will be given to its output callback later.
+]=]
+export type Pending = {}
+
+--[=[
+	@within Util
+	@type Response string? | Pending
+
+	Anything a command implementation may return as its response.
+]=]
+export type Response = string? | Pending
+
+--[=[
+	@within Util
+	@type PromiseStatus "Resolved" | "Rejected" | "Cancelled"
+
+	The states a promise can settle in, mirroring [evaera's Promise.Status](https://eryn.io/roblox-lua-promise/api/Promise#Status) minus `Started`.
+]=]
+export type PromiseStatus = "Resolved" | "Rejected" | "Cancelled"
+
+--[=[
+	@within Util
+	@param value any
+
+	Returns whether the value looks like a promise, using the same duck typing as [evaera's Promise library](https://eryn.io/roblox-lua-promise/api/Promise#is).
+]=]
+function Util.IsPromise(value: any): boolean
+	if type(value) ~= "table" then
+		return false
+	end
+
+	if isCallable(rawget(value, "andThen")) then
+		return true
+	end
+
+	const metatable = getmetatable(value)
+	const index = if type(metatable) == "table" then rawget(metatable, "__index") else nil
+
+	return type(index) == "table" and isCallable(rawget(index, "andThen"))
+end
+
+--[=[
+	@within Util
+	@param promise Promise
+	@return (PromiseStatus, any) -- The status the promise settled with, followed by the value it settled with.
+
+	Yields until the given promise settles.
+]=]
+function Util.AwaitPromise(promise: any): (PromiseStatus, any)
+	local status: PromiseStatus?, value: any
+	const thread = coroutine.running()
+
+	const function settle(settledStatus: PromiseStatus)
+		return function(...)
+			if status then
+				return
+			end
+
+			status, value = settledStatus, (...)
+
+			if coroutine.status(thread) == "suspended" then
+				task.spawn(thread)
+			end
+		end
+	end
+
+	promise:andThen(settle("Resolved"), settle("Rejected"))
+	if not status and isCallable(promise.finally) then
+		const settleCancellation = settle("Cancelled")
+		const settlement = promise:finally(function(finallyStatus: any)
+			if finallyStatus == "Cancelled" or finallyStatus == nil then
+				settleCancellation()
+			end
+		end)
+
+		if type(settlement) == "table" and isCallable(settlement.catch) then
+			settlement:catch(function() end)
+		end
+	end
+
+	-- To prevent external resumes
+	while not status do
+		coroutine.yield()
+	end
+
+	return status :: PromiseStatus, value
 end
 
 --[=[

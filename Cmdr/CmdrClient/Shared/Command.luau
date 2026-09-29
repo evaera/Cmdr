@@ -1,6 +1,7 @@
 const RunService = game:GetService("RunService")
 
 const Argument = require("./Argument")
+const Util = require("./Util")
 
 const IS_SERVER = RunService:IsServer()
 const IS_CLIENT = RunService:IsClient()
@@ -290,58 +291,239 @@ function Command:GatherArgumentValues(): ({ any }, number)
 	return values, #self.ArgumentDefinitions
 end
 
+const function settle(value: any): (Util.PromiseStatus, any)
+	if not Util.IsPromise(value) then
+		return "Resolved", value
+	end
+
+	return Util.AwaitPromise(value)
+end
+
+const function failureText(status: Util.PromiseStatus, value: any): string
+	if status == "Cancelled" then
+		return "Command cancelled."
+	end
+
+	return if value == nil then "Command failed." else tostring(value)
+end
+
+const function isExecutionError(value: any): boolean
+	return type(value) == "table" and (value :: any).kind == "ExecutionError" and type((value :: any).trace) == "string"
+end
+
 --[=[
 	@within CommandContext
+	@private
+
+	@return (string, Color3?) -- The response, followed by the color the console should display it in.
+
+	Reports an implementation whose promise didn't resolve.
+]=]
+function Command:_failureResponse(status: Util.PromiseStatus, value: any): (string, Color3?)
+	if status == "Cancelled" then
+		return failureText(status, value)
+	end
+
+	if isExecutionError(value) then
+		warn(`[Cmdr] Error occurred while running the {self.Name} command\n{tostring(value)}`)
+		return "An error occurred while running this command. Check the console for more information.", Util.ErrorColor
+	end
+
+	const response = failureText(status, value)
+	warn(`[Cmdr] Error occurred while running the {self.Name} command\n{response}`)
+
+	return response, Util.ErrorColor
+end
+
+--[=[
+	@within CommandContext
+	@private
+
+	@param value -- The value an implementation returned, which may or may not be a promise.
+	@param andThen -- The rest of the command.
+
+	@return (Response, Color3?) -- The response, followed by the color the console should display it in.
+
+	Continues the command once the given value has settled.
+]=]
+function Command:_settle(
+	value: any,
+	andThen: (Util.PromiseStatus, any) -> (Util.Response, Color3?)
+): (Util.Response, Color3?)
+	if not Util.IsPromise(value) then
+		return andThen("Resolved", value)
+	end
+
+	if not self._output then
+		return andThen(settle(value))
+	end
+
+	task.spawn(function()
+		const success, response, responseColor = xpcall(function()
+			const result, resultColor = andThen(Util.AwaitPromise(value))
+
+			if result == Util.Pending then
+				return Util.Pending
+			end
+
+			return self:_finish(result :: string?, resultColor)
+		end, function(err)
+			return debug.traceback(tostring(err))
+		end)
+
+		if not success then
+			warn(`[Cmdr] Error occurred while running the {self.Name} command\n{response}`)
+			self._output(
+				"An error occurred while running this command. Check the console for more information.",
+				Util.ErrorColor
+			)
+			return
+		end
+
+		if response == Util.Pending then
+			return
+		end
+
+		self._output(response, responseColor)
+	end)
+
+	return Util.Pending
+end
+
+--[=[
+	@within CommandContext
+	@private
+
+	@return (Response, Color3?) -- The response, followed by the color the console should display it in.
+
+	Gathers data, then runs the implementation.
+]=]
+function Command:_runImplementation(): (Util.Response, Color3?)
+	if not IS_SERVER and self.Object.Data and self.Data == nil then
+		const values, length = self:GatherArgumentValues()
+
+		return self:_settle(self.Object.Data(self, unpack(values, 1, length)), function(status, data)
+			if status ~= "Resolved" then
+				return self:_failureResponse(status, data)
+			end
+
+			self.Data = data
+
+			return self:_runClientImplementation()
+		end)
+	end
+
+	return self:_runClientImplementation()
+end
+
+--[=[
+	@within CommandContext
+	@private
+
+	@return (Response, Color3?) -- The response, followed by the color the console should display it in.
+
+	Runs the client implementation, falling back to the server one.
+]=]
+function Command:_runClientImplementation(): (Util.Response, Color3?)
+	if IS_SERVER or not self.Object.ClientRun then
+		return self:_runServerImplementation()
+	end
+
+	const values, length = self:GatherArgumentValues()
+
+	return self:_settle(self.Object.ClientRun(self, unpack(values, 1, length)), function(status, response)
+		if status ~= "Resolved" then
+			return self:_failureResponse(status, response)
+		end
+
+		if response ~= nil then
+			return response
+		end
+
+		return self:_runServerImplementation()
+	end)
+end
+
+--[=[
+	@within CommandContext
+	@private
+
+	@return (Response, Color3?) -- The response, followed by the color the console should display it in.
+
+	Runs the server implementation.
+]=]
+function Command:_runServerImplementation(): (Util.Response, Color3?)
+	if self.Object.Run then
+		const values, length = self:GatherArgumentValues()
+
+		return self:_settle(self.Object.Run(self, unpack(values, 1, length)), function(status, response)
+			if status ~= "Resolved" then
+				return self:_failureResponse(status, response)
+			end
+
+			return response
+		end)
+	end
+
+	if IS_SERVER then
+		if self.Object.ClientRun then
+			warn(
+				`[Cmdr] {self.Name} command fell back to the server because ClientRun returned nil, but there is no server implementation.`
+			)
+		else
+			warn(`[Cmdr] {self.Name} command has no implementation!`)
+		end
+
+		return "No implementation."
+	end
+
+	return self.Dispatcher:Send(self.RawText, self.Data, self._output ~= nil)
+end
+
+--[=[
+	@within CommandContext
+	@private
+
+	@return (string?, Color3?) -- The response, followed by the color the console should display it in.
+
+	Records the response and runs the AfterRun hooks.
+]=]
+function Command:_finish(response: string?, responseColor: Color3?): (string?, Color3?)
+	self.Response = response
+
+	const afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)
+	if afterRunHook then
+		return afterRunHook, responseColor
+	end
+
+	return self.Response, responseColor
+end
+
+--[=[
+	@within CommandContext
+	@return (string? | Pending, Color3?) -- The response, followed by the color the console should display it in. [Util.Pending] means the response will be given to the command's output callback instead.
+
 	Runs the command.
 ]=]
-function Command:Run(): string?
-	assert(self._Validated, "[Cmdr] Must validate a command before running.")
+function Command:Run(): (Util.Response, Color3?)
+	assert(self._Validated, "[Cmdr] CommandContext must be validated before running.")
 
 	const beforeRunHook = self.Dispatcher:RunHooks("BeforeRun", self)
 	if beforeRunHook then
-		return beforeRunHook
+		return beforeRunHook, Util.ErrorColor
 	end
 
 	const guardResult = self.Dispatcher:RunGuards(self)
 	if guardResult then
-		return guardResult
+		return guardResult, Util.ErrorColor
 	end
 
-	if not IS_SERVER and self.Object.Data and self.Data == nil then
-		const values, length = self:GatherArgumentValues()
-		self.Data = self.Object.Data(self, unpack(values, 1, length))
+	const response, responseColor = self:_runImplementation()
+	if response == Util.Pending then
+		return Util.Pending
 	end
 
-	if not IS_SERVER and self.Object.ClientRun then
-		const values, length = self:GatherArgumentValues()
-		self.Response = self.Object.ClientRun(self, unpack(values, 1, length))
-	end
-
-	if self.Response == nil then
-		if self.Object.Run then
-			const values, length = self:GatherArgumentValues()
-			self.Response = self.Object.Run(self, unpack(values, 1, length))
-		elseif IS_SERVER then
-			if self.Object.ClientRun then
-				warn(
-					`[Cmdr] {self.Name} command fell back to the server because ClientRun returned nil, but there is no server implementation!`
-				)
-			else
-				warn(`[Cmdr] {self.Name} command has no implementation!`)
-			end
-
-			self.Response = "No implementation."
-		else
-			self.Response = self.Dispatcher:Send(self.RawText, self.Data)
-		end
-	end
-
-	const afterRunHook = self.Dispatcher:RunHooks("AfterRun", self)
-	if afterRunHook then
-		return afterRunHook
-	end
-
-	return self.Response
+	return self:_finish(response :: string?, responseColor)
 end
 
 --[=[
@@ -366,7 +548,13 @@ function Command:GetData()
 	end
 
 	if self.Object.Data and not IS_SERVER then
-		self.Data = self.Object.Data(self)
+		const status, data = settle(self.Object.Data(self))
+
+		if status ~= "Resolved" then
+			error(failureText(status, data), 0)
+		end
+
+		self.Data = data
 	end
 
 	return self.Data

@@ -71,8 +71,37 @@ If you want your command to run on the client, you can add a [`ClientRun`](/api/
 If using `ClientRun`, having a Server module associated with this command is optional. If your `ClientRun` function returns a string, the command will run entirely on the client and won't touch the server at all (which means server-only hooks won't run). If this function doesn't return anything, it will then execute the associated Server module implementation on the server (including any server-sided hooks).
 
 :::caution
-If the `ClientRun` function is present and there isn't a Server module for this command then you must return a string from the `ClientRun` function.
+If the `ClientRun` function is present and there isn't a Server module for this command then you must return a string from the `ClientRun` function, or a promise that resolves to one.
 :::
+
+## Promises
+
+Command implementations are allowed to yield, so you don't need to do anything for asynchronous work. Server implementation, `ClientRun`, and `Data` can return promises and Cmdr will continue the command once it settles.
+
+```luau title="FetchServer.luau"
+return function(context: any, userId: number)
+	return getProfileAsync(userId):andThen(function(profile)
+		return `{profile.Name} has {profile.Coins} coins.`
+	end)
+end
+```
+
+Any object with an `andThen` method is treated as a promise, which covers [evaera's Promise library](https://eryn.io/roblox-lua-promise/) and anything compatible with it.
+
+- **Resolved** values are the command's response, exactly as if they had been returned directly, so a `ClientRun` promise resolving to `nil` falls back to the server.
+- **Rejected** promises respond with the rejection value, in the console's error color, and emit a warning.
+  - When the rejection carries a traceback from an error thrown inside the promise, the warning uses that instead, and the console responds with a generic message, matching how an error in an ordinary command is reported.
+- **Cancelled** promises respond with `Command cancelled.`
+
+Either way the command counts as having run, so `AfterRun` hooks fire and can rewrite the response.
+
+### Waiting doesn't block the console
+
+The console stays usable while a promise is outstanding, so more commands can be run in the meantime. Responses are printed as their promises settle, which means they can appear out of order.
+
+A response from a server implementation's promise arrives as a console message rather than as the command's response, so client-side `AfterRun` hooks don't see it.
+
+Commands run programmatically with [`Dispatcher:Run`](/api/Dispatcher#Run) or [`Dispatcher:EvaluateAndRun`](/api/Dispatcher#EvaluateAndRun) wait for the promise instead, since they have to return the response.
 
 ## Execution order
 

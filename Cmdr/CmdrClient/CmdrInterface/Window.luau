@@ -346,7 +346,12 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		Window:AddLine(`{Window:GetLabelText()} {text}`, PROCESSING_TEXT_COLOR)
-		Window:AddLine(CmdrClient.Dispatcher:EvaluateAndRun(text, Player, { IsHuman = true }))
+		Window:AddLine(CmdrClient.Dispatcher:EvaluateAndRun(text, Player, {
+			IsHuman = true,
+			Output = function(response: string, responseColor: Color3?)
+				Window:AddLine(response, responseColor)
+			end,
+		}))
 	end
 
 	--[=[
@@ -385,7 +390,7 @@ return function(CmdrClient, AutoComplete)
 				self:_setEntryText("")
 				self._processEntry(text)
 			else
-				self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+				self:AddLine(self._errorText, CmdrClient.Util.ErrorColor)
 			end
 
 			self._hasLostFocus = false

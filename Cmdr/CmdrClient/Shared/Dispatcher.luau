@@ -104,6 +104,9 @@ end
 	Runs a command as the given player. Executor is optional when running on the client.
 	If `options.Data` is given, it will be available on the server with CommandContext.GetData
 	If `options.IsHuman` is true and this function is called on the client, then the `text` will be inserted into the window history.
+	If `options.Output` is given, a command waiting on a promise responds with an empty string and gives its real response to `options.Output` once the promise settles.
+
+	Returns the command response, followed by the color the console should display it in.
 ]=]
 function Dispatcher:EvaluateAndRun(
 	text: string,
@@ -111,8 +114,9 @@ function Dispatcher:EvaluateAndRun(
 	options: {
 		Data: any?,
 		IsHuman: boolean?,
+		Output: ((response: string, responseColor: Color3?) -> ())?,
 	}?
-): string
+): (string, Color3?)
 	executor = executor or Players.LocalPlayer
 	options = options or {}
 
@@ -122,27 +126,40 @@ function Dispatcher:EvaluateAndRun(
 
 	const commandContext, errorText = self:Evaluate(text, executor, nil, (options :: any).Data)
 	if not commandContext then
-		return errorText
+		return errorText, Util.ErrorColor
 	end
 
-	const success, result = xpcall(function()
+	const output = (options :: any).Output
+	if output then
+		commandContext._output = function(response: string?, responseColor: Color3?)
+			output(response or "Command executed.", responseColor)
+		end
+	end
+
+	const success, result, resultColor = xpcall(function()
 		const isValid, validationError = commandContext:Validate(true)
 
 		if not isValid then
-			return validationError
+			return validationError, Util.ErrorColor
 		end
 
-		return commandContext:Run() or "Command executed."
+		const response, responseColor = commandContext:Run()
+
+		if response == Util.Pending then
+			return ""
+		end
+
+		return (response :: string?) or "Command executed.", responseColor
 	end, function(err)
 		return debug.traceback(tostring(err))
 	end)
 
 	if not success then
 		warn(`[Cmdr] Error occurred while evaluating command string {("%q"):format(text)}\n{result}`)
-		return "An error occurred while running this command. Check the console for more information."
+		return "An error occurred while running this command. Check the console for more information.", Util.ErrorColor
 	end
 
-	return result
+	return result, resultColor
 end
 
 --[=[
@@ -151,10 +168,14 @@ end
 	@client
 
 	Send text as the local user to remote server to be evaluated there.
+
+	When `defer` is true, a server implementation waiting on a promise responds with an empty string and sends its real response to the console later.
+
+	Returns the command response, followed by the color the console should display it in.
 ]=]
-function Dispatcher:Send(text: string, data: any?): string
+function Dispatcher:Send(text: string, data: any?, defer: boolean?): (string, Color3?)
 	assert(IS_CLIENT, "[Cmdr] [Dispatcher::Send] can only be called from the client.")
-	return self.Cmdr._remoteFunction:InvokeServer(text, { Data = data })
+	return self.Cmdr._remoteFunction:InvokeServer(text, { Data = data, Defer = defer })
 end
 
 --[=[
@@ -191,16 +212,16 @@ end
 	@client
 
 	Invokes a command programmatically as the local player.
-	Accepts a variable number of arguments, which are all joined with spaces before being run; the command should be the first argument.
+	Accepts the command name, followed by a variable number of arguments which are all joined with spaces before being run.
 	This function will raise an error if any validations occur, since it's only for hard-coded (or generated) commands.
 ]=]
-function Dispatcher:Run(...: any): string
+function Dispatcher:Run(command: string, ...: unknown): string?
 	assert(IS_CLIENT, "[Cmdr] [Dispatcher::Run] can only be called from the client.")
 
 	const arguments = { ... }
-	local text = tostring(arguments[1])
-	for index = 2, #arguments do
-		text ..= ` {arguments[index]}`
+	local text = tostring(command)
+	for index = 1, #arguments do
+		text ..= ` {tostring(arguments[index])}`
 	end
 
 	const commandContext, errorText = self:Evaluate(text, Players.LocalPlayer)
@@ -209,7 +230,7 @@ function Dispatcher:Run(...: any): string
 	const valid, validationError = commandContext:Validate(true)
 	assert(valid, validationError)
 
-	return commandContext:Run()
+	return (commandContext:Run()) :: string?
 end
 
 --[=[
