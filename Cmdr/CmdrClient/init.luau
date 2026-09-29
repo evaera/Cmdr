@@ -142,7 +142,7 @@ end
 	@readonly
 	@private
 
-	@prop _activationKeys { [Enum.KeyCode] = true }
+	@prop _activationKeys { Enum.KeyCode }
 
 	The list of key codes that will show or hide Cmdr. Use [`CmdrClient:SetActivationKeys`](#SetActivationKeys) to change.
 ]=]
@@ -154,7 +154,7 @@ end
 
 	@prop _activationUnlocksMouse boolean
 
-	Whether or not acitvating the Cmdr window will unlock the mouse.
+	Whether or not activating the Cmdr window will unlock the mouse.
 ]=]
 
 --[=[
@@ -174,7 +174,7 @@ end
 
 	@prop _hideOnLostFocus boolean
 
-	Whether or not loosing focus will hide the Cmdr window.
+	Whether or not losing focus will hide the Cmdr window.
 ]=]
 
 --[=[
@@ -228,14 +228,19 @@ const CmdrClient = {
 ]=]
 function CmdrClient:SetEnabled(enabled: boolean)
 	self._enabled = enabled
+
+	if not enabled then
+		self:Hide()
+	end
 end
 
 --[=[
 	@within CmdrClient
-	Sets the key codes that will used to toggle Cmdr.
+	Sets the key codes that will be used to toggle Cmdr.
 ]=]
 function CmdrClient:SetActivationKeys(keys: { Enum.KeyCode })
 	self._activationKeys = keys
+	self._interface.Window:BindActivationKeys()
 end
 
 --[=[
@@ -244,6 +249,7 @@ end
 ]=]
 function CmdrClient:SetActivationUnlocksMouse(enabled: boolean)
 	self._activationUnlocksMouse = enabled
+	self._interface.Window:UpdateMouseUnlock()
 end
 
 --[=[
@@ -259,7 +265,7 @@ function CmdrClient:Show()
 end
 
 --[=[
-	within CmdrClient
+	@within CmdrClient
 	Hides the Cmdr window.
 ]=]
 function CmdrClient:Hide()
@@ -271,12 +277,9 @@ end
 	Toggles the Cmdr window. Does nothing if Cmdr isn't enabled.
 ]=]
 function CmdrClient:Toggle()
-	if not self._enabled then
-		self:Hide()
-		return
+	if self._enabled then
+		self._interface.Window:SetVisible(not self._interface.Window:IsVisible())
 	end
-
-	self._interface.Window:SetVisible(not self._interface.Window:IsVisible())
 end
 
 --[=[

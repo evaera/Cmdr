@@ -1,3 +1,4 @@
+const ContextActionService = game:GetService("ContextActionService")
 const GuiService = game:GetService("GuiService")
 const Players = game:GetService("Players")
 const TextChatService = game:GetService("TextChatService")
@@ -7,43 +8,63 @@ const WINDOW_MAX_HEIGHT = 300
 const MOUSE_TOUCH_INPUTS =
 	{ Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch }
 
+const ACTION_PRIORITY = Enum.ContextActionPriority.High.Value
+const ACTIVATION_ACTION = "CmdrActivation"
+const REFOCUS_ACTION = "CmdrRefocus"
+const CLICK_OUTSIDE_ACTION = "CmdrClickOutside"
+
 const VALID_TEXT_COLOR = Color3.fromRGB(255, 255, 255)
 const INVALID_TEXT_COLOR = Color3.fromRGB(255, 73, 73)
 const PROCESSING_TEXT_COLOR = Color3.fromRGB(255, 223, 93)
+const ERROR_TEXT_COLOR = Color3.fromRGB(255, 153, 153)
 
 const Player = Players.LocalPlayer
 
 -- Checks if a screen position lies outside a given GUI bounds
 const function isPositionOutsideGui(position: Vector3, gui: GuiObject): boolean
-	const absolutePosition = gui.AbsolutePosition
-	const absoluteSize = gui.AbsoluteSize
-	return position.X < absolutePosition.X
-		or position.X > absolutePosition.X + absoluteSize.X
-		or position.Y < absolutePosition.Y
-		or position.Y > absolutePosition.Y + absoluteSize.Y
+	const topLeft = gui.AbsolutePosition
+	const bottomRight = topLeft + gui.AbsoluteSize
+	return position.X < topLeft.X or position.X > bottomRight.X or position.Y < topLeft.Y or position.Y > bottomRight.Y
 end
 
 -- Constructs auto-completed text string from command argument definitions
 const function buildAutoCompleteText(command, lastArg, replace: string): string
-	local newText = command.Alias
+	const parts = { command.Alias }
 	for _, argument in command.Arguments do
 		local segments = argument.RawSegments
 		if argument == lastArg then
+			segments = table.clone(segments)
 			segments[#segments] = replace
 		end
 
-		local argumentText = `{argument.Prefix}{table.concat(segments, ",")}`
-		if argumentText:find(" ") or argumentText == "" then
-			argumentText = ("%q"):format(argumentText)
-		end
+		const argumentText = `{argument.Prefix}{table.concat(segments, ",")}`
+		const needsQuotes = argumentText == "" or argumentText:find(" ", 1, true) ~= nil
+		table.insert(parts, if needsQuotes then ("%q"):format(argumentText) else argumentText)
 
-		newText = `{newText} {argumentText}`
 		if argument == lastArg then
 			break
 		end
 	end
 
-	return newText
+	return table.concat(parts, " ")
+end
+
+-- Acting on release keeps the key's own character out of a TextBox focused in response to it
+const function onKeyReleased(callback: () -> ())
+	local pressed = false
+
+	return function(_, state: Enum.UserInputState): Enum.ContextActionResult
+		if state == Enum.UserInputState.Begin then
+			pressed = true
+		elseif state == Enum.UserInputState.End and pressed then
+			pressed = false
+			callback()
+		else
+			pressed = false
+		end
+
+		return Enum.ContextActionResult.Pass
+	end
 end
 
 --[=[
@@ -57,12 +78,11 @@ return function(CmdrClient, AutoComplete)
 	const Window = {
 		_entry = entryFrame:WaitForChild("Entry") :: Frame,
 		_lineTemplate = entryFrame:WaitForChild("Line") :: TextBox,
+		_backdrop = CmdrClient.Gui:WaitForChild("Backdrop") :: Frame,
+		_mouseUnlocker = CmdrClient.Gui:WaitForChild("MouseUnlocker") :: TextButton,
 
-		_previousChatWindowEnabled = nil :: boolean?,
-		_previousChatInputBarEnabled = nil :: boolean?,
-		_previousChannelTabsEnabled = nil :: boolean?,
-		_previousMouseBehavior = nil :: Enum.MouseBehavior?,
-
+		_previousChatStates = {} :: { [any]: boolean },
+		_visibleInputConnection = nil :: RBXScriptConnection?,
 		_hasLostFocus = false,
 
 		_valid = true,
@@ -124,10 +144,10 @@ return function(CmdrClient, AutoComplete)
 
 	--[=[
 		@within Window
-		Returns the current command prompt label.
+		Returns the current command entry text.
 	]=]
 	function Window:GetEntryText(): string
-		return self._entry.TextBox.Text:gsub("\t", "")
+		return (self._entry.TextBox.Text:gsub("\t", ""))
 	end
 
 	--[=[
@@ -135,22 +155,18 @@ return function(CmdrClient, AutoComplete)
 		Adds a line to the command output.
 	]=]
 	function Window:AddLine(text: any, options: any)
-		options = options or {}
-		text = tostring(text)
+		const lineText = tostring(text)
+		const lineOptions = if typeof(options) == "Color3" then { Color = options } else options or {}
 
-		if typeof(options) == "Color3" then
-			options = { Color = options }
-		end
-
-		if text == "" then
+		if lineText == "" then
 			self:UpdateWindowHeight()
 			return
 		end
 
 		const line = self._lineTemplate:Clone()
-		line.Text = CmdrClient.Util.EmulateTabstops(text, 8)
-		line.TextColor3 = options.Color or line.TextColor3
-		line.RichText = options.RichText or false
+		line.Text = CmdrClient.Util.EmulateTabstops(lineText, 8)
+		line.TextColor3 = lineOptions.Color or line.TextColor3
+		line.RichText = lineOptions.RichText or false
 		line.Parent = entryFrame
 	end
 
@@ -161,56 +177,33 @@ return function(CmdrClient, AutoComplete)
 		Sets the visibility of the Roblox chat interface.
 	]=]
 	function Window:_setChatEnabled(enabled: boolean)
-		if not enabled then
-			-- Save previous state before disabling
-			self._previousChatWindowEnabled = TextChatService.ChatWindowConfiguration.Enabled
-			self._previousChatInputBarEnabled = TextChatService.ChatInputBarConfiguration.Enabled
-			self._previousChannelTabsEnabled = TextChatService.ChannelTabsConfiguration.Enabled
-
-			TextChatService.ChatWindowConfiguration.Enabled = false
-			TextChatService.ChatInputBarConfiguration.Enabled = false
-			TextChatService.ChannelTabsConfiguration.Enabled = false
-		else
-			-- Restore previous state
-			if self._previousChatWindowEnabled ~= nil then
-				TextChatService.ChatWindowConfiguration.Enabled = self._previousChatWindowEnabled
-				self._previousChatWindowEnabled = nil
+		if enabled then
+			for configuration, wasEnabled in self._previousChatStates do
+				configuration.Enabled = wasEnabled
 			end
 
-			if self._previousChatInputBarEnabled ~= nil then
-				TextChatService.ChatInputBarConfiguration.Enabled = self._previousChatInputBarEnabled
-				self._previousChatInputBarEnabled = nil
-			end
+			table.clear(self._previousChatStates)
+			return
+		end
 
-			if self._previousChannelTabsEnabled ~= nil then
-				TextChatService.ChannelTabsConfiguration.Enabled = self._previousChannelTabsEnabled
-				self._previousChannelTabsEnabled = nil
-			end
+		const configurations = {
+			TextChatService.ChatWindowConfiguration,
+			TextChatService.ChatInputBarConfiguration,
+			TextChatService.ChannelTabsConfiguration,
+		}
+
+		for _, configuration in configurations do
+			self._previousChatStates[configuration] = configuration.Enabled
+			configuration.Enabled = false
 		end
 	end
 
 	--[=[
 		@within Window
-		@private
-
-		Sets or restores the mouse behavior while Cmdr is open.
+		Unlocks the mouse while the command bar is visible, if activation is set to unlock it.
 	]=]
-	function Window:_setMouseUnlocked(unlock: boolean)
-		if unlock then
-			if not CmdrClient._activationUnlocksMouse then
-				return
-			end
-
-			self._previousMouseBehavior = UserInputService.MouseBehavior
-			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-		else
-			if not self._previousMouseBehavior then
-				return
-			end
-
-			UserInputService.MouseBehavior = self._previousMouseBehavior
-			self._previousMouseBehavior = nil
-		end
+	function Window:UpdateMouseUnlock()
+		self._mouseUnlocker.Visible = self:IsVisible() and CmdrClient._activationUnlocksMouse
 	end
 
 	--[=[
@@ -223,17 +216,14 @@ return function(CmdrClient, AutoComplete)
 		end
 
 		entryFrame.Visible = visible
+		self:_setChatEnabled(not visible)
+		self:_setInputBound(visible)
+		self:UpdateMouseUnlock()
 
 		if visible then
-			self:_setChatEnabled(false)
-			self:_setMouseUnlocked(true)
-
 			self._entry.TextBox:CaptureFocus()
 			self:_setEntryText("")
 		else
-			self:_setChatEnabled(true)
-			self:_setMouseUnlocked(false)
-
 			AutoComplete:Hide()
 			self._entry.TextBox:ReleaseFocus()
 		end
@@ -338,24 +328,24 @@ return function(CmdrClient, AutoComplete)
 
 		Trims the input command text.
 	]=]
-	function Window._processEntry(text: string)
-		text = CmdrClient.Util.TrimString(text)
+	function Window:_processEntry(text: string)
+		const trimmedText = CmdrClient.Util.TrimString(text)
 
-		if #text == 0 then
+		if #trimmedText == 0 then
 			return
 		end
 
-		Window:AddLine(`{Window:GetLabelText()} {text}`, PROCESSING_TEXT_COLOR)
-		Window:AddLine(CmdrClient.Dispatcher:EvaluateAndRun(text, Player, { IsHuman = true }))
+		self:AddLine(`{self:GetLabelText()} {trimmedText}`, PROCESSING_TEXT_COLOR)
+		self:AddLine(CmdrClient.Dispatcher:EvaluateAndRun(trimmedText, Player, { IsHuman = true }))
 	end
 
 	--[=[
 		@within Window
 		@private
 
-		Handles user input when the box is focused.
+		Handles the entry losing focus, hiding on escape and running the entry when submitted.
 	]=]
-	function Window:_loseFocus(submit: boolean)
+	function Window:_loseFocus(submit: boolean, cause: InputObject?)
 		if self._hasLostFocus then
 			return
 		end
@@ -374,18 +364,22 @@ return function(CmdrClient, AutoComplete)
 		else
 		--]]
 
-		if self:IsVisible() and GuiService.MenuIsOpen then
+		if cause and cause.KeyCode == Enum.KeyCode.Escape then
 			self:Hide()
-		end
-
-		if submit then
+		elseif submit then
 			self._hasLostFocus = true
+
+			task.defer(function()
+				if self:IsVisible() then
+					self._entry.TextBox:CaptureFocus()
+				end
+			end)
 
 			if self._valid then
 				self:_setEntryText("")
-				self._processEntry(text)
+				self:_processEntry(text)
 			else
-				self:AddLine(self._errorText, Color3.fromRGB(255, 153, 153))
+				self:AddLine(self._errorText, ERROR_TEXT_COLOR)
 			end
 
 			self._hasLostFocus = false
@@ -429,91 +423,109 @@ return function(CmdrClient, AutoComplete)
 		const item = AutoComplete:GetSelectedItem()
 		const text = self:GetEntryText()
 
-		if not item or (text:sub(#text, #text):match("%s") and AutoComplete.LastItem) then
-			task.wait()
+		if not item or (AutoComplete.LastItem and text:match("%s$")) then
 			self:_setEntryText(text)
 			return
 		end
 
-		const replace = item[2]
-		local newText
-		local insertSpace = true
-
 		const command = AutoComplete.Command
-		if command then
-			insertSpace = AutoComplete.NumArgs ~= #command.ArgumentDefinitions and not AutoComplete.IsPartial
-			newText = buildAutoCompleteText(command, AutoComplete.Arg, replace)
-		else
-			newText = replace
-		end
+		const newText = if command then buildAutoCompleteText(command, AutoComplete.Arg, item[2]) else item[2]
+		const insertSpace = not command
+			or (AutoComplete.NumArgs ~= #command.ArgumentDefinitions and not AutoComplete.IsPartial)
 
-		task.wait()
-		self:_setEntryText(`{newText}{if insertSpace then " " else ""}`)
+		self:_setEntryText(if insertSpace then `{newText} ` else newText)
 	end
 
-	--[=[
-		@within Window
-		@private
-
-		Event handler for user input.
-	]=]
-	function Window:_beginInput(input: InputObject, gameProcessed: boolean)
-		if GuiService.MenuIsOpen then
+	function Window:_handlePointerInput(input: InputObject)
+		if
+			CmdrClient._hideOnLostFocus
+			and table.find(MOUSE_TOUCH_INPUTS, input.UserInputType)
+			and isPositionOutsideGui(input.Position, entryFrame)
+		then
 			self:Hide()
 		end
+	end
 
-		if gameProcessed and not self:IsVisible() then
-			return
-		end
+	function Window:_handleVisibleInput(input: InputObject, gameProcessed: boolean)
+		const keyCode = input.KeyCode
 
-		-- Check for activation shortcut keys
-		if table.find(CmdrClient._activationKeys, input.KeyCode) then
-			task.defer(self._handleActivationKey, self)
-			return
-		end
-
-		-- Guard against disabled client state or hidden window
-		if not CmdrClient._enabled then
-			if self:IsVisible() then
+		if table.find(CmdrClient._activationKeys, keyCode) then
+			if gameProcessed then
 				self:Hide()
 			end
-
-			return
-		end
-
-		if not self:IsVisible() then
-			return
-		end
-
-		-- Check for mouse clicks outside window boundaries
-		if CmdrClient._hideOnLostFocus and table.find(MOUSE_TOUCH_INPUTS, input.UserInputType) then
-			if isPositionOutsideGui(input.Position, entryFrame) then
-				self:Hide()
-			end
-
-			return
-		end
-
-		-- Key action mappings
-		if input.KeyCode == Enum.KeyCode.Escape then
-			self:Hide()
-		elseif input.KeyCode == Enum.KeyCode.Backspace and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+		elseif keyCode == Enum.KeyCode.Backspace and input:IsModifierKeyDown(Enum.ModifierKey.Ctrl) then
 			self:_setEntryText("")
-		elseif input.KeyCode == Enum.KeyCode.Down then
+		elseif keyCode == Enum.KeyCode.Down then
 			self:_selectVertical(1)
-		elseif input.KeyCode == Enum.KeyCode.Up then
+		elseif keyCode == Enum.KeyCode.Up then
 			self:_selectVertical(-1)
-		elseif input.KeyCode == Enum.KeyCode.Return then
-			task.wait()
-			self:_setEntryText(self:GetEntryText():gsub("\n", ""):gsub("\r", ""))
-		elseif input.KeyCode == Enum.KeyCode.Tab then
-			if self._entry.TextBox.IsFocused then
-				self:_handleTabCompletion()
-			else
-				self._entry.TextBox:CaptureFocus()
-			end
-		else
+		elseif input.UserInputType == Enum.UserInputType.Keyboard and keyCode ~= Enum.KeyCode.Tab then
 			self:_clearHistoryState()
+		end
+	end
+
+	const activationAction = onKeyReleased(function()
+		Window:_handleActivationKey()
+	end)
+
+	const refocusAction = onKeyReleased(function()
+		Window._entry.TextBox:CaptureFocus()
+	end)
+
+	const function clickOutsideAction(_, state: Enum.UserInputState, input: InputObject): Enum.ContextActionResult
+		if state == Enum.UserInputState.Begin then
+			Window:_handlePointerInput(input)
+		end
+
+		return Enum.ContextActionResult.Pass
+	end
+
+	function Window:BindActivationKeys()
+		ContextActionService:UnbindAction(ACTIVATION_ACTION)
+
+		if #CmdrClient._activationKeys == 0 then
+			return
+		end
+
+		ContextActionService:BindActionAtPriority(
+			ACTIVATION_ACTION,
+			activationAction,
+			false,
+			ACTION_PRIORITY,
+			table.unpack(CmdrClient._activationKeys)
+		)
+	end
+
+	function Window:_setInputBound(bound: boolean)
+		self._backdrop.Visible = bound
+
+		if bound then
+			ContextActionService:BindActionAtPriority(
+				REFOCUS_ACTION,
+				refocusAction,
+				false,
+				ACTION_PRIORITY,
+				Enum.KeyCode.Tab
+			)
+			ContextActionService:BindActionAtPriority(
+				CLICK_OUTSIDE_ACTION,
+				clickOutsideAction,
+				false,
+				ACTION_PRIORITY,
+				table.unpack(MOUSE_TOUCH_INPUTS)
+			)
+
+			self._visibleInputConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+				self:_handleVisibleInput(input, gameProcessed)
+			end)
+		else
+			ContextActionService:UnbindAction(REFOCUS_ACTION)
+			ContextActionService:UnbindAction(CLICK_OUTSIDE_ACTION)
+
+			if self._visibleInputConnection then
+				self._visibleInputConnection:Disconnect()
+				self._visibleInputConnection = nil
+			end
 		end
 	end
 
@@ -523,7 +535,7 @@ return function(CmdrClient, AutoComplete)
 
 		Processes autocomplete for command arguments once a command name is active.
 	]=]
-	function Window._handleArgumentAutoComplete(
+	function Window:_handleArgumentAutoComplete(
 		command: any,
 		arguments: { string },
 		text: string,
@@ -531,7 +543,7 @@ return function(CmdrClient, AutoComplete)
 		atEnd: boolean
 	)
 		const commandValid, commandError = command:Validate()
-		Window:_setIsValidInput(commandValid, `Validation errors: {commandError or ""}`)
+		self:_setIsValidInput(commandValid, `Validation errors: {commandError or ""}`)
 
 		const lastArgument = command:GetArgument(#arguments)
 		if not lastArgument then
@@ -543,31 +555,28 @@ return function(CmdrClient, AutoComplete)
 		local isPartial = false
 
 		if lastArgument.RawSegmentsAreAutocomplete then
-			for index, segment in ipairs(lastArgument.RawSegments) do
+			for index, segment in lastArgument.RawSegments do
 				autocompleteItems[index] = { segment, segment }
 			end
 		else
-			local items, options = lastArgument:GetAutocomplete()
-			options = options or {}
-			isPartial = options.IsPartial or false
+			const items, options = lastArgument:GetAutocomplete()
+			isPartial = options and options.IsPartial or false
 
-			for index, item in ipairs(items) do
+			for index, item in items do
 				autocompleteItems[index] = { typedText, item }
 			end
 		end
 
-		local argumentValid = true
-		local argumentError
-
+		local argumentValid, argumentError = true, nil
 		if #typedText > 0 then
 			argumentValid, argumentError = lastArgument:Validate()
 		end
 
 		if not atEnd and argumentValid then
-			Window:HideInvalidState()
+			self:HideInvalidState()
 		end
 
-		return AutoComplete:Show(autocompleteItems, {
+		AutoComplete:Show(autocompleteItems, {
 			at = atEnd and #text - #typedText + (if hasTrailingSpace then -1 else 0),
 			prefix = if #lastArgument.RawSegments == 1 then lastArgument.Prefix else "",
 			isLast = #command.Arguments == #command.ArgumentDefinitions and #typedText > 0,
@@ -588,8 +597,8 @@ return function(CmdrClient, AutoComplete)
 
 		Processes autocomplete for initial command name lookup.
 	]=]
-	function Window._handleCommandAutoComplete(commandText: string, command: any)
-		Window:_setIsValidInput(true)
+	function Window:_handleCommandAutoComplete(commandText: string, command: any)
+		self:_setIsValidInput(true)
 
 		const exactCommand = CmdrClient.Registry:GetCommand(commandText)
 		local exactMatch
@@ -611,20 +620,21 @@ return function(CmdrClient, AutoComplete)
 			end
 
 			if argument and not argument.Optional and argument.Default == nil then
-				Window:_setIsValidInput(false, "This command has required arguments.")
-				Window:HideInvalidState()
+				self:_setIsValidInput(false, "This command has required arguments.")
+				self:HideInvalidState()
 			end
 		else
-			Window:_setIsValidInput(
+			self:_setIsValidInput(
 				false,
 				`{commandText} is not a valid command name. Use the help command to see all available commands.`
 			)
 		end
 
+		const loweredText = commandText:lower()
 		const autocompleteItems = { exactMatch }
 		-- selene: allow(mixed_table)
-		for _, commandName in ipairs(CmdrClient.Registry:GetCommandNames(true)) do
-			if commandText:lower() ~= commandName:lower():sub(1, #commandText) then
+		for _, commandName in CmdrClient.Registry:GetCommandNames(true) do
+			if commandName:lower():sub(1, #loweredText) ~= loweredText then
 				continue
 			end
 
@@ -633,17 +643,17 @@ return function(CmdrClient, AutoComplete)
 			end
 
 			const commandObject = CmdrClient.Registry:GetCommand(commandName)
-			autocompleteItems[#autocompleteItems + 1] = {
+			table.insert(autocompleteItems, {
 				commandText,
 				commandName,
 				options = {
 					name = commandObject.Name,
 					description = commandObject.Description,
 				},
-			}
+			})
 		end
 
-		return AutoComplete:Show(autocompleteItems)
+		AutoComplete:Show(autocompleteItems)
 	end
 
 	--[=[
@@ -652,12 +662,12 @@ return function(CmdrClient, AutoComplete)
 
 		Fired whenever the command input text changes. Validates inputs and updates the autocomplete view.
 	]=]
-	function Window._onTextChanged(text: string)
+	function Window:_onTextChanged(text: string)
 		const command = CmdrClient.Dispatcher:Evaluate(text, Player, true)
 		local arguments = CmdrClient.Util.SplitString(text)
 		const commandText = table.remove(arguments, 1)
 
-		const hasTrailingSpace = text:sub(#text, #text):match("%s") ~= nil
+		const hasTrailingSpace = text:match("%s$") ~= nil
 		local atEnd = false
 		if command then
 			arguments = CmdrClient.Util.MashExcessArguments(arguments, #command.Object.Args)
@@ -667,40 +677,44 @@ return function(CmdrClient, AutoComplete)
 		local entryComplete = commandText and #arguments > 0
 		if hasTrailingSpace and not atEnd then
 			entryComplete = true
-			arguments[#arguments + 1] = ""
+			table.insert(arguments, "")
 		end
 
 		if command and entryComplete then
-			Window._handleArgumentAutoComplete(command, arguments, text, hasTrailingSpace, atEnd)
-			return
+			self:_handleArgumentAutoComplete(command, arguments, text, hasTrailingSpace, atEnd)
+		elseif commandText and #arguments == 0 then
+			self:_handleCommandAutoComplete(commandText, command)
+		else
+			self:_setIsValidInput(false, "Use the help command to see all available commands.")
+			AutoComplete:Hide()
 		end
-
-		if commandText and #arguments == 0 then
-			Window._handleCommandAutoComplete(commandText, command)
-			return
-		end
-
-		Window:_setIsValidInput(false, "Use the help command to see all available commands.")
-		AutoComplete:Hide()
 	end
 
-	Window._entry.TextBox.FocusLost:Connect(function(submit: boolean)
-		Window:_loseFocus(submit)
+	const entryTextBox = Window._entry.TextBox
+
+	entryTextBox.FocusLost:Connect(function(submit: boolean, cause: InputObject?)
+		Window:_loseFocus(submit, cause)
 	end)
 
-	UserInputService.InputBegan:Connect(function(input: InputObject, gameProcessed: boolean)
-		Window:_beginInput(input, gameProcessed)
-	end)
-
-	Window._entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+	entryTextBox:GetPropertyChangedSignal("Text"):Connect(function()
+		const text = entryTextBox.Text
 		entryFrame.CanvasPosition = Vector2.new(0, entryFrame.AbsoluteCanvasSize.Y)
 
-		if Window._entry.TextBox.Text:match("\t") then
-			Window._entry.TextBox.Text = Window._entry.TextBox.Text:gsub("\t", "")
-			return
+		if text:find("\t", 1, true) then
+			Window:_handleTabCompletion()
+		elseif text:find("[\r\n]") then
+			Window:_setEntryText((text:gsub("[\r\n]", "")))
+		else
+			Window:_onTextChanged(text)
 		end
+	end)
 
-		Window._onTextChanged(Window._entry.TextBox.Text)
+	Window._backdrop.InputBegan:Connect(function(input: InputObject)
+		Window:_handlePointerInput(input)
+	end)
+
+	GuiService.MenuOpened:Connect(function()
+		Window:Hide()
 	end)
 
 	entryFrame.ChildAdded:Connect(function()
@@ -708,6 +722,7 @@ return function(CmdrClient, AutoComplete)
 	end)
 
 	Window._lineTemplate.Parent = script
+	Window:BindActivationKeys()
 
 	return Window
 end

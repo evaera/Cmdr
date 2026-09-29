@@ -4,9 +4,38 @@ const StarterGui = game:GetService("StarterGui")
 const Player = Players.LocalPlayer
 const PlayerGui = Player:WaitForChild("PlayerGui")
 
+-- ContextActionService does not receive clicks over other UI, so a non-sinking layer observes those
+const function createInputLayers(gui: ScreenGui)
+	if not gui:FindFirstChild("Backdrop") then
+		const Backdrop = Instance.new("Frame")
+		Backdrop.Active = false
+		Backdrop.BackgroundTransparency = 1
+		Backdrop.Name = "Backdrop"
+		Backdrop.Size = UDim2.fromScale(1, 1)
+		Backdrop.Visible = false
+		Backdrop.ZIndex = 0
+		Backdrop.Parent = gui
+	end
+
+	if not gui:FindFirstChild("MouseUnlocker") then
+		const MouseUnlocker = Instance.new("TextButton")
+		MouseUnlocker.Active = false
+		MouseUnlocker.BackgroundTransparency = 1
+		MouseUnlocker.Modal = true
+		MouseUnlocker.Name = "MouseUnlocker"
+		MouseUnlocker.Selectable = false
+		MouseUnlocker.Size = UDim2.fromOffset(0, 0)
+		MouseUnlocker.Text = ""
+		MouseUnlocker.Visible = false
+		MouseUnlocker.Parent = gui
+	end
+end
+
 return function(): ScreenGui
 	if StarterGui:FindFirstChild("Cmdr") then
-		return PlayerGui:WaitForChild("Cmdr")
+		const Cmdr = PlayerGui:WaitForChild("Cmdr") :: ScreenGui
+		createInputLayers(Cmdr)
+		return Cmdr
 	end
 
 	const Cmdr = Instance.new("ScreenGui")
@@ -221,6 +250,8 @@ return function(): ScreenGui
 	Type.TextSize = 15
 	Type.TextXAlignment = Enum.TextXAlignment.Left
 	Type.Parent = Field
+
+	createInputLayers(Cmdr)
 
 	Cmdr.Parent = PlayerGui
 	return Cmdr

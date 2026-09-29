@@ -1,27 +1,20 @@
+const ContextActionService = game:GetService("ContextActionService")
 const Players = game:GetService("Players")
 const TextChatService = game:GetService("TextChatService")
-const UserInputService = game:GetService("UserInputService")
 
 local hasHelperRan = false
 
 const function runBindHelper(Cmdr)
-	Players.PlayerRemoving:Connect(function(Player)
-		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
-		if binds[Player] then
-			binds[Player] = nil
-		end
+	Players.PlayerRemoving:Connect(function(player: Player)
+		Cmdr.Registry:GetStore("CMDR_Binds")[player] = nil
 	end)
 
 	TextChatService.MessageReceived:Connect(function(message: TextChatMessage)
 		const senderId = message.TextSource and message.TextSource.UserId
 		const player = senderId and Players:GetPlayerByUserId(senderId)
-		if not player then
-			return
-		end
-
-		const binds = Cmdr.Registry:GetStore("CMDR_Binds")
-		if binds[player] then
-			binds[player](message)
+		const playerBind = player and Cmdr.Registry:GetStore("CMDR_Binds")[player]
+		if playerBind then
+			playerBind(message)
 		end
 	end)
 
@@ -62,38 +55,36 @@ return {
 		end
 
 		const binds = context:GetStore("CMDR_Binds")
-		if binds[bind] then
-			if typeof(binds[bind]) == "RBXScriptConnection" then
-				binds[bind]:Disconnect()
-			end
-
-			binds[bind] = nil
+		if type(binds[bind]) == "string" then
+			ContextActionService:UnbindAction(binds[bind])
 		end
 
-		command = `{command} {arguments}`
+		const Util = context.Cmdr.Util
+		const commandString = `{command} {arguments}`
 
-		const bindType = context:GetArgument(1).Type.Name
-		if bindType == "userInput" then
-			binds[bind] = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-				if gameProcessed then
-					return
-				end
+		if context:GetArgument(1).Type.Name == "userInput" then
+			const actionName = `evaera/Cmdr/bind_{bind}`
 
-				if input.UserInputType == bind or input.KeyCode == bind then
-					context:Reply(
-						context.Dispatcher:EvaluateAndRun(
-							context.Cmdr.Util.RunEmbeddedCommands(context.Dispatcher, command)
-						)
-					)
-				end
-			end)
-		elseif bindType == "player" then
-			binds[bind] = function(message: TextChatMessage)
-				const args = { message.Text }
-				const chatCommand = context.Cmdr.Util.RunEmbeddedCommands(
-					context.Dispatcher,
-					context.Cmdr.Util.SubstituteArgs(command, args)
+
+			const function runCommand()
+				context:Reply(
+					context.Dispatcher:EvaluateAndRun(Util.RunEmbeddedCommands(context.Dispatcher, commandString))
 				)
+			end
+
+			ContextActionService:BindActionAtPriority(actionName, function(_, state: Enum.UserInputState)
+				if state == Enum.UserInputState.Begin then
+					task.spawn(runCommand)
+				end
+
+				return Enum.ContextActionResult.Pass
+			end, false, Enum.ContextActionPriority.High.Value, bind)
+
+			binds[bind] = actionName
+		else
+			binds[bind] = function(message: TextChatMessage)
+				const chatCommand =
+					Util.RunEmbeddedCommands(context.Dispatcher, Util.SubstituteArgs(commandString, { message.Text }))
 				const result = context.Dispatcher:EvaluateAndRun(chatCommand)
 				context:Reply(`{bind.Name} $ {chatCommand} : {result}`, Color3.fromRGB(244, 92, 66))
 			end
