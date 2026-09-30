@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.13.1
+
+Some minor internal fixes. If you've been having issues with v1.13.0, this patch should fix them.
+
+* Fix `:exit` re-enabling chat UI the game had disabled
+* Fix `HasCharacter` guard rejecting streamed-out players
+* Move from `UserInputService` to `ContextActionService`
+
 ## v1.13.0
 
 It's been a long time since the last release and there have been [a lot of changes](https://github.com/evaera/Cmdr/compare/v1.12.0...v1.13.0), purely internal ones have been skipped over.
