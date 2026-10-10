@@ -20,7 +20,7 @@ Originally designed for debugging, Cmdr has grown into a general-purpose command
 - **Unobtrusive & Responsive:** Integrates quietly into existing codebases without getting in the way. Executes heavy work on the client to provide immediate feedback, even on poor network connections.
 - **Extensible Architecture:** Includes built-in commands and types, but lets you seamlessly plug in your own custom implementations.
 - **Built-in Meta-Commands:** Supports command chaining, aliases, custom key bindings, and automated startup scripts.
-- **Battle-Tested:** Used for over five years across games with billions of visits. Saves hundreds of hours compared to building a console from scratch.
+- **Battle-Tested:** Used for over eight years across games with billions of visits. Saves hundreds of hours compared to building a console from scratch.
 
 ## Why _shouldn't_ I use it?
 
