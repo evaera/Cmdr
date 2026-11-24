@@ -156,7 +156,7 @@ return function(CmdrClient)
 			item.gui = button
 		end
 
-		const text = self._entry.TextBox.Text
+		const text: string = self._entry.TextBox.Text
 		const words = CmdrClient.Util.SplitString(text)
 		if text:sub(#text, #text) == " " and not options.at then
 			words[#words + 1] = "e"
