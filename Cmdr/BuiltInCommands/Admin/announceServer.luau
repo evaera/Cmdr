@@ -5,7 +5,7 @@ local lastAnnouncement = 0
 
 return function(context: any, text: string): string
 	-- This is silly, but it's what Roblox has said is needed.
-	local r = math.ceil(ANNOUNCEMENT_COOLDOWN - (os.time() - lastAnnouncement))
+	local r = ANNOUNCEMENT_COOLDOWN - (os.time() - lastAnnouncement)
 	if r > 0 then
 		return `You need to wait {r} second{if r == 1 then "" else "s"} before another announcement can be made.`
 	end
